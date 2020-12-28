@@ -146,13 +146,17 @@ namespace wsc.CodeAnalysis.Syntax
         private BlockStatementSyntax ParseBlockStatement()
         {
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
-            
             var openBraceToken = MatchToken(SyntaxKind.OpenBraceToken);
 
             while (Current.Kind != SyntaxKind.EndOfFileToken && Current.Kind != SyntaxKind.CloseBraceToken)
             {
+                var startToken = Current;
+
                 var statement = ParseStatement();
                 statements.Add(statement);
+                
+                if (Current == startToken)
+                    NextToken();
             }
             
             var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);
