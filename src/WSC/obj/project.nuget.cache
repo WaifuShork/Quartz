@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "AXVpusiwGUC48w/4f6BAYNbXAsf/SKERwCrkqqDUxHTuPjqajyWjExRCOARSomV22SH0IDi3heEMxZtVfZAnHA==",
+  "success": true,
+  "projectFilePath": "G:\\Quartz\\src\\WSC\\WSC.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

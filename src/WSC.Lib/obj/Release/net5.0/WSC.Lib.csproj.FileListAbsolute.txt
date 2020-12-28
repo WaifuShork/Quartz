@@ -1,0 +1,12 @@
+G:\wsc\WSC.Lib\bin\Release\net5.0\WSC.Lib.deps.json
+G:\wsc\WSC.Lib\bin\Release\net5.0\WSC.Lib.dll
+G:\wsc\WSC.Lib\bin\Release\net5.0\ref\WSC.Lib.dll
+G:\wsc\WSC.Lib\bin\Release\net5.0\WSC.Lib.pdb
+G:\wsc\WSC.Lib\obj\Release\net5.0\WSC.Lib.csprojAssemblyReference.cache
+G:\wsc\WSC.Lib\obj\Release\net5.0\WSC.Lib.GeneratedMSBuildEditorConfig.editorconfig
+G:\wsc\WSC.Lib\obj\Release\net5.0\WSC.Lib.AssemblyInfoInputs.cache
+G:\wsc\WSC.Lib\obj\Release\net5.0\WSC.Lib.AssemblyInfo.cs
+G:\wsc\WSC.Lib\obj\Release\net5.0\WSC.Lib.csproj.CoreCompileInputs.cache
+G:\wsc\WSC.Lib\obj\Release\net5.0\WSC.Lib.dll
+G:\wsc\WSC.Lib\obj\Release\net5.0\ref\WSC.Lib.dll
+G:\wsc\WSC.Lib\obj\Release\net5.0\WSC.Lib.pdb
