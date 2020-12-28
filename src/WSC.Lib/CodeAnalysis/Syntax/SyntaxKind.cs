@@ -38,8 +38,10 @@
         VarKeyword,
         IfKeyword,
         ElseKeyword,        
-        WhileKeyword,
-        
+        WhileKeyword,        
+        ForKeyword,
+        ToKeyword,
+
         // Expressions
         LiteralExpression,
         NameExpression,
@@ -57,6 +59,7 @@
         ExpressionStatement,
         IfStatement,
         ElseClause,
-        WhileStatement
+        WhileStatement,
+        ForStatement,
     }
 }

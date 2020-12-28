@@ -42,6 +42,8 @@ namespace WSC.Tests.CodeAnalysis
         [InlineData("{ var a = 0 if a == 0 a = 10 a }", 10)]
         
         [InlineData("{ var i = 10 var result = 0 while i > 0 { result = result + i i = i - 1 } result }", 55)]
+        
+        [InlineData("{ var result = 0 for i = 1 to 10 { result = result + i } }", 55)]
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
             var syntaxTree = SyntaxTree.Parse(text);
@@ -82,8 +84,7 @@ namespace WSC.Tests.CodeAnalysis
             ";
             AssertDiagnostics(text, diagnostics);
         }
-        
-        
+
         private void AssertDiagnostics(string text, string diagnosticText)
         {
             var annotatedText = AnnotatedText.Parse(text);

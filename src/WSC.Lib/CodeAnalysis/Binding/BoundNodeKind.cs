@@ -14,6 +14,7 @@
         BlockStatement,
         ExpressionStatement,
         IfStatement,
-        WhileStatement
+        WhileStatement,
+        ForStatement
     }
 }
