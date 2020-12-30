@@ -7,6 +7,10 @@ using wsc.CodeAnalysis.Syntax;
 
 namespace wsc.CodeAnalysis
 {
+    
+    /// <summary>
+    /// Represents a compilation unit.
+    /// </summary>
     public sealed class Compilation
     {
         private BoundGlobalScope _globalScope;

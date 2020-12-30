@@ -1,0 +1,11 @@
+G:\Quartz\src\WSC.Lib\bin\Debug\net5.0\win-x64\WSC.Lib.deps.json
+G:\Quartz\src\WSC.Lib\bin\Debug\net5.0\win-x64\WSC.Lib.dll
+G:\Quartz\src\WSC.Lib\bin\Debug\net5.0\win-x64\ref\WSC.Lib.dll
+G:\Quartz\src\WSC.Lib\bin\Debug\net5.0\win-x64\WSC.Lib.pdb
+G:\Quartz\src\WSC.Lib\obj\Debug\net5.0\win-x64\WSC.Lib.GeneratedMSBuildEditorConfig.editorconfig
+G:\Quartz\src\WSC.Lib\obj\Debug\net5.0\win-x64\WSC.Lib.AssemblyInfoInputs.cache
+G:\Quartz\src\WSC.Lib\obj\Debug\net5.0\win-x64\WSC.Lib.AssemblyInfo.cs
+G:\Quartz\src\WSC.Lib\obj\Debug\net5.0\win-x64\WSC.Lib.csproj.CoreCompileInputs.cache
+G:\Quartz\src\WSC.Lib\obj\Debug\net5.0\win-x64\WSC.Lib.dll
+G:\Quartz\src\WSC.Lib\obj\Debug\net5.0\win-x64\ref\WSC.Lib.dll
+G:\Quartz\src\WSC.Lib\obj\Debug\net5.0\win-x64\WSC.Lib.pdb

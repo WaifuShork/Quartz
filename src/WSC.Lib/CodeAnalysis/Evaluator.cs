@@ -4,6 +4,9 @@ using wsc.CodeAnalysis.Binding;
 
 namespace wsc.CodeAnalysis
 {
+    /// <summary>
+    /// Represents a basic text evaluator for the compiler.
+    /// </summary>
     internal sealed class Evaluator
     {
         private readonly BoundStatement _root;
@@ -11,18 +14,32 @@ namespace wsc.CodeAnalysis
 
         private object _lastValue;
         
+        /// <summary>
+        /// Constructor of the evaluator.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="variables"></param>
         public Evaluator(BoundStatement root, Dictionary<VariableSymbol, object> variables)
         {
             _root = root;
             _variables = variables;
         }
         
+        /// <summary>
+        /// Helper method for EvaluateStatement.
+        /// </summary>
+        /// <returns>Returns the last value.</returns>
         public object Evaluate()
         {
             EvaluateStatement(_root);
             return _lastValue;
         }
 
+        /// <summary>
+        /// Represents a statement evaluator, to determine of the current block is a Statement, Variable, or Expression.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <exception cref="Exception"></exception>
         private void EvaluateStatement(BoundStatement node)
         {
             switch (node.Kind)
@@ -55,6 +72,10 @@ namespace wsc.CodeAnalysis
             }
         }
 
+        /// <summary>
+        /// Evaluates the for loop statement.
+        /// </summary>
+        /// <param name="node"></param>
         private void EvaluateForStatement(BoundForStatement node)
         {
             var lowerBound = (int)EvaluateExpression(node.LowerBound);
@@ -67,12 +88,20 @@ namespace wsc.CodeAnalysis
             }
         }
 
+        /// <summary>
+        /// Evaluates the while loop statement.
+        /// </summary>
+        /// <param name="node"></param>
         private void EvaluateWhileStatement(BoundWhileStatement node)
         {
             while ((bool) EvaluateExpression(node.Condition))
                 EvaluateStatement(node.Body);
         }
-
+        
+        /// <summary>
+        /// Evaluates the if statement.
+        /// </summary>
+        /// <param name="node"></param>
         private void EvaluateIfStatement(BoundIfStatement node)
         {
             var condition = (bool) EvaluateExpression(node.Condition);
@@ -82,6 +111,10 @@ namespace wsc.CodeAnalysis
                 EvaluateStatement(node.ElseStatement);
         }
 
+        /// <summary>
+        /// Evaluates a variable declaration.
+        /// </summary>
+        /// <param name="node"></param>
         private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
         {
             var value = EvaluateExpression(node.Initializer);
@@ -89,6 +122,10 @@ namespace wsc.CodeAnalysis
             _lastValue = value;
         }
 
+        /// <summary>
+        /// Evaluates a given block statement => { }.
+        /// </summary>
+        /// <param name="node"></param>
         private void EvaluateBlockStatement(BoundBlockStatement node)
         {
             foreach (var statement in node.Statements)
@@ -97,11 +134,21 @@ namespace wsc.CodeAnalysis
             }
         }
 
+        /// <summary>
+        /// Evaluates basic "expressions" seen as by the compiler.
+        /// </summary>
+        /// <param name="node"></param>
         private void EvaluateExpressionStatement(BoundExpressionStatement node)
         {
             _lastValue = EvaluateExpression(node.Expression);
         }
         
+        /// <summary>
+        /// Evaluates whether an expression is literal, variable, assignment, unary, or binary.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         private object EvaluateExpression(BoundExpression node)
         {
             switch (node.Kind)
@@ -126,18 +173,31 @@ namespace wsc.CodeAnalysis
             }
         }
         
-        
-        
+        /// <summary>
+        /// Evaluates a literal expression.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns>Returns a BoundLiteralExpression value</returns>
         private static object EvaluateLiteralExpression(BoundLiteralExpression n)
         {
             return n.Value;
         }
         
+        /// <summary>
+        /// Evaluates a variable expression.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns>Returns a BoundVariableExpression.</returns>
         private object EvaluateVariableExpression(BoundVariableExpression v)
         {
             return _variables[v.Variable];
         }
         
+        /// <summary>
+        /// Evaluates an assignment expression.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns>Returns a BoundAssignmentExpression.</returns>
         private object EvaluateAssignmentExpression(BoundAssignmentExpression a)
         {
             var value = EvaluateExpression(a.Expression);
@@ -145,6 +205,12 @@ namespace wsc.CodeAnalysis
             return value;
         }
 
+        /// <summary>
+        /// Evaluates a unary expression based on the operator given.
+        /// </summary>
+        /// <param name="u"></param>
+        /// <returns>Returns BoundUnaryExpression.</returns>
+        /// <exception cref="Exception"></exception>
         private object EvaluateUnaryExpression(BoundUnaryExpression u)
         {
             var operand = EvaluateExpression(u.Operand);
@@ -162,6 +228,12 @@ namespace wsc.CodeAnalysis
             }
         }
         
+        /// <summary>
+        /// Evaluates a binary expression.
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns>Returns a BoundBinaryExpression.</returns>
+        /// <exception cref="Exception"></exception>
         private object EvaluateBinaryExpression(BoundBinaryExpression b)
         {
             var left = EvaluateExpression(b.Left);
@@ -198,7 +270,5 @@ namespace wsc.CodeAnalysis
                     throw new Exception($"Unexpected binary operator {b.Op}");
             }
         }
-        
-       
     }
 }

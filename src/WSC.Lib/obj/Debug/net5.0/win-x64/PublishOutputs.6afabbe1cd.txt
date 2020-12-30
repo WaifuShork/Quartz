@@ -1,0 +1,3 @@
+G:\Quartz\src\WSC.Lib\bin\Debug\net5.0\win-x64\publish\WSC.Lib.dll
+G:\Quartz\src\WSC.Lib\bin\Debug\net5.0\win-x64\publish\WSC.Lib.deps.json
+G:\Quartz\src\WSC.Lib\bin\Debug\net5.0\win-x64\publish\WSC.Lib.pdb
