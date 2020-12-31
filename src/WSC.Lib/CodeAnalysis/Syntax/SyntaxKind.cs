@@ -21,6 +21,12 @@
         OpenBraceToken,
         CloseBraceToken,
         
+        // Bitwise Tokens
+        TildeToken,
+        AmpersandToken,
+        PipeToken,
+        HatToken,
+
         // Comparison Tokens
         AmpersandAmpersandToken,
         PipePipeToken,
@@ -61,5 +67,6 @@
         ElseClause,
         WhileStatement,
         ForStatement,
+
     }
 }

@@ -12,6 +12,7 @@ namespace wsc.CodeAnalysis.Syntax
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.BangToken:    
+                case SyntaxKind.TildeToken:    
                     return 6;
 
                 default:
@@ -21,7 +22,6 @@ namespace wsc.CodeAnalysis.Syntax
         
         public static int GetBinaryOperatorPrecedence(this SyntaxKind kind)
         {
-
             switch (kind)
             {
                 case SyntaxKind.StarToken:
@@ -40,10 +40,13 @@ namespace wsc.CodeAnalysis.Syntax
                 case SyntaxKind.GreaterOrEqualsToken:
                     return 3;
                 
+                case SyntaxKind.AmpersandToken:
                 case SyntaxKind.AmpersandAmpersandToken:
                     return 2;
                 
+                case SyntaxKind.PipeToken:
                 case SyntaxKind.PipePipeToken:
+                case SyntaxKind.HatToken:
                     return 1;
                 
                 default:
@@ -121,6 +124,16 @@ namespace wsc.CodeAnalysis.Syntax
                     return "&&";
                 case SyntaxKind.PipePipeToken:
                     return "||";
+                
+                case SyntaxKind.AmpersandToken:
+                    return "&";
+                case SyntaxKind.PipeToken:
+                    return "|";
+                case SyntaxKind.TildeToken:
+                    return "~";
+                case SyntaxKind.HatToken:
+                    return "^";
+
                 case SyntaxKind.EqualsEqualsToken:
                     return "==";
                 case SyntaxKind.BangEqualsToken:

@@ -13,6 +13,7 @@ namespace WSC.Tests.CodeAnalysis
         [InlineData("1", 1)]
         [InlineData("+1", 1)]
         [InlineData("-1", -1)]
+        
         [InlineData("14 + 12", 26)]
         [InlineData("12 - 3", 9)]
         [InlineData("4 * 2", 8)]
@@ -28,6 +29,18 @@ namespace WSC.Tests.CodeAnalysis
         [InlineData("4 >= 5", false)]
         [InlineData("4 <= 5", true)]
         
+        [InlineData("~1", -2)]
+
+        [InlineData("1 | 2", 3)]
+        [InlineData("1 | 0", 1)]
+        
+        [InlineData("1 & 3", 1)]
+        [InlineData("1 & 0", 0)]
+        
+        [InlineData("1 ^ 0", 1)]
+        [InlineData("0 ^ 1", 1)]
+        [InlineData("1 ^ 3", 2)]
+
         [InlineData("true", true)]
         [InlineData("false", false)]
         [InlineData("!false", true)]
@@ -36,6 +49,21 @@ namespace WSC.Tests.CodeAnalysis
         [InlineData("true == false", false)]
         [InlineData("false != false", false)]
         [InlineData("true != false", true)]
+        
+        [InlineData("false | false", false)]
+        [InlineData("false | true", true)]
+        [InlineData("true | false", true)]
+        [InlineData("true | true", true)]
+        
+        [InlineData("false & false", false)]
+        [InlineData("false & true", false)]
+        [InlineData("true & false", false)]
+        [InlineData("true & true", true)]
+        
+        [InlineData("false ^ false", false)]
+        [InlineData("true ^ false", true)]
+        [InlineData("false ^ true", true)]
+        [InlineData("true ^ true", false)]
         
         [InlineData("{ var a = 0 (a = 10) * a }", 100)]
         
