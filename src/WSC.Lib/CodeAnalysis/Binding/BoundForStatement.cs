@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace wsc.CodeAnalysis.Binding
 {
     internal sealed class BoundForStatement : BoundStatement

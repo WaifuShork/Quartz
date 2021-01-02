@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Immutable;
-using wsc.CodeAnalysis.Syntax;
 
 namespace wsc.CodeAnalysis.Binding
 {

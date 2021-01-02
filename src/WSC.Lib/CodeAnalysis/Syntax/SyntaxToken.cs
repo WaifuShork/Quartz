@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using wsc.CodeAnalysis.Text;
+﻿using wsc.CodeAnalysis.Text;
 
 namespace wsc.CodeAnalysis.Syntax
 {

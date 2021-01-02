@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace wsc.CodeAnalysis.Syntax
+﻿namespace wsc.CodeAnalysis.Syntax
 {
     public sealed class UnaryExpressionSyntax : ExpressionSyntax
     {

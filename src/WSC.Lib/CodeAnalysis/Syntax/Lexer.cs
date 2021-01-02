@@ -1,5 +1,4 @@
-﻿using System;
-using wsc.CodeAnalysis.Text;
+﻿using wsc.CodeAnalysis.Text;
 
 namespace wsc.CodeAnalysis.Syntax
 {
