@@ -13,6 +13,7 @@ namespace wsc
         private static void Main()
         {
             var showTree = false;
+            var showProgram = false;
             var variables = new Dictionary<VariableSymbol, object>();
             var textBuilder = new StringBuilder();
             Compilation previous = null;
@@ -45,6 +46,13 @@ namespace wsc
                         Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
                         continue;
                     }
+                    
+                    else if (input == "#showProgram")
+                    {
+                        showProgram = !showProgram;
+                        Console.WriteLine(showProgram ? "Showing bound tree." : "Not showing bound tree.");
+                        continue;
+                    }
                     else if (input == "#cls")
                     {
                         Console.Clear();
@@ -67,17 +75,13 @@ namespace wsc
 
                 var compilation = previous == null ? new Compilation(syntaxTree) : previous.ContinueWith(syntaxTree);
 
-                var result = compilation.Evaluate(variables);
-                
-                
-                //var diagnostics = result.Diagnostics;
-
                 if (showTree)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     syntaxTree.Root.WriteTo(Console.Out);
-                    Console.ResetColor();
-                }
+
+                if (showProgram)
+                    compilation.EmitTree(Console.Out);
+                
+                var result = compilation.Evaluate(variables);
 
                 if (!result.Diagnostics.Any())
                 {

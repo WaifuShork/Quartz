@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using wsc.CodeAnalysis.Binding;
+using wsc.CodeAnalysis.Lowering;
 using wsc.CodeAnalysis.Syntax;
 
 namespace wsc.CodeAnalysis
@@ -33,7 +35,6 @@ namespace wsc.CodeAnalysis
                     var globalScope = Binder.BindGlobalScope(Previous?.GlobalScope ,SyntaxTree.Root);
                     Interlocked.CompareExchange(ref _globalScope, globalScope, null);
                 }
-
                 return _globalScope;
             }
         }
@@ -48,10 +49,23 @@ namespace wsc.CodeAnalysis
             var diagnostics = SyntaxTree.Diagnostics.Concat(GlobalScope.Diagnostics).ToImmutableArray();
             if (diagnostics.Any())
                 return new EvaluationResult(diagnostics, null);
-            
-            var evaluator = new Evaluator(GlobalScope.Statement, variables);
+
+            var statement = GetStatement();
+            var evaluator = new Evaluator(statement, variables);
             var value = evaluator.Evaluate();
             return new EvaluationResult(ImmutableArray<Diagnostic>.Empty, value);
+        }
+
+        public void EmitTree(TextWriter writer)
+        {
+            var statement = GetStatement();
+            statement.WriteTo(writer);
+        }
+
+        private BoundBlockStatement GetStatement()
+        {
+            var result = GlobalScope.Statement;
+            return Lowerer.Lower(result);
         }
     }
 }

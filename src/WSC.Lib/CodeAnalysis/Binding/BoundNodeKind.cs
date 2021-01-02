@@ -8,13 +8,16 @@
         AssignmentExpression,
         UnaryExpression,
         BinaryExpression,
-        VariableDeclaration,
-        
+
         // Statements 
         BlockStatement,
         ExpressionStatement,
         IfStatement,
         WhileStatement,
-        ForStatement
+        ForStatement,
+        VariableDeclaration,
+        GotoStatement,
+        LabelStatement,
+        ConditionalGotoStatement
     }
 }
