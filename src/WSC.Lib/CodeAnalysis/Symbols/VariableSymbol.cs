@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace wsc.CodeAnalysis
+namespace wsc.CodeAnalysis.Symbols
 {
     public sealed class VariableSymbol
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using wsc.CodeAnalysis;
+using wsc.CodeAnalysis.Symbols;
 using wsc.CodeAnalysis.Syntax;
 using wsc.CodeAnalysis.Text;
 

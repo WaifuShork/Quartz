@@ -1,4 +1,5 @@
-﻿
+﻿using wsc.CodeAnalysis.Symbols;
+
 namespace wsc.CodeAnalysis.Binding
 {
     internal sealed class BoundForStatement : BoundStatement

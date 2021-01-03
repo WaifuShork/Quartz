@@ -1,4 +1,5 @@
 ﻿using System;
+using wsc.CodeAnalysis.Symbols;
 
 namespace wsc.CodeAnalysis.Binding
 {

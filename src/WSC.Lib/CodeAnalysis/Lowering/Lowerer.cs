@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using wsc.CodeAnalysis.Binding;
 using wsc.CodeAnalysis.Syntax;
+using wsc.CodeAnalysis.Symbols;
 
 namespace wsc.CodeAnalysis.Lowering
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using wsc.CodeAnalysis.Symbols;
 using wsc.CodeAnalysis.Syntax;
 
 namespace wsc.CodeAnalysis.Binding

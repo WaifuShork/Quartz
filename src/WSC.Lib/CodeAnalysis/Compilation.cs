@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using wsc.CodeAnalysis.Binding;
 using wsc.CodeAnalysis.Lowering;
+using wsc.CodeAnalysis.Symbols;
 using wsc.CodeAnalysis.Syntax;
 
 namespace wsc.CodeAnalysis
