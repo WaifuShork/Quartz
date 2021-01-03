@@ -18,5 +18,7 @@ namespace wsc.CodeAnalysis.Syntax
         public object Value { get; }
         
         public override TextSpan Span => new(Position, Text?.Length ?? 0);
+
+        public bool IsMissing => Text == null;
     }
 }

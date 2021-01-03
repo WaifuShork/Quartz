@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 
 namespace wsc
 {
@@ -212,9 +210,7 @@ namespace wsc
             if (key.KeyChar >= ' ')
                 HandleTyping(document, view, key.KeyChar.ToString());
         }
-
         
-
         private void HandleEnter(ObservableCollection<string> document, SubmissionView view)
         {
             var submissionText = string.Join(Environment.NewLine, document);
@@ -295,7 +291,6 @@ namespace wsc
                 view.CurrentLine--;
                 document[view.CurrentLine] = previousLine + currentLine;
                 view.CurrentCharacter = previousLine.Length;
-                return;
             }
             else
             {
@@ -314,7 +309,17 @@ namespace wsc
             var line = document[lineIndex];
             var start = view.CurrentCharacter;
             if (start >= line.Length - 1)
+            {
+                if (view.CurrentLine == document.Count - 1)
+                {
+                    return;
+                }
+
+                var nextLine = document[view.CurrentLine + 1];
+                document[view.CurrentLine] += nextLine;
+                document.RemoveAt(view.CurrentLine + 1);
                 return;
+            }
 
             var before = line.Substring(0, start);
             var after = line.Substring(start + 1);
@@ -362,6 +367,9 @@ namespace wsc
 
         private void UpdateDocumentFromHistory(ObservableCollection<string> document, SubmissionView view)
         {
+            if (_submissionHistory.Count == 0)
+                return;
+            
             document.Clear();
 
             var historyItem = _submissionHistory[_submissionHistoryIndex];

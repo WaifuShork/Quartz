@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using wsc.CodeAnalysis.Syntax;
+using wsc.CodeAnalysis.Text;
 using Xunit;
 
 namespace WSC.Tests.CodeAnalysis.Syntax
@@ -9,11 +10,27 @@ namespace WSC.Tests.CodeAnalysis.Syntax
     public class LexerTests
     {
         [Fact]
-        public void Lexer_Tests_AllTokens()
+        public void Lexer_Lexes_UnterminatedString()
+        {
+            var text = "\"text";
+            var tokens = SyntaxTree.ParseTokens(text, out var diagnostics);
+            
+            var token = Assert.Single(tokens);
+            Assert.Equal(SyntaxKind.StringToken, token.Kind);
+            Assert.Equal(text, token.Text);
+
+            var diagnostic = Assert.Single(diagnostics);
+            Assert.Equal(new TextSpan(0, 1), diagnostic.Span);
+            Assert.Equal("Unterminated string literal.", diagnostic.Message);
+        }
+        
+        [Fact]
+        public void Lexer_Covers_AllTokens()
         {
             var tokenKinds = Enum.GetValues(typeof(SyntaxKind))
-                .Cast<SyntaxKind>()
-                .Where(k => k.ToString().EndsWith("Keyword") || k.ToString().EndsWith("Token"));
+                            .Cast<SyntaxKind>()
+                            .Where(k => k.ToString().EndsWith("Keyword") || 
+                                        k.ToString().EndsWith("Token"));
 
             var testedTokenKinds = GetTokens().Concat(GetSeparators()).Select(t => t.kind);
 
@@ -102,6 +119,8 @@ namespace WSC.Tests.CodeAnalysis.Syntax
                 (SyntaxKind.IdentifierToken, "abc"),
                 (SyntaxKind.NumberToken, "1"),
                 (SyntaxKind.NumberToken, "123"),
+                (SyntaxKind.StringToken, "\"Test\""),
+                (SyntaxKind.StringToken, "\"Te\"\"st\""),
             };
             return fixedTokens.Concat(dynamicTokens);
         }
@@ -137,6 +156,9 @@ namespace WSC.Tests.CodeAnalysis.Syntax
                 return true;
             
             if (t1Kind == SyntaxKind.NumberToken && t2Kind == SyntaxKind.NumberToken)
+                return true;
+            
+            if (t1Kind == SyntaxKind.StringToken && t2Kind == SyntaxKind.StringToken)
                 return true;
             
             if (t1Kind == SyntaxKind.BangToken && t2Kind == SyntaxKind.EqualsToken)

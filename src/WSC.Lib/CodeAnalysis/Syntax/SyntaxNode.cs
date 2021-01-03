@@ -20,6 +20,14 @@ namespace wsc.CodeAnalysis.Syntax
                 return TextSpan.FromBounds(first.Start, last.End);
             }
         }
+        
+        public SyntaxToken GetLastToken()
+        {
+            if (this is SyntaxToken token)
+                return token;
+            
+            return GetChildren().Last().GetLastToken();
+        }
 
         public IEnumerable<SyntaxNode> GetChildren()
         {

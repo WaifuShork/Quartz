@@ -78,5 +78,11 @@ namespace wsc.CodeAnalysis
             var message = $"Variable <{name}> is read-only and cannot be assigned to.";
             Report(span, message);
         }
+
+        public void ReportUnterminatedString(TextSpan span)
+        {
+            var message = "Unterminated string literal.";
+            Report(span, message);
+        }
     }
 }

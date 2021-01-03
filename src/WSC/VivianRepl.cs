@@ -21,19 +21,26 @@ namespace wsc
             {
                 var isKeyword = token.Kind.ToString().EndsWith("Keyword");
                 var isNumber = token.Kind == SyntaxKind.NumberToken;
-                var isVariable = token.Kind == SyntaxKind.IdentifierToken;
+                var isIdentifier = token.Kind == SyntaxKind.IdentifierToken;
 
                 var openBraceToken = token.Kind == SyntaxKind.OpenBraceToken;
                 var closeBraceToken = token.Kind == SyntaxKind.CloseBraceToken;
 
                 if (isKeyword)
                     Console.ForegroundColor = ConsoleColor.Blue;
-                else if (isVariable)
+                
+                else if (isIdentifier)
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
+                
                 else if (openBraceToken || closeBraceToken)
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                else if (!isNumber)
+                
+                else if (isNumber)
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+
+                else
                     Console.ForegroundColor = ConsoleColor.DarkGray;
+                
                 Console.Write(token.Text);
                 Console.ResetColor();
             }
@@ -67,10 +74,20 @@ namespace wsc
         {
             if (string.IsNullOrEmpty(text))
                 return true;
+
+            var lastTwoLinesAreBlank = text.Split(Environment.NewLine)
+                                            .Reverse()
+                                            .TakeWhile(s => string.IsNullOrEmpty(s))
+                                            .Take(2)
+                                            .Count() == 2;
+
+            if (lastTwoLinesAreBlank)
+                return true;
             
             var syntaxTree = SyntaxTree.Parse(text);
 
-            if (syntaxTree.Diagnostics.Any())
+            //if (syntaxTree.Diagnostics.Any())
+            if (syntaxTree.Root.Statement.GetLastToken().IsMissing)
                 return false;
 
             return true;

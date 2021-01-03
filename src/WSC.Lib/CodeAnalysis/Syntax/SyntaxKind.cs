@@ -6,13 +6,18 @@
         BadToken,
         EndOfFileToken,
         WhitespaceToken,
+        
+        // Data Tokens
+        StringToken,
+        NumberToken,
 
         // Operator Tokens
-        NumberToken,
         PlusToken,
         MinusToken,
         StarToken,
         SlashToken,
+        
+        
         BangToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
