@@ -7,7 +7,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  sln: '**\*.sln'
+  sln: '.sln'
   tests: './src/WSC.Tests/WSC.Tests.csproj'
 
 steps:
