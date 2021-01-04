@@ -183,6 +183,9 @@ namespace wsc.CodeAnalysis.Syntax
                 
                 case SyntaxKind.ToKeyword:
                     return "to";
+                
+                case SyntaxKind.CommaToken:
+                    return ",";
                 default:
                     return null;
             }

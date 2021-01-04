@@ -22,9 +22,9 @@ namespace wsc
             foreach (var token in tokens)
             {
                 var isKeyword = token.Kind.ToString().EndsWith("Keyword");
-                var isNumber = token.Kind == SyntaxKind.NumberToken;
                 var isIdentifier = token.Kind == SyntaxKind.IdentifierToken;
                 var isString = token.Kind == SyntaxKind.StringToken;
+                var isNumber = token.Kind == SyntaxKind.NumberToken;
 
                 var openBraceToken = token.Kind == SyntaxKind.OpenBraceToken;
                 var closeBraceToken = token.Kind == SyntaxKind.CloseBraceToken;
@@ -33,16 +33,12 @@ namespace wsc
                     Console.ForegroundColor = ConsoleColor.Blue;
                 else if (isString)
                     Console.ForegroundColor = ConsoleColor.Green;
-                
                 else if (isIdentifier)
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                
                 else if (openBraceToken || closeBraceToken)
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                
                 else if (isNumber)
                     Console.ForegroundColor = ConsoleColor.Cyan;
-
                 else
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                 

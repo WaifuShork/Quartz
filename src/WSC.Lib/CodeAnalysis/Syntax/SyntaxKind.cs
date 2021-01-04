@@ -5,8 +5,9 @@
         // Tokens 
         BadToken,
         EndOfFileToken,
-        WhitespaceToken,
-        
+        WhitespaceToken,        
+        CommaToken,
+
         // Data Tokens
         StringToken,
         NumberToken,
@@ -60,6 +61,7 @@
         BinaryExpression,
         ParenthesizedExpression,
         AssignmentExpression,
+        CallExpression,
         
         // Nodes
         CompilationUnit,
@@ -72,6 +74,5 @@
         ElseClause,
         WhileStatement,
         ForStatement,
-
     }
 }

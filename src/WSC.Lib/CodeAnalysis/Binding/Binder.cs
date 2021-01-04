@@ -119,11 +119,20 @@ namespace wsc.CodeAnalysis.Binding
                 case SyntaxKind.BinaryExpression:
                     return BindBinaryExpression((BinaryExpressionSyntax) syntax);
                 
+                case SyntaxKind.CallExpression:
+                    return BindCallExpression((CallExpressionSyntax) syntax);
+                
                 default:
                     throw new Exception($"Unexpected syntax {syntax.Kind}");
             }
         }
-        
+
+        private BoundExpression BindCallExpression(CallExpressionSyntax syntax)
+        {
+            _diagnostics.ReportBadCharacter(syntax.Identifier.Span.Start, 'X');
+            return new BoundErrorExpression();
+        }
+
         private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)
         {
             var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);

@@ -17,7 +17,7 @@ namespace wsc.CodeAnalysis
             _root = root;
             _variables = variables;
         }
-        
+
         public object Evaluate()
         {
             var labelToIndex = new Dictionary<BoundLabel, int>();
@@ -27,7 +27,7 @@ namespace wsc.CodeAnalysis
                 if (_root.Statements[i] is BoundLabelStatement l)
                     labelToIndex.Add(l.BoundLabel, i + 1);
             }
-
+            
             var index = 0;
             while (index < _root.Statements.Length)
             {
@@ -149,7 +149,10 @@ namespace wsc.CodeAnalysis
             switch (b.Op.Kind)
             {
                 case BoundBinaryOperatorKind.Addition:
-                    return (int) left + (int) right;
+                    if (b.Type == (TypeSymbol.Int))
+                        return (int) left + (int) right;
+                    else
+                        return (string) left + (string) right;
                 
                 case BoundBinaryOperatorKind.Subtraction:
                     return (int) left - (int) right;

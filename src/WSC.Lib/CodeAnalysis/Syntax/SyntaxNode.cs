@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using wsc.CodeAnalysis.Binding;
 using wsc.CodeAnalysis.Text;
 
 namespace wsc.CodeAnalysis.Syntax
@@ -45,8 +46,16 @@ namespace wsc.CodeAnalysis.Syntax
                 {
                     var children = (IEnumerable<SyntaxNode>) property.GetValue(this);
                     foreach (var child in children)
+                    {
                         if (child != null)
                             yield return child;
+                    }
+                }
+                else if (typeof(SeparatedSyntaxList).IsAssignableFrom(property.PropertyType))
+                {
+                    var separatedSyntaxList = (SeparatedSyntaxList) property.GetValue(this);
+                    foreach (var child in separatedSyntaxList.GetWithSeparators()) 
+                        yield return child;
                 }
             }
         }

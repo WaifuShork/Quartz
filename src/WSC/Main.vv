@@ -1,0 +1,8 @@
+﻿{
+    var result = 0
+    for i = 0 to 100
+    {
+        result = result + i
+    }
+    result    
+}
