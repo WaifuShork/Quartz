@@ -11,8 +11,8 @@ variables:
   tests: './src/WSC.Tests/WSC.Tests.csproj'
 
 steps:
-- script: dotnet build --configuration ${buildConfiguration} $(sln)
-  displayName: 'dotnet build ${buildConfiguration}'
+- script: dotnet build $(sln)
+  displayName: 'dotnet build'
 - script: dotnet test $(tests) --logger "xunit;LogFileName=TestResuls.xml"
   displayName: 'dotnet test'
 - task: PublishTestResults@2
