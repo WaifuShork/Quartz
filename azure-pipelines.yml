@@ -1,0 +1,22 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  buildConfiguration: 'Release'
+  sln: 'wsc.sln'
+  tests: './src/WSC.Tests/WSC.Tests.csproj'
+
+steps:
+- script: dotnet build $(sln)
+  displayName: 'dotnet build'
+- script: dotnet test $(tests)
+  displayName: 'dotnet test'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'xUnit'
+    testResultsFiles: '**/TestResuls.xml'
+  condition: always()
