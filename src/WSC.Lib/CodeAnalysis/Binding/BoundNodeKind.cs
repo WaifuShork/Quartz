@@ -8,6 +8,7 @@
         AssignmentExpression,
         UnaryExpression,
         BinaryExpression,
+        ErrorExpression,
 
         // Statements 
         BlockStatement,
@@ -18,6 +19,6 @@
         VariableDeclaration,
         GotoStatement,
         LabelStatement,
-        ConditionalGotoStatement
+        ConditionalGotoStatement,
     }
 }
