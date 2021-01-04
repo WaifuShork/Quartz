@@ -13,7 +13,7 @@ variables:
 steps:
 - script: dotnet build $(sln)
   displayName: 'dotnet build'
-- script: dotnet test $(tests)"
+- script: dotnet test $(tests)
   displayName: 'dotnet test'
 - task: PublishTestResults@2
   inputs:
