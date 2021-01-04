@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using wsc.CodeAnalysis;
 using wsc.CodeAnalysis.Symbols;
@@ -23,12 +24,15 @@ namespace wsc
                 var isKeyword = token.Kind.ToString().EndsWith("Keyword");
                 var isNumber = token.Kind == SyntaxKind.NumberToken;
                 var isIdentifier = token.Kind == SyntaxKind.IdentifierToken;
+                var isString = token.Kind == SyntaxKind.StringToken;
 
                 var openBraceToken = token.Kind == SyntaxKind.OpenBraceToken;
                 var closeBraceToken = token.Kind == SyntaxKind.CloseBraceToken;
 
                 if (isKeyword)
                     Console.ForegroundColor = ConsoleColor.Blue;
+                else if (isString)
+                    Console.ForegroundColor = ConsoleColor.Green;
                 
                 else if (isIdentifier)
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
