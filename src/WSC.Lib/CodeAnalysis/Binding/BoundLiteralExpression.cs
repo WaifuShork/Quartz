@@ -1,4 +1,5 @@
 ﻿using System;
+using wsc.CodeAnalysis.Symbols;
 
 namespace wsc.CodeAnalysis.Binding
 {
@@ -7,10 +8,25 @@ namespace wsc.CodeAnalysis.Binding
         public BoundLiteralExpression(object value)
         {
             Value = value;
+
+            switch (value)
+            {
+                case bool:
+                    Type = TypeSymbol.Bool;
+                    break;
+                case int:
+                    Type = TypeSymbol.Int;
+                    break;
+                case string:
+                    Type = TypeSymbol.String;
+                    break;
+                default:
+                    throw new Exception($"Unexpected literal <{value}> of type {value.GetType()}");
+            }
         }
 
         public override BoundNodeKind Kind => BoundNodeKind.LiteralExpression;
-        public override Type Type => Value.GetType();
+        public override TypeSymbol Type { get; }
         
         public object Value { get; }
     }

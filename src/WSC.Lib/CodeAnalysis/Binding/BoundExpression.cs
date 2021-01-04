@@ -1,9 +1,10 @@
 ﻿using System;
+using wsc.CodeAnalysis.Symbols;
 
 namespace wsc.CodeAnalysis.Binding
 {
     internal abstract class BoundExpression : BoundNode
     {
-        public abstract Type Type { get; }
+        public abstract TypeSymbol Type { get; }
     }
 }

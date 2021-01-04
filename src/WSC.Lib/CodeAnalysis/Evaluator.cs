@@ -20,12 +20,12 @@ namespace wsc.CodeAnalysis
         
         public object Evaluate()
         {
-            var labelToindex = new Dictionary<BoundLabel, int>();
+            var labelToIndex = new Dictionary<BoundLabel, int>();
 
             for (var i = 0; i < _root.Statements.Length; i++)
             {
                 if (_root.Statements[i] is BoundLabelStatement l)
-                    labelToindex.Add(l.BoundLabel, i + 1);
+                    labelToIndex.Add(l.BoundLabel, i + 1);
             }
 
             var index = 0;
@@ -46,14 +46,14 @@ namespace wsc.CodeAnalysis
 
                     case BoundNodeKind.GotoStatement:
                         var gs = (BoundGotoStatement) s;
-                        index = labelToindex[gs.BoundLabel];
+                        index = labelToIndex[gs.BoundLabel];
                         break;
 
                     case BoundNodeKind.ConditionalGotoStatement:
                         var cgs = (BoundConditionalGotoStatement) s;
                         var condition = (bool) EvaluateExpression(cgs.Condition);
                         if (condition == cgs.JumpIfTrue)
-                            index = labelToindex[cgs.BoundLabel];
+                            index = labelToIndex[cgs.BoundLabel];
                         else
                             index++;
                         break;
@@ -161,19 +161,19 @@ namespace wsc.CodeAnalysis
                     return (int) left / (int) right;
                 
                 case BoundBinaryOperatorKind.BitwiseAnd:
-                    if (b.Type == (typeof(int)))
+                    if (b.Type == (TypeSymbol.Int))
                         return (int) left & (int) right;
                     else 
                         return (bool) left & (bool) right;
                 
                 case BoundBinaryOperatorKind.BitwiseOr:
-                    if (b.Type == (typeof(int)))
+                    if (b.Type == (TypeSymbol.Int))
                         return (int) left | (int) right;
                     else
                         return (bool) left | (bool) right;
                 
                 case BoundBinaryOperatorKind.BitwiseXor:
-                    if (b.Type == (typeof(int)))
+                    if (b.Type == (TypeSymbol.Int))
                         return (int) left ^ (int) right;
                     else
                         return (bool) left ^ (bool) right;

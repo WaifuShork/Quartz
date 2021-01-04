@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using wsc.CodeAnalysis.Symbols;
 using wsc.CodeAnalysis.Syntax;
 using wsc.CodeAnalysis.Text;
 
@@ -23,7 +24,7 @@ namespace wsc.CodeAnalysis
             _diagnostics.Add(diagnostic);
         }
 
-        public void ReportInvalidNumber(TextSpan span, string text, Type type)
+        public void ReportInvalidNumber(TextSpan span, string text, TypeSymbol type)
         {
             var message = $"The number <{text}> isn't valid <{type}>.";
             Report(span, message);
@@ -42,13 +43,13 @@ namespace wsc.CodeAnalysis
             Report(span, message);
         }
 
-        public void ReportUndefinedUnaryOperator(TextSpan span, string operatorText, Type operandType)
+        public void ReportUndefinedUnaryOperator(TextSpan span, string operatorText, TypeSymbol operandType)
         {
             var message = $"Unary operator <{operatorText}> is not defined for type <{operandType}>.";
             Report(span, message);
         }
 
-        public void ReportUndefinedBinaryOperator(TextSpan span, string operatorText, Type leftType, Type rightType)
+        public void ReportUndefinedBinaryOperator(TextSpan span, string operatorText, TypeSymbol leftType, TypeSymbol rightType)
         {
             var message = $"Binary operator <{operatorText}> is not defined for type <{leftType}> and <{rightType}>.";
             Report(span, message);
@@ -61,7 +62,7 @@ namespace wsc.CodeAnalysis
         }
         
 
-        public void ReportCannotConvert(TextSpan span, Type fromType, Type toType)
+        public void ReportCannotConvert(TextSpan span, TypeSymbol fromType, TypeSymbol toType)
         {
             var message = $"Cannot convert type <{fromType}> to {toType}.";
             Report(span, message);

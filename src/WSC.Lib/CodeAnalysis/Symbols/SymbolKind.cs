@@ -3,5 +3,6 @@
     public enum SymbolKind
     {
         Variable,
+        Type
     }
 }

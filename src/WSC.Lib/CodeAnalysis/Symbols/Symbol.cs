@@ -9,5 +9,7 @@
         
         public abstract SymbolKind Kind { get;  }
         public string Name { get; }
+
+        public override string ToString() => Name;
     }
 }
