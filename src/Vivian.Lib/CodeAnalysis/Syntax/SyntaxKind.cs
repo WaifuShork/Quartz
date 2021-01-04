@@ -1,4 +1,4 @@
-﻿namespace wsc.CodeAnalysis.Syntax
+﻿namespace Vivian.CodeAnalysis.Syntax
 {
     public enum SyntaxKind
     {

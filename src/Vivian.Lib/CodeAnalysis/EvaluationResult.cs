@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace wsc.CodeAnalysis
+namespace Vivian.CodeAnalysis
 {
     public sealed class EvaluationResult
     {

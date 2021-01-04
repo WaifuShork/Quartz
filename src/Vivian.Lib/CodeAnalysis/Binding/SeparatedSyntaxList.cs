@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using wsc.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Syntax;
 
-namespace wsc.CodeAnalysis.Binding
+namespace Vivian.CodeAnalysis.Binding
 {
     public abstract class SeparatedSyntaxList
     {

@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using wsc.CodeAnalysis.Symbols;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Text;
 
-namespace wsc.CodeAnalysis.Syntax
+namespace Vivian.CodeAnalysis.Syntax
 {
     internal sealed class Lexer
     {

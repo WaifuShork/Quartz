@@ -1,6 +1,6 @@
-﻿using wsc.CodeAnalysis.Symbols;
+﻿using Vivian.CodeAnalysis.Symbols;
 
-namespace wsc.CodeAnalysis.Binding
+namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundErrorExpression : BoundExpression
     {

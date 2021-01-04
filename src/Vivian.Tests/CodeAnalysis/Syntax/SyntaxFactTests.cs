@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using wsc.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Syntax;
 using Xunit;
 
-namespace WSC.Tests.CodeAnalysis.Syntax
+namespace Vivian.Tests.CodeAnalysis.Syntax
 {
     public class SyntaxFactTests
     {

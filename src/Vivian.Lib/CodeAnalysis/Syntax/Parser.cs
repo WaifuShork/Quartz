@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using wsc.CodeAnalysis.Binding;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Binding;
+using Vivian.CodeAnalysis.Text;
 
-namespace wsc.CodeAnalysis.Syntax
+namespace Vivian.CodeAnalysis.Syntax
 {
     internal sealed class Parser
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using wsc.CodeAnalysis;
-using wsc.CodeAnalysis.Symbols;
-using wsc.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
 using Xunit;
 
-namespace WSC.Tests.CodeAnalysis
+namespace Vivian.Tests.CodeAnalysis
 {
     public class EvaluationTests
     {

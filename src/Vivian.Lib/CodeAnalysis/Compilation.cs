@@ -3,12 +3,12 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using wsc.CodeAnalysis.Binding;
-using wsc.CodeAnalysis.Lowering;
-using wsc.CodeAnalysis.Symbols;
-using wsc.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Binding;
+using Vivian.CodeAnalysis.Lowering;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
 
-namespace wsc.CodeAnalysis
+namespace Vivian.CodeAnalysis
 {
     public sealed class Compilation
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 
-namespace wsc.CodeAnalysis.Binding
+namespace Vivian.CodeAnalysis.Binding
 {
     internal abstract class BoundTreeRewriter
     {

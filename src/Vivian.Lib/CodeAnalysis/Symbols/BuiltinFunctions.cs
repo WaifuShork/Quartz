@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace wsc.CodeAnalysis.Symbols
+namespace Vivian.CodeAnalysis.Symbols
 {
     internal static class BuiltinFunctions
     {

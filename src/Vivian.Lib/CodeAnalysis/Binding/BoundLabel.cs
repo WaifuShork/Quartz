@@ -1,4 +1,4 @@
-﻿namespace wsc.CodeAnalysis.Binding
+﻿namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundLabel
     {

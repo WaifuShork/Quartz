@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
-using wsc.CodeAnalysis;
-using wsc.CodeAnalysis.Symbols;
-using wsc.CodeAnalysis.Syntax;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Text;
 
-namespace wsc
+namespace Vivian
 {
     internal static class Program
     {

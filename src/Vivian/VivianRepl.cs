@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using wsc.CodeAnalysis;
-using wsc.CodeAnalysis.Symbols;
-using wsc.CodeAnalysis.Syntax;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Text;
 
-namespace wsc
+namespace Vivian
 {
     internal sealed class VivianRepl : Repl
     {

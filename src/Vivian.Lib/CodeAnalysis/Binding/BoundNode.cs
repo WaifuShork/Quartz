@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace wsc.CodeAnalysis.Binding
+namespace Vivian.CodeAnalysis.Binding
 {
     internal abstract class BoundNode
     {

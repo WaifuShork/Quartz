@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using wsc.CodeAnalysis.Binding;
-using wsc.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Binding;
+using Vivian.CodeAnalysis.Symbols;
 
-namespace wsc.CodeAnalysis
+namespace Vivian.CodeAnalysis
 {
     internal sealed class Evaluator
     {

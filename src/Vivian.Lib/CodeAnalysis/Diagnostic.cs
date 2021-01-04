@@ -1,6 +1,6 @@
-﻿using wsc.CodeAnalysis.Text;
+﻿using Vivian.CodeAnalysis.Text;
 
-namespace wsc.CodeAnalysis
+namespace Vivian.CodeAnalysis
 {
     public sealed class Diagnostic
     {

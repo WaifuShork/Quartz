@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using wsc.CodeAnalysis.Binding;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Binding;
+using Vivian.CodeAnalysis.Text;
 
-namespace wsc.CodeAnalysis.Syntax
+namespace Vivian.CodeAnalysis.Syntax
 {
     public abstract class SyntaxNode
     {

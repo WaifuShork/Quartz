@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace wsc.CodeAnalysis.Syntax
+namespace Vivian.CodeAnalysis.Syntax
 {
     public static class SyntaxFacts
     {

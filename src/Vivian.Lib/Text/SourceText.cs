@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace wsc.CodeAnalysis.Text
+namespace Vivian.CodeAnalysis.Text
 {
     public sealed class SourceText
     {

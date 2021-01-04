@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using wsc.CodeAnalysis.Binding;
-using wsc.CodeAnalysis.Syntax;
-using wsc.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Binding;
+using Vivian.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Symbols;
 
-namespace wsc.CodeAnalysis.Lowering
+namespace Vivian.CodeAnalysis.Lowering
 {
     internal sealed class Lowerer : BoundTreeRewriter
     {

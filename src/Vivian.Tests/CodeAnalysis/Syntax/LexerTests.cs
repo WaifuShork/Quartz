@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using wsc.CodeAnalysis.Syntax;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Text;
 using Xunit;
 
-namespace WSC.Tests.CodeAnalysis.Syntax
+namespace Vivian.Tests.CodeAnalysis.Syntax
 {
     public class LexerTests
     {

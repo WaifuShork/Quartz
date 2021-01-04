@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Text;
 
-namespace wsc.CodeAnalysis.Syntax
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed class SyntaxTree
     {

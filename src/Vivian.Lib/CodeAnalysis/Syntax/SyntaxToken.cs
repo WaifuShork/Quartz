@@ -1,6 +1,6 @@
-﻿using wsc.CodeAnalysis.Text;
+﻿using Vivian.CodeAnalysis.Text;
 
-namespace wsc.CodeAnalysis.Syntax
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed class SyntaxToken : SyntaxNode
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Text;
 
-namespace WSC.Tests.CodeAnalysis
+namespace Vivian.Tests.CodeAnalysis
 {
     internal sealed class AnnotatedText
     {

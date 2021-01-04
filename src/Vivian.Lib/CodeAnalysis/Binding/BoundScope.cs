@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using wsc.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Symbols;
 
-namespace wsc.CodeAnalysis.Binding
+namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundScope
     {

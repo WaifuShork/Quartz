@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using wsc.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Syntax;
 using Xunit;
 
-namespace WSC.Tests.CodeAnalysis.Syntax
+namespace Vivian.Tests.CodeAnalysis.Syntax
 {
     internal sealed class AssertingEnumerator : IDisposable
     {

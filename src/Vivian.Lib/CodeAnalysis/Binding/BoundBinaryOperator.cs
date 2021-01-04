@@ -1,8 +1,8 @@
 ﻿using System;
-using wsc.CodeAnalysis.Symbols;
-using wsc.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
 
-namespace wsc.CodeAnalysis.Binding
+namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundBinaryOperator
     {

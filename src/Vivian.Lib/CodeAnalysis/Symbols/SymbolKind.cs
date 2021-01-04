@@ -1,4 +1,4 @@
-﻿namespace wsc.CodeAnalysis.Symbols
+﻿namespace Vivian.CodeAnalysis.Symbols
 {
     public enum SymbolKind
     {

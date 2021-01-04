@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using wsc.CodeAnalysis.Symbols;
-using wsc.CodeAnalysis.Syntax;
-using wsc.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Text;
 
-namespace wsc.CodeAnalysis
+namespace Vivian.CodeAnalysis
 {
     internal sealed class DiagnosticBag : IEnumerable<Diagnostic>
     {

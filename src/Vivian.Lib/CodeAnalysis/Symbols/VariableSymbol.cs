@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace wsc.CodeAnalysis.Symbols
+namespace Vivian.CodeAnalysis.Symbols
 {
     public class VariableSymbol : Symbol
     {

@@ -1,4 +1,4 @@
-﻿namespace wsc.CodeAnalysis.Text
+﻿namespace Vivian.CodeAnalysis.Text
 {
     public struct TextSpan
     {

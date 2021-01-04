@@ -1,6 +1,6 @@
-﻿using wsc.CodeAnalysis.Syntax;
+﻿using Vivian.CodeAnalysis.Syntax;
 
-namespace wsc.CodeAnalysis.Binding
+namespace Vivian.CodeAnalysis.Binding
 {
     public sealed class CallExpressionSyntax : ExpressionSyntax
     {

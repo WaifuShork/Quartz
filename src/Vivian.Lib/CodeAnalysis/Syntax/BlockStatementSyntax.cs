@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace wsc.CodeAnalysis.Syntax
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed class BlockStatementSyntax : StatementSyntax
     {

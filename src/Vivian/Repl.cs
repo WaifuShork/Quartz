@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace wsc
+namespace Vivian
 {
     internal abstract class Repl
     {

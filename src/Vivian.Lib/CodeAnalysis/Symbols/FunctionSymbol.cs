@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace wsc.CodeAnalysis.Symbols
+namespace Vivian.CodeAnalysis.Symbols
 {
     public sealed class FunctionSymbol : Symbol
     {

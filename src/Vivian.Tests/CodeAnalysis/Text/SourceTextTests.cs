@@ -1,4 +1,4 @@
-﻿using wsc.CodeAnalysis.Text;
+﻿using Vivian.CodeAnalysis.Text;
 using Xunit;
 
 namespace WSC.Tests.CodeAnalysis.Text
