@@ -12,7 +12,7 @@ namespace Vivian
 {
     internal static class Program
     {
-        private static readonly string data = @"G:\Quartz\src\WSC\main.t";
+        private static readonly string data = @"G:\Quartz\src\Vivian\main.vv";
 
         internal static void Main()
         {

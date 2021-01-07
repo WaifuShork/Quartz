@@ -65,13 +65,13 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("false ^ true", true)]
         [InlineData("true ^ true", false)]
         
-        [InlineData("{ var a = 0 (a = 10) * a }", 100)]
+        [InlineData("{ imply a = 0 (a = 10) * a }", 100)]
         
-        [InlineData("{ var a = 0 if a == 0 a = 10 a }", 10)]
+        [InlineData("{ imply a = 0 if a == 0 a = 10 a }", 10)]
         
-        [InlineData("{ var i = 10 var result = 0 while i > 0 { result = result + i i = i - 1 } result }", 55)]
+        [InlineData("{ imply i = 10 imply result = 0 while i > 0 { result = result + i i = i - 1 } result }", 55)]
         
-        [InlineData("{ var result = 0 for i = 1 to 10 { result = result + i } result }", 55)]
+        [InlineData("{ imply result = 0 for i = 1 to 10 { result = result + i } result }", 55)]
         
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
@@ -89,12 +89,12 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    var x = 10
-                    var y = 100
+                    imply x = 10
+                    imply y = 100
                     {
-                        var x = 100
+                        imply x = 100
                     }            
-                    var [x] = 5
+                    imply [x] = 5
                 }
             ";
             var diagnostics = @"

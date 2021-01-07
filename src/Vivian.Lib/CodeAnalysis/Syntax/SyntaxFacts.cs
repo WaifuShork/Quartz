@@ -60,8 +60,8 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 case "let":
                     return SyntaxKind.LetKeyword;
-                case "var":
-                    return SyntaxKind.VarKeyword;
+                case "imply":
+                    return SyntaxKind.ImplyKeyword;
                 case "true":
                     return SyntaxKind.TrueKeyword;
                 case "false":
@@ -167,8 +167,8 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "true";
                 case SyntaxKind.LetKeyword:
                     return "let";
-                case SyntaxKind.VarKeyword:
-                    return "var";
+                case SyntaxKind.ImplyKeyword:
+                    return "imply";
                 
                 case SyntaxKind.IfKeyword:
                     return "if";

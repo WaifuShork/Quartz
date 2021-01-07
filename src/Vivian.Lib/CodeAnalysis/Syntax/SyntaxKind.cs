@@ -18,7 +18,6 @@
         StarToken,
         SlashToken,
         
-        
         BangToken,
         OpenParenthesisToken,
         CloseParenthesisToken,
@@ -47,7 +46,7 @@
         FalseKeyword,
         TrueKeyword,
         LetKeyword,
-        VarKeyword,
+        ImplyKeyword,
         IfKeyword,
         ElseKeyword,        
         WhileKeyword,        
