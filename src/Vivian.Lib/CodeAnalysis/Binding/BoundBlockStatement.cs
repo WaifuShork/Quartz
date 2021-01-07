@@ -4,7 +4,6 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundBlockStatement : BoundStatement
     {
-
         public BoundBlockStatement(ImmutableArray<BoundStatement> statements)
         {
             Statements = statements;

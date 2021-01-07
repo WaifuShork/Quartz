@@ -8,7 +8,6 @@ namespace Vivian.CodeAnalysis.Binding
         public BoundLiteralExpression(object value)
         {
             Value = value;
-
             switch (value)
             {
                 case bool:

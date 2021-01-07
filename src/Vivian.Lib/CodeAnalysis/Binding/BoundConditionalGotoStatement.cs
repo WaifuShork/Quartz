@@ -2,7 +2,6 @@
 {
     internal sealed class BoundConditionalGotoStatement : BoundStatement
     {
-
         public BoundConditionalGotoStatement(BoundLabel boundLabel, BoundExpression condition, bool jumpIfTrue = true)
         {
             BoundLabel = boundLabel;

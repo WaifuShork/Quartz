@@ -229,7 +229,5 @@ namespace Vivian.CodeAnalysis
                     throw new Exception($"Unexpected binary operator {b.Op}");
             }
         }
-        
-       
     }
 }
