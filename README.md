@@ -1,4 +1,9 @@
-# Vivian
+<h1 align="center" style="position: relative;">
+  <img width="200" style="border-radius: 50%;" src="logo.png" alt="Vivian Logo" /><br>
+  Vivian
+</h1>
+
+<h3 align="center">A statically typed programming language powered by .NET</h3>
 ## How to Operate the REPL 
 
 The Vivian REPL is a simple Console Text Editor with a few basic controls: 
@@ -7,7 +12,7 @@ The Vivian REPL is a simple Console Text Editor with a few basic controls:
 - PgDn: Cycle down through submission history
 - End: Returns to the last character in the sequence
 - Home: Returns to the first character in the sequence 
-- Arrow Keys: Used for navigating around the taxt
+- Arrow Keys: Used for navigating around the text
 - Tab: 4 space indent
 - Enter: Without a scope open, it will automatically submit the input
 - Ctrl Enter: Used to continue the expression on a new line (ex -> 12 + \n 4)

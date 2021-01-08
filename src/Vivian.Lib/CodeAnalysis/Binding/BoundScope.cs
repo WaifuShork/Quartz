@@ -36,7 +36,6 @@ namespace Vivian.CodeAnalysis.Binding
             if (Parent == null)
                 return false;
             
-
             return Parent.TryLookupVariable(name, out variable);
         }
 

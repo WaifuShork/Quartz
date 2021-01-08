@@ -20,6 +20,7 @@ namespace Vivian.CodeAnalysis.Binding
         public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax)
         {
             var parentScope = CreateParentScopes(previous);
+            
             var binder = new Binder(parentScope);
             var expression = binder.BindStatement(syntax.Statement);
             var variables = binder._scope.GetDeclaredVariables();
@@ -33,8 +34,6 @@ namespace Vivian.CodeAnalysis.Binding
         
         private static BoundScope CreateParentScopes(BoundGlobalScope previous)
         {
-            // submission 3 -> 2 submission -> submission 1
-
             var stack = new Stack<BoundGlobalScope>();
             while (previous != null)
             {
@@ -42,7 +41,8 @@ namespace Vivian.CodeAnalysis.Binding
                 previous = previous.Previous;
             }
 
-            BoundScope parent = null;
+            var parent = CreateRootScope();
+            
             while (stack.Count > 0)
             {
                 previous = stack.Pop();
@@ -54,6 +54,16 @@ namespace Vivian.CodeAnalysis.Binding
             }
 
             return parent;
+        }
+
+        private static BoundScope CreateRootScope()
+        {
+            var result = new BoundScope(null);
+
+            foreach (var f in BuiltinFunctions.GetAll())
+                result.TryDeclareFunction(f);
+
+            return result;
         }
 
         public DiagnosticBag Diagnostics => _diagnostics;
