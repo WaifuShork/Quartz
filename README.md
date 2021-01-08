@@ -4,6 +4,7 @@
 </h1>
 
 <h3 align="center">A statically typed programming language powered by .NET</h3>
+
 ## How to Operate the REPL 
 
 The Vivian REPL is a simple Console Text Editor with a few basic controls: 
