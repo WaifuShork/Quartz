@@ -17,7 +17,8 @@
         MinusToken,
         StarToken,
         SlashToken,
-        
+        ModuloToken,
+
         BangToken,
         OpenParenthesisToken,
         CloseParenthesisToken,

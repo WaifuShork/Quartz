@@ -16,6 +16,7 @@
         GreaterOrEquals,
         BitwiseAnd,
         BitwiseOr,
-        BitwiseXor
+        BitwiseXor,
+        Modulo
     }
 }

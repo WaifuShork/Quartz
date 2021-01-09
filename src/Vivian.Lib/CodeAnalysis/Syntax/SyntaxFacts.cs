@@ -26,6 +26,7 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 case SyntaxKind.StarToken:
                 case SyntaxKind.SlashToken:
+                case SyntaxKind.ModuloToken:
                     return 5;
                 
                 case SyntaxKind.PlusToken:
@@ -116,6 +117,8 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "-";
                 case SyntaxKind.StarToken:
                     return "*";
+                case SyntaxKind.ModuloToken:
+                    return "%";
                 case SyntaxKind.SlashToken:
                     return "/";
                 case SyntaxKind.BangToken:

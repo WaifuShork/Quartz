@@ -104,12 +104,27 @@ namespace Vivian.CodeAnalysis
                 case BoundNodeKind.CallExpression:
                     return EvaluateCallExpression((BoundCallExpression) node);
                 
+                case BoundNodeKind.ConversionExpression:
+                    return EvaluateConversionExpression((BoundConversionExpression) node);
+                
                 default:
                     throw new Exception($"Unexpected node {node.Kind}");
             }
         }
 
-        
+        private object EvaluateConversionExpression(BoundConversionExpression node)
+        {
+            var value = EvaluateExpression(node.Expression);
+            if (node.Type == TypeSymbol.Bool)
+                return Convert.ToBoolean(value);
+            else if (node.Type == TypeSymbol.Int)
+                return Convert.ToInt32(value);
+            else if (node.Type == TypeSymbol.String)
+                return Convert.ToString(value);
+            else
+                throw new Exception($"Unexpected type {node.Type}");
+        }
+
 
         private static object EvaluateLiteralExpression(BoundLiteralExpression n)
         {
@@ -168,6 +183,10 @@ namespace Vivian.CodeAnalysis
                 
                 case BoundBinaryOperatorKind.Division:
                     return (int) left / (int) right;
+                
+                case BoundBinaryOperatorKind.Modulo:
+                    return (int) left % (int) right;
+                
                 
                 case BoundBinaryOperatorKind.BitwiseAnd:
                     if (b.Type == (TypeSymbol.Int))

@@ -52,6 +52,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     _kind = SyntaxKind.PlusToken;
                     _position++;
                     break;
+                case '%':
+                    _kind = SyntaxKind.ModuloToken;
+                    _position++;
+                    break;
                 case '-':
                     _kind = SyntaxKind.MinusToken;
                     _position++;

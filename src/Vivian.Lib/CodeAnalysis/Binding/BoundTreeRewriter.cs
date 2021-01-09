@@ -163,9 +163,21 @@ namespace Vivian.CodeAnalysis.Binding
                     return RewriteErrorExpression((BoundErrorExpression) node);
                 case BoundNodeKind.CallExpression:
                     return RewriteCallExpression((BoundCallExpression) node);
+                case BoundNodeKind.ConversionExpression:
+                    return RewriteConversionExpression((BoundConversionExpression) node);
                 default:
                     throw new Exception($"Unexpected node: {node.Kind}");
             }
+        }
+
+        protected virtual BoundExpression RewriteConversionExpression(BoundConversionExpression node)
+        {
+            var expression = RewriteExpression(node.Expression);
+            
+            if (expression == node.Expression)
+                return node;
+
+            return new BoundConversionExpression(node.Type, expression);
         }
 
         protected virtual BoundExpression RewriteCallExpression(BoundCallExpression node)

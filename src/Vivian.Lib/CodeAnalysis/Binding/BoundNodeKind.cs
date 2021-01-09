@@ -20,6 +20,7 @@
         GotoStatement,
         LabelStatement,
         ConditionalGotoStatement,
-        CallExpression
+        CallExpression,
+        ConversionExpression
     }
 }
