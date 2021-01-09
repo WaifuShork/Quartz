@@ -9,6 +9,7 @@ namespace Vivian.CodeAnalysis
     {
         private readonly BoundBlockStatement _root;
         private readonly Dictionary<VariableSymbol, object> _variables;
+        private Random _random;
 
         private object _lastValue;
         
@@ -108,22 +109,7 @@ namespace Vivian.CodeAnalysis
             }
         }
 
-        private object EvaluateCallExpression(BoundCallExpression node)
-        {
-            if (node.Function == BuiltinFunctions.Input)
-            {
-                return Console.ReadLine();
-            }
-            
-            else if (node.Function == BuiltinFunctions.Print)
-            {
-                var message = (string) EvaluateExpression(node.Arguments[0]);
-                Console.WriteLine(message);
-                return null;
-            }
-            else
-                throw new Exception($"Unexpected function {node.Function}");
-        }
+        
 
         private static object EvaluateLiteralExpression(BoundLiteralExpression n)
         {
@@ -228,6 +214,31 @@ namespace Vivian.CodeAnalysis
                 default:
                     throw new Exception($"Unexpected binary operator {b.Op}");
             }
+        }
+        
+        private object EvaluateCallExpression(BoundCallExpression node)
+        {
+            if (node.Function == BuiltinFunctions.Input)
+            {
+                return Console.ReadLine();
+            }
+            
+            else if (node.Function == BuiltinFunctions.Print)
+            {
+                var message = (string) EvaluateExpression(node.Arguments[0]);
+                Console.WriteLine(message);
+                return null;
+            }
+            else if (node.Function == BuiltinFunctions.Rnd)
+            {
+                var max = (int) EvaluateExpression(node.Arguments[0]);
+                if (_random == null)
+                    _random = new Random();
+
+                return _random.Next(max);
+            }
+            else
+                throw new Exception($"Unexpected function {node.Function}");
         }
     }
 }
