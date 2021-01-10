@@ -7,7 +7,7 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundScope
     {
-        //private Dictionary<string, VariableSymbol> _variables;
+        //private Dictionary<string, VariableSymbol> _globals;
         //private Dictionary<string, FunctionSymbol> _functions;
         private Dictionary<string, Symbol> _symbols;
         
@@ -78,20 +78,20 @@ namespace Vivian.CodeAnalysis.Binding
         
         /*public bool TryDeclareVariable(VariableSymbol variable)
         /
-            if (_variables == null)
-                _variables = new Dictionary<string, VariableSymbol>();
+            if (_globals == null)
+                _globals = new Dictionary<string, VariableSymbol>();
             
-            if (_variables.ContainsKey(variable.Name))
+            if (_globals.ContainsKey(variable.Name))
                 return false;
             
-            _variables.Add(variable.Name, variable);
+            _globals.Add(variable.Name, variable);
             return true;
         }
         
         public bool TryLookupVariable(string name, out VariableSymbol variable)
         {
             variable = null;
-            if (_variables != null && _variables.TryGetValue(name, out variable))
+            if (_globals != null && _globals.TryGetValue(name, out variable))
                 return true;
 
             if (Parent == null)
@@ -126,10 +126,10 @@ namespace Vivian.CodeAnalysis.Binding
         
         public ImmutableArray<VariableSymbol> GetDeclaredVariables()
         {
-            if (_variables == null)
+            if (_globals == null)
                 return ImmutableArray<VariableSymbol>.Empty;
             
-            return _variables.Values.ToImmutableArray();
+            return _globals.Values.ToImmutableArray();
         }
         public ImmutableArray<FunctionSymbol> GetDeclaredFunctions()
         {

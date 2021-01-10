@@ -26,57 +26,57 @@ namespace Vivian.CodeAnalysis
 
         public void ReportInvalidNumber(TextSpan span, string text, TypeSymbol type)
         {
-            var message = $"The number <{text}> isn't valid <{type}>.";
+            var message = $"The number '{text}' isn't valid '{type}'.";
             Report(span, message);
         }
 
         public void ReportBadCharacter(int position, char character)
         {
             var span = new TextSpan(position, 1);
-            var message = $"Bad character input: <{character}>.";
+            var message = $"Bad character input: '{character}'.";
             Report(span, message);
         }
         
         public void ReportUnexpectedToken(TextSpan span, SyntaxKind actualKind, SyntaxKind expectedKind)
         {
-            var message = $"Unexpected token: <{actualKind}>, expected: <{expectedKind}>.";
+            var message = $"Unexpected token: '{actualKind}', expected: '{expectedKind}'.";
             Report(span, message);
         }
 
         public void ReportUndefinedUnaryOperator(TextSpan span, string operatorText, TypeSymbol operandType)
         {
-            var message = $"Unary operator <{operatorText}> is not defined for type <{operandType}>.";
+            var message = $"Unary operator '{operatorText}' is not defined for type '{operandType}'.";
             Report(span, message);
         }
 
         public void ReportUndefinedBinaryOperator(TextSpan span, string operatorText, TypeSymbol leftType, TypeSymbol rightType)
         {
-            var message = $"Binary operator <{operatorText}> is not defined for type <{leftType}> and <{rightType}>.";
+            var message = $"Binary operator '{operatorText}' is not defined for type '{leftType}' and '{rightType}'.";
             Report(span, message);
         }
 
         public void ReportUndefinedName(TextSpan span, string name)
         {
-            var message = $"Variable <{name}> does not exist in the current context.";
+            var message = $"Variable '{name}' does not exist in the current context.";
             Report(span, message);
         }
         
 
         public void ReportCannotConvert(TextSpan span, TypeSymbol fromType, TypeSymbol toType)
         {
-            var message = $"Cannot convert type <{fromType}> to {toType}.";
+            var message = $"Cannot convert type '{fromType}' to '{toType}'.";
             Report(span, message);
         }
 
         public void ReportVariableAlreadyDeclared(TextSpan span, string name)
         {
-            var message = $"Variable <{name}> is already declared.";
+            var message = $"Variable '{name}' is already declared.";
             Report(span, message);
         }
 
         public void ReportCannotAssign(TextSpan span, string name)
         {
-            var message = $"Variable <{name}> is read-only and cannot be assigned to.";
+            var message = $"Variable '{name}' is read-only and cannot be assigned to.";
             Report(span, message);
         }
 
@@ -88,19 +88,19 @@ namespace Vivian.CodeAnalysis
 
         public void ReportUndefinedFunction(TextSpan span, string name)
         {
-            var message = $"Function <{name}> does not exist in the current context.";
+            var message = $"Function '{name}' does not exist in the current context.";
             Report(span, message);
         }
 
         public void ReportWrongArgumentCount(TextSpan span, string name, int expectedCount, int actualCount)
         {
-            var message = $"Function <{name}> requires <{expectedCount}> arguments but was given <{actualCount}>.";
+            var message = $"Function '{name}' requires '{expectedCount}' arguments but was given '{actualCount}'.";
             Report(span, message);
         }
 
         public void ReportWrongArgumentType(TextSpan span, string name, TypeSymbol expectedType, TypeSymbol actualType)
         {
-            var message = $"Parameter <{name}> requires a value of type <{expectedType}> but was given a value of type {actualType}.";
+            var message = $"Parameters '{name}' requires a value of type '{expectedType}' but was given a value of type '{actualType}'.";
             Report(span, message);
         }
 
@@ -112,20 +112,32 @@ namespace Vivian.CodeAnalysis
 
         public void ReportSymbolAlreadyDeclared(TextSpan span, string name)
         {
-            var message = $"<{name}> is already declared.";
+            var message = $"'{name}' is already declared.";
             Report(span, message);
         }
 
         public void ReportUndefinedType(TextSpan span, string name)
         {
-            var message = $"Type <{name}> does not exist.";
+            var message = $"Type '{name}' does not exist.";
             Report(span, message);
         }
 
         public void ReportCannotConvertImplicitly(TextSpan span, TypeSymbol fromType, TypeSymbol toType)
         {
-            var message = $"Cannot convert type <{fromType}> to <{toType}>. An explicit conversion exists (are you missing a cast?)";
+            var message = $"Cannot convert type '{fromType}' to '{toType}'. An explicit conversion exists (are you missing a cast?)";
             Report(span, message);
+        }
+
+        public void XXX_ReportFunctionsAreUnsupported(TextSpan span)
+        {
+            var message = $"Functions with return values are unsupported.";
+            Report(span, message);        
+        }
+
+        public void ReportParameterAlreadyDeclared(TextSpan span, string parameterName)
+        {
+            var message = $"A parameter with the name '{parameterName}' already exists.";
+            Report(span, message);             
         }
     }
 }

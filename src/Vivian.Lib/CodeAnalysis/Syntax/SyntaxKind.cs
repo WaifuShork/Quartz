@@ -78,5 +78,9 @@
         WhileStatement,
         ForStatement,
         DoWhileStatement,
+        GlobalStatement,
+        FunctionDeclaration,
+        Parameter,
+        FunctionKeyword
     }
 }
