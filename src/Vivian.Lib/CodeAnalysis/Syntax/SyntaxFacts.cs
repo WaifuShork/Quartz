@@ -159,6 +159,9 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.CloseParenthesisToken:
                     return ")";
                 
+                case SyntaxKind.ColonToken:
+                    return ":"; 
+                
                 case SyntaxKind.OpenBraceToken:
                     return "{";
                 case SyntaxKind.CloseBraceToken:

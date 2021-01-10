@@ -7,6 +7,7 @@
         EndOfFileToken,
         WhitespaceToken,        
         CommaToken,
+        ColonToken,
 
         // Data Tokens
         StringToken,
@@ -66,7 +67,8 @@
         
         // Nodes
         CompilationUnit,
-        
+        TypeClause,
+
         // Statements
         BlockStatement,
         VariableDeclaration,

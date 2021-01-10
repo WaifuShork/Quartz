@@ -7,11 +7,8 @@ namespace Vivian.CodeAnalysis.Syntax
     internal sealed class Lexer
     {
         private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
-
         private readonly SourceText _text;
-
         private int _position;
-        
         private int _start;
         private SyntaxKind _kind;
         private object _value;
@@ -78,6 +75,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '{':
                     _kind = SyntaxKind.OpenBraceToken;
+                    _position++;
+                    break;
+                case ':':
+                    _kind = SyntaxKind.ColonToken;
                     _position++;
                     break;
                 case '}':
