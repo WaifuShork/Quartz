@@ -53,6 +53,7 @@
         WhileKeyword,        
         ForKeyword,
         ToKeyword,
+        DoKeyword,
 
         // Expressions
         LiteralExpression,
@@ -74,5 +75,6 @@
         ElseClause,
         WhileStatement,
         ForStatement,
+        DoWhileStatement,
     }
 }

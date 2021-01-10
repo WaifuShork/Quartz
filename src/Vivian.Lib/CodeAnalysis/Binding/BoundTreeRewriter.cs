@@ -22,6 +22,9 @@ namespace Vivian.CodeAnalysis.Binding
                 case BoundNodeKind.WhileStatement:
                     return RewriteWhileStatement((BoundWhileStatement) node);
                 
+                case BoundNodeKind.DoWhileStatement:
+                    return RewriteDoWhileStatement((BoundDoWhileStatement) node);
+                
                 case BoundNodeKind.ForStatement:
                     return RewriteForStatement((BoundForStatement) node);
                 
@@ -42,6 +45,15 @@ namespace Vivian.CodeAnalysis.Binding
             }
         }
 
+        protected virtual BoundStatement RewriteDoWhileStatement(BoundDoWhileStatement node)
+        {
+            var body = RewriteStatement(node.Body);
+            var condition = RewriteExpression(node.Condition);
+            if (body == node.Body && condition == node.Condition)
+                return node;
+            
+            return new BoundDoWhileStatement(body, condition);
+        }
         protected virtual BoundStatement RewriteBlockStatement(BoundBlockStatement node)
         {
             ImmutableArray<BoundStatement>.Builder builder = null;
@@ -72,7 +84,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundBlockStatement(builder.MoveToImmutable());
         }
-
         protected virtual BoundStatement RewriteVariableDeclaration(BoundVariableDeclaration node)
         {
             var initializer = RewriteExpression(node.Initializer);
@@ -81,7 +92,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundVariableDeclaration(node.Variable, initializer);
         }
-
         protected virtual BoundStatement RewriteIfStatement(BoundIfStatement node)
         {
             var condition = RewriteExpression(node.Condition);
@@ -92,7 +102,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundIfStatement(condition, thenStatement, elseStatement);
         }
-        
         protected virtual BoundStatement RewriteWhileStatement(BoundWhileStatement node)
         {
             var condition = RewriteExpression(node.Condition);
@@ -102,7 +111,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundWhileStatement(condition, body);
         }
-        
         protected virtual BoundStatement RewriteForStatement(BoundForStatement node)
         {
             var lowerBound = RewriteExpression(node.LowerBound);
@@ -114,18 +122,15 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundForStatement(node.Variable, lowerBound, upperBound, body);
         }
-        
-        private BoundStatement RewriteLabelStatement(BoundLabelStatement node)
+        protected virtual BoundStatement RewriteLabelStatement(BoundLabelStatement node)
         {
             return node;
         }
-        
-        private BoundStatement RewriteGotoStatement(BoundGotoStatement node)
+        protected virtual BoundStatement RewriteGotoStatement(BoundGotoStatement node)
         {
             return node;
         }
-
-        private BoundStatement RewriteConditionalGotoStatement(BoundConditionalGotoStatement node)
+        protected virtual BoundStatement RewriteConditionalGotoStatement(BoundConditionalGotoStatement node)
         {
             var condition = RewriteExpression(node.Condition);
 
@@ -134,7 +139,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundConditionalGotoStatement(node.BoundLabel, condition, node.JumpIfTrue);
         }
-
         protected virtual BoundStatement RewriteExpressionStatement(BoundExpressionStatement node)
         {
             var expression = RewriteExpression(node.Expression);
@@ -179,7 +183,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundConversionExpression(node.Type, expression);
         }
-
         protected virtual BoundExpression RewriteCallExpression(BoundCallExpression node)
         {
             ImmutableArray<BoundExpression>.Builder builder = null;
@@ -211,22 +214,18 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundCallExpression(node.Function, builder.MoveToImmutable());
         }
-
         protected virtual BoundExpression RewriteErrorExpression(BoundErrorExpression node)
         {
             return node;
         }
-
         protected virtual BoundExpression RewriteLiteralExpression(BoundLiteralExpression node)
         {
             return node;
         }
-
         protected virtual BoundExpression RewriteVariableExpression(BoundVariableExpression node)
         {
             return node;
         }
-
         protected virtual BoundExpression RewriteAssignmentExpression(BoundAssignmentExpression node)
         {
             var expression = RewriteExpression(node.Expression);
@@ -235,7 +234,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundAssignmentExpression(node.Variable, expression);
         }
-
         protected virtual BoundExpression RewriteUnaryExpression(BoundUnaryExpression node)
         {
             var operand = RewriteExpression(node.Operand);
@@ -244,7 +242,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return new BoundUnaryExpression(node.Op, operand);
         }
-
         protected virtual BoundExpression RewriteBinaryExpression(BoundBinaryExpression node)
         {
             var left = RewriteExpression(node.Left);

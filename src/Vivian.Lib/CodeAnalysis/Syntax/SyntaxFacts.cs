@@ -72,6 +72,8 @@ namespace Vivian.CodeAnalysis.Syntax
                     return SyntaxKind.IfKeyword;
                 case "else":
                     return SyntaxKind.ElseKeyword;
+                case "do":
+                    return SyntaxKind.DoKeyword;
                 case "while":
                     return SyntaxKind.WhileKeyword;
                 
@@ -178,6 +180,8 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.ElseKeyword:
                     return "else";
                 
+                case SyntaxKind.DoKeyword:
+                    return "do";
                 case SyntaxKind.WhileKeyword:
                     return "while";
                 

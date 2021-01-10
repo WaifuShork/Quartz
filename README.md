@@ -21,8 +21,6 @@ The Vivian REPL is a simple Console Text Editor with a few basic controls:
 ## Example Syntax 
 Vivian as of currently is an implicitly typed language containing only bools, ints, and basic expression evaluation.
 
-
-
 ```c#
 {
     // built in functions

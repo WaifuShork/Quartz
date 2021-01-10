@@ -88,9 +88,21 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.WhileKeyword:
                     return ParseWhileStatement();
+                
+                case SyntaxKind.DoKeyword:
+                    return ParseDoWhileStatement();
                 default:
                     return ParseExpressionStatement();
             }
+        }
+
+        private StatementSyntax ParseDoWhileStatement()
+        {
+            var doKeyword = MatchToken(SyntaxKind.DoKeyword);
+            var body = ParseStatement();
+            var whileKeyword = MatchToken(SyntaxKind.WhileKeyword);
+            var condition = ParseExpression();
+            return new DoWhileStatementSyntax(doKeyword, body, whileKeyword, condition);
         }
 
         private StatementSyntax ParseForStatement()
@@ -142,8 +154,7 @@ namespace Vivian.CodeAnalysis.Syntax
             
             return new VariableDeclarationSyntax(keyword, identifier, equals, initializer);
         }
-
-
+        
         private BlockStatementSyntax ParseBlockStatement()
         {
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();

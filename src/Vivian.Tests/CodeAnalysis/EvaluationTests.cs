@@ -73,6 +73,8 @@ namespace Vivian.Tests.CodeAnalysis
         
         [InlineData("{ imply result = 0 for i = 1 to 10 { result = result + i } result }", 55)]
         
+        [InlineData("{ imply a = 0 do a = a + 1 while a < 10 a }", 10)]
+        
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
             var syntaxTree = SyntaxTree.Parse(text);

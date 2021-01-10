@@ -1,13 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "TPngmnYds/8tjqh83QFxJF7eijau3EqansRAPD7IxyMH4pCIFl3nnFeTnmJcIaWTSlDUjbIMJkILo7X6kw0+YQ==",
+  "dgSpecHash": "7m+FlNSsFSk84V7LcI90IS3QFg3L9mJ0wtH7s8XBVsYhgYlnKfpMpCoh4kE93xi716ojRrsK6lo2z17PLLqtLw==",
   "success": true,
   "projectFilePath": "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
-    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\5.0.0\\microsoft.netcore.app.runtime.win-x64.5.0.0.nupkg.sha512",
-    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\5.0.0\\microsoft.windowsdesktop.app.runtime.win-x64.5.0.0.nupkg.sha512",
-    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\5.0.0\\microsoft.aspnetcore.app.runtime.win-x64.5.0.0.nupkg.sha512"
+    "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }

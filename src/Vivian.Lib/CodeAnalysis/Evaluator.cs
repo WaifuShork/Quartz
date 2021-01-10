@@ -186,8 +186,7 @@ namespace Vivian.CodeAnalysis
                 
                 case BoundBinaryOperatorKind.Modulo:
                     return (int) left % (int) right;
-                
-                
+
                 case BoundBinaryOperatorKind.BitwiseAnd:
                     if (b.Type == (TypeSymbol.Int))
                         return (int) left & (int) right;
@@ -244,7 +243,7 @@ namespace Vivian.CodeAnalysis
             
             else if (node.Function == BuiltinFunctions.Print)
             {
-                var message = (string) EvaluateExpression(node.Arguments[0]);
+                var message = (object) EvaluateExpression(node.Arguments[0]);
                 Console.WriteLine(message);
                 return null;
             }
