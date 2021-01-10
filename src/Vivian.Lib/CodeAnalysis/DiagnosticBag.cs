@@ -109,5 +109,11 @@ namespace Vivian.CodeAnalysis
             var message = "Expression must have a value.";
             Report(span, message);
         }
+
+        public void ReportSymbolAlreadyDeclared(TextSpan span, string name)
+        {
+            var message = $"<{name}> is already declared.";
+            Report(span, message);
+        }
     }
 }

@@ -351,9 +351,10 @@ namespace Vivian.CodeAnalysis.Binding
             var variable = new VariableSymbol(name, isReadOnly, type);
 
             if (declare && !_scope.TryDeclareVariable(variable))
-                _diagnostics.ReportVariableAlreadyDeclared(identifier.Span, name);
+                _diagnostics.ReportSymbolAlreadyDeclared(identifier.Span, name);
             return variable;
         }
+        
         private TypeSymbol LookupType(string name)
         {
             switch (name)
