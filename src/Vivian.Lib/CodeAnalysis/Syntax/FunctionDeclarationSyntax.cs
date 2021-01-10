@@ -22,6 +22,7 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.FunctionDeclaration;
+        
         public SyntaxToken FunctionKeyword { get; }
         public SyntaxToken Identifier { get; }
         public SyntaxToken OpenParenthesisToken { get; }

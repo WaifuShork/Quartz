@@ -16,12 +16,12 @@ namespace Vivian.CodeAnalysis
 
         private object _lastValue;
         
-        public Evaluator(ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functionBodies,
-            BoundBlockStatement root, Dictionary<VariableSymbol, object> globals)
+        public Evaluator(ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functionBodies, BoundBlockStatement root, Dictionary<VariableSymbol, object> variables)
         {
             _functionBodies = functionBodies;
             _root = root;
-            _globals = globals;
+            _globals = variables;
+            _locals.Push(new Dictionary<VariableSymbol, object>());
         }
 
         public object Evaluate()
@@ -84,6 +84,7 @@ namespace Vivian.CodeAnalysis
         private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
         {
             var value = EvaluateExpression(node.Initializer);
+            
             _lastValue = value;
             Assign(node.Variable, value);
         }

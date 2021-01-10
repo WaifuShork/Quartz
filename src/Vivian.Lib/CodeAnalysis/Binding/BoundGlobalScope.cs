@@ -5,9 +5,11 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundGlobalScope
     {
-        public BoundGlobalScope(BoundGlobalScope previous, ImmutableArray<Diagnostic> diagnostics,
-            ImmutableArray<FunctionSymbol> functions, ImmutableArray<VariableSymbol> variables,
-            BoundStatement statement)
+        public BoundGlobalScope(BoundGlobalScope previous, 
+                                ImmutableArray<Diagnostic> diagnostics,
+                                ImmutableArray<FunctionSymbol> functions, 
+                                ImmutableArray<VariableSymbol> variables,
+                                BoundStatement statement)
         {
             Previous = previous;
             Diagnostics = diagnostics;

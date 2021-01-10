@@ -100,8 +100,30 @@ namespace Vivian.Tests.CodeAnalysis
                 }
             ";
             var diagnostics = @"
-                <x> is already declared.
+                'x' is already declared.
             ";
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_FunctionParameters_NoInfiniteLoop()
+        {
+            var text = @"
+                function printer(name: string[[[=]]][)]
+                { 
+                    print(""hi "" + name + ""!"")   
+                   
+                }[]
+            ";
+
+            var diagnostics = @"
+                Unexpected token: 'EqualsToken', expected: 'CloseParenthesisToken'.
+                Unexpected token: 'EqualsToken', expected: 'OpenBraceToken'.
+                Unexpected token: 'EqualsToken', expected: 'IdentifierToken'.
+                Unexpected token: 'CloseParenthesisToken', expected: 'IdentifierToken'.
+                Unexpected token: 'EndOfFileToken', expected: 'CloseBraceToken'.
+            ";
+
             AssertDiagnostics(text, diagnostics);
         }
         
@@ -116,7 +138,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             var diagnostics = @"
-                Function <print> does not exist in the current context.
+                Function 'print' does not exist in the current context.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -128,7 +150,7 @@ namespace Vivian.Tests.CodeAnalysis
             var text = @"[x] + 10";
             
             var diagnostics = @"
-                Variable <x> does not exist in the current context.
+                Variable 'x' does not exist in the current context.
             ";
             AssertDiagnostics(text, diagnostics);
         }

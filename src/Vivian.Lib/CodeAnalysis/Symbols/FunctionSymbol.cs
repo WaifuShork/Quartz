@@ -13,8 +13,8 @@ namespace Vivian.CodeAnalysis.Symbols
         }
 
         public override SymbolKind Kind => SymbolKind.Function;
+        public FunctionDeclarationSyntax Declaration { get; }
         public ImmutableArray<ParameterSymbol> Parameters { get; }
         public TypeSymbol Type { get; }
-        public FunctionDeclarationSyntax Declaration { get; }
     }
 }

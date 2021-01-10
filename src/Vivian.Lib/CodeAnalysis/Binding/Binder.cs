@@ -10,9 +10,9 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class Binder
     {
-        private readonly FunctionSymbol _function;
         private readonly DiagnosticBag _diagnostics = new();
-        
+        private readonly FunctionSymbol _function;
+
         private BoundScope _scope;
 
         public Binder(BoundScope parent, FunctionSymbol function)
@@ -30,7 +30,7 @@ namespace Vivian.CodeAnalysis.Binding
         public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax)
         {
             var parentScope = CreateParentScopes(previous);
-            var binder = new Binder(parentScope, null);
+            var binder = new Binder(parentScope, function: null);
 
             foreach (var function in syntax.Members.OfType<FunctionDeclarationSyntax>())
                 binder.BindFunctionDeclaration(function);
@@ -342,6 +342,7 @@ namespace Vivian.CodeAnalysis.Binding
             
             return new BoundAssignmentExpression(variable, convertedExpression);
         }
+        
         private BoundExpression BindUnaryExpression(UnaryExpressionSyntax syntax)
         {
             var boundOperand = BindExpression(syntax.Operand);
