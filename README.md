@@ -3,7 +3,7 @@
   Vivian
 </h1>
 
-<h3 align="center">A statically typed programming language powered by .NET</h3>
+<h3 align="center">A strongly typed programming language powered by .NET</h3>
 
 ## How to Operate the REPL 
 
