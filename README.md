@@ -57,7 +57,7 @@ Vivian as of currently is an implicitly typed language containing only bools, in
         result = 9000
     }
     
-    // Basice while loop
+    // Basic while loop
     while result < 20
     {
         result = result - 1
