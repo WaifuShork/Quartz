@@ -55,22 +55,35 @@ namespace Vivian.CodeAnalysis
             if (program.Diagnostics.Any())
                 return new EvaluationResult(program.Diagnostics.ToImmutableArray(), null);
 
-            var statement = GetStatement();
-            var evaluator = new Evaluator(program.FunctionBodies, statement, variables);
+            //var statement = GetStatement();
+            //var evaluator = new Evaluator(program.FunctionBodies, variables);
+            var evaluator = new Evaluator(program, variables);
+            
             var value = evaluator.Evaluate();
             return new EvaluationResult(ImmutableArray<Diagnostic>.Empty, value);
         }
 
         public void EmitTree(TextWriter writer)
         {
-            var statement = GetStatement();
-            statement.WriteTo(writer);
-        }
+            var program = Binder.BindProgram(GlobalScope);
+            program.Statement.WriteTo(writer);
 
-        private BoundBlockStatement GetStatement()
-        {
-            var result = GlobalScope.Statement;
-            return Lowerer.Lower(result);
+            if (program.Statement.Statements.Any())
+            {
+                program.Statement.WriteTo(writer);
+            }
+            else
+            {
+                foreach (var functionBody in program.Functions)
+                {
+                    if (!GlobalScope.Functions.Contains(functionBody.Key))
+                        continue;
+
+                    functionBody.Key.WriteTo(writer);
+                    functionBody.Value.WriteTo(writer);
+                }
+            }
+            
         }
     }
 }

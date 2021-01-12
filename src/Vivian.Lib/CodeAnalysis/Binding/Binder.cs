@@ -37,15 +37,15 @@ namespace Vivian.CodeAnalysis.Binding
             foreach (var function in syntax.Members.OfType<FunctionDeclarationSyntax>())
                 binder.BindFunctionDeclaration(function);
 
-            var statementBuilder = ImmutableArray.CreateBuilder<BoundStatement>();
+            var statements = ImmutableArray.CreateBuilder<BoundStatement>();
 
             foreach (var globalStatement in syntax.Members.OfType<GlobalStatementSyntax>())
             {
-                var s = binder.BindStatement(globalStatement.Statement);
-                statementBuilder.Add(s);
+                var statement = binder.BindStatement(globalStatement.Statement);
+                statements.Add(statement);
             }
 
-            var statement = new BoundBlockStatement(statementBuilder.ToImmutable());
+            //var statement = new BoundBlockStatement(statements.ToImmutable());
             
             var functions = binder._scope.GetDeclaredFunctions();
             var variables = binder._scope.GetDeclaredVariables();
@@ -54,7 +54,7 @@ namespace Vivian.CodeAnalysis.Binding
             if (previous != null)
                 diagnostics = diagnostics.InsertRange(0, previous.Diagnostics);
             
-            return new BoundGlobalScope(previous, diagnostics, functions, variables, statement);
+            return new BoundGlobalScope(previous, diagnostics, functions, variables, statements.ToImmutable());
         }
 
         public static BoundProgram BindProgram(BoundGlobalScope globalScope)
@@ -62,7 +62,7 @@ namespace Vivian.CodeAnalysis.Binding
             var parentScope = CreateParentScopes(globalScope);
 
             var functionBodies = ImmutableDictionary.CreateBuilder<FunctionSymbol, BoundBlockStatement>();
-            var diagnostics = new DiagnosticBag();
+            var diagnostics = ImmutableArray.CreateBuilder<Diagnostic>();
 
             var scope = globalScope;
             while (scope != null)
@@ -78,9 +78,11 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 scope = scope.Previous;
             }
-            
-            
-            return new BoundProgram(globalScope, diagnostics, functionBodies.ToImmutable());
+
+            var statement = Lowerer.Lower(new BoundBlockStatement(globalScope.Statements));
+
+            return new BoundProgram(diagnostics.ToImmutable(), functionBodies.ToImmutable(), statement);
+            //return new BoundProgram(globalScope, diagnostics.ToImmutable(), functionBodies.ToImmutable());
         }
         
         private void BindFunctionDeclaration(FunctionDeclarationSyntax syntax)

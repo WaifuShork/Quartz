@@ -183,7 +183,7 @@ namespace Vivian.CodeAnalysis.Binding
         private static void WriteCallExpression(BoundCallExpression node, IndentedTextWriter writer)
         {
             writer.WriteIdentifier(node.Function.Name);
-            writer.WritePunctuation("{");
+            writer.WritePunctuation("(");
 
             var isFirst = true;
             foreach (var argument in node.Arguments)
@@ -196,7 +196,7 @@ namespace Vivian.CodeAnalysis.Binding
                 argument.WriteTo(writer);
             }
             
-            writer.WritePunctuation("}");
+            writer.WritePunctuation(")");
         }
 
         private static void WriteConversionExpression(BoundConversionExpression node, IndentedTextWriter writer)
