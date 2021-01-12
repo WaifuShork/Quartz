@@ -20,23 +20,25 @@ The Vivian REPL is a Console Text Editor with some basic controls:
 ```
 
 ## Example Syntax 
-Vivian is currently an implicitly typed language. It only contains `bool`s, `int`s, and basic expression evaluation.
+Vivian is currently an implicitly typed language.
+It contains:
+- `bool`
+- `int`
+- `string`
+- basic expression evaluation, and
+- an early implementation of functions
 
 ```c#
 {
-    // built-in functions
-    print(string output)
-    input(string input)
-    rnd(int max)
-        
     // built-in conversions
     int(string input) // converts a string to an int, if a valid integer is given
     string(int input) // converts an int to a string
     bool(string/int input) // converts either string or int to bool
 
+    // variable declaration types
     imply result = 20 // imply represents a mutable variable
     let result = 20 // let represents a constant varable
-    // variables cannot be redeclared
+    // Remember, variables cannot be redeclared.
     
     // for loop 
     for i = 0 to 100 
@@ -64,6 +66,32 @@ Vivian is currently an implicitly typed language. It only contains `bool`s, `int
         result = result - 1
         result = result + 1
     }
+
+    // do while loop
+    do
+    {
+        result = result + 1
+    } while result < 25
+
+    // built-in functions
+    print(string output)
+    input(string input)
+    rnd(int max)
+
+    // custom function declaration
+    function name(param: string, other: int) 
+    {
+         // your code goes here!
+    }
+
+    // custom function example
+    function myPrint(text: string, number: int) {
+        print(text)
+        print(string(number))
+    }
+
+    // calling custom functions
+    myPrint("Hello, myPrint!", 100)
 }
 
 ```
@@ -107,3 +135,33 @@ Vivian is currently an implicitly typed language. It only contains `bool`s, `int
 }
 ```
 
+## Custom Function Fun
+```c#
+function randomFunctionOne()
+{
+    print("I am random function number one.")
+    print("Congrats on picking me!")
+}
+
+function randomFunctionTwo()
+{
+    print("I am random function number two.")
+    print("Pleased to make your acquaintance.")
+}
+
+function randomFunctionThree()
+{
+    print("Howdy, I'm rando function numba three!")
+    print("YEEEEEHAW")
+}
+
+{
+    let randomNumber = rnd(2) + 1
+    if randomNumber == 1
+        randomFunctionOne()
+    else if randomNumber == 2
+        randomFunctionTwo()
+    else if randomNumber == 3
+        randomFunctionThree()
+}
+```
