@@ -19,9 +19,7 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public DiagnosticBag Diagnostics => _diagnostics;
-
         private char Current => Peak(0);
-
         private char Lookahead => Peak(1);
 
         private char Peak(int offset)

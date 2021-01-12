@@ -86,6 +86,12 @@ namespace Vivian.CodeAnalysis.Syntax
                 case "to":
                     return SyntaxKind.ToKeyword;
                 
+                case "break":
+                    return SyntaxKind.BreakKeyword;
+                
+                case "continue":
+                    return SyntaxKind.ContinueKeyword;
+                
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -202,6 +208,12 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.CommaToken:
                     return ",";
+                
+                case SyntaxKind.BreakKeyword:
+                    return "break";
+                case SyntaxKind.ContinueKeyword:
+                    return "continue";
+                
                 default:
                     return null;
             }

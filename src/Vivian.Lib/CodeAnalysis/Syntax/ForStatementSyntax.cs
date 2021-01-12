@@ -3,7 +3,13 @@
     public sealed class ForStatementSyntax : StatementSyntax
     {
         
-        public ForStatementSyntax(SyntaxToken keyword, SyntaxToken identifier, SyntaxToken equalsToken, ExpressionSyntax lowerBound, SyntaxToken toKeyword, ExpressionSyntax upperBound, StatementSyntax body)
+        public ForStatementSyntax(SyntaxToken keyword, 
+                                  SyntaxToken identifier, 
+                                  SyntaxToken equalsToken, 
+                                  ExpressionSyntax lowerBound, 
+                                  SyntaxToken toKeyword, 
+                                  ExpressionSyntax upperBound, 
+                                  StatementSyntax body)
         {
             Keyword = keyword;
             Identifier = identifier;

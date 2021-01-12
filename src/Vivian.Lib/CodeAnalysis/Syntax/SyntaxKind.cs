@@ -55,6 +55,8 @@
         ForKeyword,
         ToKeyword,
         DoKeyword,
+        ContinueKeyword,
+        BreakKeyword,
 
         // Expressions
         LiteralExpression,
@@ -81,6 +83,9 @@
         GlobalStatement,
         FunctionDeclaration,
         Parameter,
-        FunctionKeyword
+        FunctionKeyword,
+
+        ContinueStatement,
+        BreakStatement
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using System.IO;
 
 namespace Vivian.CodeAnalysis.Binding
 {
@@ -10,7 +6,7 @@ namespace Vivian.CodeAnalysis.Binding
     {
         public abstract BoundNodeKind Kind { get; }
         
-        public IEnumerable<BoundNode> GetChildren()
+        /*public IEnumerable<BoundNode> GetChildren()
         {
             var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -138,13 +134,13 @@ namespace Vivian.CodeAnalysis.Binding
                 return ConsoleColor.Cyan;
             
             else return ConsoleColor.Yellow;
-        }
+        }*/
 
         public override string ToString()
         {
             using (var writer = new StringWriter())
             {
-                WriteTo(writer);
+                this.WriteTo(writer);
                 return writer.ToString();
             }
         }

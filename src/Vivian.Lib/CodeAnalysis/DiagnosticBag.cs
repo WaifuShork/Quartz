@@ -139,5 +139,11 @@ namespace Vivian.CodeAnalysis
             var message = $"A parameter with the name '{parameterName}' already exists.";
             Report(span, message);             
         }
+
+        public void ReportInvalidBreakOrContinue(TextSpan span, string text)
+        {
+            var message = $"The keyword {text} can only exist inside of a loop.";
+            Report(span, message);
+        }
     }
 }

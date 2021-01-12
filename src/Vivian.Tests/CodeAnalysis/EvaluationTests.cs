@@ -65,6 +65,13 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("false ^ true", true)]
         [InlineData("true ^ true", false)]
         
+        [InlineData("\"test\"", "test")]
+        [InlineData("\"te\"\"st\"", "te\"st")]
+        [InlineData("\"test\" == \"test\"", true)]
+        [InlineData("\"test\" != \"test\"", false)]
+        [InlineData("\"abc\" != \"abc\"", false)]
+        [InlineData("\"abc\" == \"abc\"", true)]
+        
         [InlineData("{ imply a = 0 (a = 10) * a }", 100)]
         
         [InlineData("{ imply a = 0 if a == 0 a = 10 a }", 10)]
@@ -111,8 +118,7 @@ namespace Vivian.Tests.CodeAnalysis
             var text = @"
                 function printer(name: string[[[=]]][)]
                 { 
-                    print(""hi "" + name + ""!"")   
-                   
+                    print(""hi "" + name + ""!"")
                 }[]
             ";
 
