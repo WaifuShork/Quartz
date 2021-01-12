@@ -6,44 +6,45 @@
 <h3 align="center">A strongly typed programming language powered by .NET</h3>
 
 ## How to Operate the REPL 
-
-The Vivian REPL is a simple Console Text Editor with a few basic controls: 
+The Vivian REPL is a Console Text Editor with some basic controls: 
 ```yaml
 - PgUp: Cycle up through submission history
 - PgDn: Cycle down through submission history
-- End: Returns to the last character in the sequence
-- Home: Returns to the first character in the sequence 
+- End: Moves the cursor to the last character in the sequence
+- Home: Moves the cursor to the first character in the sequence 
 - Arrow Keys: Used for navigating around the text
 - Tab: 4 space indent
-- Enter: Without a scope open, it will automatically submit the input
+- Enter: Submits current input
+  - Input will only be submitted if the cursor is not within a scope (between {} curly brackets)
 - Ctrl Enter: Used to continue the expression on a new line (ex -> 12 + \n 4)
 ```
+
 ## Example Syntax 
-Vivian as of currently is an implicitly typed language containing only bools, ints, and basic expression evaluation.
+Vivian is currently an implicitly typed language. It only contains `bool`s, `int`s, and basic expression evaluation.
 
 ```c#
 {
-    // built in functions
+    // built-in functions
     print(string output)
     input(string input)
     rnd(int max)
         
-    // built in conversions 
+    // built-in conversions
     int(string input) // converts a string to an int, if a valid integer is given
     string(int input) // converts an int to a string
     bool(string/int input) // converts either string or int to bool
 
-    imply result = 20 // imply is used to represent a mutable variable
-    let result = 20 // let is used to represent a constant varable
+    imply result = 20 // imply represents a mutable variable
+    let result = 20 // let represents a constant varable
     // variables cannot be redeclared
     
-    // Basic for loop 
+    // for loop 
     for i = 0 to 100 
     {
         result = result + i
     }
     
-    // Basic if/else/else-if
+    // if/else if/else statements
     if result <= 200
     {
         result = 0
@@ -57,7 +58,7 @@ Vivian as of currently is an implicitly typed language containing only bools, in
         result = 9000
     }
     
-    // Basic while loop
+    // while loop
     while result < 20
     {
         result = result - 1
@@ -82,6 +83,7 @@ Vivian as of currently is an implicitly typed language containing only bools, in
         else
             message = string(i)
         print(message)
+    }
 }
 ```
 
