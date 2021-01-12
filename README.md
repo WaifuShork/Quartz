@@ -3,7 +3,7 @@
   Vivian
 </h1>
 
-<h3 align="center">A statically typed programming language powered by .NET</h3>
+<h3 align="center">A strongly typed programming language powered by .NET</h3>
 
 ## How to Operate the REPL 
 
@@ -57,7 +57,7 @@ Vivian as of currently is an implicitly typed language containing only bools, in
         result = 9000
     }
     
-    // Basice while loop
+    // Basic while loop
     while result < 20
     {
         result = result - 1
