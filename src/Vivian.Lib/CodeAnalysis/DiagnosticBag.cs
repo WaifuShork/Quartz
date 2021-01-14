@@ -163,5 +163,23 @@ namespace Vivian.CodeAnalysis
             var message = "Not all code paths return a value.";
             Report(span, message);   
         }
+
+        public void ReportUndefinedVariable(TextSpan span, string name)
+        {
+            var message = $"Variable '{name}' does not exist in the current context.";
+            Report(span, message);
+        }
+
+        public void ReportNotAVariable(TextSpan span, string name)
+        {
+            var message = $"'{name}' is not a variable.";
+            Report(span, message);
+        }
+
+        public void ReportNotAFunction(TextSpan span, string name)
+        {
+            var message = $"'{name}' is not a function.";
+            Report(span, message);
+        }
     }
 }

@@ -11,12 +11,13 @@ variables:
   tests: './src/Vivian.Tests/Vivian.Tests.csproj'
 
 steps:
-- script: dotnet build $(sln)
-  displayName: 'dotnet build'
-- script: dotnet test $(tests)
+- script: dotnet build --configuration $(buildConfiguration) $(sln)
+  displayName: 'dotnet build $(buildConfiguration)'
+- script: dotnet test $(tests) --logger "xunit;LogFileName=TestResults.xml"
   displayName: 'dotnet test'
 - task: PublishTestResults@2
+  displayName: 'publish test results to azure pipelines'
   inputs:
     testResultsFormat: 'xUnit'
-    testResultsFiles: '**/TestResuls.xml'
+    testResultsFiles: '**/TestResults.xml'
   condition: always()

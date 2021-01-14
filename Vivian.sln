@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Lib", "src\Vivian.Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Tests", "src\Vivian.Tests\Vivian.Tests.csproj", "{4C4AB045-7962-4568-947F-FD9F832C2078}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Compiler", "src\Vivian.Compiler\Vivian.Compiler\Vivian.Compiler.csproj", "{7B21F13D-FD6D-4031-A7EF-0CE595425A68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,17 @@ Global
 		{4C4AB045-7962-4568-947F-FD9F832C2078}.Release|x64.Build.0 = Release|Any CPU
 		{4C4AB045-7962-4568-947F-FD9F832C2078}.Release|x86.ActiveCfg = Release|Any CPU
 		{4C4AB045-7962-4568-947F-FD9F832C2078}.Release|x86.Build.0 = Release|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Debug|x64.Build.0 = Debug|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Debug|x86.Build.0 = Debug|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Release|x64.ActiveCfg = Release|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Release|x64.Build.0 = Release|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Release|x86.ActiveCfg = Release|Any CPU
+		{7B21F13D-FD6D-4031-A7EF-0CE595425A68}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

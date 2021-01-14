@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,12 +51,13 @@ namespace Vivian.CodeAnalysis.Binding
                 if (IsEnd)
                     return "<End>";
 
-                using (var stringWriter = new StringWriter())
+                using var writer = new StringWriter();
+                using (var indentedWriter = new IndentedTextWriter(writer))
                 {
                     foreach (var statement in Statements)
-                        statement.WriteTo(stringWriter);
+                        statement.WriteTo(indentedWriter);
 
-                    return stringWriter.ToString();
+                    return writer.ToString();
                 }
             }
         }
@@ -265,8 +267,10 @@ namespace Vivian.CodeAnalysis.Binding
         }
 
         public void WriteTo(TextWriter writer)
-        {            
+        {
             string Quote(string text) => "\"" + text.Replace("\"", "\\\"") + "\"";
+            
+            
             writer.WriteLine("digraph G {");
 
             var blockIds = new Dictionary<BasicBlock, string>();
@@ -310,9 +314,8 @@ namespace Vivian.CodeAnalysis.Binding
 
             foreach (var branch in graph.End.Incoming)
             {
-                var lastStatement = branch.From.Statements.Last();
-                
-                if (lastStatement.Kind != BoundNodeKind.ReturnStatement)
+                var lastStatement = branch.From.Statements.LastOrDefault();
+                if (lastStatement == null || lastStatement.Kind != BoundNodeKind.ReturnStatement)
                         return false;
             }
 

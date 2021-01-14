@@ -1,6 +1,6 @@
 digraph G {
     N0 [label = "<Start>" shape = box]
-    N1 [label = "return string(12)\l" shape = box]
+    N1 [label = "imply ah = tr(False)\l" shape = box]
     N2 [label = "<End>" shape = box]
     N0 -> N1 [label = ""]
     N1 -> N2 [label = ""]

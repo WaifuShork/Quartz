@@ -35,7 +35,7 @@ namespace Vivian.CodeAnalysis.Binding
             return true;
         }
         
-        public bool TryLookupVariable(string name, out VariableSymbol variable)
+        /*public bool TryLookupVariable(string name, out VariableSymbol variable)
             => TryLookupSymbol(name, out variable);
         
         public bool TryLookupFunction(string name, out FunctionSymbol function)
@@ -59,7 +59,16 @@ namespace Vivian.CodeAnalysis.Binding
                 return false;
 
             return Parent.TryLookupSymbol(name, out symbol);
+        }*/
+
+        public Symbol TryLookupSymbol(string name)
+        {
+            if (_symbols != null && _symbols.TryGetValue(name, out var symbol))
+                return symbol;
+
+            return Parent?.TryLookupSymbol(name);
         }
+        
 
         public ImmutableArray<VariableSymbol> GetDeclaredVariables()
             => GetDeclaredSymbols<VariableSymbol>();

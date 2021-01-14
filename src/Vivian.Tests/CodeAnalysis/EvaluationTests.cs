@@ -137,6 +137,65 @@ namespace Vivian.Tests.CodeAnalysis
         }
         
         [Fact]
+        public void Evaluator_AssignmentExpression_Reports_NotAVariable()
+        {
+            var text = @"[print] = 42";
+
+            var diagnostics = @"
+                'print' is not a variable.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+        
+        [Fact]
+        public void Evaluator_CallExpression_Reports_Undefined()
+        {
+            var text = @"[foo](42)";
+
+            var diagnostics = @"
+                Function 'foo' does not exist in the current context.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+        [Fact]
+        public void Evaluator_CallExpression_Reports_NotAFunction()
+        {
+            var text = @"
+                {
+                    let foo = 42
+                    [foo](42)
+                }
+            ";
+
+            var diagnostics = @"
+                'foo' is not a function.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+        
+        [Fact]
+        public void Evaluator_FunctionReturn_Missing()
+        {
+            var text = @"
+                function [add](a: int, b: int): int
+                {
+                }
+            ";
+
+            var diagnostics = @"
+                Not all code paths return a value.
+            ";
+
+            AssertDiagnostics(text, diagnostics);
+        }
+
+
+        
+        [Fact]
         public void Evaluator_Variables_Can_Shadow_Functions()
         {
             var text = @"
@@ -147,7 +206,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             var diagnostics = @"
-                Function 'print' does not exist in the current context.
+                'print' is not a function.
             ";
 
             AssertDiagnostics(text, diagnostics);
