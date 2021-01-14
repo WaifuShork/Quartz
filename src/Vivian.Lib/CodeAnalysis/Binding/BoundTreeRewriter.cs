@@ -149,7 +149,7 @@ namespace Vivian.CodeAnalysis.Binding
             if (condition == node.Condition)
                 return node;
 
-            return new BoundConditionalGotoStatement(node.BoundLabel, condition, node.JumpIfTrue);
+            return new BoundConditionalGotoStatement(node.Label, condition, node.JumpIfTrue);
         }
         protected virtual BoundStatement RewriteExpressionStatement(BoundExpressionStatement node)
         {

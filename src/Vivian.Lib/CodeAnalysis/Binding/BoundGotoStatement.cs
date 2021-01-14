@@ -3,12 +3,12 @@
     internal sealed class BoundGotoStatement : BoundStatement
     {
 
-        public BoundGotoStatement(BoundLabel boundLabel)
+        public BoundGotoStatement(BoundLabel label)
         {
-            BoundLabel = boundLabel;
+            Label = label;
         }
 
         public override BoundNodeKind Kind => BoundNodeKind.GotoStatement;
-        public BoundLabel BoundLabel { get; }
+        public BoundLabel Label { get; }
     }
 }

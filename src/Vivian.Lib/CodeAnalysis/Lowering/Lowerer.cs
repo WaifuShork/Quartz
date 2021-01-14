@@ -17,7 +17,7 @@ namespace Vivian.CodeAnalysis.Lowering
 
         private BoundLabel GenerateLabel()
         {
-            var name = $"BoundLabel{++_labelCount}";
+            var name = $"Label{++_labelCount}";
             return new BoundLabel(name);
         }
 

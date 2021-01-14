@@ -114,9 +114,22 @@ namespace Vivian.CodeAnalysis.Binding
                 case BoundNodeKind.ConditionalGotoStatement:
                     WriteConditionalGotoStatement((BoundConditionalGotoStatement) node, writer);
                     break;
+                case BoundNodeKind.ReturnStatement:
+                    WriteReturnStatement((BoundReturnStatement) node, writer);
+                    break;
                 default:
                     throw new Exception($"Unexpected node: {node.Kind}");
             }
+        }
+
+        private static void WriteReturnStatement(BoundReturnStatement node, IndentedTextWriter writer)
+        {
+            writer.WriteKeyword("return ");
+            if (node.Expression != null)
+            {
+                node.Expression.WriteTo(writer);
+            }
+            writer.WriteLine();
         }
 
         private static void WriteLiteralExpression(BoundLiteralExpression node, IndentedTextWriter writer)
@@ -286,7 +299,7 @@ namespace Vivian.CodeAnalysis.Binding
         private static void WriteGotoStatement(BoundGotoStatement node, IndentedTextWriter writer)
         {
             writer.WriteKeyword("goto ");   
-            writer.WriteIdentifier(node.BoundLabel.Name);
+            writer.WriteIdentifier(node.Label.Name);
             writer.WriteLine();
         }
 
@@ -296,7 +309,7 @@ namespace Vivian.CodeAnalysis.Binding
             if (unindent)
                 writer.Indent--;
             
-            writer.WritePunctuation(node.BoundLabel.Name);
+            writer.WritePunctuation(node.Label.Name);
             writer.WritePunctuation(" : ");
             writer.WriteLine();
             
@@ -307,7 +320,7 @@ namespace Vivian.CodeAnalysis.Binding
         private static void WriteConditionalGotoStatement(BoundConditionalGotoStatement node, IndentedTextWriter writer)
         {
             writer.WriteKeyword("goto ");   
-            writer.WriteIdentifier(node.BoundLabel.Name);
+            writer.WriteIdentifier(node.Label.Name);
             writer.WriteKeyword(node.JumpIfTrue ? "if " : "unless ");   
             node.Condition.WriteTo(writer);
             writer.WriteLine();

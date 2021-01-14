@@ -40,7 +40,7 @@ namespace Vivian.CodeAnalysis
             for (var i = 0; i < body.Statements.Length; i++)
             {
                 if (body.Statements[i] is BoundLabelStatement l)
-                    labelToIndex.Add(l.BoundLabel, i + 1);
+                    labelToIndex.Add(l.Label, i + 1);
             }
 
             var index = 0;
@@ -61,14 +61,14 @@ namespace Vivian.CodeAnalysis
 
                     case BoundNodeKind.GotoStatement:
                         var gs = (BoundGotoStatement) s;
-                        index = labelToIndex[gs.BoundLabel];
+                        index = labelToIndex[gs.Label];
                         break;
 
                     case BoundNodeKind.ConditionalGotoStatement:
                         var cgs = (BoundConditionalGotoStatement) s;
                         var condition = (bool) EvaluateExpression(cgs.Condition);
                         if (condition == cgs.JumpIfTrue)
-                            index = labelToIndex[cgs.BoundLabel];
+                            index = labelToIndex[cgs.Label];
                         else
                             index++;
                         break;
