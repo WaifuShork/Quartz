@@ -92,6 +92,9 @@ namespace Vivian.CodeAnalysis.Syntax
                 case "continue":
                     return SyntaxKind.ContinueKeyword;
                 
+                case "return":
+                    return SyntaxKind.ReturnKeyword;
+                
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -213,6 +216,9 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "break";
                 case SyntaxKind.ContinueKeyword:
                     return "continue";
+                
+                case SyntaxKind.ReturnKeyword:
+                    return "return";
                 
                 default:
                     return null;

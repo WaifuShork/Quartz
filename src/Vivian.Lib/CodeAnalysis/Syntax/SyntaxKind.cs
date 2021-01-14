@@ -57,6 +57,8 @@
         DoKeyword,
         ContinueKeyword,
         BreakKeyword,
+        ReturnKeyword,
+        FunctionKeyword,
 
         // Expressions
         LiteralExpression,
@@ -83,9 +85,8 @@
         GlobalStatement,
         FunctionDeclaration,
         Parameter,
-        FunctionKeyword,
-
         ContinueStatement,
-        BreakStatement
+        BreakStatement,
+        ReturnStatement
     }
 }

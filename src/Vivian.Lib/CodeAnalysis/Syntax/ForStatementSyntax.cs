@@ -2,7 +2,6 @@
 {
     public sealed class ForStatementSyntax : StatementSyntax
     {
-        
         public ForStatementSyntax(SyntaxToken keyword, 
                                   SyntaxToken identifier, 
                                   SyntaxToken equalsToken, 
