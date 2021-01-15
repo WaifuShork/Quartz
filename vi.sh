@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dotnet run --project ./src/Vivian/Vivian.csproj
+dotnet run --project ./src/Vivian.Interactive/Vivian.Interactive.csproj

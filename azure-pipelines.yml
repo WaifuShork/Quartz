@@ -13,7 +13,7 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration) $(sln)
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test $(tests) --logger "xunit;LogFileName=TestResults.xml"
+- script: dotnet test $(tests)
   displayName: 'dotnet test'
 - task: PublishTestResults@2
   displayName: 'publish test results to azure pipelines'

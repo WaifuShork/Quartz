@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian", "src\Vivian\Vivian.csproj", "{18032116-0FAC-40F4-8543-6CC1FF878EC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Interactive", "src\Vivian.Interactive\Vivian.Interactive.csproj", "{18032116-0FAC-40F4-8543-6CC1FF878EC0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Lib", "src\Vivian.Lib\Vivian.Lib.csproj", "{1E768763-2275-4018-9AE9-113D9CB89808}"
 EndProject

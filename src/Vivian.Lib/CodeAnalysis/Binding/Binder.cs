@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Net.Security;
 using Vivian.CodeAnalysis.Lowering;
 using Vivian.CodeAnalysis.Symbols;
@@ -30,17 +31,22 @@ namespace Vivian.CodeAnalysis.Binding
             }
         }
 
-        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, CompilationUnitSyntax syntax)
+        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, ImmutableArray<SyntaxTree> syntaxTrees)
         {
             var parentScope = CreateParentScopes(previous);
             var binder = new Binder(parentScope, function: null);
 
-            foreach (var function in syntax.Members.OfType<FunctionDeclarationSyntax>())
+            var functionDeclarations = syntaxTrees.SelectMany(st => st.Root.Members).OfType<FunctionDeclarationSyntax>();
+            
+            foreach (var function in functionDeclarations)
                 binder.BindFunctionDeclaration(function);
 
+            var globalStatements = syntaxTrees.SelectMany(st => st.Root.Members).OfType<GlobalStatementSyntax>();
+
+            
             var statements = ImmutableArray.CreateBuilder<BoundStatement>();
 
-            foreach (var globalStatement in syntax.Members.OfType<GlobalStatementSyntax>())
+            foreach (var globalStatement in globalStatements)
             {
                 var statement = binder.BindStatement(globalStatement.Statement);
                 statements.Add(statement);
@@ -190,7 +196,7 @@ namespace Vivian.CodeAnalysis.Binding
                     return BindExpressionStatement((ExpressionStatementSyntax) syntax);
                 
                 default:
-                    throw new Exception($"Unexpected syntax {syntax.Kind}");
+                    throw new Exception($"Unexpected syntaxTrees {syntax.Kind}");
             }
         }
 
@@ -383,7 +389,7 @@ namespace Vivian.CodeAnalysis.Binding
                     return BindCallExpression((CallExpressionSyntax) syntax);
                 
                 default:
-                    throw new Exception($"Unexpected syntax {syntax.Kind}");
+                    throw new Exception($"Unexpected syntaxTrees {syntax.Kind}");
             }
         }        
         
@@ -406,7 +412,7 @@ namespace Vivian.CodeAnalysis.Binding
             
             //if (!_scope.TryLookupVariable(name, out var variable))
             //{
-            //    _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
+            //    _diagnostics.ReportUndefinedName(syntaxTrees.IdentifierToken.Span, name);
 
             var variable = BindVariableReference(syntax.IdentifierToken);
             if (variable == null)
@@ -422,7 +428,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             //if (!_scope.TryLookupVariable(name, out var variable))
             //{
-            //    _diagnostics.ReportUndefinedName(syntax.IdentifierToken.Span, name);
+            //    _diagnostics.ReportUndefinedName(syntaxTrees.IdentifierToken.Span, name);
 
             var variable = BindVariableReference(syntax.IdentifierToken);
             if (variable == null)
@@ -484,7 +490,7 @@ namespace Vivian.CodeAnalysis.Binding
             }
 
             var symbol = _scope.TryLookupSymbol(syntax.Identifier.Text);
-            if (symbol == null/*!_scope.TryLookupFunction(syntax.Identifier.Text, out var function)*/)
+            if (symbol == null/*!_scope.TryLookupFunction(syntaxTrees.Identifier.Text, out var function)*/)
             {
                 _diagnostics.ReportUndefinedFunction(syntax.Identifier.Location, syntax.Identifier.Text);
                 return new BoundErrorExpression();
@@ -499,7 +505,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             if (syntax.Arguments.Count != function.Parameters.Length)
             {
-                //_diagnostics.ReportWrongArgumentCount(syntax.Span, function.Name, function.Parameters.Length, syntax.Arguments.Count);
+                //_diagnostics.ReportWrongArgumentCount(syntaxTrees.Span, function.Name, function.Parameters.Length, syntaxTrees.Arguments.Count);
 
                 TextSpan span;
                 if (syntax.Arguments.Count > function.Parameters.Length)
@@ -532,7 +538,7 @@ namespace Vivian.CodeAnalysis.Binding
 
                 if (argument.Type != parameter.Type)
                 {
-                   // _diagnostics.ReportWrongArgumentType(syntax.Arguments[i].Span, parameter.Name, parameter.Type, argument.Type);
+                   // _diagnostics.ReportWrongArgumentType(syntaxTrees.Arguments[i].Span, parameter.Name, parameter.Type, argument.Type);
                     //return new BoundErrorExpression();
                     if (argument.Type != TypeSymbol.Error)
                         _diagnostics.ReportWrongArgumentType(syntax.Arguments[i].Location, parameter.Name, parameter.Type, argument.Type);

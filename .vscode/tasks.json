@@ -20,7 +20,7 @@
                 "--project",
                 "G:/Vivian/src/Vivian.Compiler/Vivian.Compiler.csproj",
                 "--",
-                "${file}"
+                "${fileDirname}"
             ],
             "presentation": {
                 "echo": true,
