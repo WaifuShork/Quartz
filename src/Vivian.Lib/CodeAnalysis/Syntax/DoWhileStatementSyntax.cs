@@ -2,7 +2,7 @@
 {
     internal sealed class DoWhileStatementSyntax : StatementSyntax
     {
-        public DoWhileStatementSyntax(SyntaxToken doKeyword, StatementSyntax body, SyntaxToken whileKeyword, ExpressionSyntax condition)
+        public DoWhileStatementSyntax(SyntaxTree syntaxTree, SyntaxToken doKeyword, StatementSyntax body, SyntaxToken whileKeyword, ExpressionSyntax condition) : base(syntaxTree)
         {
             DoKeyword = doKeyword;
             Body = body;

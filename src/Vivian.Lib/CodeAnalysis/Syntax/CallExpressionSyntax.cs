@@ -4,7 +4,7 @@ namespace Vivian.CodeAnalysis.Binding
 {
     public sealed class CallExpressionSyntax : ExpressionSyntax
     {
-        public CallExpressionSyntax(SyntaxToken identifier, SyntaxToken openParenthesisToken, SeparatedSyntaxList<ExpressionSyntax> arguments, SyntaxToken closeParenthesis)
+        public CallExpressionSyntax(SyntaxTree syntaxTree, SyntaxToken identifier, SyntaxToken openParenthesisToken, SeparatedSyntaxList<ExpressionSyntax> arguments, SyntaxToken closeParenthesis) : base(syntaxTree)
         {
             Identifier = identifier;
             OpenParenthesisToken = openParenthesisToken;

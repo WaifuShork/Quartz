@@ -4,7 +4,7 @@ using Vivian.CodeAnalysis.Text;
 
 namespace Vivian
 {
-    internal class TextSpanComparer : IComparer<TextSpan>
+    /*internal class TextSpanComparer : IComparer<TextSpan>
     {
         public int Compare(TextSpan x, TextSpan y)
         {
@@ -13,5 +13,5 @@ namespace Vivian
                 cmp = x.Length - y.Length;
             return cmp;
         }
-    }
+    }*/
 }

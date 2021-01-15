@@ -4,12 +4,12 @@ namespace Vivian.CodeAnalysis
 {
     public sealed class Diagnostic
     {
-        public Diagnostic(TextSpan span, string message)
+        public Diagnostic(TextLocation location, string message)
         {
-            Span = span;
+            Location = location;
             Message = message;
         }
-        public TextSpan Span { get; }
+        public TextLocation Location { get; }
         public string Message { get; }
 
         public override string ToString() => Message;

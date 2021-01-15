@@ -1,0 +1,135 @@
+{
+  "version": 3,
+  "targets": {
+    "net5.0": {
+      "System.Collections.Immutable/5.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/System.Collections.Immutable.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Collections.Immutable.dll": {}
+        }
+      },
+      "Vivian.Lib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "System.Collections.Immutable": "5.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Vivian.Lib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Vivian.Lib.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "System.Collections.Immutable/5.0.0": {
+      "sha512": "FXkLXiK0sVVewcso0imKQoOxjoPAj42R8HtjjbSjVPAzwDfzoyoznWxgA3c38LDbN9SJux1xXoXYAhz98j7r2g==",
+      "type": "package",
+      "path": "system.collections.immutable/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Collections.Immutable.dll",
+        "lib/net461/System.Collections.Immutable.xml",
+        "lib/netstandard1.0/System.Collections.Immutable.dll",
+        "lib/netstandard1.0/System.Collections.Immutable.xml",
+        "lib/netstandard1.3/System.Collections.Immutable.dll",
+        "lib/netstandard1.3/System.Collections.Immutable.xml",
+        "lib/netstandard2.0/System.Collections.Immutable.dll",
+        "lib/netstandard2.0/System.Collections.Immutable.xml",
+        "lib/portable-net45+win8+wp8+wpa81/System.Collections.Immutable.dll",
+        "lib/portable-net45+win8+wp8+wpa81/System.Collections.Immutable.xml",
+        "system.collections.immutable.5.0.0.nupkg.sha512",
+        "system.collections.immutable.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Vivian.Lib/1.0.0": {
+      "type": "project",
+      "path": "../Vivian.Lib/Vivian.Lib.csproj",
+      "msbuildProject": "../Vivian.Lib/Vivian.Lib.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net5.0": [
+      "Vivian.Lib >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\ashle\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "G:\\Vivian\\src\\Vivian.Compiler\\Vivian.Compiler.csproj",
+      "projectName": "Vivian.Compiler",
+      "projectPath": "G:\\Vivian\\src\\Vivian.Compiler\\Vivian.Compiler.csproj",
+      "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
+      "outputPath": "G:\\Vivian\\src\\Vivian.Compiler\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net5.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {},
+        "https://dotnet.myget.org/F/roslyn/api/v3/index.json": {},
+        "https://nuget.emzi0767.com/api/v3/index.json": {},
+        "https://www.myget.org/F/discord-net/api/v3/index.json": {}
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "projectReferences": {
+            "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj": {
+              "projectPath": "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net5.0": {
+        "targetAlias": "net5.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

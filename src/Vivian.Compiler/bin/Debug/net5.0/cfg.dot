@@ -1,0 +1,7 @@
+digraph G {
+    N0 [label = "<Start>" shape = box]
+    N1 [label = "print(\"What's your name?\")\llet name = input()\lprint(\"hello \" + name)\l" shape = box]
+    N2 [label = "<End>" shape = box]
+    N0 -> N1 [label = ""]
+    N1 -> N2 [label = ""]
+}

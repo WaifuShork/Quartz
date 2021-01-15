@@ -4,11 +4,11 @@
     {
         
 
-        public VariableDeclarationSyntax(SyntaxToken keyword, 
+        public VariableDeclarationSyntax(SyntaxTree syntaxTree, SyntaxToken keyword, 
                                         SyntaxToken identifier, 
                                         TypeClauseSyntax typeClause,
                                         SyntaxToken equalsToken, 
-                                        ExpressionSyntax initializer)
+                                        ExpressionSyntax initializer) : base(syntaxTree)
         {
             Keyword = keyword;
             Identifier = identifier;

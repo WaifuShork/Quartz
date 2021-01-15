@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "b8mlYm32OXXaq04DKj2tDlFqueVT4DzIXYrRb8/xE6OJSmhOcHWXsnV9GYV6hM3dYqIaoOfQaGPS6uKy1TvNEw==",
+  "success": true,
+  "projectFilePath": "G:\\Vivian\\src\\Vivian.Compiler\\Vivian.Compiler.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

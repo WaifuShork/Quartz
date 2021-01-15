@@ -6,4 +6,8 @@
         <RootNamespace>VivianCompiler</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Vivian.Lib\Vivian.Lib.csproj" />
+    </ItemGroup>
+
 </Project>

@@ -2,7 +2,7 @@
 {
     public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax
     {
-        public ParenthesizedExpressionSyntax(SyntaxToken openParenthesisToken, ExpressionSyntax expression, SyntaxToken closedParenthesisToken)
+        public ParenthesizedExpressionSyntax(SyntaxTree syntaxTree, SyntaxToken openParenthesisToken, ExpressionSyntax expression, SyntaxToken closedParenthesisToken) : base(syntaxTree)
         {
             OpenParenthesisToken = openParenthesisToken;
             Expression = expression;
