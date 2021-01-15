@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mime;
 using Vivian.CodeAnalysis;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
@@ -65,6 +66,9 @@ namespace Vivian
                     break;
                 case "#reset":
                     _previous = null;
+                    break;
+                case "#exit":
+                    Environment.Exit(1);
                     break;
                 default:
                     base.EvaluateMetaCommand(input);
