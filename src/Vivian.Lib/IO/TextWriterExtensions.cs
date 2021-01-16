@@ -12,7 +12,7 @@ namespace Vivian.IO
 {
     public static class TextWriterExtensions
     {
-        public static bool IsConsole(this TextWriter writer)
+        private static bool IsConsole(this TextWriter writer)
         {
             if (writer == Console.Out)
                 return !Console.IsOutputRedirected;
@@ -26,18 +26,25 @@ namespace Vivian.IO
             return false;
         }
         
-        public static void SetForeground(this TextWriter writer, ConsoleColor color)
+        private static void SetForeground(this TextWriter writer, ConsoleColor color)
         {
             if (writer.IsConsole())
                 Console.ForegroundColor = color;
         }
         
-        public static void ResetColor(this TextWriter writer)
+        private static void ResetColor(this TextWriter writer)
         {
             if (writer.IsConsole())
                 Console.ResetColor();
         }
 
+        public static void WriteKeyword(this TextWriter writer, SyntaxKind kind)
+        {
+            writer.SetForeground(ConsoleColor.Blue);
+            writer.Write(SyntaxFacts.GetText(kind));
+            writer.ResetColor();
+        }
+        
         public static void WriteKeyword(this TextWriter writer, string text)
         {
             writer.SetForeground(ConsoleColor.Blue);
@@ -65,11 +72,23 @@ namespace Vivian.IO
             writer.Write(text);
             writer.ResetColor();
         }
+
+        public static void WriteSpace(this TextWriter writer)
+        {
+            writer.WritePunctuation(" ");
+        }
         
         public static void WritePunctuation(this TextWriter writer, string text)
         {
             writer.SetForeground(ConsoleColor.DarkGray);
             writer.Write(text);
+            writer.ResetColor();
+        }
+        
+        public static void WritePunctuation(this TextWriter writer, SyntaxKind kind)
+        {
+            writer.SetForeground(ConsoleColor.DarkGray);
+            writer.Write(SyntaxFacts.GetText(kind));
             writer.ResetColor();
         }
 
