@@ -12,12 +12,12 @@ namespace VivianCompiler
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
             if (args.Length == 0)
             {
                 Console.Error.WriteLine("usage: vc <source-paths>.");
-                return;
+                return 1;
             }
 
             var paths = GetFilePaths(args);
@@ -28,7 +28,7 @@ namespace VivianCompiler
             {
                 if (!File.Exists(path))
                 {
-                    Console.WriteLine($"error: file '{path}' does not exist.");
+                    Console.Error.WriteLine($"error: file '{path}' does not exist.");
                     hasErrors = true;
                     continue;
                 }
@@ -38,7 +38,7 @@ namespace VivianCompiler
             }
 
             if (hasErrors)
-                return;
+                return 1;
             
             var compilation = new Compilation(syntaxTrees.ToArray());
             var result = compilation.Evaluate(new Dictionary<VariableSymbol, object>());
@@ -51,7 +51,10 @@ namespace VivianCompiler
             else
             {
                 Console.Error.WriteDiagnostics(result.Diagnostics);
+                return 1;
             }
+
+            return 0;
         }
 
         private static IEnumerable<string> GetFilePaths(IEnumerable<string> paths)

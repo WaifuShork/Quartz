@@ -34,7 +34,6 @@
                 "fileLocation": "absolute",
                 "pattern":[
                     {
-                        //"regexp": "^(.*)\\\\((.*)\\\\): *(.*)$",
                         "regexp": "^(.+)\\((\\d+,\\d+,\\d+,\\d+)\\):\\s+(.+)$",
                         "file": 1,
                         "location": 2,
