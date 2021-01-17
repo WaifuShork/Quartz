@@ -87,6 +87,7 @@ namespace Vivian.CodeAnalysis.Binding
             }
             
             
+            
             var variables = binder._scope.GetDeclaredVariables();
             var diagnostics = binder.Diagnostics.ToImmutableArray();
 
