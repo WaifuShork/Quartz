@@ -8,26 +8,36 @@ using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Lowering;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
+using ReflectionBindingFlags = System.Reflection.BindingFlags;
 
 namespace Vivian.CodeAnalysis
 {
     public sealed class Compilation
     {
         private BoundGlobalScope _globalScope;
-        
-        public Compilation(params SyntaxTree[] syntaxTrees) : this(null, syntaxTrees)
+
+        private Compilation(bool isScript, Compilation previous, params SyntaxTree[] syntaxTrees)
         {
-        }
-        
-        private Compilation(Compilation previous, params SyntaxTree[] syntaxTrees)
-        {
+            IsScript = isScript;
             Previous = previous;
             SyntaxTrees = syntaxTrees.ToImmutableArray();
         }
 
+        public static Compilation Create(params SyntaxTree[] syntaxTrees)
+        {
+            return new Compilation(isScript: false, previous: null, syntaxTrees);
+        }
+        
+        public static Compilation CreateScript(Compilation previous, params SyntaxTree[] syntaxTrees)
+        {
+            return new Compilation(isScript: true, previous, syntaxTrees);
+        }
+
+        public bool IsScript { get; }
         public Compilation Previous { get; }
         public ImmutableArray<SyntaxTree> SyntaxTrees { get; }
         
+        public FunctionSymbol MainFunction => GlobalScope.MainFunction;
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
 
@@ -37,7 +47,7 @@ namespace Vivian.CodeAnalysis
             {
                 if (_globalScope == null)
                 {
-                    var globalScope = Binder.BindGlobalScope(Previous?.GlobalScope, SyntaxTrees);
+                    var globalScope = Binder.BindGlobalScope(IsScript, Previous?.GlobalScope, SyntaxTrees);
                     Interlocked.CompareExchange(ref _globalScope, globalScope, null);
                 }
                 return _globalScope;
@@ -50,6 +60,16 @@ namespace Vivian.CodeAnalysis
             var seenSymbolNames = new HashSet<string>();
             while (submission != null)
             {
+                const ReflectionBindingFlags bindingFlags = 
+                    ReflectionBindingFlags.Static |
+                    ReflectionBindingFlags.Public |
+                    ReflectionBindingFlags.NonPublic;
+                var builtinFunctions = typeof(BuiltinFunctions)
+                    .GetFields(bindingFlags)
+                    .Where(fi => fi.FieldType == typeof(FunctionSymbol))
+                    .Select(fi => (FunctionSymbol)fi.GetValue(obj: null))
+                    .ToList();
+                
                 foreach (var function in submission.Functions) 
                     if (seenSymbolNames.Add(function.Name))
                         yield return function;
@@ -58,13 +78,18 @@ namespace Vivian.CodeAnalysis
                     if (seenSymbolNames.Add(variable.Name))
                         yield return variable;
                 
+                foreach (var builtin in builtinFunctions)
+                    if (seenSymbolNames.Add(builtin.Name))
+                        yield return builtin;
+                
                 submission = submission.Previous;
             }
         }
 
-        public Compilation ContinueWith(SyntaxTree syntaxTree)
+        private BoundProgram GetProgram()
         {
-            return new Compilation(this, syntaxTree);
+            var previous = Previous == null ? null : Previous.GetProgram();
+            return Binder.BindProgram(IsScript, previous, GlobalScope);
         }
         
         public EvaluationResult Evaluate(Dictionary<VariableSymbol, object> variables)
@@ -75,7 +100,7 @@ namespace Vivian.CodeAnalysis
             if (diagnostics.Any())
                 return new EvaluationResult(diagnostics, null);
 
-            var program = Binder.BindProgram(GlobalScope);
+            var program = GetProgram();
 
             var appPath = Environment.GetCommandLineArgs()[0];
             var appDirectory = Path.GetDirectoryName(appPath);
@@ -101,7 +126,7 @@ namespace Vivian.CodeAnalysis
 
         public void EmitTree(TextWriter writer)
         {
-            var program = Binder.BindProgram(GlobalScope);
+            var program = GetProgram();
             program.Statement.WriteTo(writer);
 
             if (program.Statement.Statements.Any())
@@ -125,12 +150,12 @@ namespace Vivian.CodeAnalysis
 
         public void EmitTree(FunctionSymbol symbol, TextWriter writer)
         {
-            var program = Binder.BindProgram(GlobalScope);
-            if (!program.Functions.TryGetValue(symbol, out var body))
-                return;
+            var program = GetProgram();
             
             symbol.WriteTo(writer);
             writer.WriteLine();
+            if (!program.Functions.TryGetValue(symbol, out var body))
+                return;
             body.WriteTo(writer);
         }
     }

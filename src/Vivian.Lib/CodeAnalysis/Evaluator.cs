@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Symbols;
-// 1:42:50
+
 namespace Vivian.CodeAnalysis
 {
     internal sealed class Evaluator
     {
-
-        //private readonly ImmutableDictionary<FunctionSymbol, BoundBlockStatement> _functionBodies;
-        //private readonly BoundBlockStatement _root;
-        
         private readonly BoundProgram _program;
         private readonly Dictionary<VariableSymbol, object> _globals;
+        private readonly Dictionary<FunctionSymbol, BoundBlockStatement> _functions = new Dictionary<FunctionSymbol, BoundBlockStatement>();
         private readonly Stack<Dictionary<VariableSymbol, object>> _locals = new Stack<Dictionary<VariableSymbol, object>>();
         private Random _random;
 
         private object _lastValue;
         
-        public Evaluator(/*ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functionBodies, BoundBlockStatement root,*/BoundProgram program, Dictionary<VariableSymbol, object> variables)
+        public Evaluator(BoundProgram program, Dictionary<VariableSymbol, object> variables)
         {
-            //_functionBodies = functionBodies;
-            //_root = root;
             _program = program;
             _globals = variables;
             _locals.Push(new Dictionary<VariableSymbol, object>());
+
+            var current = program;
+            while (current != null)
+            {
+                // TODO: Flagged (kv)
+                foreach (var (function, body) in current.Functions)
+                    _functions.Add(function, body);
+                
+                current = current.Previous;
+            }
         }
 
         public object Evaluate()
@@ -136,6 +140,8 @@ namespace Vivian.CodeAnalysis
         private object EvaluateConversionExpression(BoundConversionExpression node)
         {
             var value = EvaluateExpression(node.Expression);
+            if (node.Type == TypeSymbol.Object)
+                return value;
             if (node.Type == TypeSymbol.Bool)
                 return Convert.ToBoolean(value);
             else if (node.Type == TypeSymbol.Int)
@@ -310,7 +316,7 @@ namespace Vivian.CodeAnalysis
 
                 _locals.Push(locals);
 
-                var statement = _program.Functions[node.Function];
+                var statement = _functions[node.Function];
                 var result =  EvaluateStatement(statement);
                 
                 _locals.Pop();

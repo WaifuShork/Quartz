@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Net.Security;
 using Vivian.CodeAnalysis.Lowering;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
@@ -14,14 +13,16 @@ namespace Vivian.CodeAnalysis.Binding
     {
         private readonly DiagnosticBag _diagnostics = new();
         private readonly FunctionSymbol _function;
-
+        private readonly bool _isScript;
+        
         private Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)> _loopStack = new Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)>();
         private int _labelCounter;
         private BoundScope _scope;
 
-        public Binder(BoundScope parent, FunctionSymbol function)
+        public Binder(bool isScript, BoundScope parent, FunctionSymbol function)
         {
             _scope = new BoundScope(parent);
+            _isScript = isScript;
             _function = function;
 
             if (function != null)
@@ -31,10 +32,10 @@ namespace Vivian.CodeAnalysis.Binding
             }
         }
 
-        public static BoundGlobalScope BindGlobalScope(BoundGlobalScope previous, ImmutableArray<SyntaxTree> syntaxTrees)
+        public static BoundGlobalScope BindGlobalScope(bool isScript, BoundGlobalScope previous, ImmutableArray<SyntaxTree> syntaxTrees)
         {
             var parentScope = CreateParentScopes(previous);
-            var binder = new Binder(parentScope, function: null);
+            var binder = new Binder(isScript, parentScope, function: null);
 
             var functionDeclarations = syntaxTrees.SelectMany(st => st.Root.Members).OfType<FunctionDeclarationSyntax>();
             
@@ -42,58 +43,83 @@ namespace Vivian.CodeAnalysis.Binding
                 binder.BindFunctionDeclaration(function);
 
             var globalStatements = syntaxTrees.SelectMany(st => st.Root.Members).OfType<GlobalStatementSyntax>();
-
             
             var statements = ImmutableArray.CreateBuilder<BoundStatement>();
 
             foreach (var globalStatement in globalStatements)
             {
-                var statement = binder.BindStatement(globalStatement.Statement);
+                var statement = binder.BindGlobalStatement(globalStatement.Statement);
                 statements.Add(statement);
             }
-
-            //var statement = new BoundBlockStatement(statements.ToImmutable());
             
+            var firstGlobalStatementPerSyntaxTree = syntaxTrees.Select(st => st.Root.Members.OfType<GlobalStatementSyntax>().FirstOrDefault())
+                                                                .Where(g => g != null)
+                                                                .ToArray();
+
+            if (firstGlobalStatementPerSyntaxTree.Length > 1)
+            {                
+                foreach (var globalStatement in firstGlobalStatementPerSyntaxTree)
+                    binder.Diagnostics.ReportOnlyOneFileCanHaveGlobalStatements(globalStatement.Location);
+            }
+
             var functions = binder._scope.GetDeclaredFunctions();
+            var mainFunction = functions.FirstOrDefault(f => f.Name == "main");
+
+            if (mainFunction != null)
+            {
+                if (mainFunction.Type != TypeSymbol.Void || mainFunction.Parameters.Any())
+                    binder.Diagnostics.ReportMainMustHaveCorrectSignature(mainFunction.Declaration.Identifier.Location);
+            }
+            
+            if (globalStatements.Any())
+            {
+                if (mainFunction != null)
+                {
+                    binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(mainFunction.Declaration.Identifier.Location);
+
+                    foreach (var globalStatement in firstGlobalStatementPerSyntaxTree)
+                        binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(globalStatement.Location);
+                }
+                else
+                {
+                    mainFunction = new FunctionSymbol("main", ImmutableArray<ParameterSymbol>.Empty, TypeSymbol.Void, null);
+                }
+            }
+            
+            
             var variables = binder._scope.GetDeclaredVariables();
             var diagnostics = binder.Diagnostics.ToImmutableArray();
 
             if (previous != null)
                 diagnostics = diagnostics.InsertRange(0, previous.Diagnostics);
             
-            return new BoundGlobalScope(previous, diagnostics, functions, variables, statements.ToImmutable());
+            return new BoundGlobalScope(previous, diagnostics, mainFunction, functions, variables, statements.ToImmutable());
         }
 
-        public static BoundProgram BindProgram(BoundGlobalScope globalScope)
+        public static BoundProgram BindProgram(bool isScript, BoundProgram previous, BoundGlobalScope globalScope)
         {
             var parentScope = CreateParentScopes(globalScope);
 
             var functionBodies = ImmutableDictionary.CreateBuilder<FunctionSymbol, BoundBlockStatement>();
             var diagnostics = ImmutableArray.CreateBuilder<Diagnostic>();
-
-            var scope = globalScope;
-            while (scope != null)
+            
+            foreach (var function in globalScope.Functions)
             {
-                foreach (var function in scope.Functions)
-                {
-                    var binder = new Binder(parentScope, function);
-                    var body = binder.BindStatement(function.Declaration.Body);
-                    var loweredBody = Lowerer.Lower(body);
+                var binder = new Binder(isScript, parentScope, function);
+                var body = binder.BindStatement(function.Declaration.Body);
+                var loweredBody = Lowerer.Lower(body);
 
-                    if (function.Type != TypeSymbol.Void && !ControlFlowGraph.AllPathsReturn(loweredBody)) 
-                        binder._diagnostics.ReportAllPathsMustReturn(function.Declaration.Identifier.Location);
+                if (function.Type != TypeSymbol.Void && !ControlFlowGraph.AllPathsReturn(loweredBody)) 
+                    binder._diagnostics.ReportAllPathsMustReturn(function.Declaration.Identifier.Location);
                     
-                    functionBodies.Add(function, loweredBody);
+                functionBodies.Add(function, loweredBody);
 
-                    diagnostics.AddRange(binder.Diagnostics);
-                }
-                scope = scope.Previous;
+                diagnostics.AddRange(binder.Diagnostics);
             }
 
             var statement = Lowerer.Lower(new BoundBlockStatement(globalScope.Statements));
 
-            return new BoundProgram(diagnostics.ToImmutable(), functionBodies.ToImmutable(), statement);
-            //return new BoundProgram(globalScope, diagnostics.ToImmutable(), functionBodies.ToImmutable());
+            return new BoundProgram(previous, diagnostics.ToImmutable(), functionBodies.ToImmutable(), statement);
         }
         
         private void BindFunctionDeclaration(FunctionDeclarationSyntax syntax)
@@ -163,8 +189,34 @@ namespace Vivian.CodeAnalysis.Binding
         }
 
         public DiagnosticBag Diagnostics => _diagnostics;
+
         
-        private BoundStatement BindStatement(StatementSyntax syntax)
+        private BoundStatement BindGlobalStatement(StatementSyntax syntax)
+        {
+            return BindStatement(syntax, isGlobal: true);
+        }
+        
+        private BoundStatement BindStatement(StatementSyntax syntax, bool isGlobal = false)
+        {
+            var result = BindStatementInternal(syntax);
+
+            if (!_isScript || !isGlobal)
+            {
+                if (result is BoundExpressionStatement es)
+                {
+                    var isAllowedExpression = es.Expression.Kind == BoundNodeKind.ErrorExpression ||
+                                              es.Expression.Kind == BoundNodeKind.AssignmentExpression ||
+                                              es.Expression.Kind == BoundNodeKind.CallExpression;
+
+                    if (!isAllowedExpression)
+                        _diagnostics.ReportInvalidExpressionStatement(syntax.Location);
+                }
+            }
+
+            return result;
+        }
+
+        private BoundStatement BindStatementInternal(StatementSyntax syntax)
         {
             switch (syntax.Kind)
             {
@@ -476,6 +528,7 @@ namespace Vivian.CodeAnalysis.Binding
             
             return new BoundBinaryExpression(boundLeft, boundOperator, boundRight);
         }
+        
         private BoundExpression BindCallExpression(CallExpressionSyntax syntax)
         {
             if (syntax.Arguments.Count == 1 && LookupType(syntax.Identifier.Text) is TypeSymbol type)
@@ -490,7 +543,7 @@ namespace Vivian.CodeAnalysis.Binding
             }
 
             var symbol = _scope.TryLookupSymbol(syntax.Identifier.Text);
-            if (symbol == null/*!_scope.TryLookupFunction(syntaxTrees.Identifier.Text, out var function)*/)
+            if (symbol == null)
             {
                 _diagnostics.ReportUndefinedFunction(syntax.Identifier.Location, syntax.Identifier.Text);
                 return new BoundErrorExpression();
@@ -505,8 +558,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             if (syntax.Arguments.Count != function.Parameters.Length)
             {
-                //_diagnostics.ReportWrongArgumentCount(syntaxTrees.Span, function.Name, function.Parameters.Length, syntaxTrees.Arguments.Count);
-
                 TextSpan span;
                 if (syntax.Arguments.Count > function.Parameters.Length)
                 {
@@ -528,26 +579,14 @@ namespace Vivian.CodeAnalysis.Binding
                 _diagnostics.ReportWrongArgumentCount(location, function.Name, function.Parameters.Length, syntax.Arguments.Count);
                 return new BoundErrorExpression();
             }
-
-            bool hasErrors = false;
-
+            
             for (var i = 0; i < syntax.Arguments.Count; i++)
             {
+                var argumentLocation = syntax.Arguments[i].Location;
                 var argument = boundArguments[i];
                 var parameter = function.Parameters[i];
-
-                if (argument.Type != parameter.Type)
-                {
-                   // _diagnostics.ReportWrongArgumentType(syntaxTrees.Arguments[i].Span, parameter.Name, parameter.Type, argument.Type);
-                    //return new BoundErrorExpression();
-                    if (argument.Type != TypeSymbol.Error)
-                        _diagnostics.ReportWrongArgumentType(syntax.Arguments[i].Location, parameter.Name, parameter.Type, argument.Type);
-                    hasErrors = true;
-                }
+                boundArguments[i] = BindConversion(argumentLocation, argument, parameter.Type);
             }
-
-            if (hasErrors)
-                return new BoundErrorExpression();
             
             return new BoundCallExpression(function, boundArguments.ToImmutable());
         }
@@ -620,6 +659,8 @@ namespace Vivian.CodeAnalysis.Binding
         {
             switch (name)
             {
+                case "object": 
+                    return TypeSymbol.Object;
                 case "bool": 
                     return TypeSymbol.Bool;
                 case "int": 

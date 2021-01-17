@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Vivian.IO;
 
 namespace Vivian
 {
@@ -32,7 +33,7 @@ namespace Vivian
                                                BindingFlags.FlattenHierarchy);
             foreach (var method in methods)
             {
-                var attribute = (MetaCommandAttribute) method.GetCustomAttribute(typeof(MetaCommandAttribute));
+                var attribute = method.GetCustomAttribute<MetaCommandAttribute>();
 
                 if (attribute == null)
                     continue;
@@ -65,7 +66,7 @@ namespace Vivian
         {
             private readonly Action<string> _lineRenderer;
             private readonly ObservableCollection<string> _submissionDocument;
-            private readonly int _cursorTop;
+            private int _cursorTop;
             private int _renderedLineCount;
             private int _currentLine;
             private int _currentCharacter;
@@ -87,11 +88,18 @@ namespace Vivian
             private void Render()
             {
                 Console.CursorVisible = false;
-                
                 var lineCount = 0;
-                
+
                 foreach (var line in _submissionDocument)
                 {
+                    if (_cursorTop + lineCount >= Console.WindowHeight)
+                    {
+                        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                        Console.WriteLine();
+                        if (_cursorTop > 0)
+                            _cursorTop--;
+                    }
+
                     Console.SetCursorPosition(0, _cursorTop + lineCount);
                     Console.ForegroundColor = ConsoleColor.Green;
 
@@ -104,7 +112,7 @@ namespace Vivian
                     
                     Console.ResetColor();
                     _lineRenderer(line);
-                    Console.WriteLine(new string(' ', Console.WindowWidth - line.Length));
+                    Console.Write(new string(' ', Console.WindowWidth - line.Length - 2));
                     lineCount++;
                 }
 
@@ -496,7 +504,7 @@ namespace Vivian
 
             if (args.Count != parameters.Length)
             {
-                var parameterNames = string.Join(", ", parameters.Select(p => $"<{p.Name}>"));
+                var parameterNames = string.Join(" ", parameters.Select(p => $"<{p.Name}>"));
                 
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"error: invalid number of arguments (given {args.Count}, expected {parameters.Length})");
@@ -505,7 +513,8 @@ namespace Vivian
                 return;
             }
 
-            command.Method.Invoke(this, args.ToArray());
+            var instance = command.Method.IsStatic ? null : this;
+            command.Method.Invoke(instance, args.ToArray());
         }
 
         protected abstract bool IsCompleteSubmission(string text);
@@ -546,14 +555,42 @@ namespace Vivian
 
             foreach (var metaCommand in _metaCommands.OrderBy(mc => mc.Name))
             {
-                var paddedName = metaCommand.Name.PadRight(maxNameLength);
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write($"#{paddedName}");
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(" - ");
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{metaCommand.Description}");
-                Console.ResetColor();
+                var metaParams = metaCommand.Method.GetParameters();
+                if (metaParams.Length == 0)
+                {
+                    var paddedName = metaCommand.Name.PadRight(maxNameLength);
+
+                    Console.Out.WritePunctuation("#");
+                    Console.Out.WriteIdentifier(paddedName);
+                }
+                else
+                {
+                    Console.Out.WritePunctuation("#");
+                    Console.Out.WriteIdentifier(metaCommand.Name);
+                    foreach (var pi in metaParams)
+                    {
+                        Console.Out.WriteSpace();
+                        Console.Out.WritePunctuation("<");
+                        Console.Out.WriteIdentifier(pi.Name);
+                        Console.Out.WritePunctuation(">");
+                    }
+                    Console.Out.WriteLine();
+                    Console.Out.WriteSpace();
+                    for (int _ = 0; _ < maxNameLength; _++)
+                        Console.Out.WriteSpace();
+                }
+                Console.Out.WriteSpace();
+                Console.Out.WriteSpace();
+                Console.Out.WriteSpace();
+                
+                //var paddedName = metaCommand.Name.PadRight(maxNameLength);
+                //Console.ForegroundColor = ConsoleColor.Cyan;
+                //Console.Write($"#{paddedName}");
+                //Console.ForegroundColor = ConsoleColor.Yellow;
+                //Console.Write(" - ");
+                //Console.ForegroundColor = ConsoleColor.DarkGray;
+                //Console.WriteLine($"{metaCommand.Description}");
+                //Console.ResetColor();
             }
         }
     }

@@ -88,7 +88,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
             var syntaxTree = SyntaxTree.Parse(text);
-            var compilation = new Compilation(syntaxTree);
+            var compilation = Compilation.CreateScript(null, syntaxTree);
             var variables = new Dictionary<VariableSymbol, object>();
             var result = compilation.Evaluate(variables);
             Assert.Empty(result.Diagnostics);
@@ -223,11 +223,23 @@ namespace Vivian.Tests.CodeAnalysis
             AssertDiagnostics(text, diagnostics);
         }
 
+        private static void AssertValue(string text, object expectedValue)
+        {
+            var syntaxTree = SyntaxTree.Parse(text);
+            var compilation = Compilation.CreateScript(null, syntaxTree);
+            var variables = new Dictionary<VariableSymbol, object>();
+            var result = compilation.Evaluate(variables);
+
+            Assert.Empty(result.Diagnostics);
+            Assert.Equal(expectedValue, result.Value);
+        }
+        
+
         private void AssertDiagnostics(string text, string diagnosticText)
         {
             var annotatedText = AnnotatedText.Parse(text);
             var syntaxTree = SyntaxTree.Parse(annotatedText.Text);
-            var compilation = new Compilation(syntaxTree);
+            var compilation = Compilation.CreateScript(null, syntaxTree);
             var result = compilation.Evaluate(new Dictionary<VariableSymbol, object>());
 
             var expectedDiagnostics = AnnotatedText.UnindentLines(diagnosticText);

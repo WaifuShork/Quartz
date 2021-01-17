@@ -1,6 +1,6 @@
 function GetName(): string
 {
-    print("what's your name?")
-    let name = input()
+    print("whats your name?")
+    imply name = input()
     return name
-}
+} 

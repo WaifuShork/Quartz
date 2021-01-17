@@ -26,6 +26,16 @@ namespace Vivian.CodeAnalysis.Binding
             if (from == to)
                 return Conversion.Identity;
 
+            if (from != TypeSymbol.Void && to == TypeSymbol.Object)
+            { 
+                return Conversion.Implicit;
+            }
+            
+            if (from == TypeSymbol.Object && to != TypeSymbol.Void)
+            { 
+                return Conversion.Explicit;
+            }
+            
             if (from == TypeSymbol.Bool || from == TypeSymbol.Int)
             {
                 if (to == TypeSymbol.String)

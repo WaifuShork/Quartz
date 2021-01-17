@@ -5,27 +5,20 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundProgram
     {
-        
-
-        //BoundGlobalScope globalScope, DiagnosticBag diagnostics, ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functionBodies
-        /*
-         * GlobalScope = globalScope;
-            Diagnostics = diagnostics;
-            FunctionBodies = functionBodies;
-         */
-        public BoundProgram(ImmutableArray<Diagnostic> diagnostics, ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functions, BoundBlockStatement statement)
+        public BoundProgram(BoundProgram previous, 
+                            ImmutableArray<Diagnostic> diagnostics, 
+                            ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functions, 
+                            BoundBlockStatement statement)
         {
+            Previous = previous;
             Diagnostics = diagnostics;
             Functions = functions;
             Statement = statement;
         }
-        
+
+        public BoundProgram Previous { get; }
         public ImmutableArray<Diagnostic> Diagnostics { get; }
         public ImmutableDictionary<FunctionSymbol, BoundBlockStatement> Functions { get; }
         public BoundBlockStatement Statement { get; }
-        
-        //public BoundGlobalScope GlobalScope { get; }
-        //public DiagnosticBag Diagnostics { get; }
-        //public ImmutableDictionary<FunctionSymbol, BoundBlockStatement> FunctionBodies { get; }
     }
 }

@@ -180,5 +180,29 @@ namespace Vivian.CodeAnalysis
             var message = $"'{name}' is not a function.";
             Report(location, message);
         }
+
+        public void ReportInvalidExpressionStatement(TextLocation location)
+        {
+            var message = "Only assignment and call expressions can be used as a statement";
+            Report(location, message);        
+        }
+        
+        public void ReportCannotMixMainAndGlobalStatements(TextLocation location)
+        {
+            var message = "Cannot declare main function when global statements are used.";
+            Report(location, message);
+        }
+
+        public void ReportMainMustHaveCorrectSignature(TextLocation location)
+        {
+            var message = "Main must not take arguments and cannot return anything.";
+            Report(location, message);
+        }
+
+        public void ReportOnlyOneFileCanHaveGlobalStatements(TextLocation location)
+        {
+            var message = "At most one file can contain global statements.";
+            Report(location, message);
+        }
     }
 }

@@ -1,2 +1,2 @@
-let name = GetName()
-print("hello " + name)
+imply name = GetName()
+print("Hello " + name)
