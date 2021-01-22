@@ -1,2 +1,5 @@
-imply name = GetName()
-print("Hello " + name)
+function main()
+{
+    imply name = GetName()
+    print("Hello " + name)
+}

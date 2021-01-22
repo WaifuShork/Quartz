@@ -7,18 +7,21 @@ namespace Vivian.CodeAnalysis.Binding
     {
         public BoundProgram(BoundProgram previous, 
                             ImmutableArray<Diagnostic> diagnostics, 
-                            ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functions, 
-                            BoundBlockStatement statement)
+                            FunctionSymbol mainFunction,
+                            FunctionSymbol scriptFunction,
+                            ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functions)
         {
             Previous = previous;
             Diagnostics = diagnostics;
+            MainFunction = mainFunction;
+            ScriptFunction = scriptFunction;
             Functions = functions;
-            Statement = statement;
         }
 
         public BoundProgram Previous { get; }
         public ImmutableArray<Diagnostic> Diagnostics { get; }
+        public FunctionSymbol MainFunction { get; }
+        public FunctionSymbol ScriptFunction { get; }
         public ImmutableDictionary<FunctionSymbol, BoundBlockStatement> Functions { get; }
-        public BoundBlockStatement Statement { get; }
     }
 }

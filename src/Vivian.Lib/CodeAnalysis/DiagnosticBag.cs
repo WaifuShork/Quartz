@@ -53,23 +53,10 @@ namespace Vivian.CodeAnalysis
             var message = $"Binary operator '{operatorText}' is not defined for type '{leftType}' and '{rightType}'.";
             Report(location, message);
         }
-
-        public void ReportUndefinedName(TextLocation location, string name)
-        {
-            var message = $"Variable '{name}' does not exist in the current context.";
-            Report(location, message);
-        }
         
-
         public void ReportCannotConvert(TextLocation location, TypeSymbol fromType, TypeSymbol toType)
         {
             var message = $"Cannot convert type '{fromType}' to '{toType}'.";
-            Report(location, message);
-        }
-
-        public void ReportVariableAlreadyDeclared(TextLocation location, string name)
-        {
-            var message = $"Variable '{name}' is already declared.";
             Report(location, message);
         }
 
@@ -81,7 +68,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportUnterminatedString(TextLocation location)
         {
-            var message = "Unterminated string literal.";
+            const string message = "Unterminated string literal.";
             Report(location, message);
         }
 
@@ -97,15 +84,9 @@ namespace Vivian.CodeAnalysis
             Report(location, message);
         }
 
-        public void ReportWrongArgumentType(TextLocation location, string name, TypeSymbol expectedType, TypeSymbol actualType)
-        {
-            var message = $"Parameters '{name}' requires a value of type '{expectedType}' but was given a value of type '{actualType}'.";
-            Report(location, message);
-        }
-
         public void ReportExpressionMustHaveValue(TextLocation location)
         {
-            var message = "Expression must have a value.";
+            const string message = "Expression must have a value.";
             Report(location, message);
         }
 
@@ -138,13 +119,7 @@ namespace Vivian.CodeAnalysis
             var message = $"The keyword {text} can only exist inside of a loop.";
             Report(location, message);
         }
-
-        public void ReportInvalidReturn(TextLocation location)
-        {
-            var message = $"The 'return' keyword can only be used inside of functions.";
-            Report(location, message);        
-        }
-
+        
         public void ReportInvalidReturnExpression(TextLocation location, string functionName)
         {
             var message = $"Since the function '{functionName}' does not return a value the 'return' keyword cannot be followed by an expression.";
@@ -159,7 +134,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportAllPathsMustReturn(TextLocation location)
         {
-            var message = "Not all code paths return a value.";
+            const string message = "Not all code paths return a value.";
             Report(location, message);   
         }
 
@@ -183,25 +158,25 @@ namespace Vivian.CodeAnalysis
 
         public void ReportInvalidExpressionStatement(TextLocation location)
         {
-            var message = "Only assignment and call expressions can be used as a statement";
+            const string message = "Only assignment and call expressions can be used as a statement";
             Report(location, message);        
         }
         
         public void ReportCannotMixMainAndGlobalStatements(TextLocation location)
         {
-            var message = "Cannot declare main function when global statements are used.";
+            const string message = "Cannot declare main function when global statements are used.";
             Report(location, message);
         }
 
         public void ReportMainMustHaveCorrectSignature(TextLocation location)
         {
-            var message = "Main must not take arguments and cannot return anything.";
+            const string message = "Main must not take arguments and cannot return anything.";
             Report(location, message);
         }
 
         public void ReportOnlyOneFileCanHaveGlobalStatements(TextLocation location)
         {
-            var message = "At most one file can contain global statements.";
+            const string message = "At most one file can contain global statements.";
             Report(location, message);
         }
     }
