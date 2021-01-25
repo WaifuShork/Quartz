@@ -25,6 +25,7 @@ It contains:
 - `bool`
 - `int`
 - `string`
+- `object`
 - basic expression evaluation, and
 - an early implementation of functions
 
