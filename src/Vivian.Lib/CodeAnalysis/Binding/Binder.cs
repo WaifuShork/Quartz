@@ -165,7 +165,6 @@ namespace Vivian.CodeAnalysis.Binding
         private void BindFunctionDeclaration(FunctionDeclarationSyntax syntax)
         {
             var parameters = ImmutableArray.CreateBuilder<ParameterSymbol>();
-
             var seenParameterNames = new HashSet<string>();
             
             foreach (var parameterSyntax in syntax.Parameters)
@@ -187,7 +186,9 @@ namespace Vivian.CodeAnalysis.Binding
 
             var function = new FunctionSymbol(syntax.Identifier.Text, parameters.ToImmutable(), type, syntax);
             if (function.Declaration.Identifier.Text != null && !_scope.TryDeclareFunction(function))
+            {
                 _diagnostics.ReportSymbolAlreadyDeclared(syntax.Identifier.Location, function.Name);
+            }
         }
 
         private static BoundScope CreateParentScopes(BoundGlobalScope previous)
@@ -511,34 +512,29 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 return new BoundErrorExpression();
             }
-            
-            //if (!_scope.TryLookupVariable(name, out var variable))
-            //{
-            //    _diagnostics.ReportUndefinedName(syntaxTrees.IdentifierToken.Span, name);
 
             var variable = BindVariableReference(syntax.IdentifierToken);
             if (variable == null)
+            {
                 return new BoundErrorExpression();
-            //}
-
+            }
             return new BoundVariableExpression(variable);
         }
         private BoundExpression BindAssignmentExpression(AssignmentExpressionSyntax syntax)
         {
             var name = syntax.IdentifierToken.Text;
             var boundExpression = BindExpression(syntax.Expression);
-
-            //if (!_scope.TryLookupVariable(name, out var variable))
-            //{
-            //    _diagnostics.ReportUndefinedName(syntaxTrees.IdentifierToken.Span, name);
-
             var variable = BindVariableReference(syntax.IdentifierToken);
+            
             if (variable == null)
+            {
                 return boundExpression;
-            //}
+            }
 
             if (variable.IsReadOnly)
+            {
                 _diagnostics.ReportCannotAssign(syntax.EqualsToken.Location, name);
+            }
 
             var convertedExpression = BindConversion(syntax.Expression.Location, boundExpression, variable.Type);
             

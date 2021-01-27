@@ -64,8 +64,8 @@ namespace Vivian.CodeAnalysis.Syntax
 
             _diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind);
             return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null);
-            
         }
+        
         public CompilationUnitSyntax ParseCompilationUnit()
         {
             var members = ParseMembers();
@@ -397,7 +397,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.IdentifierToken:
                 default:
                     return ParseNameOrCallExpression();
-                }
+            }
         }
 
         private ExpressionSyntax ParseNameOrCallExpression()
@@ -414,8 +414,12 @@ namespace Vivian.CodeAnalysis.Syntax
             var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var arguments = ParseArguments();
             var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
-            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
-            return new CallExpressionSyntax(_syntaxTree ,identifier, openParenthesis, arguments, closeParenthesis, semicolon);
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }
+
+            return new CallExpressionSyntax(_syntaxTree ,identifier, openParenthesis, arguments, closeParenthesis);
         }
 
         private SeparatedSyntaxList<ExpressionSyntax> ParseArguments()
