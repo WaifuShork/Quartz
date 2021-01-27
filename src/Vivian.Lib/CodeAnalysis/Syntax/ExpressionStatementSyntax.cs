@@ -2,7 +2,6 @@
 {
     public class ExpressionStatementSyntax : StatementSyntax
     {
-
         public ExpressionStatementSyntax(SyntaxTree syntaxTree, ExpressionSyntax expression) : base(syntaxTree)
         {
             Expression = expression;

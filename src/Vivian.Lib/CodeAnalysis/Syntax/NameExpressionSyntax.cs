@@ -9,6 +9,5 @@
         
         public override SyntaxKind Kind => SyntaxKind.NameExpression;
         public SyntaxToken IdentifierToken { get; }
-        
     }
 }

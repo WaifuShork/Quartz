@@ -8,6 +8,7 @@
         WhitespaceToken,        
         CommaToken,
         ColonToken,
+        SemicolonToken,
 
         // Data Tokens
         StringToken,

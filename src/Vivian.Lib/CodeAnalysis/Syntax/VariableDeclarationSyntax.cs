@@ -4,17 +4,20 @@
     {
         
 
-        public VariableDeclarationSyntax(SyntaxTree syntaxTree, SyntaxToken keyword, 
-                                        SyntaxToken identifier, 
-                                        TypeClauseSyntax typeClause,
-                                        SyntaxToken equalsToken, 
-                                        ExpressionSyntax initializer) : base(syntaxTree)
+        public VariableDeclarationSyntax(SyntaxTree syntaxTree, 
+                                         SyntaxToken keyword, 
+                                         SyntaxToken identifier, 
+                                         TypeClauseSyntax typeClause,
+                                         SyntaxToken equalsToken, 
+                                         ExpressionSyntax initializer,
+                                         SyntaxToken semicolonToken) : base(syntaxTree)
         {
             Keyword = keyword;
             Identifier = identifier;
             TypeClause = typeClause;
             EqualsToken = equalsToken;
             Initializer = initializer;
+            SemicolonToken = semicolonToken;
         }
         
         public override SyntaxKind Kind => SyntaxKind.VariableDeclaration;
@@ -24,5 +27,6 @@
         public TypeClauseSyntax TypeClause { get; }
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Initializer { get; }
+        public SyntaxToken SemicolonToken { get; }
     }
 }

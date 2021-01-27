@@ -7,10 +7,9 @@
             OperatorToken = operatorToken;
             Operand = operand;
         }
-        
+        public override SyntaxKind Kind => SyntaxKind.UnaryExpression;
+
         public SyntaxToken OperatorToken { get; }
         public ExpressionSyntax Operand { get; }
-        public override SyntaxKind Kind => SyntaxKind.UnaryExpression;
-        
     }
 }

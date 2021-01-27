@@ -72,15 +72,15 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("\"abc\" != \"abc\"", false)]
         [InlineData("\"abc\" == \"abc\"", true)]
         
-        [InlineData("{ var a = 0 return (a = 10) * a }", 100)]
+        [InlineData("{ var a = 0; return (a = 10) * a; }", 100)]
         
-        [InlineData("{ var a = 0 if (a == 0) a = 10 return a }", 10)]
+        [InlineData("{ var a = 0; if (a == 0) a = 10; return a; }", 10)]
         
-        [InlineData("{ var i = 10 var result = 0 while (i > 0) { result = result + i i = i - 1 } return result }", 55)]
+        [InlineData("{ var i = 10; var result = 0; while (i > 0) { result = result + i; i = i - 1; } return result; }", 55)]
         
-        [InlineData("{ var result = 0 for (i = 1 to 10) { result = result + i } return result }", 55)]
+        [InlineData("{ var result = 0; for (i = 1 to 10) { result = result + i; } return result; }", 55)]
         
-        [InlineData("{ var a = 0 do a = a + 1 while (a < 10) return a }", 10)]
+        [InlineData("{ var a = 0; do a = a + 1; while (a < 10); return a; }", 10)]
         
         // [InlineData("{ var i = 0 while i < 5 { i = i + 1 if i == 5 continue } i }", 5)]
         // [InlineData("{ var i = 0 do { i = i + 1 if i == 5 continue } while i < 5 i }", 5)]
@@ -101,12 +101,12 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    var x = 10
-                    var y = 100
+                    var x = 10;
+                    var y = 100;
                     {
-                        var x = 100
+                        var x = 100;
                     }            
-                    var [x] = 5
+                    var [x] = 5;
                 }
             ";
             var diagnostics = @"
@@ -121,7 +121,7 @@ namespace Vivian.Tests.CodeAnalysis
             var text = @"
                 function printer(name: string[[[=]]][)]
                 { 
-                    print(""hi "" + name + ""!"")
+                    print(""hi "" + name + ""!"");
                 }[]
             ";
 
@@ -139,7 +139,7 @@ namespace Vivian.Tests.CodeAnalysis
         [Fact]
         public void Evaluator_AssignmentExpression_Reports_NotAVariable()
         {
-            var text = @"[print] = 42";
+            var text = @"[print] = 42;";
 
             var diagnostics = @"
                 'print' is not a variable.
@@ -151,7 +151,7 @@ namespace Vivian.Tests.CodeAnalysis
         [Fact]
         public void Evaluator_CallExpression_Reports_Undefined()
         {
-            var text = @"[foo](42)";
+            var text = @"[foo](42);";
 
             var diagnostics = @"
                 Function 'foo' does not exist in the current context.
@@ -165,8 +165,8 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    const foo = 42
-                    [foo](42)
+                    const foo = 42;
+                    [foo](42);
                 }
             ";
 
@@ -192,16 +192,14 @@ namespace Vivian.Tests.CodeAnalysis
 
             AssertDiagnostics(text, diagnostics);
         }
-
-
         
         [Fact]
         public void Evaluator_Variables_Can_Shadow_Functions()
         {
             var text = @"
                 {
-                    const print = 42
-                    [print](""test"")
+                    const print = 42;
+                    [print](""test"");
                 }
             ";
 

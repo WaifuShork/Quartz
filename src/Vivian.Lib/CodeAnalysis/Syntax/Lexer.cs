@@ -98,6 +98,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     _kind = SyntaxKind.HatToken;
                     _position++;
                     break;
+                case ';':
+                    _kind = SyntaxKind.SemicolonToken;
+                    _position++;
+                    break;
                 case '&':
                     _position++;
                     if (Current != '&')

@@ -188,24 +188,29 @@ namespace Vivian.CodeAnalysis.Syntax
         private StatementSyntax ParseReturnStatement()
         {
             var keyword = MatchToken(SyntaxKind.ReturnKeyword);
-            var keywordLine = _text.GetLineIndex(keyword.Span.Start);
-            var currentLine = _text.GetLineIndex(Current.Span.Start);
-            var isEof = Current.Kind == SyntaxKind.EndOfFileToken;
-            var sameLine = !isEof && keywordLine == currentLine;
-            var expression = sameLine ?  ParseExpression() : null;
-            return new ReturnStatementSyntax(_syntaxTree, keyword, expression);
+            var expression = ParseExpression();
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            
+            if (expression == null && Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                return new ReturnStatementSyntax(_syntaxTree, keyword, null, semicolon);
+            }
+
+            return new ReturnStatementSyntax(_syntaxTree, keyword, expression, semicolon);
         }
 
         private StatementSyntax ParseContinueStatement()
         {
             var keyword = MatchToken(SyntaxKind.ContinueKeyword);
-            return new ContinueStatementSyntax(_syntaxTree, keyword);
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            return new ContinueStatementSyntax(_syntaxTree, keyword, semicolon);
         }
 
         private StatementSyntax ParseBreakStatement()
         {
             var keyword = MatchToken(SyntaxKind.BreakKeyword);
-            return new BreakStatementSyntax(_syntaxTree, keyword);
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            return new BreakStatementSyntax(_syntaxTree, keyword, semicolon);
         }
 
         private StatementSyntax ParseDoWhileStatement()
@@ -213,8 +218,11 @@ namespace Vivian.CodeAnalysis.Syntax
             var doKeyword = MatchToken(SyntaxKind.DoKeyword);
             var body = ParseStatement();
             var whileKeyword = MatchToken(SyntaxKind.WhileKeyword);
+            var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var condition = ParseExpression();
-            return new DoWhileStatementSyntax(_syntaxTree, doKeyword, body, whileKeyword, condition);
+            var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            return new DoWhileStatementSyntax(_syntaxTree, doKeyword, body, whileKeyword, openParenthesis, condition, closeParenthesis, semicolon);
         }
 
         private StatementSyntax ParseForStatement()
@@ -270,8 +278,9 @@ namespace Vivian.CodeAnalysis.Syntax
             var typeClause = ParseOptionalTypeClause();
             var equals = MatchToken(SyntaxKind.EqualsToken);
             var initializer = ParseExpression();
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
             
-            return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer);
+            return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer, semicolon);
         }
 
         private TypeClauseSyntax ParseOptionalTypeClause()
@@ -328,6 +337,11 @@ namespace Vivian.CodeAnalysis.Syntax
                 var identifierToken = NextToken();
                 var operatorToken = NextToken();
                 var right = ParseAssignmentExpression();
+                if (Current.Kind == SyntaxKind.SemicolonToken)
+                {
+                    NextToken();
+                }
+
                 return new AssignmentExpressionSyntax(_syntaxTree, identifierToken, operatorToken, right);
             }
 
@@ -397,11 +411,11 @@ namespace Vivian.CodeAnalysis.Syntax
         private ExpressionSyntax ParseCallExpression()
         {
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
-            
             var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var arguments = ParseArguments();
             var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
-            return new CallExpressionSyntax(_syntaxTree ,identifier, openParenthesis, arguments, closeParenthesis);
+            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            return new CallExpressionSyntax(_syntaxTree ,identifier, openParenthesis, arguments, closeParenthesis, semicolon);
         }
 
         private SeparatedSyntaxList<ExpressionSyntax> ParseArguments()

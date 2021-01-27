@@ -179,6 +179,9 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.CloseBraceToken:
                     return "}";
                 
+                case SyntaxKind.SemicolonToken:
+                    return ";";
+                
                 case SyntaxKind.EqualsToken:
                     return "=";
                 case SyntaxKind.FalseKeyword:

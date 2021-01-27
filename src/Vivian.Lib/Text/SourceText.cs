@@ -30,7 +30,7 @@ namespace Vivian.CodeAnalysis.Text
         {
             var lower = 0;
             // var upper = Lines.Length - 1;
-            var upper = Lines.Length - 2;
+            var upper = Lines.Length - 1;
 
             while (lower <= upper)
             {
