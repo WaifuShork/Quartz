@@ -65,7 +65,7 @@ namespace Vivian.CodeAnalysis.Symbols
 
         private static void WriteGlobalVariableTo(GlobalVariableSymbol symbol, TextWriter writer)
         {
-            writer.WriteKeyword(symbol.IsReadOnly ? SyntaxKind.LetKeyword : SyntaxKind.ImplyKeyword);
+            writer.WriteKeyword(symbol.IsReadOnly ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword);
             writer.WriteSpace();
             writer.WriteIdentifier(symbol.Name);
             writer.WritePunctuation(SyntaxKind.ColonToken);
@@ -75,7 +75,7 @@ namespace Vivian.CodeAnalysis.Symbols
 
         private static void WriteLocalVariableTo(LocalVariableSymbol symbol, TextWriter writer)
         {
-            writer.WriteKeyword(symbol.IsReadOnly ? SyntaxKind.LetKeyword : SyntaxKind.ImplyKeyword);
+            writer.WriteKeyword(symbol.IsReadOnly ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword);
             writer.WriteSpace();
             writer.WriteIdentifier(symbol.Name);
             writer.WritePunctuation(SyntaxKind.ColonToken);

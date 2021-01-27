@@ -179,5 +179,11 @@ namespace Vivian.CodeAnalysis
             const string message = "At most one file can contain global statements.";
             Report(location, message);
         }
+        
+        public void ReportInvalidReturnWithValueInGlobalStatements(TextLocation location)
+        {
+            const string message = "The 'return' keyword cannot be followed by an expression in global statements.";
+            Report(location, message);
+        }
     }
 }

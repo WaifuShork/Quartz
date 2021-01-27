@@ -29,7 +29,8 @@ namespace Vivian.CodeAnalysis.Text
         public int GetLineIndex(int position)
         {
             var lower = 0;
-            var upper = Lines.Length - 1;
+            // var upper = Lines.Length - 1;
+            var upper = Lines.Length - 2;
 
             while (lower <= upper)
             {

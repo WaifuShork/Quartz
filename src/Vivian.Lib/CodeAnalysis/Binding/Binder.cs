@@ -82,7 +82,7 @@ namespace Vivian.CodeAnalysis.Binding
             else
             {
                 scriptFunction = null;
-                mainFunction = functions.FirstOrDefault(f => f.Name == "main");
+                mainFunction = functions.FirstOrDefault(f => f.Name == "Main");
 
                 if (mainFunction != null)
                 {
@@ -101,7 +101,7 @@ namespace Vivian.CodeAnalysis.Binding
                     }
                     else
                     {
-                        mainFunction = new FunctionSymbol("main", ImmutableArray<ParameterSymbol>.Empty, TypeSymbol.Void, null);
+                        mainFunction = new FunctionSymbol("Main", ImmutableArray<ParameterSymbol>.Empty, TypeSymbol.Void, null);
                     }
                 }
             }
@@ -307,7 +307,7 @@ namespace Vivian.CodeAnalysis.Binding
                 else if (expression != null)
                 {
                     // Main does not support return values
-                    _diagnostics.ReportInvalidReturnExpression(syntax.Expression.Location, _function.Name);
+                    _diagnostics.ReportInvalidReturnWithValueInGlobalStatements(syntax.Expression.Location);
                 }
             }
             else
@@ -378,7 +378,7 @@ namespace Vivian.CodeAnalysis.Binding
         }
         private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)
         {
-            var isReadOnly = syntax.Keyword.Kind == SyntaxKind.LetKeyword;
+            var isReadOnly = syntax.Keyword.Kind == SyntaxKind.ConstKeyword;
             var type = BindTypeClause(syntax.TypeClause);
             var initializer = BindExpression(syntax.Initializer);
             var variableType = type ?? initializer.Type;

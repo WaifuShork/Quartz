@@ -156,8 +156,8 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 case SyntaxKind.OpenBraceToken:
                     return ParseBlockStatement();
-                case SyntaxKind.LetKeyword:
-                case SyntaxKind.ImplyKeyword:
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.VarKeyword:
                     return ParseVariableDeclaration();
                 
                 case SyntaxKind.IfKeyword:
@@ -258,7 +258,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private StatementSyntax ParseVariableDeclaration()
         {
-            var expected = Current.Kind == SyntaxKind.LetKeyword ? SyntaxKind.LetKeyword : SyntaxKind.ImplyKeyword;
+            var expected = Current.Kind == SyntaxKind.ConstKeyword ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword;
             var keyword = MatchToken(expected);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var typeClause = ParseOptionalTypeClause();

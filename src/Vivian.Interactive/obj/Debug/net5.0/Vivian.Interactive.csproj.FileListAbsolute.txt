@@ -17,3 +17,7 @@ G:\Vivian\src\Vivian.Interactive\obj\Debug\net5.0\Vivian.Interactive.dll
 G:\Vivian\src\Vivian.Interactive\obj\Debug\net5.0\ref\Vivian.Interactive.dll
 G:\Vivian\src\Vivian.Interactive\obj\Debug\net5.0\Vivian.Interactive.pdb
 G:\Vivian\src\Vivian.Interactive\obj\Debug\net5.0\Vivian.Interactive.genruntimeconfig.cache
+G:\Vivian\src\Vivian.Interactive\bin\Debug\net5.0\Mono.Cecil.Mdb.dll
+G:\Vivian\src\Vivian.Interactive\bin\Debug\net5.0\Mono.Cecil.Pdb.dll
+G:\Vivian\src\Vivian.Interactive\bin\Debug\net5.0\Mono.Cecil.Rocks.dll
+G:\Vivian\src\Vivian.Interactive\bin\Debug\net5.0\Mono.Cecil.dll

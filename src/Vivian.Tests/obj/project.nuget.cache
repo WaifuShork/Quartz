@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NeKDkYN39PkngeCIoMHd1Dnne49iljWANy5TEdlI1HBqlhubgudOkXgb4B9BiN84LfCG5btzlSz16bLdAXaTZw==",
+  "dgSpecHash": "sIl4PldaLa2nMW6f40l/aZtxSgStqlXa2wjcSS1AtqMjBLIsHc515svRBWG8Nwmo9B1FawsP5TCq+chjvN2GXw==",
   "success": true,
   "projectFilePath": "G:\\Vivian\\src\\Vivian.Tests\\Vivian.Tests.csproj",
   "expectedPackageFiles": [
@@ -13,6 +13,7 @@
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.testplatform.objectmodel\\16.7.1\\microsoft.testplatform.objectmodel.16.7.1.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.testplatform.testhost\\16.7.1\\microsoft.testplatform.testhost.16.7.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\mono.cecil\\0.11.3\\mono.cecil.0.11.3.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\nuget.frameworks\\5.0.0\\nuget.frameworks.5.0.0.nupkg.sha512",

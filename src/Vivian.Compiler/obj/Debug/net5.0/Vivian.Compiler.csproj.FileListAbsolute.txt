@@ -17,3 +17,8 @@ G:\Vivian\src\Vivian.Compiler\obj\Debug\net5.0\Vivian.Compiler.genruntimeconfig.
 G:\Vivian\src\Vivian.Compiler\bin\Debug\net5.0\Vivian.Lib.dll
 G:\Vivian\src\Vivian.Compiler\bin\Debug\net5.0\Vivian.Lib.pdb
 G:\Vivian\src\Vivian.Compiler\obj\Debug\net5.0\Vivian.Compiler.csproj.CopyComplete
+G:\Vivian\src\Vivian.Compiler\bin\Debug\net5.0\Mono.Cecil.Mdb.dll
+G:\Vivian\src\Vivian.Compiler\bin\Debug\net5.0\Mono.Cecil.Pdb.dll
+G:\Vivian\src\Vivian.Compiler\bin\Debug\net5.0\Mono.Cecil.Rocks.dll
+G:\Vivian\src\Vivian.Compiler\bin\Debug\net5.0\Mono.Cecil.dll
+G:\Vivian\src\Vivian.Compiler\bin\Debug\net5.0\Mono.Options.dll

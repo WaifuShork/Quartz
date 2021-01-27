@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "7m+FlNSsFSk84V7LcI90IS3QFg3L9mJ0wtH7s8XBVsYhgYlnKfpMpCoh4kE93xi716ojRrsK6lo2z17PLLqtLw==",
+  "dgSpecHash": "+jbLLAVbRte8EjE2p3o1CNsMZUdun1BDq8dgO9QzccMQf4hekYOWEKh/8DK8lN85myteNA+OMJL6+k0INSb58g==",
   "success": true,
   "projectFilePath": "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\ashle\\.nuget\\packages\\mono.cecil\\0.11.3\\mono.cecil.0.11.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512"
   ],
   "logs": []

@@ -59,10 +59,10 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             switch (text)
             {
-                case "let":
-                    return SyntaxKind.LetKeyword;
-                case "imply":
-                    return SyntaxKind.ImplyKeyword;
+                case "const":
+                    return SyntaxKind.ConstKeyword;
+                case "var":
+                    return SyntaxKind.VarKeyword;
                 case "true":
                     return SyntaxKind.TrueKeyword;
                 case "false":
@@ -185,10 +185,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "false";
                 case SyntaxKind.TrueKeyword:
                     return "true";
-                case SyntaxKind.LetKeyword:
-                    return "let";
-                case SyntaxKind.ImplyKeyword:
-                    return "imply";
+                case SyntaxKind.ConstKeyword:
+                    return "const";
+                case SyntaxKind.VarKeyword:
+                    return "var";
                 
                 case SyntaxKind.IfKeyword:
                     return "if";

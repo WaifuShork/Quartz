@@ -110,6 +110,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Mono.Cecil": {
+              "target": "Package",
+              "version": "[0.11.3, )"
+            },
             "System.Collections.Immutable": {
               "target": "Package",
               "version": "[5.0.0, )"

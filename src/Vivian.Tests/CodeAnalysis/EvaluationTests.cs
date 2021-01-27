@@ -72,18 +72,18 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("\"abc\" != \"abc\"", false)]
         [InlineData("\"abc\" == \"abc\"", true)]
         
-        [InlineData("{ imply a = 0 return (a = 10) * a }", 100)]
+        [InlineData("{ var a = 0 return (a = 10) * a }", 100)]
         
-        [InlineData("{ imply a = 0 if a == 0 a = 10 return a }", 10)]
+        [InlineData("{ var a = 0 if a == 0 a = 10 return a }", 10)]
         
-        [InlineData("{ imply i = 10 imply result = 0 while i > 0 { result = result + i i = i - 1 } return result }", 55)]
+        [InlineData("{ var i = 10 var result = 0 while i > 0 { result = result + i i = i - 1 } return result }", 55)]
         
-        [InlineData("{ imply result = 0 for i = 1 to 10 { result = result + i } return result }", 55)]
+        [InlineData("{ var result = 0 for i = 1 to 10 { result = result + i } return result }", 55)]
         
-        [InlineData("{ imply a = 0 do a = a + 1 while a < 10 return a }", 10)]
+        [InlineData("{ var a = 0 do a = a + 1 while a < 10 return a }", 10)]
         
-        // [InlineData("{ imply i = 0 while i < 5 { i = i + 1 if i == 5 continue } i }", 5)]
-        // [InlineData("{ imply i = 0 do { i = i + 1 if i == 5 continue } while i < 5 i }", 5)]
+        // [InlineData("{ var i = 0 while i < 5 { i = i + 1 if i == 5 continue } i }", 5)]
+        // [InlineData("{ var i = 0 do { i = i + 1 if i == 5 continue } while i < 5 i }", 5)]
         
         public void Evaluator_Computes_CorrectValues(string text, object expectedValue)
         {
@@ -101,12 +101,12 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    imply x = 10
-                    imply y = 100
+                    var x = 10
+                    var y = 100
                     {
-                        imply x = 100
+                        var x = 100
                     }            
-                    imply [x] = 5
+                    var [x] = 5
                 }
             ";
             var diagnostics = @"
@@ -165,7 +165,7 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    let foo = 42
+                    const foo = 42
                     [foo](42)
                 }
             ";
@@ -200,7 +200,7 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    let print = 42
+                    const print = 42
                     [print](""test"")
                 }
             ";

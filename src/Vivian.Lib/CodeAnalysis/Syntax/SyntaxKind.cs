@@ -47,8 +47,8 @@
         // Keywords 
         FalseKeyword,
         TrueKeyword,
-        LetKeyword,
-        ImplyKeyword,
+        ConstKeyword,
+        VarKeyword,
         IfKeyword,
         ElseKeyword,        
         WhileKeyword,        

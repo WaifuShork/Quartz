@@ -8,15 +8,45 @@
     ".NETCoreApp,Version=v5.0": {
       "Vivian.Compiler/1.0.0": {
         "dependencies": {
+          "Mono.Options": "6.6.0.161",
           "Vivian.Lib": "1.0.0"
         },
         "runtime": {
           "Vivian.Compiler.dll": {}
         }
       },
+      "Mono.Cecil/0.11.3": {
+        "runtime": {
+          "lib/netstandard2.0/Mono.Cecil.Mdb.dll": {
+            "assemblyVersion": "0.11.3.0",
+            "fileVersion": "0.11.3.0"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Pdb.dll": {
+            "assemblyVersion": "0.11.3.0",
+            "fileVersion": "0.11.3.0"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Rocks.dll": {
+            "assemblyVersion": "0.11.3.0",
+            "fileVersion": "0.11.3.0"
+          },
+          "lib/netstandard2.0/Mono.Cecil.dll": {
+            "assemblyVersion": "0.11.3.0",
+            "fileVersion": "0.11.3.0"
+          }
+        }
+      },
+      "Mono.Options/6.6.0.161": {
+        "runtime": {
+          "lib/netstandard2.0/Mono.Options.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.6.0.0"
+          }
+        }
+      },
       "System.Collections.Immutable/5.0.0": {},
       "Vivian.Lib/1.0.0": {
         "dependencies": {
+          "Mono.Cecil": "0.11.3",
           "System.Collections.Immutable": "5.0.0"
         },
         "runtime": {
@@ -30,6 +60,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Mono.Cecil/0.11.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DNYE+io5XfEE8+E+5padThTPHJARJHbz1mhbhMPNrrWGKVKKqj/KEeLvbawAmbIcT73NuxLV7itHZaYCZcVWGg==",
+      "path": "mono.cecil/0.11.3",
+      "hashPath": "mono.cecil.0.11.3.nupkg.sha512"
+    },
+    "Mono.Options/6.6.0.161": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hX0hERiBJqZOD/2QlRWgxCI50cZmQUEA6xyoEaUlCMgKlkf8CLH4Op+kaNtfSXJuWTPA6ApROa6DRBLjQdTK4g==",
+      "path": "mono.options/6.6.0.161",
+      "hashPath": "mono.options.6.6.0.161.nupkg.sha512"
     },
     "System.Collections.Immutable/5.0.0": {
       "type": "package",

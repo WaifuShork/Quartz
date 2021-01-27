@@ -1,6 +1,0 @@
-function GetName(): string
-{
-    print("whats your name?")
-    imply name = input()
-    return name
-} 

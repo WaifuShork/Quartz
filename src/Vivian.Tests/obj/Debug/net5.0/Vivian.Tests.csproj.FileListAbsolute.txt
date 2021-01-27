@@ -100,3 +100,7 @@ G:\Vivian\src\Vivian.Tests\obj\Debug\net5.0\Vivian.Tests.dll
 G:\Vivian\src\Vivian.Tests\obj\Debug\net5.0\ref\Vivian.Tests.dll
 G:\Vivian\src\Vivian.Tests\obj\Debug\net5.0\Vivian.Tests.pdb
 G:\Vivian\src\Vivian.Tests\obj\Debug\net5.0\Vivian.Tests.genruntimeconfig.cache
+G:\Vivian\src\Vivian.Tests\bin\Debug\net5.0\Mono.Cecil.Mdb.dll
+G:\Vivian\src\Vivian.Tests\bin\Debug\net5.0\Mono.Cecil.Pdb.dll
+G:\Vivian\src\Vivian.Tests\bin\Debug\net5.0\Mono.Cecil.Rocks.dll
+G:\Vivian\src\Vivian.Tests\bin\Debug\net5.0\Mono.Cecil.dll
