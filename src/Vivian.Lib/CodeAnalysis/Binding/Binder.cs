@@ -442,7 +442,7 @@ namespace Vivian.CodeAnalysis.Binding
             
             _scope = new BoundScope(_scope);
             
-            var variable = BindVariableDeclaration(syntax.Identifier, true ,TypeSymbol.Int);
+            var variable = BindVariableDeclaration(syntax.Identifier, false ,TypeSymbol.Int);
             var body = BindLoopBody(syntax.Body, out var breakLabel, out var continueLabel);
             
             _scope = _scope.Parent;

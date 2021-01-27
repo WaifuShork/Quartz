@@ -220,30 +220,36 @@ namespace Vivian.CodeAnalysis.Syntax
         private StatementSyntax ParseForStatement()
         {
             var keyword = MatchToken(SyntaxKind.ForKeyword);
+            var openParenthesisToken = MatchToken(SyntaxKind.OpenParenthesisToken);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var equalsToken = MatchToken(SyntaxKind.EqualsToken);
             var lowerBound = ParseExpression();
             var toKeyword = MatchToken(SyntaxKind.ToKeyword);
             var upperBound = ParseExpression();
+            var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
             var body = ParseStatement();
-            return new ForStatementSyntax(_syntaxTree, keyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
+            return new ForStatementSyntax(_syntaxTree, keyword, openParenthesisToken, identifier, equalsToken, lowerBound, toKeyword, upperBound, closeParenthesisToken, body);
         }
 
         private StatementSyntax ParseWhileStatement()
         {
             var keyword = MatchToken(SyntaxKind.WhileKeyword);
+            var openParenthesisToken = MatchToken(SyntaxKind.OpenParenthesisToken);
             var condition = ParseExpression();
+            var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
             var body = ParseStatement();
-            return new WhileStatementSyntax(_syntaxTree, keyword, condition, body);
+            return new WhileStatementSyntax(_syntaxTree, keyword, openParenthesisToken, condition, closeParenthesisToken, body);
         }
 
         private StatementSyntax ParseIfStatement()
         {
             var keyword = MatchToken(SyntaxKind.IfKeyword);
+            var openParenthesisToken = MatchToken(SyntaxKind.OpenParenthesisToken);
             var condition = ParseExpression();
+            var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
             var statement = ParseStatement();
             var elseClause = ParseElseClause();
-            return new IfStatementSyntax(_syntaxTree, keyword, condition, statement, elseClause);
+            return new IfStatementSyntax(_syntaxTree, keyword, openParenthesisToken, condition, closeParenthesisToken, statement, elseClause);
         }
 
         private ElseClauseSyntax ParseElseClause()
