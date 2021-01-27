@@ -25,19 +25,28 @@ It contains:
 - `bool`
 - `int`
 - `string`
+- `object`
 - basic expression evaluation, and
 - an early implementation of functions
 
 ```c#
 {
+  
+    // data types
+    int: whole numbers
+    bool: true/false
+    string: "sentences encased in double quotes"
+    object: unboxed object that can represent any type
+    
     // built-in conversions
-    int(string input) // converts a string to an int, if a valid integer is given
-    string(int input) // converts an int to a string
-    bool(string/int input) // converts either string or int to bool
+    int(string input) // converts a string to an int, if a valid integer is given.
+    string(int input) // converts an int to a string.
+    bool(string/int input) // converts either string or int to bool.
+    object(object input) // converts anything to an unboxed object implicitly.
 
     // variable declaration types
-    imply result = 20 // imply represents a mutable variable
-    let result = 20 // let represents a constant varable
+    var result = 20 // imply represents a mutable variable
+    const result = 20 // let represents a constant varable
     // Remember, variables cannot be redeclared.
     
     // for loop 
@@ -99,7 +108,7 @@ It contains:
 ## Fizz Buzz Example
 ```c#
 {   
-    imply message = " " 
+    var message = " " 
     for i = 0 to 100 
     {
         if i % 3 == 0
@@ -118,12 +127,12 @@ It contains:
 ## Number Guessing Game
 ```c#
 {   
-    imply factor = true
+    var factor = true
     while factor == true
     {   
         print("I'm thinking of a number between 0 and 10")
-        imply answer = input()
-        imply num = rnd(10)
+        var answer = input()
+        var num = rnd(10)
         if int(answer) == num
         {
             print("Congrats!, the number I was thinking of was " + num)
@@ -156,7 +165,7 @@ function randomFunctionThree()
 }
 
 {
-    let randomNumber = rnd(2) + 1
+    const randomNumber = rnd(2) + 1
     if randomNumber == 1
         randomFunctionOne()
     else if randomNumber == 2
