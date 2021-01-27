@@ -278,9 +278,12 @@ namespace Vivian.CodeAnalysis.Syntax
             var typeClause = ParseOptionalTypeClause();
             var equals = MatchToken(SyntaxKind.EqualsToken);
             var initializer = ParseExpression();
-            var semicolon = MatchToken(SyntaxKind.SemicolonToken);
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }            
             
-            return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer, semicolon);
+            return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer);
         }
 
         private TypeClauseSyntax ParseOptionalTypeClause()
@@ -337,6 +340,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 var identifierToken = NextToken();
                 var operatorToken = NextToken();
                 var right = ParseAssignmentExpression();
+                
                 if (Current.Kind == SyntaxKind.SemicolonToken)
                 {
                     NextToken();
@@ -414,12 +418,13 @@ namespace Vivian.CodeAnalysis.Syntax
             var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var arguments = ParseArguments();
             var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
+            
             if (Current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
 
-            return new CallExpressionSyntax(_syntaxTree ,identifier, openParenthesis, arguments, closeParenthesis);
+            return new CallExpressionSyntax(_syntaxTree, identifier, openParenthesis, arguments, closeParenthesis);
         }
 
         private SeparatedSyntaxList<ExpressionSyntax> ParseArguments()

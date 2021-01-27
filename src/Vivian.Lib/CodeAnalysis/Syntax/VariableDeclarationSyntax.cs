@@ -9,15 +9,14 @@
                                          SyntaxToken identifier, 
                                          TypeClauseSyntax typeClause,
                                          SyntaxToken equalsToken, 
-                                         ExpressionSyntax initializer,
-                                         SyntaxToken semicolonToken) : base(syntaxTree)
+                                         ExpressionSyntax initializer) 
+                                         : base(syntaxTree)
         {
             Keyword = keyword;
             Identifier = identifier;
             TypeClause = typeClause;
             EqualsToken = equalsToken;
             Initializer = initializer;
-            SemicolonToken = semicolonToken;
         }
         
         public override SyntaxKind Kind => SyntaxKind.VariableDeclaration;

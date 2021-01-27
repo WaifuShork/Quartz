@@ -410,6 +410,7 @@ namespace Vivian.CodeAnalysis.Binding
             var elseStatement = syntax.ElseClause == null ? null : BindStatement(syntax.ElseClause.ElseStatement);
             return new BoundIfStatement(condition, thenStatement, elseStatement);
         }
+        
         private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)
         {
             var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);

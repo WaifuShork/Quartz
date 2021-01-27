@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Emit;
-using Vivian.CodeAnalysis.Lowering;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
 using ReflectionBindingFlags = System.Reflection.BindingFlags;
