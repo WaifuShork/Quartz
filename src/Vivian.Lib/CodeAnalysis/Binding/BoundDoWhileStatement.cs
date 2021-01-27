@@ -13,7 +13,7 @@
         public override BoundNodeKind Kind => BoundNodeKind.DoWhileStatement;
         public BoundStatement Body { get; }
         public BoundExpression Condition { get; }
-        public BoundLabel BreakLabel { get; }
-        public BoundLabel ContinueLabel { get; }
+        public new BoundLabel BreakLabel { get; }
+        public new BoundLabel ContinueLabel { get; }
     }
 }

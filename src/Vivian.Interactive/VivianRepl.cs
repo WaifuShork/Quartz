@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
+
 using Vivian.CodeAnalysis;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
-using Vivian.CodeAnalysis.Text;
 using Vivian.IO;
 
 namespace Vivian

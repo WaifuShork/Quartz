@@ -14,6 +14,5 @@
         public SyntaxToken IdentifierToken { get; }
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Expression { get; }
-        public SyntaxToken SemicolonToken { get; }
     }
 }

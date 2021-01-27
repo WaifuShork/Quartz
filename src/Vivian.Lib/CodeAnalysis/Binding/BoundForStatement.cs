@@ -25,7 +25,7 @@ namespace Vivian.CodeAnalysis.Binding
         public BoundExpression LowerBound { get; }
         public BoundExpression UpperBound { get; }
         public BoundStatement Body { get; }
-        public BoundLabel BreakLabel { get; }
-        public BoundLabel ContinueLabel { get; }
+        public new BoundLabel BreakLabel { get; }
+        public new BoundLabel ContinueLabel { get; }
     }
 }

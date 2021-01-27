@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text.RegularExpressions;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Text;
 
@@ -278,6 +277,7 @@ namespace Vivian.CodeAnalysis.Syntax
             var typeClause = ParseOptionalTypeClause();
             var equals = MatchToken(SyntaxKind.EqualsToken);
             var initializer = ParseExpression();
+            
             if (Current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Vivian.CodeAnalysis.Symbols
+﻿namespace Vivian.CodeAnalysis.Symbols
 {
     public abstract class VariableSymbol : Symbol
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Vivian.CodeAnalysis.Text;
-
-namespace Vivian
+﻿namespace Vivian
 {
     /*internal class TextSpanComparer : IComparer<TextSpan>
     {

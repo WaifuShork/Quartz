@@ -26,6 +26,5 @@
         public TypeClauseSyntax TypeClause { get; }
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Initializer { get; }
-        public SyntaxToken SemicolonToken { get; }
     }
 }

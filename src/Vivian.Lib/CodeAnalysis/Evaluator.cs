@@ -298,7 +298,7 @@ namespace Vivian.CodeAnalysis
             
             else if (node.Function == BuiltinFunctions.Print)
             {
-                var message = (object) EvaluateExpression(node.Arguments[0]);
+                var message = EvaluateExpression(node.Arguments[0]);
                 Console.WriteLine(message);
                 return null;
             }

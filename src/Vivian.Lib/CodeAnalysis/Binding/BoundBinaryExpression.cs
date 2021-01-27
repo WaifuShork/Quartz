@@ -1,5 +1,4 @@
-﻿using System;
-using Vivian.CodeAnalysis.Symbols;
+﻿using Vivian.CodeAnalysis.Symbols;
 
 namespace Vivian.CodeAnalysis.Binding
 {
