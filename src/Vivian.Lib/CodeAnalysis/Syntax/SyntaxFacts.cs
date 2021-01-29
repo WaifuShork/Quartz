@@ -95,6 +95,9 @@ namespace Vivian.CodeAnalysis.Syntax
                 case "return":
                     return SyntaxKind.ReturnKeyword;
                 
+                case "array":
+                    return SyntaxKind.ArrayKeyword;
+                
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -178,9 +181,17 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "{";
                 case SyntaxKind.CloseBraceToken:
                     return "}";
+                    
+                case SyntaxKind.OpenBracketToken:
+                    return "[";
+                case SyntaxKind.CloseBracketToken:
+                    return "]";
                 
                 case SyntaxKind.SemicolonToken:
                     return ";";
+                
+                case SyntaxKind.DotToken:
+                    return ".";
                 
                 case SyntaxKind.EqualsToken:
                     return "=";
@@ -222,6 +233,9 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.ReturnKeyword:
                     return "return";
+                
+                case SyntaxKind.ArrayKeyword:
+                    return "array";
                 
                 default:
                     return null;

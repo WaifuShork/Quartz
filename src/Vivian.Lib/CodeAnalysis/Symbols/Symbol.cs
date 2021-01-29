@@ -9,7 +9,7 @@ namespace Vivian.CodeAnalysis.Symbols
             Name = name;
         }
         
-        public abstract SymbolKind Kind { get;  }
+        public abstract SymbolKind Kind { get; }
         public string Name { get; }
 
         public void WriteTo(TextWriter writer)

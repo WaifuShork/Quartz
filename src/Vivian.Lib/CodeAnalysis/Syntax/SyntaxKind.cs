@@ -9,6 +9,9 @@
         CommaToken,
         ColonToken,
         SemicolonToken,
+        
+        // TODO: Struct and dot operator. 
+        DotToken,
 
         // Data Tokens
         StringToken,
@@ -22,12 +25,17 @@
         ModuloToken,
 
         BangToken,
+        IdentifierToken,
+
         OpenParenthesisToken,
         CloseParenthesisToken,
-        IdentifierToken,
+
         EqualsToken,
         OpenBraceToken,
         CloseBraceToken,
+        
+        OpenBracketToken,
+        CloseBracketToken,
         
         // Bitwise Tokens
         TildeToken,
@@ -60,6 +68,7 @@
         BreakKeyword,
         ReturnKeyword,
         FunctionKeyword,
+        ArrayKeyword,
 
         // Expressions
         LiteralExpression,
@@ -85,6 +94,7 @@
         DoWhileStatement,
         GlobalStatement,
         FunctionDeclaration,
+        ArrayDeclaration,
         Parameter,
         ContinueStatement,
         BreakStatement,
