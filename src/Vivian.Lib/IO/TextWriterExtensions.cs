@@ -93,7 +93,16 @@ namespace Vivian.IO
 
         public static void WriteDiagnostics(this TextWriter writer, IEnumerable<Diagnostic> diagnostics)
         {
-            foreach (var diagnostic in diagnostics.OrderBy(d => d.Location.Text.FileName)
+            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text == null))
+            {
+                writer.SetForeground(ConsoleColor.DarkRed);
+                writer.Write(diagnostic.Message);
+                writer.WriteLine(diagnostic);
+                writer.ResetColor();
+            }
+
+            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text != null)
+                                                  .OrderBy(d => d.Location.Text.FileName)
                                                   .ThenBy(d => d.Location.Span.Start)
                                                   .ThenBy(d => d.Location.Span.Length))
             {
@@ -104,7 +113,7 @@ namespace Vivian.IO
 
                 var startCharacter = diagnostic.Location.StartCharacter + 1;
                 var endCharacter = diagnostic.Location.EndCharacter + 1;
-                
+            
                 var span = diagnostic.Location.Span;
                 var lineIndex = text.GetLineIndex(span.Start);
                 var line = text.Lines[lineIndex];
@@ -134,7 +143,6 @@ namespace Vivian.IO
 
                 writer.WriteLine();
             }
-
             writer.WriteLine();
         }
     }

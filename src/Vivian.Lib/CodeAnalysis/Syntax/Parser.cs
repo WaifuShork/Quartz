@@ -114,6 +114,7 @@ namespace Vivian.CodeAnalysis.Syntax
             var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
             var type = ParseOptionalTypeClause();
             var body = ParseBlockStatement();
+            
             return new FunctionDeclarationSyntax(_syntaxTree, functionKeyword, identifier, openParenthesisToken, parameters,
                 closeParenthesisToken, type, body);
         }
