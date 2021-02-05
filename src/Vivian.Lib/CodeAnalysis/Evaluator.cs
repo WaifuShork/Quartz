@@ -76,7 +76,7 @@ namespace Vivian.CodeAnalysis
 
                     case BoundNodeKind.ConditionalGotoStatement:
                         var cgs = (BoundConditionalGotoStatement) s;
-                        var condition = (bool) EvaluateExpression(cgs.Condition);
+                        var condition = (int) EvaluateExpression(cgs.Condition) == 0 ? false : true;
                         if (condition == cgs.JumpIfTrue)
                             index = labelToIndex[cgs.Label];
                         else
@@ -148,10 +148,18 @@ namespace Vivian.CodeAnalysis
             var value = EvaluateExpression(node.Expression);
             if (node.Type == TypeSymbol.Object)
                 return value;
-            if (node.Type == TypeSymbol.Bool)
-                return Convert.ToBoolean(value);
-            else if (node.Type == TypeSymbol.Int)
+            if (node.Type == TypeSymbol.Int)
+            {
+                if (value is string s)
+                {
+                    return s.Equals("true") ?
+                        1 :
+                        s.Equals("false") ?
+                        0 :
+                        throw new Exception($"Value {value} can not be cast to type {node.Type}");
+                }
                 return Convert.ToInt32(value);
+            }
             else if (node.Type == TypeSymbol.String)
                 return Convert.ToString(value);
             else
@@ -209,7 +217,7 @@ namespace Vivian.CodeAnalysis
                 case BoundUnaryOperatorKind.Negation:
                     return -(int) operand;
                 case BoundUnaryOperatorKind.LogicalNegation:
-                    return !(bool) operand;
+                    return ((int) operand) == 0 ? 1 : 0;
                 case BoundUnaryOperatorKind.OnesComplement:
                     return ~(int) operand;
                 default:
@@ -219,70 +227,61 @@ namespace Vivian.CodeAnalysis
         
         private object EvaluateBinaryExpression(BoundBinaryExpression b)
         {
-            var left = EvaluateExpression(b.Left);
-            var right = EvaluateExpression(b.Right);
+            object left() => EvaluateExpression(b.Left);
+            object right() => EvaluateExpression(b.Right);
 
             switch (b.Op.Kind)
             {
                 case BoundBinaryOperatorKind.Addition:
                     if (b.Type == (TypeSymbol.Int))
-                        return (int) left + (int) right;
+                        return (int)left() + (int)right();
                     else
-                        return (string) left + (string) right;
+                        return (string)left() + (string)right();
                 
                 case BoundBinaryOperatorKind.Subtraction:
-                    return (int) left - (int) right;
+                    return (int) left() - (int) right();
                 
                 case BoundBinaryOperatorKind.Multiplication:
-                    return (int) left * (int) right;
+                    return (int) left() * (int) right();
                 
                 case BoundBinaryOperatorKind.Division:
-                    return (int) left / (int) right;
+                    return (int) left() / (int) right();
                 
                 case BoundBinaryOperatorKind.Modulo:
-                    return (int) left % (int) right;
+                    return (int) left() % (int) right();
 
                 case BoundBinaryOperatorKind.BitwiseAnd:
-                    if (b.Type == (TypeSymbol.Int))
-                        return (int) left & (int) right;
-                    else 
-                        return (bool) left & (bool) right;
+                    return (int) left() & (int) right();
                 
                 case BoundBinaryOperatorKind.BitwiseOr:
-                    if (b.Type == (TypeSymbol.Int))
-                        return (int) left | (int) right;
-                    else
-                        return (bool) left | (bool) right;
+                    return (int) left() | (int) right();
                 
                 case BoundBinaryOperatorKind.BitwiseXor:
-                    if (b.Type == (TypeSymbol.Int))
-                        return (int) left ^ (int) right;
-                    else
-                        return (bool) left ^ (bool) right;
+                    return (int) left() ^ (int) right();
                 
                 case BoundBinaryOperatorKind.LogicalAnd:
-                    return (bool) left && (bool) right;
+                    return ((int) left()) == 0 ? 0 : ((int) right()) == 0 ? 0 : 1;
                 
                 case BoundBinaryOperatorKind.LogicalOr:
-                    return (bool) left || (bool) right;
+                    return ((int) left()) == 0 ? ((int) right()) == 0 ? 0 : 1 : 1;
                 
                 case BoundBinaryOperatorKind.Equals:
-                    return Equals(left, right);
+                    return Equals(left(), right()) ? 1 : 0;
                 
                 case BoundBinaryOperatorKind.NotEquals:
-                    return !Equals(left, right);
+                    return !Equals(left(), right()) ? 1 : 0;
                 
                 case BoundBinaryOperatorKind.Less:
-                    return (int) left < (int) right;
+                    return (int) left() < (int) right() ? 1 : 0;
                 
                 case BoundBinaryOperatorKind.Greater:
-                    return (int) left > (int) right;
+                    return (int) left() > (int) right() ? 1 : 0;
                 
                 case BoundBinaryOperatorKind.GreaterOrEquals:
-                    return (int) left >= (int) right;
+                    return (int) left() >= (int) right() ? 1 : 0;
                 
                 case BoundBinaryOperatorKind.LessOrEquals:
-                    return (int) left <= (int) right;
+                    return (int) left() <= (int) right() ? 1 : 0;
 
                 default:
                     throw new Exception($"Unexpected binary operator {b.Op}");

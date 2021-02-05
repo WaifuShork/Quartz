@@ -36,15 +36,15 @@ namespace Vivian.CodeAnalysis.Binding
                 return Conversion.Explicit;
             }
             
-            if (from == TypeSymbol.Bool || from == TypeSymbol.Int)
+            if (from == TypeSymbol.Int)
             {
                 if (to == TypeSymbol.String)
                     return Conversion.Explicit;
             }
-            
+
             if (from == TypeSymbol.String)
             {
-                if (to == TypeSymbol.Bool || to == TypeSymbol.Int)
+                if (to == TypeSymbol.Int)
                     return Conversion.Explicit;
             }
 

@@ -10,9 +10,6 @@ namespace Vivian.CodeAnalysis.Binding
             Value = value;
             switch (value)
             {
-                case bool:
-                    Type = TypeSymbol.Bool;
-                    break;
                 case int:
                     Type = TypeSymbol.Int;
                     break;
