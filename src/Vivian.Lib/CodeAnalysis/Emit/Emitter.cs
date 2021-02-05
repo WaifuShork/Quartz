@@ -9,8 +9,13 @@ using Vivian.CodeAnalysis.Symbols;
 
 namespace Vivian.CodeAnalysis.Emit
 {
-    internal static class Emitter
+    internal class Emitter
     {
+        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
+        private readonly List<AssemblyDefinition> _assemblies = new List<AssemblyDefinition>();
+        private readonly Dictionary<TypeSymbol, TypeReference> _knownTypes = new Dictionary<TypeSymbol, TypeReference>();
+        
+        
         public static ImmutableArray<Diagnostic> Emit(BoundProgram program, string moduleName, string[] references, string outputPath)
         {
             if (program.Diagnostics.Any())
@@ -56,26 +61,92 @@ namespace Vivian.CodeAnalysis.Emit
             
             foreach (var (typeSymbol, metadataName) in builtInTypes)
             {
+                var typeReference = ResolveType(typeSymbol.Name, metadataName);
+                knownTypes.Add(typeSymbol, typeReference);
+            }
+
+            TypeReference ResolveType(string vivianName, string metadataName)
+            {
                 var foundTypes = assemblies.SelectMany(a => a.Modules)
-                                           .SelectMany(m => m.Types)
-                                           .Where(t => t.FullName == metadataName)
-                                           .ToArray();
+                    .SelectMany(m => m.Types)
+                    .Where(t => t.FullName == metadataName)
+                    .ToArray();
 
                 if (foundTypes.Length == 1)
                 {
                     var typeReference = assemblyDefinition.MainModule.ImportReference(foundTypes[0]);
-                    knownTypes.Add(typeSymbol, typeReference);
+                    return typeReference;
                 }
                 
                 else if (foundTypes.Length == 0)
                 {
-                    result.ReportRequiredTypeNotFound(typeSymbol.Name, metadataName);
+                    result.ReportRequiredTypeNotFound(vivianName, metadataName);
                 }
+                
                 else
                 {
-                    result.ReportRequiredTypeAmbiguous(typeSymbol.Name, metadataName, foundTypes);
+                    result.ReportRequiredTypeAmbiguous(vivianName, metadataName, foundTypes);
                 }
+
+                return null;
             }
+
+            MethodReference ResolveMethod(string typeName, string methodName, string[] parameterTypeNames)
+            {
+                var foundTypes = assemblies.SelectMany(a => a.Modules)
+                    .SelectMany(m => m.Types)
+                    .Where(t => t.FullName == typeName)
+                    .ToArray();
+
+                if (foundTypes.Length == 1)
+                {
+                    var foundType = foundTypes[0];
+                    var methods = foundType.Methods.Where(m => m.Name == methodName);
+
+                    foreach (var method in methods)
+                    {
+                        if (method.Parameters.Count != parameterTypeNames.Length)
+                        {
+                            continue;
+                        }
+
+                        var allParametersMatch = true;
+                            
+                        for (var i = 0; i < parameterTypeNames.Length; i++)
+                        {
+                            if (method.Parameters[i].ParameterType.FullName != parameterTypeNames[i])
+                            {
+                                allParametersMatch = false;
+                                break;
+                            }
+                        }
+
+                        if (!allParametersMatch)
+                        {
+                            continue;
+                        }
+
+                        return assemblyDefinition.MainModule.ImportReference(method);
+                    }
+
+                    result.ReportRequiredMethodNotFound(typeName, methodName, parameterTypeNames);
+                    return null;
+                }
+                
+                else if (foundTypes.Length == 0)
+                {
+                    result.ReportRequiredTypeNotFound(null, typeName);
+                }
+                
+                else
+                {
+                    result.ReportRequiredTypeAmbiguous(null, typeName, foundTypes);
+                }
+
+                return null;
+            }
+
+            var consoleWriteLineReference = ResolveMethod("System.Console", "WriteLine", new [] { "System.String"});
             
             if (result.Any())
             {
@@ -91,6 +162,8 @@ namespace Vivian.CodeAnalysis.Emit
             typeDefinition.Methods.Add(mainMethod);
 
             var ilProcessor = mainMethod.Body.GetILProcessor();
+            ilProcessor.Emit(OpCodes.Ldstr, "Hello world!");
+            ilProcessor.Emit(OpCodes.Call, consoleWriteLineReference);
             ilProcessor.Emit(OpCodes.Ret);
             
             assemblyDefinition.EntryPoint = mainMethod;

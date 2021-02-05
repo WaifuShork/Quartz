@@ -196,8 +196,8 @@ namespace Vivian.CodeAnalysis
         public void ReportRequiredTypeNotFound(string vivianName, string metadataName)
         {
             var message = vivianName == null
-                ? $"The required type '{vivianName}' ('{metadataName}') cannot be resolved among the given references."
-                : $"The required type '{metadataName}' cannot be resolved among the given references.";
+                ? $"The required type '{metadataName}' cannot be resolved among the given references."
+                : $"The required type '{vivianName}' ('{metadataName}') cannot be resolved among the given references.";
             Report(default, message);
         }
 
@@ -207,8 +207,16 @@ namespace Vivian.CodeAnalysis
             var assemblyNameList = string.Join(", ", assemblyNames);
             
             var message = vivianName == null
-                ? $"The required type '{vivianName}' ('{metadataName}') was found in multiple references: {assemblyNameList}."
-                : $"The required type '{vivianName}' was found in multiple references: {assemblyNameList}";
+                ? $"The required type '{vivianName}' was found in multiple references: {assemblyNameList}"
+                : $"The required type '{vivianName}' ('{metadataName}') was found in multiple references: {assemblyNameList}.";
+            Report(default, message);
+        }
+
+        public void ReportRequiredMethodNotFound(string typeName, string methodName, string[] parameterTypeNames)
+        {
+            var parameterTypeNameList = string.Join(", ", parameterTypeNames);
+
+            var message = $"The required method '{typeName}.{methodName}'({parameterTypeNameList}) cannot be resolved among the given references.";
             Report(default, message);
         }
     }

@@ -96,8 +96,7 @@ namespace Vivian.IO
             foreach (var diagnostic in diagnostics.Where(d => d.Location.Text == null))
             {
                 writer.SetForeground(ConsoleColor.DarkRed);
-                writer.Write(diagnostic.Message);
-                writer.WriteLine(diagnostic);
+                writer.WriteLine(diagnostic.Message);
                 writer.ResetColor();
             }
 
