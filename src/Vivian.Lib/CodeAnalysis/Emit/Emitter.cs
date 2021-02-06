@@ -7,6 +7,7 @@ using Mono.Cecil.Cil;
 using Mono.Cecil.Rocks;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Emit
 {
@@ -393,7 +394,31 @@ namespace Vivian.CodeAnalysis.Emit
 
         private void EmitUnaryExpression(ILProcessor ilProcessor, BoundUnaryExpression node)
         {
-            throw new NotImplementedException();
+            EmitExpression(ilProcessor, node.Operand);
+            if (node.Op.Kind == BoundUnaryOperatorKind.Identity)
+            {
+                // Done
+            }
+            else if (node.Op.Kind == BoundUnaryOperatorKind.LogicalNegation)
+            {
+                // !
+                ilProcessor.Emit(OpCodes.Ldc_I4_0);
+                ilProcessor.Emit(OpCodes.Ceq);
+            }
+            else if (node.Op.Kind == BoundUnaryOperatorKind.Negation)
+            {
+                // -
+                ilProcessor.Emit(OpCodes.Neg);
+            }
+            else if (node.Op.Kind == BoundUnaryOperatorKind.OnesComplement)
+            {
+                // ~
+                ilProcessor.Emit(OpCodes.Not);
+            }
+            else
+            {
+                throw new Exception($"Unexpected unary operator {SyntaxFacts.GetText(node.Op.SyntaxKind)}({node.Operand.Type})");
+            }
         }
 
         private void EmitBinaryExpression(ILProcessor ilProcessor, BoundBinaryExpression node)
@@ -458,7 +483,7 @@ namespace Vivian.CodeAnalysis.Emit
 
             if (node.Type == TypeSymbol.Object)
             {
-                
+                // Done
             }
             else if (node.Type == TypeSymbol.Bool)
             {
