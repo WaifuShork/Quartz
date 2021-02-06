@@ -13,13 +13,15 @@ namespace Vivian.CodeAnalysis.Emit
 {
     internal sealed class Emitter
     {
+        private readonly AssemblyDefinition _assemblyDefinition;
+        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
         private readonly Dictionary<VariableSymbol, VariableDefinition> _locals = new Dictionary<VariableSymbol, VariableDefinition>();
         private readonly Dictionary<FunctionSymbol, MethodDefinition> _methods = new Dictionary<FunctionSymbol, MethodDefinition>();
-        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
-        private readonly AssemblyDefinition _assemblyDefinition;
+        private readonly Dictionary<BoundLabel, int> _labels = new Dictionary<BoundLabel, int>();
         private readonly Dictionary<TypeSymbol, TypeReference> _knownTypes;
         
-        
+        private readonly List<(int InstructionIndex, BoundLabel Target)> _fixups = new List<(int InstructionIndex, BoundLabel Target)>();
+
         private readonly MethodReference _consoleWriteLineReference;
         private readonly MethodReference _consoleReadLineReference;
         private readonly MethodReference _stringConcatReference;
@@ -213,6 +215,8 @@ namespace Vivian.CodeAnalysis.Emit
         {
             var method = _methods[function];
             _locals.Clear();
+            _fixups.Clear();
+            _labels.Clear();
             
             var ilProcessor = method.Body.GetILProcessor();
             
@@ -221,9 +225,13 @@ namespace Vivian.CodeAnalysis.Emit
                 EmitStatement(ilProcessor, statement);
             }
 
-            if (function.Type == TypeSymbol.Void)
+            foreach (var fixup in _fixups)
             {
-                ilProcessor.Emit(OpCodes.Ret);
+                var targetLabel = fixup.Target;
+                var targetInstructionIndex = _labels[targetLabel];
+                var targetInstruction = ilProcessor.Body.Instructions[targetInstructionIndex];
+                var instructionToFixup = ilProcessor.Body.Instructions[fixup.InstructionIndex];
+                instructionToFixup.Operand = targetInstruction;
             }
             
             method.Body.OptimizeMacros();
@@ -296,17 +304,22 @@ namespace Vivian.CodeAnalysis.Emit
         
         private void EmitConditionalGotoStatement(ILProcessor ilProcessor, BoundConditionalGotoStatement node)
         {
-            throw new NotImplementedException();
+            EmitExpression(ilProcessor, node.Condition);
+            
+            var opCode = node.JumpIfTrue ? OpCodes.Brtrue : OpCodes.Brfalse;
+            _fixups.Add((ilProcessor.Body.Instructions.Count, node.Label));
+            ilProcessor.Emit(opCode, Instruction.Create(OpCodes.Nop));
         }
         
         private void EmitLabelStatement(ILProcessor ilProcessor, BoundLabelStatement node)
         {
-            throw new NotImplementedException();
+            _labels.Add(node.Label, ilProcessor.Body.Instructions.Count);
         }
 
         private void EmitGotoStatement(ILProcessor ilProcessor, BoundGotoStatement node)
         {
-            throw new NotImplementedException();
+            _fixups.Add((ilProcessor.Body.Instructions.Count, node.Label));
+            ilProcessor.Emit(OpCodes.Br, Instruction.Create(OpCodes.Nop));
         }
 
         private void EmitVariableDeclaration(ILProcessor ilProcessor, BoundVariableDeclaration node)
@@ -466,8 +479,6 @@ namespace Vivian.CodeAnalysis.Emit
                     return;
                 }
             }
-            
-            
             
             switch (node.Op.Kind)
             {

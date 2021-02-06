@@ -1,13 +1,7 @@
 function Main()
 {
-    var x = 1 == 2
-    var y = 1 != 2
-    
-    var z = "1" == "2"
-    var a = "1" != "2"
-    print(string(x))
-    print(string(y))
-
-    print(string(z))
-    print(string(a))
+    for (i = 1 to 10)
+    {
+        print(string(i))
+    }
 }
