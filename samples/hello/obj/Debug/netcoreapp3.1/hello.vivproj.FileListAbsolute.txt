@@ -1,0 +1,9 @@
+G:\Vivian\samples\hello\obj\Debug\netcoreapp3.1\hello.vivprojAssemblyReference.cache
+G:\Vivian\samples\hello\obj\Debug\netcoreapp3.1\hello.vivproj.CoreCompileInputs.cache
+G:\Vivian\samples\hello\bin\Debug\netcoreapp3.1\hello.exe
+G:\Vivian\samples\hello\bin\Debug\netcoreapp3.1\hello.deps.json
+G:\Vivian\samples\hello\bin\Debug\netcoreapp3.1\hello.runtimeconfig.json
+G:\Vivian\samples\hello\bin\Debug\netcoreapp3.1\hello.runtimeconfig.dev.json
+G:\Vivian\samples\hello\bin\Debug\netcoreapp3.1\hello.dll
+G:\Vivian\samples\hello\obj\Debug\netcoreapp3.1\hello.dll
+G:\Vivian\samples\hello\obj\Debug\netcoreapp3.1\hello.genruntimeconfig.cache

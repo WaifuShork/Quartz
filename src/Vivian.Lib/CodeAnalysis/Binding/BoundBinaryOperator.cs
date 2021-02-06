@@ -31,7 +31,7 @@ namespace Vivian.CodeAnalysis.Binding
         public TypeSymbol RightType { get; }
         public TypeSymbol Type { get; }
 
-        private static BoundBinaryOperator[] _operators =
+        private static readonly BoundBinaryOperator[] _operators =
         {
             new BoundBinaryOperator(SyntaxKind.PlusToken, BoundBinaryOperatorKind.Addition, TypeSymbol.Int),
             new BoundBinaryOperator(SyntaxKind.MinusToken, BoundBinaryOperatorKind.Subtraction, TypeSymbol.Int),

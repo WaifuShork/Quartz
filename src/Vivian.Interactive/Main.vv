@@ -1,7 +1,0 @@
-﻿function isTrue(fact: bool): bool 
-{
-    if fact == true
-        return true
-    else
-        return false
-}

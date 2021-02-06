@@ -213,7 +213,8 @@ namespace Vivian.CodeAnalysis.Syntax
                 NextToken();
             }            
             
-            return new ArrayDeclarationSyntax(_syntaxTree, arrayKeyword, openBracketToken, literalToken, closeBracketToken, identifierToken, typeClause, equalsToken, openBraceToken, parameters, closeBraceToken);        }
+            return new ArrayDeclarationSyntax(_syntaxTree, arrayKeyword, openBracketToken, literalToken, closeBracketToken, identifierToken, typeClause, equalsToken, openBraceToken, parameters, closeBraceToken);        
+        }
 
         private StatementSyntax ParseReturnStatement()
         {

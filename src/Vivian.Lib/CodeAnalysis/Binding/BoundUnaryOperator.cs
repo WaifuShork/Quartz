@@ -21,7 +21,7 @@ namespace Vivian.CodeAnalysis.Binding
         public TypeSymbol OperandType { get; }
         public TypeSymbol Type { get; }
 
-        private static BoundUnaryOperator[] _operators =
+        private static readonly BoundUnaryOperator[] _operators =
         {
             new BoundUnaryOperator(SyntaxKind.BangToken, BoundUnaryOperatorKind.LogicalNegation, TypeSymbol.Bool),
             

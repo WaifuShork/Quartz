@@ -207,7 +207,7 @@ namespace Vivian.CodeAnalysis
             var assemblyNameList = string.Join(", ", assemblyNames);
             
             var message = vivianName == null
-                ? $"The required type '{vivianName}' was found in multiple references: {assemblyNameList}"
+                ? $"The required type '{metadataName}' was found in multiple references: {assemblyNameList}"
                 : $"The required type '{vivianName}' ('{metadataName}') was found in multiple references: {assemblyNameList}.";
             Report(default, message);
         }

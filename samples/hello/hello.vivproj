@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <DefaultLanguageSourceExtension>.viv</DefaultLanguageSourceExtension>
+
+    </PropertyGroup>
+        
+        <Target Name="CreateManifestResourceNames" />
+        <Target Name="CoreCompile" DependsOnTargets="$(CoreCompileDependsOn)">
+            <ItemGroup>
+                <ReferencePath Remove="@(ReferencePath)"
+                               Condition="'%(FileName)' != 'System.Runtime' AND
+                                          '%(FileName)' != 'System.Console' AND
+                                          '%(FileName)' != 'System.Runtime.Extensions'" />
+            </ItemGroup>
+            <Exec Command="dotnet run --project &quot;$(MSBuildThisFileDirectory)\..\..\src\Vivian.Compiler\Vivian.Compiler.csproj&quot; -- @(Compile->'&quot;%(Identity)&quot;', ' ') /o &quot;@(IntermediateAssembly)&quot; @(ReferencePath->'/r &quot;%(Identity)&quot;', ' ')" 
+                  WorkingDirectory="$(MSBuildProjectDirectory)" />
+        </Target>
+</Project>
