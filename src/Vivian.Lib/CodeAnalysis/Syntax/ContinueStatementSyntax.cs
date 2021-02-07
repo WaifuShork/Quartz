@@ -1,6 +1,6 @@
 ﻿namespace Vivian.CodeAnalysis.Syntax
 {
-    internal class ContinueStatementSyntax : StatementSyntax
+    public sealed class ContinueStatementSyntax : StatementSyntax
     {
         public ContinueStatementSyntax(SyntaxTree syntaxTree, SyntaxToken keyword, SyntaxToken semicolonToken) : base(syntaxTree)
         {

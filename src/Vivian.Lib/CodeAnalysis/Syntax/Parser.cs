@@ -64,6 +64,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             _diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind);
             return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null);
+            
         }
         
         public CompilationUnitSyntax ParseCompilationUnit()

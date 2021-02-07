@@ -38,7 +38,7 @@ namespace Vivian.CodeAnalysis.Syntax
             
             return GetChildren().Last().GetLastToken();
         }
-
+        
         public IEnumerable<SyntaxNode> GetChildren()
         {
             var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
