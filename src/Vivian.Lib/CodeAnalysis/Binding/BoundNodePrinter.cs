@@ -135,12 +135,8 @@ namespace Vivian.CodeAnalysis.Binding
         private static void WriteLiteralExpression(BoundLiteralExpression node, IndentedTextWriter writer)
         {
             var value = node.Value.ToString();
-            if (node.Type == TypeSymbol.Bool)
-            {
-                writer.WriteKeyword(value);
-            }
             
-            else if (node.Type == TypeSymbol.Int)
+            if (node.Type == TypeSymbol.Int)
             {
                 writer.WriteNumber(value);
             }

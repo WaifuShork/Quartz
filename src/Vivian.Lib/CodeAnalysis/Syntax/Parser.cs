@@ -493,8 +493,8 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private ExpressionSyntax ParseBooleanLiteral()
         {
-            var isTrue = Current.Kind == SyntaxKind.TrueKeyword;
-            var keywordToken = isTrue ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
+            var isTrue = Current.Kind == SyntaxKind.TrueKeyword ? 1 : 0;
+            var keywordToken = Current.Kind == SyntaxKind.TrueKeyword ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
             
             return new LiteralExpressionSyntax(_syntaxTree, keywordToken, isTrue);
         }

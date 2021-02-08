@@ -19,15 +19,15 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("4 * 2", 8)]
         [InlineData("9 / 3", 3)]
         [InlineData("(10)", 10)]
-        [InlineData("12 == 3", false)]
-        [InlineData("3 == 3", true)]
-        [InlineData("12 != 3", true)]
-        [InlineData("3 != 3", false)]
+        [InlineData("12 == 3", 0)]
+        [InlineData("3 == 3", 1)]
+        [InlineData("12 != 3", 1)]
+        [InlineData("3 != 3", 0)]
         
-        [InlineData("3 < 5", true)]
-        [InlineData("5 < 4", false)]
-        [InlineData("4 >= 5", false)]
-        [InlineData("4 <= 5", true)]
+        [InlineData("3 < 5", 1)]
+        [InlineData("5 < 4", 0)]
+        [InlineData("4 >= 5", 0)]
+        [InlineData("4 <= 5", 1)]
         
         [InlineData("~1", -2)]
 
@@ -41,36 +41,68 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("0 ^ 1", 1)]
         [InlineData("1 ^ 3", 2)]
 
-        [InlineData("true", true)]
-        [InlineData("false", false)]
-        [InlineData("!false", true)]
-        [InlineData("!true", false)]
-        [InlineData("false == false", true)]
-        [InlineData("true == false", false)]
-        [InlineData("false != false", false)]
-        [InlineData("true != false", true)]
+        [InlineData("true", 1)]
+        [InlineData("false", 0)]
+        [InlineData("!false", 1)]
+        [InlineData("!true", 0)]
+        [InlineData("false == false", 1)]
+        [InlineData("true == false", 0)]
+        [InlineData("false != false", 0)]
+        [InlineData("true != false", 1)]
         
-        [InlineData("false | false", false)]
-        [InlineData("false | true", true)]
-        [InlineData("true | false", true)]
-        [InlineData("true | true", true)]
+        [InlineData("false | false", 0)]
+        [InlineData("false | true", 1)]
+        [InlineData("true | false", 1)]
+        [InlineData("true | true", 1)]
         
-        [InlineData("false & false", false)]
-        [InlineData("false & true", false)]
-        [InlineData("true & false", false)]
-        [InlineData("true & true", true)]
+        [InlineData("false & false", 0)]
+        [InlineData("false & true", 0)]
+        [InlineData("true & false", 0)]
+        [InlineData("true & true", 1)]
         
-        [InlineData("false ^ false", false)]
-        [InlineData("true ^ false", true)]
-        [InlineData("false ^ true", true)]
-        [InlineData("true ^ true", false)]
-        
+        [InlineData("false ^ false", 0)]
+        [InlineData("true ^ false", 1)]
+        [InlineData("false ^ true", 1)]
+        [InlineData("true ^ true", 0)]
+
+        [InlineData("false + false", 0)]
+        [InlineData("true + false", 1)]
+        [InlineData("false + true", 1)]
+        [InlineData("true + true", 2)]
+
+        [InlineData("false - false", 0)]
+        [InlineData("true - false", 1)]
+        [InlineData("false - true", -1)]
+        [InlineData("true - true", 0)]
+
+        [InlineData("false * false", 0)]
+        [InlineData("true * false", 0)]
+        [InlineData("false * true", 0)]
+        [InlineData("true * true", 1)]
+
+        //[InlineData("false / false", error)] // should produce division by 0
+        //[InlineData("true / false", error)] // should produce division by 0
+        [InlineData("false / true", 0)]
+        [InlineData("true / true", 1)]
+
+        [InlineData("!0", 1)]
+        [InlineData("!1", 0)]
+
+        [InlineData("string(false)", "0")]
+        [InlineData("string(true)", "1")]
+
+        [InlineData("bool(\"false\")", 0)]
+        [InlineData("bool(\"true\")", 1)]
+
+        [InlineData("int(\"false\")", 0)]
+        [InlineData("int(\"true\")", 1)]
+
         [InlineData("\"test\"", "test")]
         [InlineData("\"te\"\"st\"", "te\"st")]
-        [InlineData("\"test\" == \"test\"", true)]
-        [InlineData("\"test\" != \"test\"", false)]
-        [InlineData("\"abc\" != \"abc\"", false)]
-        [InlineData("\"abc\" == \"abc\"", true)]
+        [InlineData("\"test\" == \"test\"", 1)]
+        [InlineData("\"test\" != \"test\"", 0)]
+        [InlineData("\"abc\" != \"abc\"", 0)]
+        [InlineData("\"abc\" == \"abc\"", 1)]
         
         [InlineData("{ var a = 0; return (a = 10) * a; }", 100)]
         

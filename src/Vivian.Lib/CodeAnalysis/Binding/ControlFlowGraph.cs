@@ -242,7 +242,7 @@ namespace Vivian.CodeAnalysis.Binding
                     return new BoundLiteralExpression(!value);
                 }
 
-                var unaryOperator = BoundUnaryOperator.Bind(SyntaxKind.BangToken, TypeSymbol.Bool);
+                var unaryOperator = BoundUnaryOperator.Bind(SyntaxKind.BangToken, TypeSymbol.Int);
                 return new BoundUnaryExpression(unaryOperator, condition);
             }
           

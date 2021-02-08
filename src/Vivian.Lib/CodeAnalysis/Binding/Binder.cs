@@ -405,7 +405,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         private BoundStatement BindIfStatement(IfStatementSyntax syntax)
         {
-            var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);
+            var condition = BindExpression(syntax.Condition, TypeSymbol.Int);
             var thenStatement = BindStatement(syntax.ThenStatement);
             var elseStatement = syntax.ElseClause == null ? null : BindStatement(syntax.ElseClause.ElseStatement);
             return new BoundIfStatement(condition, thenStatement, elseStatement);
@@ -413,14 +413,14 @@ namespace Vivian.CodeAnalysis.Binding
         
         private BoundStatement BindWhileStatement(WhileStatementSyntax syntax)
         {
-            var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);
+            var condition = BindExpression(syntax.Condition, TypeSymbol.Int);
             var body = BindLoopBody(syntax.Body, out var breakLabel, out var continueLabel); 
             return new BoundWhileStatement(condition, body, breakLabel, continueLabel);
         }
         private BoundStatement BindDoWhileStatement(DoWhileStatementSyntax syntax)
         {
             var body = BindLoopBody(syntax.Body, out var breakLabel, out var continueLabel);
-            var condition = BindExpression(syntax.Condition, TypeSymbol.Bool);
+            var condition = BindExpression(syntax.Condition, TypeSymbol.Int);
             return new BoundDoWhileStatement(body, condition, breakLabel, continueLabel);
         }
 
@@ -709,7 +709,6 @@ namespace Vivian.CodeAnalysis.Binding
                 case "object": 
                     return TypeSymbol.Object;
                 case "bool": 
-                    return TypeSymbol.Bool;
                 case "int": 
                     return TypeSymbol.Int;
                 case "string": 
