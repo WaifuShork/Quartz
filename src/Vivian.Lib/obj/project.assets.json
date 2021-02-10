@@ -96,11 +96,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj",
+      "projectUniqueName": "G:\\vtest\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj",
       "projectName": "Vivian.Lib",
-      "projectPath": "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj",
+      "projectPath": "G:\\vtest\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "G:\\Vivian\\src\\Vivian.Lib\\obj\\",
+      "outputPath": "G:\\vtest\\Vivian\\src\\Vivian.Lib\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

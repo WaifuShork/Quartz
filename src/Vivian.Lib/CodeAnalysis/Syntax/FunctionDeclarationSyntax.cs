@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed class FunctionDeclarationSyntax : MemberSyntax
+    public sealed partial class FunctionDeclarationSyntax : MemberSyntax
     {
         public FunctionDeclarationSyntax(SyntaxTree syntaxTree, 
                                         SyntaxToken functionKeyword, 
@@ -18,7 +18,7 @@ namespace Vivian.CodeAnalysis.Syntax
             Identifier = identifier;
             OpenParenthesisToken = openParenthesisToken;
             Parameters = parameters;
-            ClosedParenthesisToken = closedParenthesisToken;
+            CloseParenthesisToken = closedParenthesisToken;
             Type = type;
             Body = body;
         }
@@ -29,7 +29,7 @@ namespace Vivian.CodeAnalysis.Syntax
         public SyntaxToken Identifier { get; }
         public SyntaxToken OpenParenthesisToken { get; }
         public SeparatedSyntaxList<ParameterSyntax> Parameters { get; }
-        public SyntaxToken ClosedParenthesisToken { get; }
+        public SyntaxToken CloseParenthesisToken { get; }
         public TypeClauseSyntax Type { get; }
         public BlockStatementSyntax Body { get; }
     }

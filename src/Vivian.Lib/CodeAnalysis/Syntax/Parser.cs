@@ -161,10 +161,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.VarKeyword:
                     return ParseVariableDeclaration();
-                
-                case SyntaxKind.ArrayKeyword:
-                    return ParseArrayDeclaration();
-                
+
                 case SyntaxKind.IfKeyword:
                     return ParseIfStatement();
                 
@@ -188,33 +185,6 @@ namespace Vivian.CodeAnalysis.Syntax
                 default:
                     return ParseExpressionStatement();
             }
-        }
-
-        private StatementSyntax ParseArrayDeclaration()
-        {
-            var expected = Current.Kind == SyntaxKind.ConstKeyword ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword;
-            var keyword = MatchToken(expected);
-            var identifier = MatchToken(SyntaxKind.IdentifierToken);
-            var equals = MatchToken(SyntaxKind.EqualsToken);
-            var initializer = ParseExpression();
-
-            var arrayKeyword = MatchToken(SyntaxKind.ArrayKeyword);
-            var openBracketToken = MatchToken(SyntaxKind.OpenBraceToken);
-            var literalToken = ParseNumberLiteral();
-            var closeBracketToken = MatchToken(SyntaxKind.CloseBracketToken);
-            var identifierToken = MatchToken(SyntaxKind.IdentifierToken);
-            var typeClause = ParseTypeClause();
-            var equalsToken = MatchToken(SyntaxKind.EqualsToken);
-            var openBraceToken = MatchToken(SyntaxKind.OpenBraceToken);
-            var parameters = ParseParameterList();
-            var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);
-            
-            if (Current.Kind == SyntaxKind.SemicolonToken)
-            {
-                NextToken();
-            }            
-            
-            return new ArrayDeclarationSyntax(_syntaxTree, arrayKeyword, openBracketToken, literalToken, closeBracketToken, identifierToken, typeClause, equalsToken, openBraceToken, parameters, closeBraceToken);        
         }
 
         private StatementSyntax ParseReturnStatement()

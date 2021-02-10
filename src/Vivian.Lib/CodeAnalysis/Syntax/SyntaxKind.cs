@@ -9,6 +9,8 @@
         CommaToken,
         ColonToken,
         SemicolonToken,
+        MultiLineCommentToken,
+        SingleLineCommentToken,
         
         // TODO: Struct and dot operator. 
         DotToken,
@@ -94,7 +96,6 @@
         DoWhileStatement,
         GlobalStatement,
         FunctionDeclaration,
-        ArrayDeclaration,
         Parameter,
         ContinueStatement,
         BreakStatement,

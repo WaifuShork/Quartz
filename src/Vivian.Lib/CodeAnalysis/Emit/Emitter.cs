@@ -31,11 +31,11 @@ namespace Vivian.CodeAnalysis.Emit
         private readonly MethodReference _objectEqualsReference;
         private readonly MethodReference _randomNextReference;
         private readonly MethodReference _randomCtoReference;
-        
+        private readonly TypeReference _randomReference;
+
         private TypeDefinition _typeDefinition;
         private FieldDefinition _randomFieldDefinition;
         
-        private TypeReference _randomReference;
 
         private Emitter(string moduleName, string[] references)
         {
@@ -163,7 +163,7 @@ namespace Vivian.CodeAnalysis.Emit
             
             _objectEqualsReference = ResolveMethod("System.Object", "Equals", new[] {"System.Object", "System.Object"});
             
-            _consoleWriteLineReference = ResolveMethod("System.Console", "WriteLine", new [] { "System.String"});
+            _consoleWriteLineReference = ResolveMethod("System.Console", "WriteLine", new [] { "System.Object"});
             _consoleReadLineReference = ResolveMethod("System.Console", "ReadLine", Array.Empty<string>());
             
             _stringConcatReference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String" });
@@ -269,6 +269,9 @@ namespace Vivian.CodeAnalysis.Emit
                 case BoundNodeKind.VariableDeclaration:
                     EmitVariableDeclaration(ilProcessor, (BoundVariableDeclaration) node);
                     break;
+                case BoundNodeKind.NopStatement:
+                    EmitNopStatement(ilProcessor, (BoundNopStatement) node);
+                    break;
                 case BoundNodeKind.GotoStatement:
                     EmitGotoStatement(ilProcessor, (BoundGotoStatement) node);
                     break;
@@ -289,7 +292,12 @@ namespace Vivian.CodeAnalysis.Emit
                     throw new Exception($"Unexpected node kind {node.Kind}");
             }
         }
-        
+
+        private void EmitNopStatement(ILProcessor ilProcessor, BoundNopStatement node)
+        {
+            ilProcessor.Emit(OpCodes.Nop);
+        }
+
         private void EmitExpressionStatement(ILProcessor ilProcessor, BoundExpressionStatement node)
         {
             EmitExpression(ilProcessor, node.Expression);
@@ -343,11 +351,15 @@ namespace Vivian.CodeAnalysis.Emit
         
         private void EmitExpression(ILProcessor ilProcessor, BoundExpression node)
         {
+            if (node.ConstantValue != null)
+            {
+                EmitConstantExpression(ilProcessor, node);
+                return;
+            }
+            
+            
             switch (node.Kind)
             {
-                case BoundNodeKind.LiteralExpression:
-                    EmitLiteralExpression(ilProcessor, (BoundLiteralExpression) node);
-                    break;
                 case BoundNodeKind.VariableExpression:
                     EmitVariableExpression(ilProcessor, (BoundVariableExpression) node);
                     break;
@@ -371,27 +383,28 @@ namespace Vivian.CodeAnalysis.Emit
             }
         }
 
-        private void EmitLiteralExpression(ILProcessor ilProcessor, BoundLiteralExpression node)
+        private void EmitConstantExpression(ILProcessor ilProcessor, BoundExpression node)
         {
-            if (node.Type == TypeSymbol.Int)
+            if (node.Type == TypeSymbol.Bool)
             {
-                var value = (int) node.Value;
-                ilProcessor.Emit(OpCodes.Ldc_I4, value);
-            }
-            else if (node.Type == TypeSymbol.Bool)
-            {
-                var value = (bool) node.Value;
+                var value = (bool) node.ConstantValue.Value;
                 var instruction = value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
                 ilProcessor.Emit(instruction);
             }
+            else if (node.Type == TypeSymbol.Int)
+            {
+                var value = (int) node.ConstantValue.Value;
+                ilProcessor.Emit(OpCodes.Ldc_I4, value);
+            }
+           
             else if (node.Type == TypeSymbol.String)
             {
-                var value = (string) node.Value;
+                var value = (string) node.ConstantValue.Value;
                 ilProcessor.Emit(OpCodes.Ldstr, value);
             }
             else
             {
-                throw new Exception($"Unexpected literal type {node.Type}");
+                throw new Exception($"Unexpected constant expression type {node.Type}");
             }
         }
 

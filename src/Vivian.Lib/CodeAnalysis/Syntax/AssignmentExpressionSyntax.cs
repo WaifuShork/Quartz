@@ -1,6 +1,6 @@
 ﻿namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed class AssignmentExpressionSyntax : ExpressionSyntax
+    public sealed partial class AssignmentExpressionSyntax : ExpressionSyntax
     {
         public AssignmentExpressionSyntax(SyntaxTree syntaxTree, SyntaxToken identifierToken, SyntaxToken equalsToken, ExpressionSyntax expression) : base(syntaxTree)
         {

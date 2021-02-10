@@ -1,6 +1,6 @@
 ﻿namespace Vivian.CodeAnalysis.Syntax
 {
-    public partial class BreakStatementSyntax : StatementSyntax
+    public sealed partial class BreakStatementSyntax : StatementSyntax
     {
         public BreakStatementSyntax(SyntaxTree syntaxTree, SyntaxToken keyword, SyntaxToken semicolonToken) : base(syntaxTree)
         {

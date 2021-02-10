@@ -6,3 +6,12 @@ G:\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.Assem
 G:\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.csproj.CoreCompileInputs.cache
 G:\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.dll
 G:\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.pdb
+G:\vtest\Vivian\src\Vivian.Generators\bin\Debug\netstandard2.0\Vivian.Generators.deps.json
+G:\vtest\Vivian\src\Vivian.Generators\bin\Debug\netstandard2.0\Vivian.Generators.dll
+G:\vtest\Vivian\src\Vivian.Generators\bin\Debug\netstandard2.0\Vivian.Generators.pdb
+G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.csprojAssemblyReference.cache
+G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.AssemblyInfoInputs.cache
+G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.AssemblyInfo.cs
+G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.csproj.CoreCompileInputs.cache
+G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.dll
+G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\netstandard2.0\Vivian.Generators.pdb

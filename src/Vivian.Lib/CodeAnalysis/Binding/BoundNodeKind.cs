@@ -23,6 +23,7 @@
         GotoStatement,
         LabelStatement,
         ConditionalGotoStatement,
-        ReturnStatement
+        ReturnStatement,
+        NopStatement
     }
 }

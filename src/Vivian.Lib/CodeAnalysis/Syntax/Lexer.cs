@@ -63,8 +63,19 @@ namespace Vivian.CodeAnalysis.Syntax
                     _position++;
                     break;
                 case '/':
-                    _kind = SyntaxKind.SlashToken;
-                    _position++;
+                    if (Lookahead == '/')
+                    {
+                        ReadSingleLineComment();
+                    }
+                    else if (Lookahead == '*')
+                    {
+                        ReadMultiLineComments();
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.SlashToken;
+                        _position++;
+                    }
                     break;
                 case '(':
                     _kind = SyntaxKind.OpenParenthesisToken;
@@ -226,7 +237,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             return new SyntaxToken(_syntaxTree, _kind, _start, text, _value);
         }
-
+        
         private void ReadString()
         {
             _position++;
@@ -303,6 +314,36 @@ namespace Vivian.CodeAnalysis.Syntax
             var length = _position - _start;
             var text = _text.ToString(_start, length);
             _kind = SyntaxFacts.GetKeywordKind(text);
+        }
+        
+        private void ReadSingleLineComment()
+        {
+            _position += 2;
+            var done = false;
+            
+            while (!done)
+            {
+                switch (Current)
+                {
+                    case '\r':
+                    case '\n':
+                    case '\0':
+                    {
+                        done = true;
+                        break;
+                    }
+                    default:
+                        _position++;
+                        break;
+                }
+            }
+            _kind = SyntaxKind.SingleLineCommentToken;
+
+        }
+        
+        private void ReadMultiLineComments()
+        {
+            _kind = SyntaxKind.MultiLineCommentToken;
         }
     }
 }

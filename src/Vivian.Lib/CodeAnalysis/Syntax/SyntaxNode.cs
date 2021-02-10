@@ -38,8 +38,10 @@ namespace Vivian.CodeAnalysis.Syntax
             
             return GetChildren().Last().GetLastToken();
         }
+
+        public abstract IEnumerable<SyntaxNode> GetChildren();
         
-        public IEnumerable<SyntaxNode> GetChildren()
+        /*public IEnumerable<SyntaxNode> GetChildren()
         {
             var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -67,7 +69,7 @@ namespace Vivian.CodeAnalysis.Syntax
                         yield return child;
                 }
             }
-        }
+        }*/
 
         public void WriteTo(TextWriter writer)
         {

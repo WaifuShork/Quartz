@@ -1,6 +1,6 @@
 ﻿namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed class BinaryExpressionSyntax : ExpressionSyntax
+    public sealed partial class BinaryExpressionSyntax : ExpressionSyntax
     {
         public BinaryExpressionSyntax(SyntaxTree syntaxTree, ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right) : base(syntaxTree)
         {

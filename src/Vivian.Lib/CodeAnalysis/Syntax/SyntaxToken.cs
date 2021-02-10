@@ -1,4 +1,6 @@
-﻿using Vivian.CodeAnalysis.Text;
+﻿using System;
+using System.Collections.Generic;
+using Vivian.CodeAnalysis.Text;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
@@ -18,6 +20,11 @@ namespace Vivian.CodeAnalysis.Syntax
         public object Value { get; }
         
         public override TextSpan Span => new(Position, Text?.Length ?? 0);
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            return Array.Empty<SyntaxNode>();
+        }
 
         public bool IsMissing => Text == null;
     }

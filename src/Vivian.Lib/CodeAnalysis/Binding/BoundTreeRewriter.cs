@@ -13,6 +13,9 @@ namespace Vivian.CodeAnalysis.Binding
                 case BoundNodeKind.BlockStatement:
                     return RewriteBlockStatement((BoundBlockStatement) node);
                 
+                case BoundNodeKind.NopStatement:
+                    return RewriteNopStatement((BoundNopStatement) node);
+                
                 case BoundNodeKind.VariableDeclaration:
                     return RewriteVariableDeclaration((BoundVariableDeclaration) node);
                 
@@ -46,6 +49,11 @@ namespace Vivian.CodeAnalysis.Binding
                 default:
                     throw new Exception($"Unexpected node: {node.Kind}");
             }
+        }
+
+        protected virtual BoundStatement RewriteNopStatement(BoundNopStatement node)
+        {
+            return node;
         }
 
         protected virtual BoundStatement RewriteReturnStatement(BoundReturnStatement node)

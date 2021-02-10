@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\Vivian\\samples\\hello\\hello.vivproj",
+      "projectUniqueName": "G:\\vtest\\Vivian\\samples\\hello\\hello.vivproj",
       "projectName": "hello",
-      "projectPath": "G:\\Vivian\\samples\\hello\\hello.vivproj",
+      "projectPath": "G:\\vtest\\Vivian\\samples\\hello\\hello.vivproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "G:\\Vivian\\samples\\hello\\obj\\",
+      "outputPath": "G:\\vtest\\Vivian\\samples\\hello\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

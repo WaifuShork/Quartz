@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cRLmqHLkks0n2+/Wm8SsX6PMwGF8+Cojjt7C8ZzitbkmEL+uZJgePic/UMtr+j+CPFLjp9RbH25k1rVaYmoOXw==",
+  "dgSpecHash": "djjiuuFgC0+9X5d9Hdq0QBOeZTulHSyvnHX/KFklH35oQUQYSTCus8ll7Z8a2CVAIolL6gMhunwUNXunbTVFJw==",
   "success": true,
-  "projectFilePath": "G:\\Vivian\\src\\Vivian.Compiler\\Vivian.Compiler.csproj",
+  "projectFilePath": "G:\\vtest\\Vivian\\src\\Vivian.Compiler\\Vivian.Compiler.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ashle\\.nuget\\packages\\mono.cecil\\0.11.3\\mono.cecil.0.11.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\mono.options\\6.6.0.161\\mono.options.6.6.0.161.nupkg.sha512",

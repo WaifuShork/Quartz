@@ -82,6 +82,11 @@ namespace Vivian.Tests.CodeAnalysis
         
         [InlineData("{ var a = 0; do a = a + 1; while (a < 10); return a; }", 10)]
         
+        [InlineData("{ var a : object = 0 var b : object = \"b\" return a == b; }", false)]
+        [InlineData("{ var a : object = 0 var b : object = \"b\" return a != b; }", true)]
+        [InlineData("{ var a : object = 0 var b : object = 0 return a == b; }", true)]
+        [InlineData("{ var a : object = 0 var b : object = 0 return a != b; }", false)]
+        
         // [InlineData("{ var i = 0 while i < 5 { i = i + 1 if i == 5 continue } i }", 5)]
         // [InlineData("{ var i = 0 do { i = i + 1 if i == 5 continue } while i < 5 i }", 5)]
         

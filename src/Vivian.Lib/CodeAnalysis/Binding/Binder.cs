@@ -383,7 +383,7 @@ namespace Vivian.CodeAnalysis.Binding
             var type = BindTypeClause(syntax.TypeClause);
             var initializer = BindExpression(syntax.Initializer);
             var variableType = type ?? initializer.Type;
-            var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly, variableType);
+            var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly, variableType, initializer.ConstantValue);
             var convertedInitializer = BindConversion(syntax.Initializer.Location, initializer, variableType);
 
             return new BoundVariableDeclaration(variable, convertedInitializer);
@@ -444,7 +444,7 @@ namespace Vivian.CodeAnalysis.Binding
             
             _scope = new BoundScope(_scope);
             
-            var variable = BindVariableDeclaration(syntax.Identifier, false ,TypeSymbol.Int);
+            var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly: false, TypeSymbol.Int);
             var body = BindLoopBody(syntax.Body, out var breakLabel, out var continueLabel);
             
             _scope = _scope.Parent;
@@ -619,7 +619,7 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 else
                 {
-                    span = syntax.CloseParenthesis.Span; 
+                    span = syntax.CloseParenthesisToken.Span; 
                 }
 
                 var location = new TextLocation(syntax.SyntaxTree.Text, span);
@@ -671,13 +671,13 @@ namespace Vivian.CodeAnalysis.Binding
             var expression = BindExpression(syntax.Expression, canBeVoid: true);
             return new BoundExpressionStatement(expression);
         }
-        private VariableSymbol BindVariableDeclaration(SyntaxToken identifier, bool isReadOnly, TypeSymbol type)
+        private VariableSymbol BindVariableDeclaration(SyntaxToken identifier, bool isReadOnly, TypeSymbol type, BoundConstant constant = null)
         {
             var name = identifier.Text ?? "?";
             var declare = !identifier.IsMissing;
             var variable = _function == null
-                                    ? (VariableSymbol) new GlobalVariableSymbol(name, isReadOnly, type)
-                                    : new LocalVariableSymbol(name, isReadOnly, type);
+                                    ? (VariableSymbol) new GlobalVariableSymbol(name, isReadOnly, type, constant)
+                                    : new LocalVariableSymbol(name, isReadOnly, type, constant);
             
             if (declare && !_scope.TryDeclareVariable(variable))
                 _diagnostics.ReportSymbolAlreadyDeclared(identifier.Location, name);

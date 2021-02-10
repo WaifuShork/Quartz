@@ -1,6 +1,6 @@
 ﻿namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed class DoWhileStatementSyntax : StatementSyntax
+    public sealed partial class DoWhileStatementSyntax : StatementSyntax
     {
         public DoWhileStatementSyntax(SyntaxTree syntaxTree, SyntaxToken doKeyword, StatementSyntax body, SyntaxToken whileKeyword, SyntaxToken openParenthesisToken, ExpressionSyntax condition, SyntaxToken closeParenthesisToken, SyntaxToken semicolonToken) : base(syntaxTree)
         {

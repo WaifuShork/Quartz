@@ -2,7 +2,7 @@
 {
     public sealed class ParameterSymbol : LocalVariableSymbol
     {
-        public ParameterSymbol(string name, TypeSymbol type, int ordinal) : base(name, isReadOnly: false, type)
+        public ParameterSymbol(string name, TypeSymbol type, int ordinal) : base(name, isReadOnly: false, type, null)
         {
             Ordinal = ordinal;
         }

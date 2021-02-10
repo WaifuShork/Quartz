@@ -62,6 +62,9 @@ namespace Vivian.CodeAnalysis.Binding
                 case BoundNodeKind.LiteralExpression:
                     WriteLiteralExpression((BoundLiteralExpression) node, writer);
                     break;
+                case BoundNodeKind.NopStatement:
+                    WriteNopStatement((BoundNopStatement) node, writer);
+                    break;
                 case BoundNodeKind.VariableExpression:
                     WriteVariableExpression((BoundVariableExpression) node, writer);
                     break;
@@ -119,6 +122,12 @@ namespace Vivian.CodeAnalysis.Binding
                 default:
                     throw new Exception($"Unexpected node: {node.Kind}");
             }
+        }
+
+        private static void WriteNopStatement(BoundNopStatement node, IndentedTextWriter writer)
+        {
+            writer.WriteKeyword("nop");
+            writer.WriteLine();
         }
 
         private static void WriteReturnStatement(BoundReturnStatement node, IndentedTextWriter writer)
@@ -295,7 +304,6 @@ namespace Vivian.CodeAnalysis.Binding
             node.UpperBound.WriteTo(writer);
             writer.WriteLine();
             writer.WriteNestedStatement(node.Body);
-
         }
 
         private static void WriteVariableDeclaration(BoundVariableDeclaration node, IndentedTextWriter writer)
@@ -311,7 +319,8 @@ namespace Vivian.CodeAnalysis.Binding
 
         private static void WriteGotoStatement(BoundGotoStatement node, IndentedTextWriter writer)
         {
-            writer.WriteKeyword("goto ");   
+            writer.WriteKeyword("goto");
+            writer.WriteSpace();
             writer.WriteIdentifier(node.Label.Name);
             writer.WriteLine();
         }
@@ -323,9 +332,7 @@ namespace Vivian.CodeAnalysis.Binding
                 writer.Indent--;
             
             writer.WritePunctuation(node.Label.Name);
-            writer.WriteSpace();
             writer.WritePunctuation(SyntaxKind.ColonToken);
-            writer.WriteSpace();
             writer.WriteLine();
             
             if (unindent)
@@ -334,9 +341,12 @@ namespace Vivian.CodeAnalysis.Binding
         
         private static void WriteConditionalGotoStatement(BoundConditionalGotoStatement node, IndentedTextWriter writer)
         {
-            writer.WriteKeyword("goto ");   
+            writer.WriteKeyword("goto");   
+            writer.WriteSpace();
             writer.WriteIdentifier(node.Label.Name);
-            writer.WriteKeyword(node.JumpIfTrue ? "if " : "unless ");   
+            writer.WriteSpace();
+            writer.WriteKeyword(node.JumpIfTrue ? "if" : "unless");
+            writer.WriteSpace();
             node.Condition.WriteTo(writer);
             writer.WriteLine();
         }

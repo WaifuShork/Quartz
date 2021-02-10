@@ -63,6 +63,10 @@ namespace Vivian.CodeAnalysis
                         EvaluateVariableDeclaration((BoundVariableDeclaration) s);
                         index++;
                         break;
+                    
+                    case BoundNodeKind.NopStatement:
+                        index++;
+                        break;
 
                     case BoundNodeKind.ExpressionStatement:
                         EvaluateExpressionStatement((BoundExpressionStatement) s);

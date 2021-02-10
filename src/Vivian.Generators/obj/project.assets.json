@@ -2939,11 +2939,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\Vivian\\src\\Vivian.Generators\\Vivian.Generators.csproj",
+      "projectUniqueName": "G:\\vtest\\Vivian\\src\\Vivian.Generators\\Vivian.Generators.csproj",
       "projectName": "Vivian.Generators",
-      "projectPath": "G:\\Vivian\\src\\Vivian.Generators\\Vivian.Generators.csproj",
+      "projectPath": "G:\\vtest\\Vivian\\src\\Vivian.Generators\\Vivian.Generators.csproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "G:\\Vivian\\src\\Vivian.Generators\\obj\\",
+      "outputPath": "G:\\vtest\\Vivian\\src\\Vivian.Generators\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

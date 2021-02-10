@@ -9,3 +9,15 @@ G:\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.csproj.CoreCompileInputs.ca
 G:\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.dll
 G:\Vivian\src\Vivian.Lib\obj\Debug\net5.0\ref\Vivian.Lib.dll
 G:\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.pdb
+G:\vtest\Vivian\src\Vivian.Lib\bin\Debug\net5.0\Vivian.Lib.deps.json
+G:\vtest\Vivian\src\Vivian.Lib\bin\Debug\net5.0\Vivian.Lib.dll
+G:\vtest\Vivian\src\Vivian.Lib\bin\Debug\net5.0\ref\Vivian.Lib.dll
+G:\vtest\Vivian\src\Vivian.Lib\bin\Debug\net5.0\Vivian.Lib.pdb
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.csprojAssemblyReference.cache
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.GeneratedMSBuildEditorConfig.editorconfig
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.AssemblyInfoInputs.cache
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.AssemblyInfo.cs
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.csproj.CoreCompileInputs.cache
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.dll
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\ref\Vivian.Lib.dll
+G:\vtest\Vivian\src\Vivian.Lib\obj\Debug\net5.0\Vivian.Lib.pdb

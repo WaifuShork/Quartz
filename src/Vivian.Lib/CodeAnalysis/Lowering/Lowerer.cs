@@ -25,9 +25,9 @@ namespace Vivian.CodeAnalysis.Lowering
         {
             var lowerer = new Lowerer();
             var result = lowerer.RewriteStatement(statement);
-            return Flatten(function, result);
+            return RemoveDeadCode(Flatten(function, result));
         }
-
+        
         private static BoundBlockStatement Flatten(FunctionSymbol function, BoundStatement statement)
         {
             var builder = ImmutableArray.CreateBuilder<BoundStatement>();
@@ -64,6 +64,24 @@ namespace Vivian.CodeAnalysis.Lowering
         {
             return boundStatement.Kind != BoundNodeKind.ReturnStatement &&
                    boundStatement.Kind != BoundNodeKind.GotoStatement;
+        }
+        
+        private static BoundBlockStatement RemoveDeadCode(BoundBlockStatement node)
+        {
+            var controlFlow = ControlFlowGraph.Create(node);
+            var reachableStatements = new HashSet<BoundStatement>(controlFlow.Blocks.SelectMany(b => b.Statements));
+
+            var builder = node.Statements.ToBuilder();
+
+            for (var i = builder.Count - 1; i >= 0; i--)
+            {
+                if (!reachableStatements.Contains(builder[i]))
+                {
+                    builder.RemoveAt(i);
+                }
+            }
+
+            return new BoundBlockStatement(builder.ToImmutable());
         }
 
         protected override BoundStatement RewriteIfStatement(BoundIfStatement node)
@@ -180,7 +198,6 @@ namespace Vivian.CodeAnalysis.Lowering
                 gotoTrue,
                 breakLabelStatement
                 ));
-
             return RewriteStatement(result);
         }
         
@@ -202,7 +219,7 @@ namespace Vivian.CodeAnalysis.Lowering
 
             var variableDeclaration = new BoundVariableDeclaration(node.Variable, node.LowerBound);
             var variableExpression = new BoundVariableExpression(node.Variable);
-            var upperBoundSymbol = new LocalVariableSymbol("upperBound", true, TypeSymbol.Int);
+            var upperBoundSymbol = new LocalVariableSymbol("upperBound", true, TypeSymbol.Int, node.UpperBound.ConstantValue);
             var upperBoundDeclaration = new BoundVariableDeclaration(upperBoundSymbol, node.UpperBound);
             
             var condition = new BoundBinaryExpression(
@@ -233,6 +250,25 @@ namespace Vivian.CodeAnalysis.Lowering
             var result = new BoundBlockStatement(ImmutableArray.Create<BoundStatement>(variableDeclaration, upperBoundDeclaration, whileStatement));
 
             return RewriteStatement(result);
+        }
+        
+        protected override BoundStatement RewriteConditionalGotoStatement(BoundConditionalGotoStatement node)
+        {
+            if (node.Condition.ConstantValue != null)
+            {
+                var condition = (bool) node.Condition.ConstantValue.Value;
+                condition = node.JumpIfTrue ? condition : !condition;
+                if (condition)
+                {
+                    return RewriteStatement(new BoundGotoStatement(node.Label));
+                }
+                else
+                {
+                    return RewriteStatement(new BoundNopStatement());
+                }
+            }
+
+            return base.RewriteConditionalGotoStatement(node);
         }
     }
 }

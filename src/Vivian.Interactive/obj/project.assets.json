@@ -114,11 +114,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\Vivian\\src\\Vivian.Interactive\\Vivian.Interactive.csproj",
+      "projectUniqueName": "G:\\vtest\\Vivian\\src\\Vivian.Interactive\\Vivian.Interactive.csproj",
       "projectName": "Vivian.Interactive",
-      "projectPath": "G:\\Vivian\\src\\Vivian.Interactive\\Vivian.Interactive.csproj",
+      "projectPath": "G:\\vtest\\Vivian\\src\\Vivian.Interactive\\Vivian.Interactive.csproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "G:\\Vivian\\src\\Vivian.Interactive\\obj\\",
+      "outputPath": "G:\\vtest\\Vivian\\src\\Vivian.Interactive\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -141,8 +141,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj": {
-              "projectPath": "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj"
+            "G:\\vtest\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj": {
+              "projectPath": "G:\\vtest\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj"
             }
           }
         }

@@ -5656,11 +5656,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\Vivian\\src\\Vivian.Tests\\Vivian.Tests.csproj",
+      "projectUniqueName": "G:\\vtest\\Vivian\\src\\Vivian.Tests\\Vivian.Tests.csproj",
       "projectName": "Vivian.Tests",
-      "projectPath": "G:\\Vivian\\src\\Vivian.Tests\\Vivian.Tests.csproj",
+      "projectPath": "G:\\vtest\\Vivian\\src\\Vivian.Tests\\Vivian.Tests.csproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "G:\\Vivian\\src\\Vivian.Tests\\obj\\",
+      "outputPath": "G:\\vtest\\Vivian\\src\\Vivian.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -5683,8 +5683,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj": {
-              "projectPath": "G:\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj"
+            "G:\\vtest\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj": {
+              "projectPath": "G:\\vtest\\Vivian\\src\\Vivian.Lib\\Vivian.Lib.csproj"
             }
           }
         }

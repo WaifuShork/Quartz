@@ -1,6 +1,6 @@
 ﻿namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed class VariableDeclarationSyntax : StatementSyntax
+    public sealed partial class VariableDeclarationSyntax : StatementSyntax
     {
         
 

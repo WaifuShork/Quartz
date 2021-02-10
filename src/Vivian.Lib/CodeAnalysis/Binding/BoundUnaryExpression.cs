@@ -8,6 +8,7 @@ namespace Vivian.CodeAnalysis.Binding
         {
             Op = op;
             Operand = operand;
+            ConstantValue = ConstantFolding.ComputeConstant(op, operand);
         }
 
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
@@ -15,5 +16,6 @@ namespace Vivian.CodeAnalysis.Binding
         
         public BoundUnaryOperator Op { get; }
         public BoundExpression Operand { get; }
+        public override BoundConstant ConstantValue { get; }
     }
 }

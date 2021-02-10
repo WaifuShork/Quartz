@@ -3,7 +3,7 @@ using Vivian.CodeAnalysis.Syntax;
 
 namespace wsc.CodeAnalysis.Syntax
 {
-    public sealed class ArrayDeclarationSyntax : StatementSyntax
+    /*public sealed partial class ArrayDeclarationSyntax : StatementSyntax
     {
         public ArrayDeclarationSyntax(SyntaxTree syntaxTree, 
                                       SyntaxToken arrayKeyword,
@@ -42,5 +42,5 @@ namespace wsc.CodeAnalysis.Syntax
         public SyntaxToken OpenBraceToken { get; }
         public SeparatedSyntaxList<ParameterSyntax> Parameters { get; }
         public SyntaxToken ClosedBraceToken { get; }
-    }
+    }*/
 }
