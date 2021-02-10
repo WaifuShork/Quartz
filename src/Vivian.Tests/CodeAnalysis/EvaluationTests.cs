@@ -19,15 +19,15 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("4 * 2", 8)]
         [InlineData("9 / 3", 3)]
         [InlineData("(10)", 10)]
-        [InlineData("12 == 3", 0)]
-        [InlineData("3 == 3", 1)]
-        [InlineData("12 != 3", 1)]
-        [InlineData("3 != 3", 0)]
+        [InlineData("string(12 == 3)", "false")]
+        [InlineData("string(3 == 3)", "true")]
+        [InlineData("string(12 != 3)", "true")]
+        [InlineData("string(3 != 3)", "false")]
         
-        [InlineData("3 < 5", 1)]
-        [InlineData("5 < 4", 0)]
-        [InlineData("4 >= 5", 0)]
-        [InlineData("4 <= 5", 1)]
+        [InlineData("string(3 < 5)", "true")]
+        [InlineData("string(5 < 4)", "false")]
+        [InlineData("string(4 >= 5)", "false")]
+        [InlineData("string(4 <= 5)", "true")]
         
         [InlineData("~1", -2)]
 
@@ -41,55 +41,55 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("0 ^ 1", 1)]
         [InlineData("1 ^ 3", 2)]
 
-        [InlineData("true", 1)]
-        [InlineData("false", 0)]
-        [InlineData("!false", 1)]
-        [InlineData("!true", 0)]
-        [InlineData("false == false", 1)]
-        [InlineData("true == false", 0)]
-        [InlineData("false != false", 0)]
-        [InlineData("true != false", 1)]
+        [InlineData("string(true)", "true")]
+        [InlineData("string(false)", "false")]
+        [InlineData("string(!false)", "true")]
+        [InlineData("string(!true)", "false")]
+        [InlineData("string(false == false)", "true")]
+        [InlineData("string(true == false)", "false")]
+        [InlineData("string(false != false)", "false")]
+        [InlineData("string(true != false)", "true")]
         
-        [InlineData("false | false", 0)]
-        [InlineData("false | true", 1)]
-        [InlineData("true | false", 1)]
-        [InlineData("true | true", 1)]
+        [InlineData("string(false | false)", "false")]
+        [InlineData("string(false | true)", "true")]
+        [InlineData("string(true | false)", "true")]
+        [InlineData("string(true | true)", "true")]
         
-        [InlineData("false & false", 0)]
-        [InlineData("false & true", 0)]
-        [InlineData("true & false", 0)]
-        [InlineData("true & true", 1)]
+        [InlineData("string(false & false)", "false")]
+        [InlineData("string(false & true)", "false")]
+        [InlineData("string(true & false)", "false")]
+        [InlineData("string(true & true)", "true")]
         
-        [InlineData("false ^ false", 0)]
-        [InlineData("true ^ false", 1)]
-        [InlineData("false ^ true", 1)]
-        [InlineData("true ^ true", 0)]
+        [InlineData("string(false ^ false)", "false")]
+        [InlineData("string(true ^ false)", "true")]
+        [InlineData("string(false ^ true)", "true")]
+        [InlineData("string(true ^ true)", "false")]
 
-        [InlineData("false + false", 0)]
-        [InlineData("true + false", 1)]
-        [InlineData("false + true", 1)]
-        [InlineData("true + true", 2)]
+        [InlineData("string(false + false)", "false")]
+        [InlineData("string(true + false)", "true")]
+        [InlineData("string(false + true)", "true")]
+        [InlineData("string(true + true)", "true")]
 
-        [InlineData("false - false", 0)]
-        [InlineData("true - false", 1)]
-        [InlineData("false - true", -1)]
-        [InlineData("true - true", 0)]
+        [InlineData("string(false - false)", "false")]
+        [InlineData("string(true - false)", "true")]
+        //[InlineData("string(false - true)", "true")] // underflow error
+        [InlineData("string(true - true)", "false")]
 
-        [InlineData("false * false", 0)]
-        [InlineData("true * false", 0)]
-        [InlineData("false * true", 0)]
-        [InlineData("true * true", 1)]
+        [InlineData("string(false * false)", "false")]
+        [InlineData("string(true * false)", "false")]
+        [InlineData("string(false * true)", "false")]
+        [InlineData("string(true * true)", "true")]
 
-        //[InlineData("false / false", error)] // should produce division by 0
-        //[InlineData("true / false", error)] // should produce division by 0
-        [InlineData("false / true", 0)]
-        [InlineData("true / true", 1)]
+        //[InlineData("string(false / false)", error)] // should produce division by 0
+        //[InlineData("string(true / false)", error)] // should produce division by 0
+        [InlineData("string(false / true)", "false")]
+        [InlineData("string(true / true)", "true")]
 
-        [InlineData("!0", 1)]
-        [InlineData("!1", 0)]
+        //[InlineData("!0", 1)] // implicit cast error
+        //[InlineData("!1", 0)] // implicit cast error
 
-        [InlineData("string(false)", "0")]
-        [InlineData("string(true)", "1")]
+        [InlineData("string(false)", "false")]
+        [InlineData("string(true)", "true")]
 
         [InlineData("bool(\"false\")", 0)]
         [InlineData("bool(\"true\")", 1)]
@@ -99,10 +99,10 @@ namespace Vivian.Tests.CodeAnalysis
 
         [InlineData("\"test\"", "test")]
         [InlineData("\"te\"\"st\"", "te\"st")]
-        [InlineData("\"test\" == \"test\"", 1)]
-        [InlineData("\"test\" != \"test\"", 0)]
-        [InlineData("\"abc\" != \"abc\"", 0)]
-        [InlineData("\"abc\" == \"abc\"", 1)]
+        [InlineData("string(\"test\" == \"test\")", "true")]
+        [InlineData("string(\"test\" != \"test\")", "false")]
+        [InlineData("string(\"abc\" != \"abc\")", "false")]
+        [InlineData("string(\"abc\" == \"abc\")", "true")]
         
         [InlineData("{ var a = 0; return (a = 10) * a; }", 100)]
         
