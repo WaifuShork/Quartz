@@ -434,8 +434,6 @@ namespace Vivian
         
         private void EvaluateMetaCommand(string input)
         {
-            
-            
             // Parse arguments
             var args = new List<string>();
             var inQuotes = false;
@@ -526,7 +524,6 @@ namespace Vivian
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
         protected sealed class MetaCommandAttribute : Attribute
         {
-
             public MetaCommandAttribute(string name, string description)
             {
                 Name = name;

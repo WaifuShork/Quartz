@@ -18,6 +18,11 @@ namespace Vivian.CodeAnalysis
         {
             _diagnostics.AddRange(diagnostics._diagnostics);
         }
+        
+        public void AddRange(IEnumerable<Diagnostic> diagnostics)
+        {
+            _diagnostics.AddRange(diagnostics);
+        }
 
         private void Report(TextLocation location, string message)
         {

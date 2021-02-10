@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
@@ -37,6 +37,7 @@ namespace Vivian.CodeAnalysis.Syntax
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return Keyword;
+            yield return SemicolonToken;
         }
     }
     partial class CallExpressionSyntax
@@ -45,8 +46,6 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             yield return Identifier;
             yield return OpenParenthesisToken;
-            foreach (var child in Arguments.GetWithSeparators())
-                yield return child;
             yield return CloseParenthesisToken;
         }
     }
@@ -64,6 +63,7 @@ namespace Vivian.CodeAnalysis.Syntax
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return Keyword;
+            yield return SemicolonToken;
         }
     }
     partial class DoWhileStatementSyntax
@@ -73,7 +73,10 @@ namespace Vivian.CodeAnalysis.Syntax
             yield return DoKeyword;
             yield return Body;
             yield return WhileKeyword;
+            yield return OpenParenthesisToken;
             yield return Condition;
+            yield return CloseParenthesisToken;
+            yield return SemicolonToken;
         }
     }
     partial class ElseClauseSyntax
@@ -96,11 +99,13 @@ namespace Vivian.CodeAnalysis.Syntax
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return Keyword;
+            yield return OpenParenthesisToken;
             yield return Identifier;
             yield return EqualsToken;
             yield return LowerBound;
             yield return ToKeyword;
             yield return UpperBound;
+            yield return CloseParenthesisToken;
             yield return Body;
         }
     }
@@ -111,8 +116,6 @@ namespace Vivian.CodeAnalysis.Syntax
             yield return FunctionKeyword;
             yield return Identifier;
             yield return OpenParenthesisToken;
-            foreach (var child in Parameters.GetWithSeparators())
-                yield return child;
             yield return CloseParenthesisToken;
             yield return Type;
             yield return Body;
@@ -130,7 +133,9 @@ namespace Vivian.CodeAnalysis.Syntax
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return IfKeyword;
+            yield return OpenParenthesisToken;
             yield return Condition;
+            yield return CloseParenthesisToken;
             yield return ThenStatement;
             yield return ElseClause;
         }
@@ -172,6 +177,7 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             yield return ReturnKeyword;
             yield return Expression;
+            yield return SemicolonToken;
         }
     }
     partial class TypeClauseSyntax
@@ -206,7 +212,9 @@ namespace Vivian.CodeAnalysis.Syntax
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return WhileKeyword;
+            yield return OpenParenthesisToken;
             yield return Condition;
+            yield return CloseParenthesisToken;
             yield return Body;
         }
     }

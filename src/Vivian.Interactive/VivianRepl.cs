@@ -67,12 +67,12 @@ namespace Vivian
                 var tokenEnd = Math.Min(token.Span.End, lineSpan.End);
                 var tokenSpan = TextSpan.FromBounds(tokenStart, tokenEnd);
                 var tokenText = renderState.Text.ToString(tokenSpan);
-                
-                var isKeyword = token.Kind.ToString().EndsWith("Keyword");
+
+                var isComment = token.Kind.IsComment();
+                var isKeyword = token.Kind.IsKeyword();
                 var isIdentifier = token.Kind == SyntaxKind.IdentifierToken;
                 var isString = token.Kind == SyntaxKind.StringToken;
                 var isNumber = token.Kind == SyntaxKind.NumberToken;
-                var isComment = token.Kind == SyntaxKind.SingleLineCommentToken;
 
                 if (isKeyword)
                     Console.ForegroundColor = ConsoleColor.Blue;

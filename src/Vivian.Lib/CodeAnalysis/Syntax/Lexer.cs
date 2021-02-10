@@ -38,7 +38,7 @@ namespace Vivian.CodeAnalysis.Syntax
         public SyntaxToken Lex()
         {
             _start = _position;
-            _kind = SyntaxKind.BadToken;
+            _kind = SyntaxKind.BadTokenTrivia;
             _value = null;
             
             switch (Current)
@@ -281,7 +281,7 @@ namespace Vivian.CodeAnalysis.Syntax
             while (char.IsWhiteSpace(Current))
                 _position++;
 
-            _kind = SyntaxKind.WhitespaceToken;
+            _kind = SyntaxKind.WhitespaceTrivia;
         }
         
         private void ReadNumberToken()
@@ -333,7 +333,7 @@ namespace Vivian.CodeAnalysis.Syntax
                         break;
                 }
             }
-            _kind = SyntaxKind.SingleLineCommentToken;
+            _kind = SyntaxKind.SingleLineCommentTrivia;
         }
         
         private void ReadMultiLineComments()
@@ -364,7 +364,7 @@ namespace Vivian.CodeAnalysis.Syntax
                         break;
                 }
             }
-            _kind = SyntaxKind.MultiLineCommentToken;
+            _kind = SyntaxKind.MultiLineCommentTrivia;
         }
     }
 }

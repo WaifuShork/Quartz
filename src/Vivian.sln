@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Interactive", "src\Vivian.Interactive\Vivian.Interactive.csproj", "{18032116-0FAC-40F4-8543-6CC1FF878EC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Interactive", "Vivian.Interactive\Vivian.Interactive.csproj", "{18032116-0FAC-40F4-8543-6CC1FF878EC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Lib", "src\Vivian.Lib\Vivian.Lib.csproj", "{1E768763-2275-4018-9AE9-113D9CB89808}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Lib", "Vivian.Lib\Vivian.Lib.csproj", "{1E768763-2275-4018-9AE9-113D9CB89808}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Tests", "src\Vivian.Tests\Vivian.Tests.csproj", "{4C4AB045-7962-4568-947F-FD9F832C2078}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Tests", "Vivian.Tests\Vivian.Tests.csproj", "{4C4AB045-7962-4568-947F-FD9F832C2078}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Compiler", "src\Vivian.Compiler\Vivian.Compiler.csproj", "{7B21F13D-FD6D-4031-A7EF-0CE595425A68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Compiler", "Vivian.Compiler\Vivian.Compiler.csproj", "{7B21F13D-FD6D-4031-A7EF-0CE595425A68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Generators", "src\Vivian.Generators\Vivian.Generators.csproj", "{1A1B6EC4-C42E-401F-A916-256AB6F77506}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Generators", "Vivian.Generators\Vivian.Generators.csproj", "{1A1B6EC4-C42E-401F-A916-256AB6F77506}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

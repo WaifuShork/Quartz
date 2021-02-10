@@ -123,7 +123,6 @@ namespace Vivian.CodeAnalysis.Syntax
             }
         }
         
-
         public static string GetText(SyntaxKind kind)
         {
             switch (kind)
@@ -237,6 +236,37 @@ namespace Vivian.CodeAnalysis.Syntax
                 default:
                     return null;
             }
+        }
+
+        public static bool IsKeyword(this SyntaxKind kind)
+        {
+            return kind.ToString().EndsWith("Keyword");
+        }
+        
+        public static bool IsToken(this SyntaxKind kind)
+        {
+            return !kind.IsTrivia() &&
+                   (kind.IsKeyword() || kind.ToString().EndsWith("Token"));
+        }
+        
+        public static bool IsTrivia(this SyntaxKind kind)
+        {
+            switch (kind)
+            {
+                case SyntaxKind.WhitespaceTrivia: 
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                case SyntaxKind.BadTokenTrivia:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool IsComment(this SyntaxKind kind)
+        {
+            return kind == SyntaxKind.SingleLineCommentTrivia ||
+                   kind == SyntaxKind.MultiLineCommentTrivia;
         }
     }
 }
