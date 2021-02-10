@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Text.RegularExpressions;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Symbols;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
@@ -63,7 +64,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 return NextToken();
 
             _diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind);
-            return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null);
+            return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null, null);
         }
         
         public CompilationUnitSyntax ParseCompilationUnit()
@@ -455,10 +456,10 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private ExpressionSyntax ParseBooleanLiteral()
         {
-            var isTrue = Current.Kind == SyntaxKind.TrueKeyword ? 1 : 0;
+            byte isTrue = Current.Kind == SyntaxKind.TrueKeyword ? 1 : 0;
             var keywordToken = Current.Kind == SyntaxKind.TrueKeyword ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
             
-            return new LiteralExpressionSyntax(_syntaxTree, keywordToken, isTrue);
+            return new LiteralExpressionSyntax(_syntaxTree, keywordToken, isTrue, TypeSymbol.Bool);
         }
         
         private ExpressionSyntax ParseNumberLiteral()

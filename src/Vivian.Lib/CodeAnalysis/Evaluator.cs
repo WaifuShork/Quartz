@@ -76,7 +76,7 @@ namespace Vivian.CodeAnalysis
 
                     case BoundNodeKind.ConditionalGotoStatement:
                         var cgs = (BoundConditionalGotoStatement) s;
-                        var condition = (int) EvaluateExpression(cgs.Condition) == 0 ? false : true;
+                        var condition = (dynamic) EvaluateExpression(cgs.Condition) == 0 ? false : true;
                         if (condition == cgs.JumpIfTrue)
                             index = labelToIndex[cgs.Label];
                         else
@@ -148,7 +148,7 @@ namespace Vivian.CodeAnalysis
             var value = EvaluateExpression(node.Expression);
             if (node.Type == TypeSymbol.Object)
                 return value;
-            if (node.Type == TypeSymbol.Int)
+            if ((node.Type.Caps & TypeSymbolCaps.Arithmetic) != TypeSymbolCaps.None)
             {
                 if (value is string s)
                 {
@@ -158,10 +158,16 @@ namespace Vivian.CodeAnalysis
                         0 :
                         throw new Exception($"Value {value} can not be cast to type {node.Type}");
                 }
-                return Convert.ToInt32(value);
+                return Conversion.Convert(node.Type, value);
             }
             else if (node.Type == TypeSymbol.String)
+            {
+                if (node.Expression.Type == TypeSymbol.Bool)
+                {
+                    return (byte)value == 0 ? "false" : "true";
+                }
                 return Convert.ToString(value);
+            }
             else
                 throw new Exception($"Unexpected type {node.Type}");
         }
@@ -209,85 +215,107 @@ namespace Vivian.CodeAnalysis
         private object EvaluateUnaryExpression(BoundUnaryExpression u)
         {
             var operand = EvaluateExpression(u.Operand);
+            var conversion = Conversion.Classify(u.Operand.Type, u.Type);
+            if (!conversion.IsImplicit)
+                throw new Exception($"Can not implicitly cast type {u.Operand.Type} to {u.Type}");
 
-            switch (u.Op.Kind)
-            {
-                case BoundUnaryOperatorKind.Identity:
-                    return (int) operand;
-                case BoundUnaryOperatorKind.Negation:
-                    return -(int) operand;
-                case BoundUnaryOperatorKind.LogicalNegation:
-                    return ((int) operand) == 0 ? 1 : 0;
-                case BoundUnaryOperatorKind.OnesComplement:
-                    return ~(int) operand;
-                default:
-                    throw new Exception($"Unexpected unary operator {u.Op}");
-            }
+            return Conversion.Convert(u.Type, u.Op.Operate(Conversion.Convert(u.Type, operand))); // Convert twice incase C# changes the type after the operation
         }
         
         private object EvaluateBinaryExpression(BoundBinaryExpression b)
         {
-            object left() => EvaluateExpression(b.Left);
-            object right() => EvaluateExpression(b.Right);
+            var left = EvaluateExpression(b.Left);
+            var right = EvaluateExpression(b.Right);
 
-            switch (b.Op.Kind)
+            if (b.Op.Type == null)
             {
-                case BoundBinaryOperatorKind.Addition:
-                    if (b.Type == (TypeSymbol.Int))
-                        return (int)left() + (int)right();
-                    else
-                        return (string)left() + (string)right();
-                
-                case BoundBinaryOperatorKind.Subtraction:
-                    return (int) left() - (int) right();
-                
-                case BoundBinaryOperatorKind.Multiplication:
-                    return (int) left() * (int) right();
-                
-                case BoundBinaryOperatorKind.Division:
-                    return (int) left() / (int) right();
-                
-                case BoundBinaryOperatorKind.Modulo:
-                    return (int) left() % (int) right();
+                var conversionL = Conversion.Classify(b.Left.Type, b.Type);
+                if (!conversionL.IsImplicit)
+                    throw new Exception($"Can not implicitly cast type {b.Left.Type} to {b.Type}");
 
-                case BoundBinaryOperatorKind.BitwiseAnd:
-                    return (int) left() & (int) right();
-                
-                case BoundBinaryOperatorKind.BitwiseOr:
-                    return (int) left() | (int) right();
-                
-                case BoundBinaryOperatorKind.BitwiseXor:
-                    return (int) left() ^ (int) right();
-                
-                case BoundBinaryOperatorKind.LogicalAnd:
-                    return ((int) left()) == 0 ? 0 : ((int) right()) == 0 ? 0 : 1;
-                
-                case BoundBinaryOperatorKind.LogicalOr:
-                    return ((int) left()) == 0 ? ((int) right()) == 0 ? 0 : 1 : 1;
-                
-                case BoundBinaryOperatorKind.Equals:
-                    return Equals(left(), right()) ? 1 : 0;
-                
-                case BoundBinaryOperatorKind.NotEquals:
-                    return !Equals(left(), right()) ? 1 : 0;
-                
-                case BoundBinaryOperatorKind.Less:
-                    return (int) left() < (int) right() ? 1 : 0;
-                
-                case BoundBinaryOperatorKind.Greater:
-                    return (int) left() > (int) right() ? 1 : 0;
-                
-                case BoundBinaryOperatorKind.GreaterOrEquals:
-                    return (int) left() >= (int) right() ? 1 : 0;
-                
-                case BoundBinaryOperatorKind.LessOrEquals:
-                    return (int) left() <= (int) right() ? 1 : 0;
+                var conversionR = Conversion.Classify(b.Right.Type, b.Type);
+                if (!conversionR.IsImplicit)
+                    throw new Exception($"Can not implicitly cast type {b.Right.Type} to {b.Type}");
 
-                default:
-                    throw new Exception($"Unexpected binary operator {b.Op}");
+                left = Conversion.Convert(b.Type, left);
+                right = Conversion.Convert(b.Type, right);
             }
+
+            return Conversion.Convert(b.Type, b.Op.Operate(left, right));
+
+            //switch (b.Op.Kind)
+            //{
+            //    case BoundBinaryOperatorKind.Addition:
+            //        if ((b.Type.Caps & TypeSymbolCaps.Arithmetic) != TypeSymbolCaps.None)
+            //        {
+            //            var conversionL = Conversion.Classify(b.Left.Type, b.Type);
+            //            if (!conversionL.IsImplicit)
+            //                throw new Exception($"Can not implicitly cast type {b.Left.Type} to {b.Type}");
+
+            //            var conversionR = Conversion.Classify(b.Right.Type, b.Type);
+            //            if (!conversionR.IsImplicit)
+            //                throw new Exception($"Can not implicitly cast type {b.Right.Type} to {b.Type}");
+
+            //            left = Conversion.Convert(b.Type, left);
+            //            right = Conversion.Convert(b.Type, right);
+
+            //            var value = (dynamic)left + (dynamic)right;
+
+            //            return Conversion.Convert(b.Type, value);
+            //        }
+            //        else
+            //            return (string)left + (string)right;
+
+            //    case BoundBinaryOperatorKind.Subtraction:
+            //        return (int)left - (int) right;
+
+            //    case BoundBinaryOperatorKind.Multiplication:
+            //        return (int)left * (int) right;
+
+            //    case BoundBinaryOperatorKind.Division:
+            //        return (int)left / (int) right;
+
+            //    case BoundBinaryOperatorKind.Modulo:
+            //        return (int)left % (int) right;
+
+            //    case BoundBinaryOperatorKind.BitwiseAnd:
+            //        return (int)left & (int) right;
+
+            //    case BoundBinaryOperatorKind.BitwiseOr:
+            //        return (int)left | (int) right;
+
+            //    case BoundBinaryOperatorKind.BitwiseXor:
+            //        return (int)left ^ (int) right;
+
+            //    case BoundBinaryOperatorKind.LogicalAnd:
+            //        return ((int) left) == 0 ? 0 : ((int) right) == 0 ? 0 : 1;
+
+            //    case BoundBinaryOperatorKind.LogicalOr:
+            //        return ((int) left) == 0 ? ((int) right) == 0 ? 0 : 1 : 1;
+
+            //    case BoundBinaryOperatorKind.Equals:
+            //        return Equals(left, right) ? 1 : 0;
+
+            //    case BoundBinaryOperatorKind.NotEquals:
+            //        return !Equals(left, right) ? 1 : 0;
+
+            //    case BoundBinaryOperatorKind.Less:
+            //        return (int) left < (int) right ? 1 : 0;
+
+            //    case BoundBinaryOperatorKind.Greater:
+            //        return (int) left > (int) right ? 1 : 0;
+
+            //    case BoundBinaryOperatorKind.GreaterOrEquals:
+            //        return (int) left >= (int) right ? 1 : 0;
+
+            //    case BoundBinaryOperatorKind.LessOrEquals:
+            //        return (int) left <= (int) right ? 1 : 0;
+
+            //    default:
+            //        throw new Exception($"Unexpected binary operator {b.Op}");
+            //}
         }
-        
+
         private object EvaluateCallExpression(BoundCallExpression node)
         {
             if (node.Function == BuiltinFunctions.Input)

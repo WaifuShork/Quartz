@@ -151,7 +151,7 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 else if (statements.Any() && statements.Last().Kind != BoundNodeKind.ReturnStatement)
                 {
-                    var nullValue = new BoundLiteralExpression("");
+                    var nullValue = new BoundLiteralExpression("", TypeSymbol.Void);
                     statements = statements.Add(new BoundReturnStatement(nullValue));
                 }
                 
@@ -303,7 +303,7 @@ namespace Vivian.CodeAnalysis.Binding
                 {
                     // Ignore because returns with and without values are allowed.
                     if (expression == null)
-                        expression = new BoundLiteralExpression("");
+                        expression = new BoundLiteralExpression("", TypeSymbol.Void);
                 }
                 else if (expression != null)
                 {
@@ -503,7 +503,7 @@ namespace Vivian.CodeAnalysis.Binding
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
         {
             var value = syntax.Value ?? 0;
-            return new BoundLiteralExpression(value);
+            return new BoundLiteralExpression(value, syntax.Type);
         }
         private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
         {
@@ -703,18 +703,9 @@ namespace Vivian.CodeAnalysis.Binding
         
         private TypeSymbol LookupType(string name)
         {
-            switch (name)
-            {
-                case "object": 
-                    return TypeSymbol.Object;
-                case "bool": 
-                case "int": 
-                    return TypeSymbol.Int;
-                case "string": 
-                    return TypeSymbol.String;
-                default:
-                    return null;
-            }
+            if (TypeSymbol.NameToType.TryGetValue(name, out TypeSymbol type))
+                return type;
+            return null;
         }
     }
 }

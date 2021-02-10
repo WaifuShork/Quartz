@@ -200,11 +200,11 @@ namespace Vivian.CodeAnalysis.Lowering
             var continueLabelStatement = new BoundLabelStatement(node.ContinueLabel);
             var increment = new BoundExpressionStatement(
                 new BoundAssignmentExpression(
-                    node.Variable, 
+                    node.Variable,
                     new BoundBinaryExpression(
-                        variableExpression, 
-                        BoundBinaryOperator.Bind(SyntaxKind.PlusToken, TypeSymbol.Int, TypeSymbol.Int), 
-                        new BoundLiteralExpression(1)
+                        variableExpression,
+                        BoundBinaryOperator.Bind(SyntaxKind.PlusToken, TypeSymbol.Int, TypeSymbol.Int),
+                        new BoundLiteralExpression(1, node.Variable.Type)
                     )
                 )
             );

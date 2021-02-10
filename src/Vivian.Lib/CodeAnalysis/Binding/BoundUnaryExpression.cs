@@ -12,7 +12,7 @@ namespace Vivian.CodeAnalysis.Binding
         }
 
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
-        public override TypeSymbol Type => Op.Type;
+        public override TypeSymbol Type => Op.Type?? Operand.Type;
         
         public BoundUnaryOperator Op { get; }
         public BoundExpression Operand { get; }

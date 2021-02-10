@@ -240,10 +240,10 @@ namespace Vivian.CodeAnalysis.Binding
                 if (condition is BoundLiteralExpression literal)
                 {
                     var value = (bool) literal.Value;
-                    return new BoundLiteralExpression(!value);
+                    return new BoundLiteralExpression((byte)(!value ? 1 : 0), literal.Type);
                 }
 
-                var unaryOperator = BoundUnaryOperator.Bind(SyntaxKind.BangToken, TypeSymbol.Int);
+                var unaryOperator = BoundUnaryOperator.Bind(SyntaxKind.BangToken, condition.Type);
                 return new BoundUnaryExpression(unaryOperator, condition);
             }
           

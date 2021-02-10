@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Text;
 
@@ -14,6 +15,7 @@ namespace Vivian.CodeAnalysis.Syntax
         private int _start;
         private SyntaxKind _kind;
         private object _value;
+        private TypeSymbol _type;
         
         public Lexer(SyntaxTree syntaxTree)
         {
@@ -40,6 +42,7 @@ namespace Vivian.CodeAnalysis.Syntax
             _start = _position;
             _kind = SyntaxKind.BadToken;
             _value = null;
+            _type = null;
             
             switch (Current)
             {
@@ -181,6 +184,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case'0': case'1': case'2': case'3': case'4': 
                 case'5': case'6': case'7': case'8': case'9':
+                case'.':
                     ReadNumberToken();
                     break;
                 
@@ -212,7 +216,7 @@ namespace Vivian.CodeAnalysis.Syntax
             if (text == null)
                 text = _text.ToString(_start, length);
 
-            return new SyntaxToken(_syntaxTree, _kind, _start, text, _value);
+            return new SyntaxToken(_syntaxTree, _kind, _start, text, _value, _type);
         }
 
         private void ReadString()
@@ -255,6 +259,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             _kind = SyntaxKind.StringToken;
             _value = sb.ToString();
+            _type = TypeSymbol.String;
         }
 
         private void ReadWhiteSpace()
@@ -264,22 +269,95 @@ namespace Vivian.CodeAnalysis.Syntax
 
             _kind = SyntaxKind.WhitespaceToken;
         }
-        
+
         private void ReadNumberToken()
         {
-            while (char.IsDigit(Current))
+            var decimalPointFound = false;
+            while (char.IsDigit(Current) || (Current == '.' && !decimalPointFound))
+            {
+                if (Current == '.')
+                    decimalPointFound = true;
                 _position++;
+            }
 
             var length = _position - _start;
             var text = _text.ToString(_start, length);
-            if (!int.TryParse(text, out var value))
-            {
-                var span = new TextSpan(_start, length);
-                var location = new TextLocation(_text, span);
-                _diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Int);
+
+            var type = '\0';
+            if (Current is 'l' or 'f' or 'm') {
+                type = Current;
+                _position++;
             }
 
-            _value = value;
+            _type = TypeSymbol.Int;
+
+            switch (type)
+            {
+                case '\0':
+                    if (int.TryParse(text, out var intValue))
+                    {
+                        _value = intValue;
+                        _type = TypeSymbol.Int;
+                    }
+                    else if (double.TryParse(text, out var doubleValue))
+                    {
+                        _value = doubleValue;
+                        _type = TypeSymbol.Double;
+                    }
+                    else
+                    {
+                        var span = new TextSpan(_start, length);
+                        var location = new TextLocation(_text, span);
+                        _diagnostics.ReportInvalidNumber(location, text, decimalPointFound ? TypeSymbol.Double : TypeSymbol.Int);
+                    }
+                    break;
+                case 'l':
+                    if (decimalPointFound)
+                        throw new Exception($"Invalid type specifier {type} for fixed point number");
+                    if (long.TryParse(text, out var longValue))
+                    {
+                        _value = longValue;
+                        _type = TypeSymbol.Long;
+                    }
+                    else
+                    {
+                        var span = new TextSpan(_start, length);
+                        var location = new TextLocation(_text, span);
+                        _diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Long);
+                    }
+                    break;
+                case 'f':
+                    if (!decimalPointFound)
+                        throw new Exception($"Invalid type specifier {type} for floating point number");
+                    if (float.TryParse(text, out var floatValue))
+                    {
+                        _value = floatValue;
+                        _type = TypeSymbol.Float;
+                    }
+                    else
+                    {
+                        var span = new TextSpan(_start, length);
+                        var location = new TextLocation(_text, span);
+                        _diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Float);
+                    }
+                    break;
+                case 'm':
+                    if (decimal.TryParse(text, out var decimalValue))
+                    {
+                        _value = decimalValue;
+                        _type = TypeSymbol.Decimal;
+                    }
+                    else
+                    {
+                        var span = new TextSpan(_start, length);
+                        var location = new TextLocation(_text, span);
+                        _diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
+                    }
+                    break;
+                default:
+                    throw new Exception($"Unknown type specifier {type}");
+            }
+
             _kind = SyntaxKind.NumberToken;
         }
         
