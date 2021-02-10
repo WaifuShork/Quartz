@@ -19,5 +19,11 @@
         }
 
         public override string ToString() => $"{Start}..{End}";
+
+        public bool OverlapsWith(TextSpan span)
+        {
+            return Start < span.End &&
+                   End >= span.Start;
+        }
     }
 }

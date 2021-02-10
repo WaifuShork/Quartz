@@ -62,21 +62,6 @@ namespace Vivian.CodeAnalysis.Syntax
                     _kind = SyntaxKind.StarToken;
                     _position++;
                     break;
-                case '/':
-                    if (Lookahead == '/')
-                    {
-                        ReadSingleLineComment();
-                    }
-                    //else if (Lookahead == '*')
-                    //{
-                    //    ReadMultiLineComments();
-                    //}
-                    else
-                    {
-                        _kind = SyntaxKind.SlashToken;
-                        _position++;
-                    }
-                    break;
                 case '(':
                     _kind = SyntaxKind.OpenParenthesisToken;
                     _position++;
@@ -120,6 +105,21 @@ namespace Vivian.CodeAnalysis.Syntax
                 case ';':
                     _kind = SyntaxKind.SemicolonToken;
                     _position++;
+                    break;
+                case '/':
+                    if (Lookahead == '/')
+                    {
+                        ReadSingleLineComment();
+                    }
+                    else if (Lookahead == '*')
+                    {
+                        ReadMultiLineComments();
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.SlashToken;
+                        _position++;
+                    }
                     break;
                 case '&':
                     _position++;
@@ -321,9 +321,9 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 switch (Current)
                 {
+                    case '\0':
                     case '\r':
                     case '\n':
-                    case '\0':
                     {
                         done = true;
                         break;
@@ -334,12 +334,37 @@ namespace Vivian.CodeAnalysis.Syntax
                 }
             }
             _kind = SyntaxKind.SingleLineCommentToken;
-
         }
         
-        //private void ReadMultiLineComments()
-        //{
-        //    _kind = SyntaxKind.MultiLineCommentToken;
-        //}
+        private void ReadMultiLineComments()
+        {
+            _position += 2;
+            var done = false;
+            
+            while (!done)
+            {
+                switch (Current)
+                {
+                    case '\0':
+                        var span = new TextSpan(_start, 2);
+                        var location = new TextLocation(_text, span);
+                        _diagnostics.ReportUnterminatedMultiLineComment(location);
+                        done = true;
+                        break;
+                    case '*':
+                        if (Lookahead == '/')
+                        {
+                            _position++;
+                            done = true;
+                        }
+                        _position++;
+                        break;
+                    default:
+                        _position++;
+                        break;
+                }
+            }
+            _kind = SyntaxKind.MultiLineCommentToken;
+        }
     }
 }

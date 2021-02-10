@@ -219,5 +219,11 @@ namespace Vivian.CodeAnalysis
             var message = $"The required method '{typeName}.{methodName}'({parameterTypeNameList}) cannot be resolved among the given references.";
             Report(default, message);
         }
+
+        public void ReportUnterminatedMultiLineComment(TextLocation location)
+        {
+            const string message = "Unterminated multi-line comment.";
+            Report(default, message);
+        }
     }
 }

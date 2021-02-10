@@ -10,7 +10,7 @@
         ColonToken,
         SemicolonToken,
         SingleLineCommentToken,
-        // MultiLineCommentToken,
+        MultiLineCommentToken,
 
         StringToken,
         NumberToken,
