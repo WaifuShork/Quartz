@@ -1,0 +1,12 @@
+G:\vtest\Vivian\src\Vivian\bin\Debug\Vivian.deps.json
+G:\vtest\Vivian\src\Vivian\bin\Debug\Vivian.dll
+G:\vtest\Vivian\src\Vivian\bin\Debug\ref\Vivian.dll
+G:\vtest\Vivian\src\Vivian\bin\Debug\Vivian.pdb
+G:\vtest\Vivian\src\Vivian\obj\Debug\Vivian.csprojAssemblyReference.cache
+G:\vtest\Vivian\src\Vivian\obj\Debug\Vivian.GeneratedMSBuildEditorConfig.editorconfig
+G:\vtest\Vivian\src\Vivian\obj\Debug\Vivian.AssemblyInfoInputs.cache
+G:\vtest\Vivian\src\Vivian\obj\Debug\Vivian.AssemblyInfo.cs
+G:\vtest\Vivian\src\Vivian\obj\Debug\Vivian.csproj.CoreCompileInputs.cache
+G:\vtest\Vivian\src\Vivian\obj\Debug\Vivian.dll
+G:\vtest\Vivian\src\Vivian\obj\Debug\ref\Vivian.dll
+G:\vtest\Vivian\src\Vivian\obj\Debug\Vivian.pdb

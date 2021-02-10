@@ -74,8 +74,7 @@ namespace Vivian.Generators
                                          separatedSyntaxListType) &&
                                      IsDerivedFrom(propertyType.TypeArguments[0], syntaxNodeType))
                             {
-                                indentedTextWriter.WriteLine(
-                                    $"foreach (var child in {property.Name}.GetWithSeparators())");
+                                indentedTextWriter.WriteLine($"foreach (var child in {property.Name}.GetWithSeparators())");
                                 indentedTextWriter.Indent++;
                                 indentedTextWriter.WriteLine("yield return child;");
                                 indentedTextWriter.Indent--;
@@ -105,9 +104,9 @@ namespace Vivian.Generators
 
             var fileName = "SyntaxNode_GetChildren.g.cs";
 
-            var syntaxNodeFilePath = syntaxNodeType.DeclaringSyntaxReferences.First().SyntaxTree.FilePath;
+            var syntaxNodeFilePath = syntaxNodeType!.DeclaringSyntaxReferences.First().SyntaxTree.FilePath;
             var syntaxDirectory = Path.GetDirectoryName(syntaxNodeFilePath);
-            var filePath = Path.Combine(syntaxDirectory, fileName);
+            var filePath = Path.Combine(syntaxDirectory!, fileName);
 
             if (File.Exists(filePath))
             {
@@ -148,7 +147,7 @@ namespace Vivian.Generators
         {
             var result = new List<INamedTypeSymbol>();
             GetAllTypes(result, symbol.GlobalNamespace);
-            result.Sort((x, y) => x.MetadataName.CompareTo(y.MetadataName));
+            result.Sort((x, y) => string.Compare(x.MetadataName, y.MetadataName, StringComparison.Ordinal));
             return result;
         }
 
@@ -162,7 +161,7 @@ namespace Vivian.Generators
                     GetAllTypes(result, nsChild);
         }
 
-        private bool IsDerivedFrom(ITypeSymbol type, INamedTypeSymbol baseType)
+        private bool IsDerivedFrom(ITypeSymbol? type, INamedTypeSymbol? baseType)
         {
             while (type != null)
             {

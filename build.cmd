@@ -1,4 +1,4 @@
 @echo off
 
-dotnet build
-dotnet test 
+dotnet clean src\Vivian.sln
+dotnet test src\Vivian.sln

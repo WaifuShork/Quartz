@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "FPe/koJMvswhJAk17zqefpM9VDrVI358wzAnv8f2Jgx/TM3bADc/hr3dI8MOq7vkkKsF1htA/GWmsz4WVWTnkQ==",
+  "dgSpecHash": "eKsJoOyG3I4JKuc1LKoQcb+QWuHGlnv8DmiEE0mq+1tTRiH3sYuGwV1p2Xf1bqIlwUvhpz5xD1C+iMV+md/4qw==",
   "success": true,
   "projectFilePath": "G:\\vtest\\Vivian\\src\\Vivian.Generators\\Vivian.Generators.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,7 @@
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.codeanalysis.csharp\\3.9.0-3.final\\microsoft.codeanalysis.csharp.3.9.0-3.final.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.codeanalysis.csharp.workspaces\\3.9.0-3.final\\microsoft.codeanalysis.csharp.workspaces.3.9.0-3.final.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.codeanalysis.workspaces.common\\3.9.0-3.final\\microsoft.codeanalysis.workspaces.common.3.9.0-3.final.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.net.compilers.toolset\\3.9.0-3.final\\microsoft.net.compilers.toolset.3.9.0-3.final.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.netcore.platforms\\2.1.2\\microsoft.netcore.platforms.2.1.2.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",

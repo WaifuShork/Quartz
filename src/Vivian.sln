@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Interactive", "Vivian.Interactive\Vivian.Interactive.csproj", "{18032116-0FAC-40F4-8543-6CC1FF878EC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Lib", "Vivian.Lib\Vivian.Lib.csproj", "{1E768763-2275-4018-9AE9-113D9CB89808}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian", "Vivian\Vivian.csproj", "{1E768763-2275-4018-9AE9-113D9CB89808}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Tests", "Vivian.Tests\Vivian.Tests.csproj", "{4C4AB045-7962-4568-947F-FD9F832C2078}"
 EndProject

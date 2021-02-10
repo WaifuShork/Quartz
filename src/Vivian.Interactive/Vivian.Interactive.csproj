@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vivian.Lib\Vivian.Lib.csproj" />
+    <ProjectReference Include="..\Vivian\Vivian.csproj" />
   </ItemGroup>
 
 </Project>

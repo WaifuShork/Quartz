@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Vivian.Lib\Vivian.Lib.csproj" />
+      <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Mono.Options" Version="6.6.0.161" />
+      <ProjectReference Include="..\Vivian\Vivian.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,19 @@
+<Project>
+
+    <PropertyGroup>
+        <Features>Strict</Features>
+        <Nullable>Enable</Nullable>
+        <LangVersion>Preview</LangVersion>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <GeneratedSources>**/*.g.cs</GeneratedSources>
+        <DefaultItemExcludes Condition="'$(JetBrainsDesignTimeBuild)' == ''">$(DefaultItemExcludes);$(GeneratedSources)</DefaultItemExcludes>
+    </PropertyGroup>
+
+</Project>

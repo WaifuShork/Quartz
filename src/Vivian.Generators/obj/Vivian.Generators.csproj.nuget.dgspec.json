@@ -50,6 +50,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[3.9.0-3.final, )"
+            },
+            "Microsoft.NET.Compilers.ToolSet": {
+              "target": "Package",
+              "version": "[3.9.0-3.final, )"
             }
           },
           "imports": [
