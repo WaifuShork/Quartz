@@ -215,9 +215,12 @@ namespace Vivian.CodeAnalysis
         private object EvaluateUnaryExpression(BoundUnaryExpression u)
         {
             var operand = EvaluateExpression(u.Operand);
-            var conversion = Conversion.Classify(u.Operand.Type, u.Type);
-            if (!conversion.IsImplicit)
-                throw new Exception($"Can not implicitly cast type {u.Operand.Type} to {u.Type}");
+            if (u.Op.Type == null)
+            {
+                var conversion = Conversion.Classify(u.Operand.Type, u.Type);
+                if (!conversion.IsImplicit)
+                    throw new Exception($"Can not implicitly cast type {u.Operand.Type} to {u.Type}");
+            }
 
             return Conversion.Convert(u.Type, u.Op.Operate(Conversion.Convert(u.Type, operand))); // Convert twice incase C# changes the type after the operation
         }

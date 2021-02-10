@@ -26,7 +26,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         private static BoundUnaryOperator[] _operators =
         {
-            new BoundUnaryOperator(SyntaxKind.BangToken, BoundUnaryOperatorKind.LogicalNegation, new TypeComparator(TypeSymbolCaps.Arithmetic), TypeSymbol.Bool, x => x == 0 ? 1 : 0),
+            new BoundUnaryOperator(SyntaxKind.BangToken, BoundUnaryOperatorKind.LogicalNegation, new TypeComparator(TypeSymbolCaps.Arithmetic), TypeSymbol.Bool, x => x == 0 ? (byte)1 : (byte)0),
 
             new BoundUnaryOperator(SyntaxKind.PlusToken, BoundUnaryOperatorKind.Identity, new TypeComparator(TypeSymbolCaps.Arithmetic), x => x),
             new BoundUnaryOperator(SyntaxKind.MinusToken, BoundUnaryOperatorKind.Negation, new TypeComparator(TypeSymbolCaps.Arithmetic), x => -x),
