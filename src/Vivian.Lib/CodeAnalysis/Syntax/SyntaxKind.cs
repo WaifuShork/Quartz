@@ -9,13 +9,9 @@
         CommaToken,
         ColonToken,
         SemicolonToken,
-        MultiLineCommentToken,
         SingleLineCommentToken,
-        
-        // TODO: Struct and dot operator. 
-        DotToken,
+        // MultiLineCommentToken,
 
-        // Data Tokens
         StringToken,
         NumberToken,
 

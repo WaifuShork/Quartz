@@ -67,10 +67,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     {
                         ReadSingleLineComment();
                     }
-                    else if (Lookahead == '*')
-                    {
-                        ReadMultiLineComments();
-                    }
+                    //else if (Lookahead == '*')
+                    //{
+                    //    ReadMultiLineComments();
+                    //}
                     else
                     {
                         _kind = SyntaxKind.SlashToken;
@@ -119,10 +119,6 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case ';':
                     _kind = SyntaxKind.SemicolonToken;
-                    _position++;
-                    break;
-                case '.':
-                    _kind = SyntaxKind.DotToken;
                     _position++;
                     break;
                 case '&':
@@ -341,9 +337,9 @@ namespace Vivian.CodeAnalysis.Syntax
 
         }
         
-        private void ReadMultiLineComments()
-        {
-            _kind = SyntaxKind.MultiLineCommentToken;
-        }
+        //private void ReadMultiLineComments()
+        //{
+        //    _kind = SyntaxKind.MultiLineCommentToken;
+        //}
     }
 }

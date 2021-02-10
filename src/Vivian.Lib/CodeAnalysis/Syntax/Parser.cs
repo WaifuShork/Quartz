@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Text;
-using wsc.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
@@ -23,8 +22,9 @@ namespace Vivian.CodeAnalysis.Syntax
             do
             {
                 token = lexer.Lex();
-
-                if (token.Kind != SyntaxKind.WhitespaceToken && token.Kind != SyntaxKind.BadToken)
+                if (token.Kind != SyntaxKind.WhitespaceToken && 
+                    token.Kind != SyntaxKind.SingleLineCommentToken && 
+                    token.Kind != SyntaxKind.BadToken)
                 {
                     tokens.Add(token);
                 }

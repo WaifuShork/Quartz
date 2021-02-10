@@ -34,9 +34,7 @@ namespace Vivian
                 var isIdentifier = token.Kind == SyntaxKind.IdentifierToken;
                 var isString = token.Kind == SyntaxKind.StringToken;
                 var isNumber = token.Kind == SyntaxKind.NumberToken;
-
-                var openBraceToken = token.Kind == SyntaxKind.OpenBraceToken;
-                var closeBraceToken = token.Kind == SyntaxKind.CloseBraceToken;
+                var isComment = token.Kind == SyntaxKind.SingleLineCommentToken;
 
                 if (isKeyword)
                     Console.ForegroundColor = ConsoleColor.Blue;
@@ -44,10 +42,12 @@ namespace Vivian
                     Console.ForegroundColor = ConsoleColor.Green;
                 else if (isIdentifier)
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
-                else if (openBraceToken || closeBraceToken)
-                    Console.ForegroundColor = ConsoleColor.Yellow;
                 else if (isNumber)
                     Console.ForegroundColor = ConsoleColor.Cyan;
+                else if (isComment)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                }
                 else
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                 
@@ -153,7 +153,8 @@ namespace Vivian
             
             var syntaxTree = SyntaxTree.Parse(text);
 
-            if (syntaxTree.Root.Members.Last().GetLastToken().IsMissing)
+            var lastMember = syntaxTree.Root.Members.LastOrDefault();
+            if (lastMember == null || lastMember.GetLastToken().IsMissing)
                 return false;
 
             return true;

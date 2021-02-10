@@ -189,10 +189,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.SemicolonToken:
                     return ";";
-                
-                case SyntaxKind.DotToken:
-                    return ".";
-                
+
                 case SyntaxKind.EqualsToken:
                     return "=";
                 case SyntaxKind.FalseKeyword:
