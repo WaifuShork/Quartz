@@ -85,11 +85,8 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("string(false / true)", "false")]
         [InlineData("string(true / true)", "true")]
 
-        //[InlineData("!0", 1)] // implicit cast error
-        //[InlineData("!1", 0)] // implicit cast error
-
-        [InlineData("string(false)", "false")]
-        [InlineData("string(true)", "true")]
+        [InlineData("string(!0)", "true")]
+        [InlineData("string(!1)", "false")]
 
         [InlineData("bool(\"false\")", 0)]
         [InlineData("bool(\"true\")", 1)]
