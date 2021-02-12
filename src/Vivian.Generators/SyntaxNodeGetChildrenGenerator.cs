@@ -21,12 +21,10 @@ namespace Vivian.Generators
         public void Execute(GeneratorExecutionContext context)
         {
             SourceText sourceText;
-
             var compilation = (CSharpCompilation) context.Compilation;
 
-            var immutableArrayType = compilation.GetTypeByMetadataName("System.Collections.Immutable.ImmutableArray`1");
-            var separatedSyntaxListType =
-                compilation.GetTypeByMetadataName("Vivian.CodeAnalysis.Syntax.SeparatedSyntaxList`1");
+            var immutableArrayType = compilation.GetTypeByMetadataName("System.Collections.Immutable.ImmutableArray");
+            var separatedSyntaxListType = compilation.GetTypeByMetadataName("Vivian.CodeAnalysis.Syntax.SeparatedSyntaxList");
             var syntaxNodeType = compilation.GetTypeByMetadataName("Vivian.CodeAnalysis.Syntax.SyntaxNode");
             var types = GetAllTypes(compilation.Assembly);
             var syntaxNodeTypes = types.Where(t => !t.IsAbstract && IsPartial(t) && IsDerivedFrom(t, syntaxNodeType));

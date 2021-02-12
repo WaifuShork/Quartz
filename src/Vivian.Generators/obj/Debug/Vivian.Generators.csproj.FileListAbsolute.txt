@@ -1,12 +1,9 @@
 G:\vtest\Vivian\src\Vivian.Generators\bin\Debug\Vivian.Generators.deps.json
 G:\vtest\Vivian\src\Vivian.Generators\bin\Debug\Vivian.Generators.dll
-G:\vtest\Vivian\src\Vivian.Generators\bin\Debug\ref\Vivian.Generators.dll
 G:\vtest\Vivian\src\Vivian.Generators\bin\Debug\Vivian.Generators.pdb
 G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\Vivian.Generators.csprojAssemblyReference.cache
-G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\Vivian.Generators.GeneratedMSBuildEditorConfig.editorconfig
 G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\Vivian.Generators.AssemblyInfoInputs.cache
 G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\Vivian.Generators.AssemblyInfo.cs
 G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\Vivian.Generators.csproj.CoreCompileInputs.cache
 G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\Vivian.Generators.dll
-G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\ref\Vivian.Generators.dll
 G:\vtest\Vivian\src\Vivian.Generators\obj\Debug\Vivian.Generators.pdb

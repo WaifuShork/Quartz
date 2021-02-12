@@ -13,6 +13,6 @@ namespace Vivian.CodeAnalysis.Symbols
 
         public bool IsReadOnly { get; }
         public TypeSymbol Type { get; }
-        internal BoundConstant Constant { get; }
+        internal BoundConstant? Constant { get; }
     }
 }

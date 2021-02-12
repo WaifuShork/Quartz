@@ -1,1 +1,0 @@
-dotnet clean src\Vivian.sln

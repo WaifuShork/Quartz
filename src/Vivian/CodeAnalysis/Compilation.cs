@@ -35,7 +35,7 @@ namespace Vivian.CodeAnalysis
         public bool IsScript { get; }
         public Compilation Previous { get; }
         public ImmutableArray<SyntaxTree> SyntaxTrees { get; }
-        
+
         public FunctionSymbol MainFunction => GlobalScope.MainFunction;
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
@@ -63,13 +63,8 @@ namespace Vivian.CodeAnalysis
                     ReflectionBindingFlags.Static |
                     ReflectionBindingFlags.Public |
                     ReflectionBindingFlags.NonPublic;
-                var builtinFunctions = typeof(BuiltinFunctions)
-                    .GetFields(bindingFlags)
-                    .Where(fi => fi.FieldType == typeof(FunctionSymbol))
-                    .Select(fi => (FunctionSymbol)fi.GetValue(obj: null))
-                    .ToList();
 
-                //var builtinFunctions = BuiltinFunctions.GetAll().ToList();
+                var builtinFunctions = BuiltinFunctions.GetAll().ToList();
                 
                 foreach (var function in submission.Functions) 
                     if (seenSymbolNames.Add(function.Name))

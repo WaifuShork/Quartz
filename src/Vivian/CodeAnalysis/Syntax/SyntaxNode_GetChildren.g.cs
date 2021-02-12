@@ -27,8 +27,6 @@ namespace Vivian.CodeAnalysis.Syntax
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return OpenBraceToken;
-            foreach (var child in Statements)
-                yield return child;
             yield return CloseBraceToken;
         }
     }
@@ -53,8 +51,6 @@ namespace Vivian.CodeAnalysis.Syntax
     {
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            foreach (var child in Members)
-                yield return child;
             yield return EndOfFileToken;
         }
     }
