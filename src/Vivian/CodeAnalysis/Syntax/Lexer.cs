@@ -102,6 +102,9 @@ namespace Vivian.CodeAnalysis.Syntax
                     _kind = SyntaxKind.HatToken;
                     _position++;
                     break;
+                case '_':
+                    ReadIdentifierOrKeyword();
+                    break;
                 case ';':
                     _kind = SyntaxKind.SemicolonToken;
                     _position++;
@@ -304,7 +307,7 @@ namespace Vivian.CodeAnalysis.Syntax
         
         private void ReadIdentifierOrKeyword()
         {
-            while (char.IsLetter(Current))
+            while (char.IsLetterOrDigit(Current) || Current == '_')
                 _position++;
 
             var length = _position - _start;

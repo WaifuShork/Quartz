@@ -119,11 +119,13 @@ namespace Vivian.CodeAnalysis
         
         private object EvaluateExpression(BoundExpression node)
         {
+            if (node.ConstantValue != null)
+            {
+                return EvaluateConstantExpression(node);
+            }
+            
             switch (node.Kind)
             {
-                case BoundNodeKind.LiteralExpression:
-                    return EvaluateLiteralExpression((BoundLiteralExpression) node);
-                
                 case BoundNodeKind.VariableExpression:
                     return EvaluateVariableExpression((BoundVariableExpression) node);
                 
@@ -162,9 +164,9 @@ namespace Vivian.CodeAnalysis
                 throw new Exception($"Unexpected type {node.Type}");
         }
         
-        private static object EvaluateLiteralExpression(BoundLiteralExpression n)
+        private static object EvaluateConstantExpression(BoundExpression n)
         {
-            return n.Value;
+            return n.ConstantValue.Value;
         }
         
         private object EvaluateVariableExpression(BoundVariableExpression v)

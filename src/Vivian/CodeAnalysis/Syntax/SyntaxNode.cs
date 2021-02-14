@@ -15,7 +15,6 @@ namespace Vivian.CodeAnalysis.Syntax
             SyntaxTree = syntaxTree;
         }
         
-        
         public abstract SyntaxKind Kind { get; }
         public SyntaxTree SyntaxTree { get;  }
 

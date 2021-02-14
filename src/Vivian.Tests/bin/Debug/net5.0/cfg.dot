@@ -1,5 +1,0 @@
-digraph G {
-    N0 [label = "<Start>" shape = box]
-    N1 [label = "<End>" shape = box]
-    N0 -> N1 [label = ""]
-}

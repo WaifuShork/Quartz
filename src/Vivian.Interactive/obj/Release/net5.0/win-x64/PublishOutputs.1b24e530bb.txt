@@ -1,7 +1,0 @@
-G:\Quartz\src\WSC\bin\Release\net5.0\win-x64\publish\WSC.pdb
-G:\Quartz\src\WSC\bin\Release\net5.0\win-x64\publish\clrcompression.dll
-G:\Quartz\src\WSC\bin\Release\net5.0\win-x64\publish\clrjit.dll
-G:\Quartz\src\WSC\bin\Release\net5.0\win-x64\publish\coreclr.dll
-G:\Quartz\src\WSC\bin\Release\net5.0\win-x64\publish\mscordaccore.dll
-G:\Quartz\src\WSC\bin\Release\net5.0\win-x64\publish\WSC.Lib.pdb
-G:\Quartz\src\WSC\bin\Release\net5.0\win-x64\publish\WSC.exe

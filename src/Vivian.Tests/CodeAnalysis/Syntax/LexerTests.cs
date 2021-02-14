@@ -9,6 +9,23 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
 {
     public class LexerTests
     {
+
+        [Theory]
+        [InlineData("foo")]
+        [InlineData("foo42")]
+        [InlineData("foo_42")]
+        [InlineData("_foo")]
+        public void Lexer_Lexes_Identifiers(string name)
+        {
+            var tokens = SyntaxTree.ParseTokens(name).ToArray();
+
+            Assert.Single(tokens);
+
+            var token = tokens[0];
+            Assert.Equal(SyntaxKind.IdentifierToken, token.Kind);
+            Assert.Equal(name, token.Text);
+        }
+        
         [Fact]
         public void Lexer_Lexes_UnterminatedString()
         {
@@ -206,6 +223,12 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 return true;
             
             if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.MultiLineCommentTrivia)
+                return true;
+
+            if (t1Kind == SyntaxKind.IdentifierToken && t2Kind == SyntaxKind.NumberToken)
+                return true;
+
+            if (t1IsKeyword && t2Kind == SyntaxKind.NumberToken)
                 return true;
 
             return false;

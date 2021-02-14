@@ -1,7 +1,0 @@
-G:\Vivian\src\Vivian\bin\Release\net5.0\win-x64\publish\Vivian.pdb
-G:\Vivian\src\Vivian\bin\Release\net5.0\win-x64\publish\clrcompression.dll
-G:\Vivian\src\Vivian\bin\Release\net5.0\win-x64\publish\clrjit.dll
-G:\Vivian\src\Vivian\bin\Release\net5.0\win-x64\publish\coreclr.dll
-G:\Vivian\src\Vivian\bin\Release\net5.0\win-x64\publish\mscordaccore.dll
-G:\Vivian\src\Vivian\bin\Release\net5.0\win-x64\publish\Vivian.Lib.pdb
-G:\Vivian\src\Vivian\bin\Release\net5.0\win-x64\publish\Vivian.exe
