@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class VariableDeclarationSyntax : StatementSyntax
     {
@@ -26,5 +28,14 @@
         public TypeClauseSyntax TypeClause { get; }
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Initializer { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return Keyword;
+            yield return Identifier;
+            yield return TypeClause;
+            yield return EqualsToken;
+            yield return Initializer;
+        }
     }
 }

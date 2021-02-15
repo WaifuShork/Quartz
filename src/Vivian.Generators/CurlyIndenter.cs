@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.CodeDom.Compiler;
 
 namespace Vivian.Generators
@@ -26,4 +26,4 @@ namespace Vivian.Generators
             _indentedTextWriter.WriteLine("}");
         }
     }
-}
+}*/

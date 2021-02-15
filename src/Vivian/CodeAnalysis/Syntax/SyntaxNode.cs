@@ -27,6 +27,16 @@ namespace Vivian.CodeAnalysis.Syntax
                 return TextSpan.FromBounds(first.Start, last.End);
             }
         }
+        
+        public virtual TextSpan FullSpan
+        {
+            get
+            {
+                var first = GetChildren().First().FullSpan;
+                var last = GetChildren().Last().FullSpan;
+                return TextSpan.FromBounds(first.Start, last.End);
+            }
+        }
 
         public TextLocation Location => new TextLocation(SyntaxTree.Text, Span);
         
@@ -39,36 +49,6 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public abstract IEnumerable<SyntaxNode> GetChildren();
-        
-        /*public IEnumerable<SyntaxNode> GetChildren()
-        {
-            var properties = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            foreach (var property in properties)
-            {
-                if (typeof(SyntaxNode).IsAssignableFrom(property.PropertyType))
-                {
-                    var child = (SyntaxNode) property.GetValue(this);
-                    if (child != null)
-                        yield return child;
-                }
-                else if (typeof(IEnumerable<SyntaxNode>).IsAssignableFrom(property.PropertyType))
-                {
-                    var children = (IEnumerable<SyntaxNode>) property.GetValue(this);
-                    foreach (var child in children)
-                    {
-                        if (child != null)
-                            yield return child;
-                    }
-                }
-                else if (typeof(SeparatedSyntaxList).IsAssignableFrom(property.PropertyType))
-                {
-                    var separatedSyntaxList = (SeparatedSyntaxList) property.GetValue(this);
-                    foreach (var child in separatedSyntaxList.GetWithSeparators()) 
-                        yield return child;
-                }
-            }
-        }*/
 
         public void WriteTo(TextWriter writer)
         {
@@ -77,31 +57,75 @@ namespace Vivian.CodeAnalysis.Syntax
         
         private static void PrettyPrint(TextWriter writer, SyntaxNode node, string indent = "", bool isLast = true)
         {
-            var isToConsole = writer == Console.Out;
-            var marker = isLast ? "└──" : "├──";
+            if (node == null)
+            {
+                return;
+            }
             
-            writer.Write(indent);
-
+            var isToConsole = writer == Console.Out;
+            var token = node as SyntaxToken;
+            
+            if (token != null)
+            {
+                foreach (var trivia in token.LeadingTrivia)
+                {
+                    if (isToConsole)
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                    
+                    writer.Write(indent);
+                    writer.Write("├──");
+                    
+                    if (isToConsole)
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    
+                    writer.WriteLine($"Leading: {trivia.Kind}");
+                }
+            }
+            
+            var hasTrailingTrivia = token != null && token.TrailingTrivia.Any();
+            var tokenMarker = !hasTrailingTrivia && isLast ? "└──" : "├──";
+            
             if (isToConsole)
                 Console.ForegroundColor = ConsoleColor.DarkGray;
             
-            writer.Write(marker);
+            writer.Write(indent);
+            writer.Write(tokenMarker);
             
             if (isToConsole)
                 Console.ForegroundColor = node is SyntaxToken ? ConsoleColor.Blue : ConsoleColor.Cyan;
             
             writer.Write(node.Kind);
             
-            if (node is SyntaxToken t && t.Value != null)
+            if (token != null && token.Value != null)
             {
                 writer.Write(" ");
-                writer.Write(t.Value);
+                writer.Write(token.Value);
             }
             
             if (isToConsole)
                 Console.ResetColor();
             
             writer.WriteLine();
+
+            if (token != null)
+            {
+                foreach (var trivia in token.TrailingTrivia)
+                {
+                    var isLastTrailingTrivia = trivia == token.TrailingTrivia.Last();
+                    var triviaMarker = isLast && isLastTrailingTrivia ? "└──" : "├──";
+
+                    if (isToConsole)
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                    
+                    writer.Write(indent);
+                    writer.Write(triviaMarker);
+                    
+                    if (isToConsole)
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    
+                    writer.WriteLine($"Trailing: {trivia.Kind}");
+                }
+            }
             
             indent += isLast ? "   " : "|   ";
 

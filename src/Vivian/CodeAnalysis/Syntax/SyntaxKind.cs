@@ -3,12 +3,14 @@
     public enum SyntaxKind
     {
         // Trivia
+        SkippedTextTrivia,
         WhitespaceTrivia,        
         SingleLineCommentTrivia,
         MultiLineCommentTrivia,        
-        BadTokenTrivia,
+        LineBreakTrivia,
         
         // Tokens 
+        BadToken,
         EndOfFileToken,
         CommaToken,
         ColonToken,
@@ -97,6 +99,7 @@
         Parameter,
         ContinueStatement,
         BreakStatement,
-        ReturnStatement
+        ReturnStatement,
+        
     }
 }

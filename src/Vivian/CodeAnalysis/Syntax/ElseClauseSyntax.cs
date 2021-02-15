@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class ElseClauseSyntax : SyntaxNode
     {
@@ -12,5 +14,11 @@
         
         public SyntaxToken ElseKeyword { get; }
         public StatementSyntax ElseStatement { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return ElseKeyword;
+            yield return ElseStatement;
+        }
     }
 }

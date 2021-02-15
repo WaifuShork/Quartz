@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class ForStatementSyntax : StatementSyntax
     {
@@ -36,5 +38,18 @@
         public ExpressionSyntax UpperBound { get; }
         public SyntaxToken CloseParenthesisToken { get; }
         public StatementSyntax Body { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return Keyword;
+            yield return OpenParenthesisToken;
+            yield return Identifier;
+            yield return EqualsToken;
+            yield return LowerBound;
+            yield return ToKeyword;
+            yield return UpperBound;
+            yield return CloseParenthesisToken;
+            yield return Body;
+        }
     }
 }

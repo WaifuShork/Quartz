@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Text;
 
@@ -14,6 +15,7 @@ namespace Vivian.CodeAnalysis.Syntax
         private int _start;
         private SyntaxKind _kind;
         private object _value;
+        private ImmutableArray<SyntaxTrivia>.Builder _triviaBuilder = ImmutableArray.CreateBuilder<SyntaxTrivia>();
         
         public Lexer(SyntaxTree syntaxTree)
         {
@@ -37,8 +39,99 @@ namespace Vivian.CodeAnalysis.Syntax
 
         public SyntaxToken Lex()
         {
+            ReadTrivia(leading: true);
+            var leadingTrivia = _triviaBuilder.ToImmutable();
+            var tokenStart = _position;
+
+            ReadToken();
+            var tokenKind = _kind;
+            var tokenValue = _value;
+            var tokenLength = _position - _start;
+            
+            ReadTrivia(leading: false);
+            
+            var trailingTrivia = _triviaBuilder.ToImmutable();
+            
+            var tokenText = SyntaxFacts.GetText(tokenKind);
+            if (tokenText == null)
+                tokenText = _text.ToString(tokenStart, tokenLength);
+
+            return new SyntaxToken(_syntaxTree, tokenKind, tokenStart, tokenText, tokenValue, leadingTrivia, trailingTrivia);
+        }
+
+        private void ReadTrivia(bool leading)
+        {
+            _triviaBuilder.Clear();
+            
+            var done = false;
+            
+            while (!done)
+            {
+                _start = _position;
+                _kind = SyntaxKind.BadToken;
+                _value = null;
+                
+                switch (Current)
+                {
+                    case '\0':
+                        done = true;
+                        break;
+                    case '/':
+                        if (Lookahead == '/')
+                        {
+                            ReadSingleLineComment();
+                        }
+                        else if (Lookahead == '*')
+                        {
+                            ReadMultiLineComments();
+                        }
+                        else
+                        {
+                            done = true;
+                        }
+
+                        break;
+                    
+                    case '\r':
+                    case '\n':
+                        if (!leading)
+                        {
+                            done = true;
+                        }
+                        ReadLineBreak();
+                        break;
+                    
+                    case ' ':
+                    case '\t':
+                        ReadWhiteSpace();
+                        break;
+                    
+                    default:
+                        if (char.IsWhiteSpace(Current))
+                        {
+                            ReadWhiteSpace();
+                        }
+                        else
+                        {
+                            done = true;
+                        }
+                        break;
+                }
+
+                var length = _position - _start;
+                if (length > 0)
+                {
+                    var text = _text.ToString(_start, length);
+                    var trivia = new SyntaxTrivia(_syntaxTree, _kind, _start, text);
+                    _triviaBuilder.Add(trivia);
+                }
+            }
+        }
+        
+        private void ReadToken()
+        {
             _start = _position;
-            _kind = SyntaxKind.BadTokenTrivia;
+            _kind = SyntaxKind.BadToken;
             _value = null;
             
             switch (Current)
@@ -110,19 +203,8 @@ namespace Vivian.CodeAnalysis.Syntax
                     _position++;
                     break;
                 case '/':
-                    if (Lookahead == '/')
-                    {
-                        ReadSingleLineComment();
-                    }
-                    else if (Lookahead == '*')
-                    {
-                        ReadMultiLineComments();
-                    }
-                    else
-                    {
-                        _kind = SyntaxKind.SlashToken;
-                        _position++;
-                    }
+                    _kind = SyntaxKind.SlashToken;
+                    _position++;
                     break;
                 case '&':
                     _position++;
@@ -205,19 +287,11 @@ namespace Vivian.CodeAnalysis.Syntax
                 case'5': case'6': case'7': case'8': case'9':
                     ReadNumberToken();
                     break;
-                
-                case ' ': case '\t': case '\n':
-                    ReadWhiteSpace();
-                    break;
 
                 default:
                     if (char.IsLetter(Current))
                     {
                         ReadIdentifierOrKeyword();
-                    }
-                    else if (char.IsWhiteSpace(Current))
-                    {
-                        ReadWhiteSpace();
                     }
                     else
                     {
@@ -228,13 +302,6 @@ namespace Vivian.CodeAnalysis.Syntax
                     }
                     break;
             }
-
-            var length = _position - _start;
-            var text = SyntaxFacts.GetText(_kind);
-            if (text == null)
-                text = _text.ToString(_start, length);
-
-            return new SyntaxToken(_syntaxTree, _kind, _start, text, _value);
         }
         
         private void ReadString()
@@ -279,10 +346,40 @@ namespace Vivian.CodeAnalysis.Syntax
             _value = sb.ToString();
         }
 
+        private void ReadLineBreak()
+        {
+            if (Current == '\r' && Lookahead == '\n')
+            {
+                _position += 2;
+            }
+            else
+            {
+                _position++;
+            }
+            
+            _kind = SyntaxKind.LineBreakTrivia;
+        }
+        
         private void ReadWhiteSpace()
         {
-            while (char.IsWhiteSpace(Current))
-                _position++;
+            var done = false;
+            while (!done)
+            {
+                switch (Current)
+                {
+                    case '\0':
+                    case '\r':
+                    case '\n':
+                        done = true;
+                        break;
+                    default:
+                        if (!char.IsWhiteSpace(Current))
+                            done = true;
+                        else
+                            _position++; 
+                        break;
+                }
+            }
 
             _kind = SyntaxKind.WhitespaceTrivia;
         }

@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class ContinueStatementSyntax : StatementSyntax
     {
@@ -11,5 +13,11 @@
         public override SyntaxKind Kind => SyntaxKind.ContinueStatement;
         public SyntaxToken Keyword { get; }
         public SyntaxToken SemicolonToken { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return Keyword;
+            yield return SemicolonToken;
+        }
     }
 }

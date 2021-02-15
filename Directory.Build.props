@@ -10,10 +10,5 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     </PropertyGroup>
-    
-    <PropertyGroup>
-        <GeneratedSources>**/*.g.cs</GeneratedSources>
-        <DefaultItemExcludes Condition="'$(JetBrainsDesignTimeBuild)' == ''">$(DefaultItemExcludes);$(GeneratedSources)</DefaultItemExcludes>
-    </PropertyGroup>
 
 </Project>

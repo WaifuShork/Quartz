@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class WhileStatementSyntax : StatementSyntax
     {
@@ -18,5 +20,14 @@
         public ExpressionSyntax Condition { get; }
         public SyntaxToken CloseParenthesisToken { get; }
         public StatementSyntax Body { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return WhileKeyword;
+            yield return OpenParenthesisToken;
+            yield return Condition;
+            yield return CloseParenthesisToken;
+            yield return Body;
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class TypeClauseSyntax : SyntaxNode
     {
@@ -11,5 +13,11 @@
         public override SyntaxKind Kind => SyntaxKind.TypeClause;
         public SyntaxToken ColonToken { get; }
         public SyntaxToken Identifier { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return ColonToken;
+            yield return Identifier;
+        }
     }
 }

@@ -173,7 +173,7 @@ namespace Vivian
             _done = false;
             
             var document = new ObservableCollection<string>() { "" };
-            var view = new SubmissionView(RenderLine, document);
+            var view = new SubmissionView(RenderLine!, document);
             
             while (!_done)
             {
@@ -261,6 +261,7 @@ namespace Vivian
 
             InsertLine(document, view);
         }
+
         private void HandleEscape(ObservableCollection<string> document, SubmissionView view)
         {
             document.Clear();
@@ -426,7 +427,7 @@ namespace Vivian
             _submissionHistory.Clear();
         }
 
-        protected virtual object RenderLine(IReadOnlyList<string> lines, int lineIndex, object state)
+        protected virtual object? RenderLine(IReadOnlyList<string> lines, int lineIndex, object state)
         {
             Console.Write(lines[lineIndex]);
             return state;
@@ -434,7 +435,6 @@ namespace Vivian
         
         private void EvaluateMetaCommand(string input)
         {
-            // Parse arguments
             var args = new List<string>();
             var inQuotes = false;
             var position = 1;
@@ -529,6 +529,7 @@ namespace Vivian
                 Name = name;
                 Description = description;
             }
+            
             public string Name { get; }
             public string Description { get; set; }
         }

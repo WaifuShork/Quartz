@@ -256,7 +256,8 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.WhitespaceTrivia: 
                 case SyntaxKind.SingleLineCommentTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
-                case SyntaxKind.BadTokenTrivia:
+                case SyntaxKind.SkippedTextTrivia:
+                case SyntaxKind.LineBreakTrivia:
                     return true;
                 default:
                     return false;

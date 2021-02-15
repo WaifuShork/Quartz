@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 
 using Vivian.CodeAnalysis;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
-using Vivian.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Authoring;
 using Vivian.IO;
 
 namespace Vivian
@@ -26,74 +25,56 @@ namespace Vivian
         {
             LoadSubmissions();
         }
-
-        private sealed class RenderState
-        {
-            public RenderState(SourceText text, ImmutableArray<SyntaxToken> tokens)
-            {
-                Text = text;
-                Tokens = tokens;
-            }
-            
-            public SourceText Text { get; }
-            public ImmutableArray<SyntaxToken> Tokens { get; }
-        }
         
-        protected override object RenderLine(IReadOnlyList<string> lines, int lineIndex, object state)
+        protected override object? RenderLine(IReadOnlyList<string> lines, int lineIndex, object state)
         {
-            RenderState renderState;
+            SyntaxTree syntaxTree;
+            
             if (state == null)
             {
                 var text = string.Join(Environment.NewLine, lines);
-                var sourceText = SourceText.From(text);
-                var tokens = SyntaxTree.ParseTokens(sourceText);
-                renderState = new RenderState(sourceText, tokens);
+                syntaxTree = SyntaxTree.Parse(text);
             }
             else
             {
-                renderState = (RenderState) state;
+                syntaxTree = (SyntaxTree) state;
             }
 
-            var lineSpan = renderState.Text.Lines[lineIndex].Span;
-
-            foreach (var token in renderState.Tokens)
+            var lineSpan = syntaxTree.Text.Lines[lineIndex].Span;
+            var classifiedSpans = Classifier.Classify(syntaxTree, lineSpan);
+            
+            foreach (var classifiedSpan in classifiedSpans)
             {
-                if (!lineSpan.OverlapsWith(token.Span))
+                var classifiedText = syntaxTree.Text.ToString(classifiedSpan.Span);
+
+                switch (classifiedSpan.Classification)
                 {
-                    continue;
+                    case Classification.Keyword:
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        break;
+                    case Classification.Identifier:
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        break;
+                    case Classification.Number:
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        break;
+                    case Classification.Comment:
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        break;
+                    case Classification.String:
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        break;
+                    case Classification.Text:
+                    default:
+                        Console.ForegroundColor = ConsoleColor.White;
+                        break;
                 }
-
-                var tokenStart = Math.Max(token.Span.Start, lineSpan.Start);
-                var tokenEnd = Math.Min(token.Span.End, lineSpan.End);
-                var tokenSpan = TextSpan.FromBounds(tokenStart, tokenEnd);
-                var tokenText = renderState.Text.ToString(tokenSpan);
-
-                var isComment = token.Kind.IsComment();
-                var isKeyword = token.Kind.IsKeyword();
-                var isIdentifier = token.Kind == SyntaxKind.IdentifierToken;
-                var isString = token.Kind == SyntaxKind.StringToken;
-                var isNumber = token.Kind == SyntaxKind.NumberToken;
-
-                if (isKeyword)
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                else if (isString)
-                    Console.ForegroundColor = ConsoleColor.Green;
-                else if (isIdentifier)
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                else if (isNumber)
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                else if (isComment)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                }
-                else
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
                 
-                Console.Write(tokenText);
+                Console.Write(classifiedText);
                 Console.ResetColor();
             }
 
-            return state;
+            return syntaxTree;
         }
 
         [MetaCommand("showTree", "Shows the parse tree")]

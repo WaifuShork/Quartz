@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class ReturnStatementSyntax : StatementSyntax
     {
@@ -14,5 +16,12 @@
         public SyntaxToken ReturnKeyword { get; }
         public ExpressionSyntax Expression { get; }
         public SyntaxToken SemicolonToken { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return ReturnKeyword;
+            yield return Expression;
+            yield return SemicolonToken;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
@@ -114,9 +114,8 @@ namespace Vivian.Generators
             }
 
             using (var writer = new StreamWriter(filePath))
-            {
                 sourceText.Write(writer);
-            }
+            
             
             //var syntaxNodeFileName = syntaxNodeType.DeclaringSyntaxReferences.First().SyntaxTree.FilePath;
             //var syntaxDirectory = Path.GetDirectoryName(syntaxNodeFileName);
@@ -189,6 +188,5 @@ namespace Vivian.Generators
 
             return false;
         }
-        
     }
-}
+}*/

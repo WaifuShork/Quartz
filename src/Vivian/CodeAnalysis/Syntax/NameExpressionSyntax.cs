@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class NameExpressionSyntax : ExpressionSyntax
     {
@@ -9,5 +11,10 @@
         
         public override SyntaxKind Kind => SyntaxKind.NameExpression;
         public SyntaxToken IdentifierToken { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return IdentifierToken;
+        }
     }
 }

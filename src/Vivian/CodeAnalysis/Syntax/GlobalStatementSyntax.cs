@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class GlobalStatementSyntax : MemberSyntax
     {
@@ -10,5 +12,10 @@
 
         public override SyntaxKind Kind => SyntaxKind.GlobalStatement;
         public StatementSyntax Statement { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return Statement;
+        }
     }
 }

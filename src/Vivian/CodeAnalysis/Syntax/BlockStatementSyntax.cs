@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
@@ -16,5 +17,11 @@ namespace Vivian.CodeAnalysis.Syntax
         public SyntaxToken OpenBraceToken { get; }
         public ImmutableArray<StatementSyntax> Statements { get; }
         public SyntaxToken CloseBraceToken { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return OpenBraceToken;
+            yield return CloseBraceToken;
+        }
     }
 }

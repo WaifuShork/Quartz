@@ -20,11 +20,16 @@ namespace Vivian.CodeAnalysis.Syntax
         
         public override SyntaxKind Kind => SyntaxKind.CallExpression;
         
-
-
         public SyntaxToken Identifier { get; }
         public SyntaxToken OpenParenthesisToken { get; }
         public SeparatedSyntaxList<ExpressionSyntax> Arguments { get; }
         public SyntaxToken CloseParenthesisToken { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return Identifier;
+            yield return OpenParenthesisToken;
+            yield return CloseParenthesisToken;
+        }
     }
 }

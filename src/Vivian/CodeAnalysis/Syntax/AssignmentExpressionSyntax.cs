@@ -1,4 +1,6 @@
-﻿namespace Vivian.CodeAnalysis.Syntax
+﻿using System.Collections.Generic;
+
+namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed partial class AssignmentExpressionSyntax : ExpressionSyntax
     {
@@ -14,5 +16,12 @@
         public SyntaxToken IdentifierToken { get; }
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Expression { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return IdentifierToken;
+            yield return EqualsToken;
+            yield return Expression;
+        }
     }
 }

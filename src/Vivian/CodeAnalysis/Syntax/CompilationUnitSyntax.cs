@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
@@ -13,5 +14,10 @@ namespace Vivian.CodeAnalysis.Syntax
         public override SyntaxKind Kind => SyntaxKind.CompilationUnit;
         public ImmutableArray<MemberSyntax> Members { get; }
         public SyntaxToken EndOfFileToken { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return EndOfFileToken;
+        }
     }
 }

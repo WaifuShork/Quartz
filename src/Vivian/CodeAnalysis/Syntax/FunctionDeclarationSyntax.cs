@@ -1,4 +1,5 @@
-﻿using Vivian.CodeAnalysis.Binding;
+﻿using System.Collections.Generic;
+using Vivian.CodeAnalysis.Binding;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
@@ -32,5 +33,15 @@ namespace Vivian.CodeAnalysis.Syntax
         public SyntaxToken CloseParenthesisToken { get; }
         public TypeClauseSyntax Type { get; }
         public BlockStatementSyntax Body { get; }
+        
+        public override IEnumerable<SyntaxNode> GetChildren()
+        {
+            yield return FunctionKeyword;
+            yield return Identifier;
+            yield return OpenParenthesisToken;
+            yield return CloseParenthesisToken;
+            yield return Type;
+            yield return Body;
+        }
     }
 }
