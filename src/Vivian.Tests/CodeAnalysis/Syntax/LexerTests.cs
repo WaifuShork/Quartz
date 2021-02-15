@@ -70,6 +70,18 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
         }
         
         [Theory]
+        [MemberData(nameof(GetSeparatorData))]
+        public void Lexer_Lexes_Separator(SyntaxKind kind, string text)
+        {
+            var tokens = SyntaxTree.ParseTokens(text, includeEndOfFile: true);
+            
+            var token = Assert.Single(tokens);
+            var trivia = Assert.Single(token.LeadingTrivia);
+            Assert.Equal(kind, trivia.Kind);
+            Assert.Equal(text, trivia.Text);
+        }
+        
+        [Theory]
         [MemberData(nameof(GetTokenPairsData))]
         public void Lexer_Lexes_TokenPairs(SyntaxKind t1Kind, string t1Text,  SyntaxKind t2Kind, string t2Text)
         {
@@ -92,21 +104,28 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
             var text = t1Text + separatorText + t2Text;
             var tokens = SyntaxTree.ParseTokens(text).ToArray();
 
-            Assert.Equal(3, tokens.Length);
+            Assert.Equal(2, tokens.Length);
             
             Assert.Equal(tokens[0].Kind, t1Kind);
             Assert.Equal(tokens[0].Text, t1Text);
-            
-            Assert.Equal(tokens[1].Kind, separatorKind);
-            Assert.Equal(tokens[1].Text, separatorText);
-            
-            Assert.Equal(tokens[2].Kind, t2Kind);
-            Assert.Equal(tokens[2].Text, t2Text);
+
+            var separator = Assert.Single(tokens[0].TrailingTrivia);
+            Assert.Equal(separatorKind, separator.Kind);
+            Assert.Equal(separatorText, separator.Text);
+
+            Assert.Equal(tokens[1].Kind, t2Kind);
+            Assert.Equal(tokens[1].Text, t2Text);
         }
 
         public static IEnumerable<object[]> GetTokensData()
         {
-            foreach (var t in GetTokens().Concat(GetSeparators()))
+            foreach (var t in GetTokens())
+                yield return new object[] { t.kind, t.text };
+        }
+        
+        public static IEnumerable<object[]> GetSeparatorData()
+        {
+            foreach (var t in GetSeparators())
                 yield return new object[] { t.kind, t.text };
         }
         
@@ -147,9 +166,9 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
             {
                 (SyntaxKind.WhitespaceTrivia, " "),
                 (SyntaxKind.WhitespaceTrivia, "  "),
-                (SyntaxKind.WhitespaceTrivia, "\r"),
-                (SyntaxKind.WhitespaceTrivia, "\n"),
-                (SyntaxKind.WhitespaceTrivia, "\r\n"),
+                (SyntaxKind.LineBreakTrivia, "\r"),
+                (SyntaxKind.LineBreakTrivia, "\n"),
+                (SyntaxKind.LineBreakTrivia, "\r\n"),
                 (SyntaxKind.MultiLineCommentTrivia, "/**/"),
             };
         }
