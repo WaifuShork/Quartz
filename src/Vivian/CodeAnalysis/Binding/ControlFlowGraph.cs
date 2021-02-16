@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Vivian.CodeAnalysis.Symbols;
@@ -51,19 +52,17 @@ namespace Vivian.CodeAnalysis.Binding
                     return "<End>";
 
                 using var writer = new StringWriter();
-                using (var indentedWriter = new IndentedTextWriter(writer))
-                {
-                    foreach (var statement in Statements)
-                        statement.WriteTo(indentedWriter);
+                using var indentedWriter = new IndentedTextWriter(writer);
+                foreach (var statement in Statements)
+                    statement.WriteTo(indentedWriter);
 
-                    return writer.ToString();
-                }
+                return writer.ToString();
             }
         }
 
         public sealed class BasicBlockBranch
         {
-            public BasicBlockBranch(BasicBlock from, BasicBlock to, BoundExpression condition)
+            public BasicBlockBranch(BasicBlock from, BasicBlock to, BoundExpression? condition)
             {
                 From = from;
                 To = to;
@@ -72,7 +71,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             public BasicBlock From { get; }
             public BasicBlock To { get; }
-            public BoundExpression Condition { get; }
+            public BoundExpression? Condition { get; }
 
             public override string ToString()
             {
@@ -84,8 +83,8 @@ namespace Vivian.CodeAnalysis.Binding
 
         public sealed class BasicBlockBuilder
         {
-            private List<BoundStatement> _statements = new List<BoundStatement>();
-            private List<BasicBlock> _blocks = new List<BasicBlock>();
+            private readonly List<BoundStatement> _statements = new();
+            private readonly List<BasicBlock> _blocks = new();
 
             public List<BasicBlock> Build(BoundBlockStatement block)
             {
@@ -137,12 +136,12 @@ namespace Vivian.CodeAnalysis.Binding
 
         public sealed class GraphBuilder
         {
-            private Dictionary<BoundStatement, BasicBlock> _blockFromStatement = new Dictionary<BoundStatement, BasicBlock>();
-            private Dictionary<BoundLabel, BasicBlock> _blockFromLabel = new Dictionary<BoundLabel, BasicBlock>();
-            private List<BasicBlockBranch> _branches = new List<BasicBlockBranch>();
+            private Dictionary<BoundStatement, BasicBlock> _blockFromStatement = new();
+            private readonly Dictionary<BoundLabel, BasicBlock> _blockFromLabel = new();
+            private readonly List<BasicBlockBranch> _branches = new();
                 
-            private BasicBlock _start = new BasicBlock(isStart: true);
-            private BasicBlock _end = new BasicBlock(isStart: false);
+            private readonly BasicBlock _start = new(isStart: true);
+            private readonly BasicBlock _end = new(isStart: false);
             
             public ControlFlowGraph Build(List<BasicBlock> blocks)
             {
@@ -244,11 +243,12 @@ namespace Vivian.CodeAnalysis.Binding
                     return new BoundLiteralExpression(!value);
                 }
 
-                var unaryOperator = BoundUnaryOperator.Bind(SyntaxKind.BangToken, TypeSymbol.Bool);
-                return new BoundUnaryExpression(unaryOperator, condition);
+                var op = BoundUnaryOperator.Bind(SyntaxKind.BangToken, TypeSymbol.Bool);
+                Debug.Assert(op != null);
+                return new BoundUnaryExpression(op, condition);
             }
           
-            private void Connect(BasicBlock from, BasicBlock to, BoundExpression condition = null)
+            private void Connect(BasicBlock from, BasicBlock to, BoundExpression? condition = null)
             {
                 if (condition is BoundLiteralExpression l)
                 {

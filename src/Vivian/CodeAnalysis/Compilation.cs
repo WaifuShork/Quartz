@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using ReflectionBindingFlags = System.Reflection.BindingFlags;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading;
+
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Emit;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
-using ReflectionBindingFlags = System.Reflection.BindingFlags;
 
 namespace Vivian.CodeAnalysis
 {
     public sealed class Compilation
     {
-        private BoundGlobalScope _globalScope;
+        private BoundGlobalScope? _globalScope;
 
-        private Compilation(bool isScript, Compilation previous, params SyntaxTree[] syntaxTrees)
+        private Compilation(bool isScript, Compilation? previous, params SyntaxTree[] syntaxTrees)
         {
             IsScript = isScript;
             Previous = previous;
@@ -24,19 +25,19 @@ namespace Vivian.CodeAnalysis
 
         public static Compilation Create(params SyntaxTree[] syntaxTrees)
         {
-            return new Compilation(isScript: false, previous: null, syntaxTrees);
+            return new(isScript: false, previous: null, syntaxTrees);
         }
         
         public static Compilation CreateScript(Compilation previous, params SyntaxTree[] syntaxTrees)
         {
-            return new Compilation(isScript: true, previous, syntaxTrees);
+            return new(isScript: true, previous, syntaxTrees);
         }
 
         public bool IsScript { get; }
-        public Compilation Previous { get; }
+        public Compilation? Previous { get; }
         public ImmutableArray<SyntaxTree> SyntaxTrees { get; }
 
-        public FunctionSymbol MainFunction => GlobalScope.MainFunction;
+        public FunctionSymbol? MainFunction => GlobalScope.MainFunction;
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
 
@@ -114,7 +115,7 @@ namespace Vivian.CodeAnalysis
             //     cfg.WriteTo(streamWriter);
             
             if (program.Diagnostics.Any())
-                return new EvaluationResult(program.Diagnostics.ToImmutableArray(), null);
+                return new EvaluationResult(program.Diagnostics, null);
 
             //var statement = GetStatement();
             //var evaluator = new Evaluator(program.FunctionBodies, variables);

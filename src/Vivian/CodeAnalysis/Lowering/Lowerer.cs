@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Syntax;
 using Vivian.CodeAnalysis.Symbols;
@@ -224,7 +225,7 @@ namespace Vivian.CodeAnalysis.Lowering
             
             var condition = new BoundBinaryExpression(
                 variableExpression, 
-                BoundBinaryOperator.Bind(SyntaxKind.LessOrEqualsToken, TypeSymbol.Int, TypeSymbol.Int), 
+                BoundBinaryOperator.Bind(SyntaxKind.LessOrEqualsToken, TypeSymbol.Int, TypeSymbol.Int)!, 
                 new BoundVariableExpression(upperBoundSymbol)
             );
 
@@ -234,7 +235,7 @@ namespace Vivian.CodeAnalysis.Lowering
                     node.Variable, 
                     new BoundBinaryExpression(
                         variableExpression, 
-                        BoundBinaryOperator.Bind(SyntaxKind.PlusToken, TypeSymbol.Int, TypeSymbol.Int), 
+                        BoundBinaryOperator.Bind(SyntaxKind.PlusToken, TypeSymbol.Int, TypeSymbol.Int)!, 
                         new BoundLiteralExpression(1)
                     )
                 )

@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class BlockStatementSyntax : StatementSyntax
+    public sealed class BlockStatementSyntax : StatementSyntax
     {
         public BlockStatementSyntax(SyntaxTree syntaxTree, SyntaxToken openBraceToken, ImmutableArray<StatementSyntax> statements, SyntaxToken closeBraceToken) : base(syntaxTree)
         {

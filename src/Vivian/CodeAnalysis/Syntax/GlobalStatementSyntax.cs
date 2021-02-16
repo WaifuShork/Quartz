@@ -2,9 +2,8 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class GlobalStatementSyntax : MemberSyntax
+    public sealed class GlobalStatementSyntax : MemberSyntax
     {
-
         public GlobalStatementSyntax(SyntaxTree syntaxTree, StatementSyntax statement) : base(syntaxTree)
         {
             Statement = statement;

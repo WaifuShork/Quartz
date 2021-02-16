@@ -93,14 +93,14 @@ namespace Vivian.IO
 
         public static void WriteDiagnostics(this TextWriter writer, IEnumerable<Diagnostic> diagnostics)
         {
-            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text == null))
+            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text == null!))
             {
                 writer.SetForeground(ConsoleColor.DarkRed);
                 writer.WriteLine(diagnostic.Message);
                 writer.ResetColor();
             }
 
-            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text != null)
+            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text != null!)
                                                   .OrderBy(d => d.Location.Text.FileName)
                                                   .ThenBy(d => d.Location.Span.Start)
                                                   .ThenBy(d => d.Location.Span.Length))

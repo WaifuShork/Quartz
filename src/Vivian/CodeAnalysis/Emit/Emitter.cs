@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
@@ -17,13 +18,13 @@ namespace Vivian.CodeAnalysis.Emit
     internal sealed class Emitter
     {
         private readonly AssemblyDefinition _assemblyDefinition;
-        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
-        private readonly Dictionary<VariableSymbol, VariableDefinition> _locals = new Dictionary<VariableSymbol, VariableDefinition>();
-        private readonly Dictionary<FunctionSymbol, MethodDefinition> _methods = new Dictionary<FunctionSymbol, MethodDefinition>();
-        private readonly Dictionary<BoundLabel, int> _labels = new Dictionary<BoundLabel, int>();
+        private readonly DiagnosticBag _diagnostics = new();
+        private readonly Dictionary<VariableSymbol, VariableDefinition> _locals = new();
+        private readonly Dictionary<FunctionSymbol, MethodDefinition> _methods = new();
+        private readonly Dictionary<BoundLabel, int> _labels = new();
         private readonly Dictionary<TypeSymbol, TypeReference> _knownTypes;
         
-        private readonly List<(int InstructionIndex, BoundLabel Target)> _fixups = new List<(int InstructionIndex, BoundLabel Target)>();
+        private readonly List<(int InstructionIndex, BoundLabel Target)> _fixups = new();
 
         private readonly MethodReference _consoleWriteLineReference;
         private readonly MethodReference _consoleReadLineReference;
@@ -40,12 +41,10 @@ namespace Vivian.CodeAnalysis.Emit
         private readonly MethodReference _stringConcat4Reference;
         private readonly MethodReference _stringConcatArrayReference;
         
-        
         private readonly TypeReference _randomReference;
 
-        private TypeDefinition _typeDefinition;
-        private FieldDefinition _randomFieldDefinition;
-        
+        private readonly TypeDefinition _typeDefinition;
+        private FieldDefinition? _randomFieldDefinition;
 
         private Emitter(string moduleName, string[] references)
         {
@@ -90,7 +89,7 @@ namespace Vivian.CodeAnalysis.Emit
                 _knownTypes.Add(typeSymbol, typeReference);
             }
 
-            TypeReference ResolveType(string vivianName, string metadataName)
+            TypeReference ResolveType(string? vivianName, string metadataName)
             {
                 var foundTypes = assemblies.SelectMany(a => a.Modules)
                     .SelectMany(m => m.Types)
@@ -113,7 +112,7 @@ namespace Vivian.CodeAnalysis.Emit
                     _diagnostics.ReportRequiredTypeAmbiguous(vivianName, metadataName, foundTypes);
                 }
 
-                return null;
+                return null!;
             }
 
             MethodReference ResolveMethod(string typeName, string methodName, string[] parameterTypeNames)
@@ -155,7 +154,7 @@ namespace Vivian.CodeAnalysis.Emit
                     }
 
                     _diagnostics.ReportRequiredMethodNotFound(typeName, methodName, parameterTypeNames);
-                    return null;
+                    return null!;
                 }
                 
                 else if (foundTypes.Length == 0)
@@ -168,28 +167,42 @@ namespace Vivian.CodeAnalysis.Emit
                     _diagnostics.ReportRequiredTypeAmbiguous(null, typeName, foundTypes);
                 }
 
-                return null;
+                return null!;
             }
-            
+
             _objectEqualsReference = ResolveMethod("System.Object", "Equals", new[] {"System.Object", "System.Object"});
-            
-            _consoleWriteLineReference = ResolveMethod("System.Console", "WriteLine", new [] { "System.Object"});
+
+            _consoleWriteLineReference = ResolveMethod("System.Console", "WriteLine", new[] {"System.Object"});
             _consoleReadLineReference = ResolveMethod("System.Console", "ReadLine", Array.Empty<string>());
-            
-            
-            _convertToBooleanReference = ResolveMethod("System.Convert", "ToBoolean", new [] { "System.Object" });
-            _convertToInt32Reference = ResolveMethod("System.Convert", "ToInt32", new [] { "System.Object" });
-            _convertToStringReference = ResolveMethod("System.Convert", "ToString", new [] { "System.Object" });
+
+            _convertToBooleanReference = ResolveMethod("System.Convert", "ToBoolean", new[] {"System.Object"});
+            _convertToInt32Reference = ResolveMethod("System.Convert", "ToInt32", new[] {"System.Object"});
+            _convertToStringReference = ResolveMethod("System.Convert", "ToString", new[] {"System.Object"});
 
             _randomReference = ResolveType(null, "System.Random");
             _randomCtoReference = ResolveMethod("System.Random", ".ctor", Array.Empty<string>());
-            _randomNextReference = ResolveMethod("System.Random", "Next", new [] { "System.Int32" });
+            _randomNextReference = ResolveMethod("System.Random", "Next", new[] {"System.Int32"});
+
+            _stringConcatReference =
+                ResolveMethod("System.String", "Concat", new[] {"System.String", "System.String"});
+            _stringConcat2Reference =
+                ResolveMethod("System.String", "Concat", new[] {"System.String", "System.String"});
+            _stringConcat3Reference = ResolveMethod("System.String", "Concat",
+                new[] {"System.String", "System.String", "System.String"});
+            _stringConcat4Reference = ResolveMethod("System.String", "Concat",
+                new[] {"System.String", "System.String", "System.String", "System.String"});
+            _stringConcatArrayReference = ResolveMethod("System.String", "Concat", new[] {"System.String[]"});
             
-            _stringConcatReference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String" });
-            _stringConcat2Reference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String" });
-            _stringConcat3Reference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String", "System.String" });
-            _stringConcat4Reference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String", "System.String", "System.String" });
-            _stringConcatArrayReference = ResolveMethod("System.String", "Concat", new [] { "System.String[]" });
+            var objectType = _knownTypes[TypeSymbol.Object];
+            if (objectType != null!)
+            {
+                _typeDefinition = new TypeDefinition("", "Program", TypeAttributes.Abstract | TypeAttributes.Sealed, objectType); 
+                _assemblyDefinition.MainModule.Types.Add(_typeDefinition); 
+            }
+            else
+            {
+                _typeDefinition = null!;
+            }
         }
 
         public static ImmutableArray<Diagnostic> Emit(BoundProgram program, string moduleName, string[] references, string outputPath)
@@ -209,10 +222,7 @@ namespace Vivian.CodeAnalysis.Emit
             {
                 return _diagnostics.ToImmutableArray();
             }
-
-            var objectType = _knownTypes[TypeSymbol.Object];
-            _typeDefinition = new TypeDefinition("", "Program", TypeAttributes.Abstract | TypeAttributes.Sealed, objectType); 
-            _assemblyDefinition.MainModule.Types.Add(_typeDefinition);
+            
 
             foreach (var functionWithBody in program.Functions)
             {
@@ -400,6 +410,8 @@ namespace Vivian.CodeAnalysis.Emit
 
         private void EmitConstantExpression(ILProcessor ilProcessor, BoundExpression node)
         {
+            Debug.Assert(node.ConstantValue != null);
+            
             if (node.Type == TypeSymbol.Bool)
             {
                 var value = (bool) node.ConstantValue.Value;
@@ -475,8 +487,6 @@ namespace Vivian.CodeAnalysis.Emit
 
         private void EmitBinaryExpression(ILProcessor ilProcessor, BoundBinaryExpression node)
         {
-            
-
             // +(string, string)
             if (node.Op.Kind == BoundBinaryOperatorKind.Addition)
             {
@@ -635,7 +645,7 @@ namespace Vivian.CodeAnalysis.Emit
 
         private static IEnumerable<BoundExpression> FoldConstants(IEnumerable<BoundExpression> nodes)
         {
-            StringBuilder sb = null;
+            StringBuilder? sb = null;
 
             foreach (var node in nodes)
             {

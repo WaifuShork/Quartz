@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+
 using Vivian.CodeAnalysis.Text;
 
 namespace Vivian.CodeAnalysis.Syntax
@@ -43,7 +44,7 @@ namespace Vivian.CodeAnalysis.Syntax
         
         public static SyntaxTree Parse(SourceText text)
         {
-            return new SyntaxTree(text, Parse);
+            return new(text, Parse);
         }
         
         public static ImmutableArray<SyntaxToken> ParseTokens(string text, bool includeEndOfFile = false)
@@ -67,17 +68,17 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             var tokens = new List<SyntaxToken>();
             
-            void ParseTokens(SyntaxTree syntaxTree, out CompilationUnitSyntax root, out ImmutableArray<Diagnostic> d)
+            void InternalParseTokens(SyntaxTree st, out CompilationUnitSyntax root, out ImmutableArray<Diagnostic> d)
             {
-                root = null;
+                root = null!;
+                var l = new Lexer(st);
                 
-                var l = new Lexer(syntaxTree);
                 while (true)
                 {
                     var token = l.Lex();
                     if (token.Kind == SyntaxKind.EndOfFileToken)
                     {
-                        root = new CompilationUnitSyntax(syntaxTree, ImmutableArray<MemberSyntax>.Empty, token);
+                        root = new CompilationUnitSyntax(st, ImmutableArray<MemberSyntax>.Empty, token);
                     }
 
                     if (token.Kind != SyntaxKind.EndOfFileToken || includeEndOfFile)
@@ -94,8 +95,8 @@ namespace Vivian.CodeAnalysis.Syntax
                 d = l.Diagnostics.ToImmutableArray();
             }
 
-            var syntaxTree = new SyntaxTree(text, ParseTokens);
-            diagnostics = syntaxTree.Diagnostics.ToImmutableArray();
+            var syntaxTree = new SyntaxTree(text, InternalParseTokens);
+            diagnostics = syntaxTree.Diagnostics;
             return tokens.ToImmutableArray();
         }
     }

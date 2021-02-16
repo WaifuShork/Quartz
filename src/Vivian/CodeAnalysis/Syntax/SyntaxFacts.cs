@@ -95,9 +95,6 @@ namespace Vivian.CodeAnalysis.Syntax
                 case "return":
                     return SyntaxKind.ReturnKeyword;
                 
-                case "array":
-                    return SyntaxKind.ArrayKeyword;
-                
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -123,7 +120,7 @@ namespace Vivian.CodeAnalysis.Syntax
             }
         }
         
-        public static string GetText(SyntaxKind kind)
+        public static string? GetText(SyntaxKind kind)
         {
             switch (kind)
             {
@@ -229,10 +226,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.ReturnKeyword:
                     return "return";
-                
-                case SyntaxKind.ArrayKeyword:
-                    return "array";
-                
+
                 default:
                     return null;
             }

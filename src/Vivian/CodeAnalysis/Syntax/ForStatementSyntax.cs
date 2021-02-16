@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class ForStatementSyntax : StatementSyntax
+    public sealed class ForStatementSyntax : StatementSyntax
     {
         public ForStatementSyntax(SyntaxTree syntaxTree,
                                   SyntaxToken keyword, 

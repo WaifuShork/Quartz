@@ -6,6 +6,6 @@ namespace Vivian.CodeAnalysis.Binding
     {
         public abstract TypeSymbol Type { get; }
 
-        public virtual BoundConstant ConstantValue => null;
+        public virtual BoundConstant? ConstantValue => null;
     }
 }

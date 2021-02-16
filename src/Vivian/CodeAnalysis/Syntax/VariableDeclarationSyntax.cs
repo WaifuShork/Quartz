@@ -2,14 +2,12 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class VariableDeclarationSyntax : StatementSyntax
+    public sealed class VariableDeclarationSyntax : StatementSyntax
     {
-        
-
         public VariableDeclarationSyntax(SyntaxTree syntaxTree, 
                                          SyntaxToken keyword, 
                                          SyntaxToken identifier, 
-                                         TypeClauseSyntax typeClause,
+                                         TypeClauseSyntax? typeClause,
                                          SyntaxToken equalsToken, 
                                          ExpressionSyntax initializer) 
                                          : base(syntaxTree)
@@ -25,7 +23,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         public SyntaxToken Keyword { get; }
         public SyntaxToken Identifier { get; }
-        public TypeClauseSyntax TypeClause { get; }
+        public TypeClauseSyntax? TypeClause { get; }
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Initializer { get; }
         
@@ -33,7 +31,7 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             yield return Keyword;
             yield return Identifier;
-            yield return TypeClause;
+            yield return TypeClause!;
             yield return EqualsToken;
             yield return Initializer;
         }

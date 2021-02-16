@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Vivian.CodeAnalysis.Lowering;
 using Vivian.CodeAnalysis.Symbols;
@@ -12,14 +13,14 @@ namespace Vivian.CodeAnalysis.Binding
     internal sealed class Binder
     {
         private readonly DiagnosticBag _diagnostics = new();
-        private readonly FunctionSymbol _function;
+        private readonly FunctionSymbol? _function;
         private readonly bool _isScript;
+        private readonly Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)> _loopStack = new();
         
-        private Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)> _loopStack = new Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)>();
         private int _labelCounter;
         private BoundScope _scope;
 
-        private Binder(bool isScript, BoundScope parent, FunctionSymbol function)
+        private Binder(bool isScript, BoundScope? parent, FunctionSymbol? function)
         {
             _scope = new BoundScope(parent);
             _isScript = isScript;
@@ -32,7 +33,9 @@ namespace Vivian.CodeAnalysis.Binding
             }
         }
 
-        public static BoundGlobalScope BindGlobalScope(bool isScript, BoundGlobalScope previous, ImmutableArray<SyntaxTree> syntaxTrees)
+        public DiagnosticBag Diagnostics => _diagnostics;
+
+        public static BoundGlobalScope BindGlobalScope(bool isScript, BoundGlobalScope? previous, ImmutableArray<SyntaxTree> syntaxTrees)
         {
             var parentScope = CreateParentScopes(previous);
             var binder = new Binder(isScript, parentScope, function: null);
@@ -71,13 +74,13 @@ namespace Vivian.CodeAnalysis.Binding
             if (firstGlobalStatementPerSyntaxTree.Length > 1)
             {                
                 foreach (var globalStatement in firstGlobalStatementPerSyntaxTree)
-                    binder.Diagnostics.ReportOnlyOneFileCanHaveGlobalStatements(globalStatement.Location);
+                    binder.Diagnostics.ReportOnlyOneFileCanHaveGlobalStatements(globalStatement!.Location);
             }
 
             var functions = binder._scope.GetDeclaredFunctions();
             
-            FunctionSymbol mainFunction;
-            FunctionSymbol scriptFunction;
+            FunctionSymbol? mainFunction;
+            FunctionSymbol? scriptFunction;
 
             if (isScript)
             {
@@ -99,17 +102,17 @@ namespace Vivian.CodeAnalysis.Binding
                 if (mainFunction != null)
                 {
                     if (mainFunction.Type != TypeSymbol.Void || mainFunction.Parameters.Any())
-                        binder.Diagnostics.ReportMainMustHaveCorrectSignature(mainFunction.Declaration.Identifier.Location);
+                        binder.Diagnostics.ReportMainMustHaveCorrectSignature(mainFunction.Declaration!.Identifier.Location);
                 }
             
                 if (globalStatements.Any())
                 {
                     if (mainFunction != null)
                     {
-                        binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(mainFunction.Declaration.Identifier.Location);
+                        binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(mainFunction.Declaration!.Identifier.Location);
 
                         foreach (var globalStatement in firstGlobalStatementPerSyntaxTree)
-                            binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(globalStatement.Location);
+                            binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(globalStatement!.Location);
                     }
                     else
                     {
@@ -127,7 +130,7 @@ namespace Vivian.CodeAnalysis.Binding
             return new BoundGlobalScope(previous, diagnostics.ToImmutableArray(), mainFunction, scriptFunction, functions, variables, statements.ToImmutable());
         }
 
-        public static BoundProgram BindProgram(bool isScript, BoundProgram previous, BoundGlobalScope globalScope)
+        public static BoundProgram BindProgram(bool isScript, BoundProgram? previous, BoundGlobalScope globalScope)
         {
             var parentScope = CreateParentScopes(globalScope);
 
@@ -145,7 +148,7 @@ namespace Vivian.CodeAnalysis.Binding
             foreach (var function in globalScope.Functions)
             {
                 var binder = new Binder(isScript, parentScope, function);
-                var body = binder.BindStatement(function.Declaration.Body);
+                var body = binder.BindStatement(function.Declaration!.Body);
                 var loweredBody = Lowerer.Lower(function, body);
 
                 if (function.Type != TypeSymbol.Void && !ControlFlowGraph.AllPathsReturn(loweredBody)) 
@@ -205,13 +208,13 @@ namespace Vivian.CodeAnalysis.Binding
             var type = BindTypeClause(syntax.Type) ?? TypeSymbol.Void;
 
             var function = new FunctionSymbol(syntax.Identifier.Text, parameters.ToImmutable(), type, syntax);
-            if (function.Declaration.Identifier.Text != null && !_scope.TryDeclareFunction(function))
+            if (syntax.Identifier.Text != null! && !_scope.TryDeclareFunction(function))
             {
                 _diagnostics.ReportSymbolAlreadyDeclared(syntax.Identifier.Location, function.Name);
             }
         }
 
-        private static BoundScope CreateParentScopes(BoundGlobalScope previous)
+        private static BoundScope CreateParentScopes(BoundGlobalScope? previous)
         {
             var stack = new Stack<BoundGlobalScope>();
             while (previous != null)
@@ -248,9 +251,6 @@ namespace Vivian.CodeAnalysis.Binding
 
             return result;
         }
-
-        public DiagnosticBag Diagnostics => _diagnostics;
-
         
         private BoundStatement BindGlobalStatement(StatementSyntax syntax)
         {
@@ -328,7 +328,7 @@ namespace Vivian.CodeAnalysis.Binding
                 else if (expression != null)
                 {
                     // Main does not support return values
-                    _diagnostics.ReportInvalidReturnWithValueInGlobalStatements(syntax.Expression.Location);
+                    _diagnostics.ReportInvalidReturnWithValueInGlobalStatements(syntax.Expression!.Location);
                 }
             }
             else
@@ -336,7 +336,7 @@ namespace Vivian.CodeAnalysis.Binding
                 if (_function.Type == TypeSymbol.Void)
                 {
                     if (expression != null)
-                        _diagnostics.ReportInvalidReturnExpression(syntax.Expression.Location, _function.Name);
+                        _diagnostics.ReportInvalidReturnExpression(syntax.Expression!.Location, _function.Name);
                 }
                 else
                 {
@@ -344,7 +344,7 @@ namespace Vivian.CodeAnalysis.Binding
                         _diagnostics.ReportMissingReturnExpression(syntax.ReturnKeyword.Location, _function.Type);
 
                     else
-                        expression = BindConversion(syntax.Expression.Location, expression, _function.Type);
+                        expression = BindConversion(syntax.Expression!.Location, expression, _function.Type);
                 }
             }
 
@@ -393,7 +393,7 @@ namespace Vivian.CodeAnalysis.Binding
                 statements.Add(statement);
             }
 
-            _scope = _scope.Parent;
+            _scope = _scope.Parent!;
 
             return new BoundBlockStatement(statements.ToImmutable());
         }
@@ -409,18 +409,19 @@ namespace Vivian.CodeAnalysis.Binding
             return new BoundVariableDeclaration(variable, convertedInitializer);
         }
 
-        private TypeSymbol BindTypeClause(TypeClauseSyntax syntax)
+        [return: NotNullIfNotNull("syntax")] 
+        private TypeSymbol? BindTypeClause(TypeClauseSyntax? syntax)
         {
             if (syntax == null)
                 return null;
 
             var type = LookupType(syntax.Identifier.Text);
 
-            if (type == null)
+            if (type == null!)
             {
                 _diagnostics.ReportUndefinedType(syntax.Identifier.Location, syntax.Identifier.Text);
             }
-            return type;
+            return type!;
         }
 
         private BoundStatement BindIfStatement(IfStatementSyntax syntax)
@@ -467,7 +468,7 @@ namespace Vivian.CodeAnalysis.Binding
             var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly: false, TypeSymbol.Int);
             var body = BindLoopBody(syntax.Body, out var breakLabel, out var continueLabel);
             
-            _scope = _scope.Parent;
+            _scope = _scope.Parent!;
             return new BoundForStatement(variable, lowerBound, upperBound, body, breakLabel, continueLabel);
         }
 
@@ -523,12 +524,12 @@ namespace Vivian.CodeAnalysis.Binding
         }
         private BoundExpression BindLiteralExpression(LiteralExpressionSyntax syntax)
         {
-            var value = syntax.Value ?? 0;
+            var value = syntax.Value;
             return new BoundLiteralExpression(value);
         }
         private BoundExpression BindNameExpression(NameExpressionSyntax syntax)
         {
-            var name = syntax.IdentifierToken.Text;
+            //var name = syntax.IdentifierToken.Text;
             if (syntax.IdentifierToken.IsMissing)
             {
                 return new BoundErrorExpression();
@@ -691,9 +692,9 @@ namespace Vivian.CodeAnalysis.Binding
             var expression = BindExpression(syntax.Expression, canBeVoid: true);
             return new BoundExpressionStatement(expression);
         }
-        private VariableSymbol BindVariableDeclaration(SyntaxToken identifier, bool isReadOnly, TypeSymbol type, BoundConstant constant = null)
+        private VariableSymbol BindVariableDeclaration(SyntaxToken identifier, bool isReadOnly, TypeSymbol type, BoundConstant? constant = null)
         {
-            var name = identifier.Text ?? "?";
+            var name = identifier.Text;
             var declare = !identifier.IsMissing;
             var variable = _function == null
                                     ? (VariableSymbol) new GlobalVariableSymbol(name, isReadOnly, type, constant)
@@ -704,7 +705,7 @@ namespace Vivian.CodeAnalysis.Binding
             return variable;
         }
         
-        private VariableSymbol BindVariableReference(SyntaxToken identifierToken)
+        private VariableSymbol? BindVariableReference(SyntaxToken identifierToken)
         {
             var name = identifierToken.Text;
             switch (_scope.TryLookupSymbol(name))
@@ -722,7 +723,7 @@ namespace Vivian.CodeAnalysis.Binding
             }
         }
         
-        private TypeSymbol LookupType(string name)
+        private TypeSymbol? LookupType(string name)
         {
             switch (name)
             {

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using Vivian.CodeAnalysis.Binding;
+
 using Vivian.CodeAnalysis.Text;
 
 namespace Vivian.CodeAnalysis.Syntax
@@ -38,7 +37,7 @@ namespace Vivian.CodeAnalysis.Syntax
             }
         }
 
-        public TextLocation Location => new TextLocation(SyntaxTree.Text, Span);
+        public TextLocation Location => new(SyntaxTree.Text, Span);
         
         public SyntaxToken GetLastToken()
         {
@@ -50,6 +49,13 @@ namespace Vivian.CodeAnalysis.Syntax
 
         public abstract IEnumerable<SyntaxNode> GetChildren();
 
+        public override string ToString()
+        {
+            using var writer = new StringWriter();
+            WriteTo(writer);
+            return writer.ToString();
+        }
+        
         public void WriteTo(TextWriter writer)
         {
             PrettyPrint(writer, this);
@@ -57,7 +63,7 @@ namespace Vivian.CodeAnalysis.Syntax
         
         private static void PrettyPrint(TextWriter writer, SyntaxNode node, string indent = "", bool isLast = true)
         {
-            if (node == null)
+            if (node == null!)
             {
                 return;
             }
@@ -135,13 +141,5 @@ namespace Vivian.CodeAnalysis.Syntax
                 PrettyPrint(writer, child, indent, child == lastChild);
         }
 
-        public override string ToString()
-        {
-            using (var writer = new StringWriter())
-            {
-                WriteTo(writer);
-                return writer.ToString();
-            }
-        }
     }
 }

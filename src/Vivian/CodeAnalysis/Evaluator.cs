@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Symbols;
 
@@ -9,11 +10,11 @@ namespace Vivian.CodeAnalysis
     {
         private readonly BoundProgram _program;
         private readonly Dictionary<VariableSymbol, object> _globals;
-        private readonly Dictionary<FunctionSymbol, BoundBlockStatement> _functions = new Dictionary<FunctionSymbol, BoundBlockStatement>();
-        private readonly Stack<Dictionary<VariableSymbol, object>> _locals = new Stack<Dictionary<VariableSymbol, object>>();
-        private Random _random;
+        private readonly Dictionary<FunctionSymbol, BoundBlockStatement> _functions = new();
+        private readonly Stack<Dictionary<VariableSymbol, object>> _locals = new();
+        private Random? _random;
 
-        private object _lastValue;
+        private object? _lastValue;
         
         public Evaluator(BoundProgram program, Dictionary<VariableSymbol, object> variables)
         {
@@ -24,7 +25,6 @@ namespace Vivian.CodeAnalysis
             var current = program;
             while (current != null)
             {
-                // TODO: Flagged (kv)
                 foreach (var (function, body) in current.Functions)
                     _functions.Add(function, body);
                 
@@ -32,7 +32,7 @@ namespace Vivian.CodeAnalysis
             }
         }
 
-        public object Evaluate()
+        public object? Evaluate()
         {
             var function = _program.MainFunction ?? _program.ScriptFunction;
 
@@ -43,7 +43,7 @@ namespace Vivian.CodeAnalysis
             return EvaluateStatement(body);
         }
 
-        private object EvaluateStatement(BoundBlockStatement body)
+        private object? EvaluateStatement(BoundBlockStatement body)
         {
             var labelToIndex = new Dictionary<BoundLabel, int>();
 
@@ -80,7 +80,7 @@ namespace Vivian.CodeAnalysis
 
                     case BoundNodeKind.ConditionalGotoStatement:
                         var cgs = (BoundConditionalGotoStatement) s;
-                        var condition = (bool) EvaluateExpression(cgs.Condition);
+                        var condition = (bool) EvaluateExpression(cgs.Condition)!;
                         if (condition == cgs.JumpIfTrue)
                             index = labelToIndex[cgs.Label];
                         else
@@ -107,7 +107,7 @@ namespace Vivian.CodeAnalysis
         private void EvaluateVariableDeclaration(BoundVariableDeclaration node)
         {
             var value = EvaluateExpression(node.Initializer);
-            
+            Debug.Assert(value != null);
             _lastValue = value;
             Assign(node.Variable, value);
         }
@@ -117,7 +117,7 @@ namespace Vivian.CodeAnalysis
             _lastValue = EvaluateExpression(node.Expression);
         }
         
-        private object EvaluateExpression(BoundExpression node)
+        private object? EvaluateExpression(BoundExpression node)
         {
             if (node.ConstantValue != null)
             {
@@ -149,7 +149,7 @@ namespace Vivian.CodeAnalysis
             }
         }
 
-        private object EvaluateConversionExpression(BoundConversionExpression node)
+        private object? EvaluateConversionExpression(BoundConversionExpression node)
         {
             var value = EvaluateExpression(node.Expression);
             if (node.Type == TypeSymbol.Object)
@@ -166,6 +166,7 @@ namespace Vivian.CodeAnalysis
         
         private static object EvaluateConstantExpression(BoundExpression n)
         {
+            Debug.Assert(n.ConstantValue != null);
             return n.ConstantValue.Value;
         }
         
@@ -184,8 +185,9 @@ namespace Vivian.CodeAnalysis
         
         private object EvaluateAssignmentExpression(BoundAssignmentExpression a)
         {
-            
             var value = EvaluateExpression(a.Expression);
+
+            Debug.Assert(value != null);
             Assign(a.Variable, value);
 
             return value;
@@ -208,6 +210,8 @@ namespace Vivian.CodeAnalysis
         {
             var operand = EvaluateExpression(u.Operand);
 
+            Debug.Assert(operand != null);
+            
             switch (u.Op.Kind)
             {
                 case BoundUnaryOperatorKind.Identity:
@@ -227,6 +231,8 @@ namespace Vivian.CodeAnalysis
         {
             var left = EvaluateExpression(b.Left);
             var right = EvaluateExpression(b.Right);
+
+            Debug.Assert(left != null && right != null);
 
             switch (b.Op.Kind)
             {
@@ -295,7 +301,7 @@ namespace Vivian.CodeAnalysis
             }
         }
         
-        private object EvaluateCallExpression(BoundCallExpression node)
+        private object? EvaluateCallExpression(BoundCallExpression node)
         {
             if (node.Function == BuiltinFunctions.Input)
             {
@@ -310,7 +316,7 @@ namespace Vivian.CodeAnalysis
             }
             else if (node.Function == BuiltinFunctions.Rnd)
             {
-                var max = (int) EvaluateExpression(node.Arguments[0]);
+                var max = (int) EvaluateExpression(node.Arguments[0])!;
                 if (_random == null)
                     _random = new Random();
 
@@ -323,6 +329,7 @@ namespace Vivian.CodeAnalysis
                 {
                     var parameter = node.Function.Parameters[i];
                     var value = EvaluateExpression(node.Arguments[i]);
+                    Debug.Assert(value != null);
                     locals.Add(parameter, value);
                 }
 

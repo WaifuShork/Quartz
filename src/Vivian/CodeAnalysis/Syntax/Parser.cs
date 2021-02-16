@@ -9,7 +9,7 @@ namespace Vivian.CodeAnalysis.Syntax
     {
         private readonly SyntaxTree _syntaxTree;
         private readonly SourceText _text;
-        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
+        private readonly DiagnosticBag _diagnostics = new();
         private readonly ImmutableArray<SyntaxToken> _tokens;
         
         private int _position;
@@ -284,11 +284,11 @@ namespace Vivian.CodeAnalysis.Syntax
             var condition = ParseExpression();
             var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
             var statement = ParseStatement();
-            var elseClause = ParseElseClause();
+            var elseClause = ParseOptionalElseClause();
             return new IfStatementSyntax(_syntaxTree, keyword, openParenthesisToken, condition, closeParenthesisToken, statement, elseClause);
         }
 
-        private ElseClauseSyntax ParseElseClause()
+        private ElseClauseSyntax? ParseOptionalElseClause()
         {
             if (Current.Kind != SyntaxKind.ElseKeyword)
                 return null;
@@ -315,7 +315,7 @@ namespace Vivian.CodeAnalysis.Syntax
             return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer);
         }
 
-        private TypeClauseSyntax ParseOptionalTypeClause()
+        private TypeClauseSyntax? ParseOptionalTypeClause()
         {
             if (Current.Kind != SyntaxKind.ColonToken)
                 return null;

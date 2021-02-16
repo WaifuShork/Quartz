@@ -2,9 +2,16 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class IfStatementSyntax : StatementSyntax
+    public sealed class IfStatementSyntax : StatementSyntax
     {
-        public IfStatementSyntax(SyntaxTree syntaxTree, SyntaxToken ifKeyword, SyntaxToken openParenthesisToken, ExpressionSyntax condition, SyntaxToken closeParenthesisToken, StatementSyntax thenStatement, ElseClauseSyntax elseClause) : base(syntaxTree)
+        public IfStatementSyntax(SyntaxTree syntaxTree, 
+                                 SyntaxToken ifKeyword, 
+                                 SyntaxToken openParenthesisToken, 
+                                 ExpressionSyntax condition, 
+                                 SyntaxToken closeParenthesisToken, 
+                                 StatementSyntax thenStatement, 
+                                 ElseClauseSyntax? elseClause) 
+                                 : base(syntaxTree)
         {
             IfKeyword = ifKeyword;
             OpenParenthesisToken = openParenthesisToken;
@@ -20,7 +27,7 @@ namespace Vivian.CodeAnalysis.Syntax
         public ExpressionSyntax Condition { get; }
         public SyntaxToken CloseParenthesisToken { get; }
         public StatementSyntax ThenStatement { get; }
-        public ElseClauseSyntax ElseClause { get; }
+        public ElseClauseSyntax? ElseClause { get; }
         
         public override IEnumerable<SyntaxNode> GetChildren()
         {
@@ -29,7 +36,7 @@ namespace Vivian.CodeAnalysis.Syntax
             yield return Condition;
             yield return CloseParenthesisToken;
             yield return ThenStatement;
-            yield return ElseClause;
+            yield return ElseClause!;
         }
     }
 }

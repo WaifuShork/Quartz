@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+
 using Vivian.CodeAnalysis.Text;
 
 namespace Vivian.CodeAnalysis.Syntax
@@ -12,7 +13,7 @@ namespace Vivian.CodeAnalysis.Syntax
                            SyntaxKind kind, 
                            int position, 
                            string text, 
-                           object value, 
+                           object? value, 
                            ImmutableArray<SyntaxTrivia> leadingTrivia, 
                            ImmutableArray<SyntaxTrivia> trailingTrivia) 
                            : base(syntaxTree)
@@ -20,14 +21,24 @@ namespace Vivian.CodeAnalysis.Syntax
             Kind = kind;
             Position = position;
             Text = text;
+            IsMissing = text == null!;
             Value = value;
             LeadingTrivia = leadingTrivia;
             TrailingTrivia = trailingTrivia;
         }
         
         public override SyntaxKind Kind { get; }
-        public override TextSpan Span => new(Position, Text?.Length ?? 0);
+        public override TextSpan Span => new(Position, Text.Length);
+        
+        public int Position { get; }
+        public string Text { get; }
+        public object? Value { get; }
 
+        public bool IsMissing { get; }
+        
+        public ImmutableArray<SyntaxTrivia> LeadingTrivia { get; }
+        public ImmutableArray<SyntaxTrivia> TrailingTrivia { get; }
+        
         public override TextSpan FullSpan
         {
             get
@@ -43,15 +54,6 @@ namespace Vivian.CodeAnalysis.Syntax
                 return TextSpan.FromBounds(start, end);
             }
         }
-
-        public int Position { get; }
-        public string Text { get; }
-        public object Value { get; }
-
-        public bool IsMissing => Text == null;
-        
-        public ImmutableArray<SyntaxTrivia> LeadingTrivia { get; }
-        public ImmutableArray<SyntaxTrivia> TrailingTrivia { get; }
         
         public override IEnumerable<SyntaxNode> GetChildren()
         {

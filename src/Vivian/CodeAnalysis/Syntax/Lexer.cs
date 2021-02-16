@@ -7,15 +7,15 @@ namespace Vivian.CodeAnalysis.Syntax
 {
     internal sealed class Lexer
     {
-        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
+        private readonly ImmutableArray<SyntaxTrivia>.Builder _triviaBuilder = ImmutableArray.CreateBuilder<SyntaxTrivia>();
+        private readonly DiagnosticBag _diagnostics = new();
         private readonly SyntaxTree _syntaxTree;
         private readonly SourceText _text;
         private int _position;
         
         private int _start;
         private SyntaxKind _kind;
-        private object _value;
-        private ImmutableArray<SyntaxTrivia>.Builder _triviaBuilder = ImmutableArray.CreateBuilder<SyntaxTrivia>();
+        private object? _value;
         
         public Lexer(SyntaxTree syntaxTree)
         {
@@ -53,7 +53,7 @@ namespace Vivian.CodeAnalysis.Syntax
             var trailingTrivia = _triviaBuilder.ToImmutable();
             
             var tokenText = SyntaxFacts.GetText(tokenKind);
-            if (tokenText == null)
+            if (tokenText == null!)
                 tokenText = _text.ToString(tokenStart, tokenLength);
 
             return new SyntaxToken(_syntaxTree, tokenKind, tokenStart, tokenText, tokenValue, leadingTrivia, trailingTrivia);

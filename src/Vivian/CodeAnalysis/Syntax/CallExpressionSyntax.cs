@@ -4,7 +4,7 @@ using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class CallExpressionSyntax : ExpressionSyntax
+    public sealed class CallExpressionSyntax : ExpressionSyntax
     {
         public CallExpressionSyntax(SyntaxTree syntaxTree, 
                                     SyntaxToken identifier, 

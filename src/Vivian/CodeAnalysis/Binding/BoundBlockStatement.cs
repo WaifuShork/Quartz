@@ -11,6 +11,5 @@ namespace Vivian.CodeAnalysis.Binding
 
         public override BoundNodeKind Kind => BoundNodeKind.BlockStatement;
         public ImmutableArray<BoundStatement> Statements { get; }
-
     }
 }

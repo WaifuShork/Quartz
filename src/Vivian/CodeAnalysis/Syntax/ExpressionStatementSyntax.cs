@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class ExpressionStatementSyntax : StatementSyntax
+    public sealed class ExpressionStatementSyntax : StatementSyntax
     {
         public ExpressionStatementSyntax(SyntaxTree syntaxTree, ExpressionSyntax expression) : base(syntaxTree)
         {

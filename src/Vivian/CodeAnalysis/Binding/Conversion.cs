@@ -4,10 +4,10 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class Conversion
     {
-        public static readonly Conversion None = new Conversion(exists: false, isIdentity: false, isImplicit: false);
-        public static readonly Conversion Identity = new Conversion(exists: true, isIdentity: true, isImplicit: true);
-        public static readonly Conversion Implicit = new Conversion(exists: true, isIdentity: false, isImplicit: true);
-        public static readonly Conversion Explicit = new Conversion(exists: true, isIdentity: false, isImplicit: false);
+        public static readonly Conversion None = new(exists: false, isIdentity: false, isImplicit: false);
+        public static readonly Conversion Identity = new(exists: true, isIdentity: true, isImplicit: true);
+        public static readonly Conversion Implicit = new(exists: true, isIdentity: false, isImplicit: true);
+        public static readonly Conversion Explicit = new(exists: true, isIdentity: false, isImplicit: false);
         
         private Conversion(bool exists, bool isIdentity, bool isImplicit)
         {
@@ -24,31 +24,31 @@ namespace Vivian.CodeAnalysis.Binding
         public static Conversion Classify(TypeSymbol from, TypeSymbol to)
         {
             if (from == to)
-                return Conversion.Identity;
+                return Identity;
 
             if (from != TypeSymbol.Void && to == TypeSymbol.Object)
             { 
-                return Conversion.Implicit;
+                return Implicit;
             }
             
             if (from == TypeSymbol.Object && to != TypeSymbol.Void)
             { 
-                return Conversion.Explicit;
+                return Explicit;
             }
             
             if (from == TypeSymbol.Bool || from == TypeSymbol.Int)
             {
                 if (to == TypeSymbol.String)
-                    return Conversion.Explicit;
+                    return Explicit;
             }
             
             if (from == TypeSymbol.String)
             {
                 if (to == TypeSymbol.Bool || to == TypeSymbol.Int)
-                    return Conversion.Explicit;
+                    return Explicit;
             }
 
-            return Conversion.None;
+            return None;
         }
     }
 }

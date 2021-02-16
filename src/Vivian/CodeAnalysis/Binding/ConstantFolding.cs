@@ -5,7 +5,7 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal static class ConstantFolding
     {
-        public static BoundConstant ComputeConstant(BoundUnaryOperator op, BoundExpression operand)
+        public static BoundConstant? ComputeConstant(BoundUnaryOperator op, BoundExpression operand)
         {
             if (operand.ConstantValue != null && operand.ConstantValue.Value is int value)
             {
@@ -26,7 +26,7 @@ namespace Vivian.CodeAnalysis.Binding
             return null;
         }
         
-        public static BoundConstant ComputeConstant(BoundExpression left, BoundBinaryOperator op, BoundExpression right)
+        public static BoundConstant? ComputeConstant(BoundExpression left, BoundBinaryOperator op, BoundExpression right)
         {
             var leftConstant = left.ConstantValue;
             var rightConstant = right.ConstantValue;
@@ -127,7 +127,6 @@ namespace Vivian.CodeAnalysis.Binding
                 default:
                     throw new Exception($"Unexpected binary operator {op.Kind}");
             }
-            
         }
     }
 }

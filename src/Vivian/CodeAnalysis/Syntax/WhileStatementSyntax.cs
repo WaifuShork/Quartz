@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class WhileStatementSyntax : StatementSyntax
+    public sealed class WhileStatementSyntax : StatementSyntax
     {
         public WhileStatementSyntax(SyntaxTree syntaxTree, SyntaxToken whileKeyword, SyntaxToken openParenthesisToken, ExpressionSyntax condition, SyntaxToken closeParenthesisToken, StatementSyntax body) : base(syntaxTree)
         {

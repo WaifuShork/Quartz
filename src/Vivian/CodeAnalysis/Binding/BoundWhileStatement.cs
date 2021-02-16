@@ -6,15 +6,15 @@
         {
             Condition = condition;
             Body = body;
-            BreakLabel = breakLabel;
-            ContinueLabel = continueLabel;
+            //BreakLabel = breakLabel;
+            //ContinueLabel = continueLabel;
         }
 
         public override BoundNodeKind Kind => BoundNodeKind.WhileStatement;
 
         public BoundExpression Condition { get; }
         public BoundStatement Body { get; }
-        public new BoundLabel BreakLabel { get; }
-        public new BoundLabel ContinueLabel { get; }
+        //public new BoundLabel BreakLabel { get; }
+        //public new BoundLabel ContinueLabel { get; }
     }
 }

@@ -70,7 +70,6 @@
         BreakKeyword,
         ReturnKeyword,
         FunctionKeyword,
-        ArrayKeyword,
 
         // Expressions
         LiteralExpression,

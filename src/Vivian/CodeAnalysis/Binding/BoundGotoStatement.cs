@@ -2,7 +2,6 @@
 {
     internal sealed class BoundGotoStatement : BoundStatement
     {
-
         public BoundGotoStatement(BoundLabel label)
         {
             Label = label;

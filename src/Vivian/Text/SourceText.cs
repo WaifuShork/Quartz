@@ -17,7 +17,7 @@ namespace Vivian.CodeAnalysis.Text
         
         public static SourceText From(string text, string fileName = "")
         {
-            return new SourceText(text, fileName);
+            return new(text, fileName);
         }
 
         public ImmutableArray<TextLine> Lines { get; }
@@ -103,9 +103,7 @@ namespace Vivian.CodeAnalysis.Text
 
             return 0;
         }
-
         
-
         public override string ToString() => _text;
 
         public string ToString(int start, int length) => _text.Substring(start, length);
