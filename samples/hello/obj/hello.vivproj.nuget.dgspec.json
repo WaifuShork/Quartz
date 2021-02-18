@@ -40,6 +40,12 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.NET.Compilers.ToolSet": {
+              "target": "Package",
+              "version": "[3.9.0-3.final, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

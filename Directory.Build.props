@@ -1,7 +1,6 @@
 <Project>
 
     <PropertyGroup>
-        <Features>Strict</Features>
         <Nullable>Enable</Nullable>
         <LangVersion>Preview</LangVersion>
     </PropertyGroup>

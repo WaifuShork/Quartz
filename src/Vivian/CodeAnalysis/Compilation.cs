@@ -28,7 +28,7 @@ namespace Vivian.CodeAnalysis
             return new(isScript: false, previous: null, syntaxTrees);
         }
         
-        public static Compilation CreateScript(Compilation previous, params SyntaxTree[] syntaxTrees)
+        public static Compilation CreateScript(Compilation? previous, params SyntaxTree[] syntaxTrees)
         {
             return new(isScript: true, previous, syntaxTrees);
         }
@@ -60,10 +60,10 @@ namespace Vivian.CodeAnalysis
             var seenSymbolNames = new HashSet<string>();
             while (submission != null)
             {
-                const ReflectionBindingFlags bindingFlags = 
-                    ReflectionBindingFlags.Static |
-                    ReflectionBindingFlags.Public |
-                    ReflectionBindingFlags.NonPublic;
+                //const ReflectionBindingFlags bindingFlags = 
+                //    ReflectionBindingFlags.Static |
+                //    ReflectionBindingFlags.Public |
+                //    ReflectionBindingFlags.NonPublic;
 
                 var builtinFunctions = BuiltinFunctions.GetAll().ToList();
                 

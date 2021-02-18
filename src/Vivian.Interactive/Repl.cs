@@ -11,8 +11,8 @@ namespace Vivian
 {
     internal abstract class Repl
     {
-        private readonly List<MetaCommand> _metaCommands = new List<MetaCommand>();
-        private readonly List<string> _submissionHistory = new List<string>();
+        private readonly List<MetaCommand> _metaCommands = new();
+        private readonly List<string> _submissionHistory = new();
         
         private int _submissionHistoryIndex;
         private bool _done;
@@ -60,7 +60,7 @@ namespace Vivian
             }
         }
 
-        private delegate object LineRenderHandler(IReadOnlyList<string> lines, int lineIndex, object state);
+        private delegate object? LineRenderHandler(IReadOnlyList<string> lines, int lineIndex, object? state);
         
         private sealed class SubmissionView
         {
@@ -75,7 +75,7 @@ namespace Vivian
             {
                 _lineRenderer = lineRenderer;
                 _submissionDocument = submissionDocument;
-                _submissionDocument.CollectionChanged += SubmissionDocumentChanged;
+                _submissionDocument.CollectionChanged += SubmissionDocumentChanged!;
                 _cursorTop = Console.CursorTop;
                 Render();
             }
@@ -89,7 +89,7 @@ namespace Vivian
             {
                 Console.CursorVisible = false;
                 var lineCount = 0;
-                var state = (object) null;
+                var state = (object) null!;
                 
                 foreach (var line in _submissionDocument)
                 {
@@ -173,7 +173,7 @@ namespace Vivian
             _done = false;
             
             var document = new ObservableCollection<string>() { "" };
-            var view = new SubmissionView(RenderLine!, document);
+            var view = new SubmissionView(RenderLine, document);
             
             while (!_done)
             {
@@ -427,7 +427,7 @@ namespace Vivian
             _submissionHistory.Clear();
         }
 
-        protected virtual object? RenderLine(IReadOnlyList<string> lines, int lineIndex, object state)
+        protected virtual object? RenderLine(IReadOnlyList<string> lines, int lineIndex, object? state)
         {
             Console.Write(lines[lineIndex]);
             return state;
@@ -531,7 +531,7 @@ namespace Vivian
             }
             
             public string Name { get; }
-            public string Description { get; set; }
+            public string Description { get; }
         }
 
         private class MetaCommand
@@ -571,7 +571,7 @@ namespace Vivian
                     {
                         Console.Out.WriteSpace();
                         Console.Out.WritePunctuation("<");
-                        Console.Out.WriteIdentifier(pi.Name);
+                        Console.Out.WriteIdentifier(pi.Name!);
                         Console.Out.WritePunctuation(">");
                     }
                     Console.Out.WriteLine();

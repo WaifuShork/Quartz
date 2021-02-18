@@ -13,20 +13,20 @@ namespace Vivian
 {
     internal sealed class VivianRepl : Repl
     {
-        private Compilation _previous;
+        private Compilation? _previous;
         private bool _showTree;
         private bool _showProgram;
         private static bool _loadingSubmissions;
         private static readonly Compilation emptyCompilation = Compilation.CreateScript(null);
         
-        private readonly Dictionary<VariableSymbol, object> _variables = new Dictionary<VariableSymbol, object>();
+        private readonly Dictionary<VariableSymbol, object> _variables = new();
 
         public VivianRepl()
         {
             LoadSubmissions();
         }
         
-        protected override object? RenderLine(IReadOnlyList<string> lines, int lineIndex, object state)
+        protected override object? RenderLine(IReadOnlyList<string> lines, int lineIndex, object? state)
         {
             SyntaxTree syntaxTree;
             

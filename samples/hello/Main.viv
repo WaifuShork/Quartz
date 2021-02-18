@@ -1,4 +1,9 @@
 function Main()
 {
+    print(Sum(12, 2))
+}
 
+function Sum(x: int, y: int)
+{
+    return x + y;
 }

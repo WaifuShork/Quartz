@@ -182,7 +182,7 @@ namespace Vivian.CodeAnalysis.Binding
             var op = SyntaxFacts.GetText(node.Op.SyntaxKind);
             var precedence = node.Op.SyntaxKind.GetUnaryOperatorPrecedence();
             
-            writer.WritePunctuation(op);
+            writer.WritePunctuation(op!);
             
             writer.WriteNestedExpression(precedence, node.Operand);
         }
@@ -194,7 +194,7 @@ namespace Vivian.CodeAnalysis.Binding
             
             writer.WriteNestedExpression(precedence, node.Left);
             writer.WriteSpace();
-            writer.WritePunctuation(op);
+            writer.WritePunctuation(op!);
             writer.WriteSpace();
             writer.WriteNestedExpression(precedence, node.Right);
         }

@@ -157,7 +157,7 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 (SyntaxKind.StringToken, "\"Test\""),
                 (SyntaxKind.StringToken, "\"Te\"\"st\""),
             };
-            return fixedTokens.Concat(dynamicTokens);
+            return Enumerable.Concat(fixedTokens, dynamicTokens);
         }
         
         private static IEnumerable<(SyntaxKind kind, string text)> GetSeparators()

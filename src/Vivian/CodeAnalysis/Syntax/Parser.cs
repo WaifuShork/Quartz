@@ -90,7 +90,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 return NextToken();
 
             _diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind);
-            return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
+            return new SyntaxToken(_syntaxTree, kind, Current.Position, null!, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
         }
         
         public CompilationUnitSyntax ParseCompilationUnit()
