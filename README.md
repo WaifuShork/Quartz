@@ -44,23 +44,20 @@ It contains:
     bool(string/int input) // converts either string or int to bool.
     object(object input) // converts anything to an unboxed object implicitly.
 
-    // variable declaration types
-    var result = 20 // imply represents a mutable variable
-    const result = 20 // let represents a constant varable
     // Remember, variables cannot be redeclared.
     
     // for loop 
-    for i = 0 to 100 
+    for (i = 0 to 100) 
     {
         result = result + i
     }
     
     // if/else if/else statements
-    if result <= 200
+    if (result <= 200)
     {
         result = 0
     }
-    else if result == 20
+    else if (result == 20)
     {
         result = 0
     }
@@ -70,7 +67,7 @@ It contains:
     }
     
     // while loop
-    while result < 20
+    while (result < 20)
     {
         result = result - 1
         result = result + 1
@@ -80,7 +77,7 @@ It contains:
     do
     {
         result = result + 1
-    } while result < 25
+    } while (result < 25)
 
     // built-in functions
     print(string output)
@@ -88,13 +85,14 @@ It contains:
     rnd(int max)
 
     // custom function declaration
-    function name(param: string, other: int) 
+    void name(string param, int other) 
     {
          // your code goes here!
     }
 
     // custom function example
-    function myPrint(text: string, number: int) {
+    void myPrint(string text, int number)
+    {
         print(text)
         print(string(number))
     }
@@ -108,14 +106,14 @@ It contains:
 ## Fizz Buzz Example
 ```c#
 {   
-    var message = " " 
-    for i = 0 to 100 
+    string message = " " 
+    for (i = 0 to 100) 
     {
-        if i % 3 == 0
+        if (i % 3 == 0)
             message = "fizz"
-        else if i % 5 == 0 
+        else if (i % 5 == 0) 
             message = "buzz"
-        else if i % 3 == 0 && i % 5 == 0
+        else if (i % 3 == 0 && i % 5 == 0)
             message = "fizzbuzz"
         else
             message = string(i)
@@ -127,13 +125,13 @@ It contains:
 ## Number Guessing Game
 ```c#
 {   
-    var factor = true
-    while factor == true
+    bool factor = true
+    while (factor == true)
     {   
         print("I'm thinking of a number between 0 and 10")
-        var answer = input()
-        var num = rnd(10)
-        if int(answer) == num
+        int answer = input()
+        int num = rnd(10)
+        if (int(answer) == num)
         {
             print("Congrats!, the number I was thinking of was " + num)
             factor = false
@@ -146,31 +144,31 @@ It contains:
 
 ## Custom Function Fun
 ```c#
-function randomFunctionOne()
+void randomFunctionOne()
 {
     print("I am random function number one.")
     print("Congrats on picking me!")
 }
 
-function randomFunctionTwo()
+void randomFunctionTwo()
 {
     print("I am random function number two.")
     print("Pleased to make your acquaintance.")
 }
 
-function randomFunctionThree()
+void randomFunctionThree()
 {
     print("Howdy, I'm rando function numba three!")
     print("YEEEEEHAW")
 }
 
 {
-    const randomNumber = rnd(2) + 1
-    if randomNumber == 1
+    int randomNumber = rnd(2) + 1
+    if (randomNumber == 1)
         randomFunctionOne()
-    else if randomNumber == 2
+    else if (randomNumber == 2)
         randomFunctionTwo()
-    else if randomNumber == 3
+    else if (randomNumber == 3)
         randomFunctionThree()
 }
 ```
