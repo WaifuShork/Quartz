@@ -7,7 +7,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  sln: 'Vivian.sln'
+  sln: './src/Vivian.sln'
   tests: './src/Vivian.Tests/Vivian.Tests.csproj'
 
 steps:
