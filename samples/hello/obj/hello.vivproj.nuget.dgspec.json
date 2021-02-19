@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\vtest\\Vivian\\samples\\hello\\hello.vivproj": {}
+    "G:\\v\\Vivian\\samples\\hello\\hello.vivproj": {}
   },
   "projects": {
-    "G:\\vtest\\Vivian\\samples\\hello\\hello.vivproj": {
+    "G:\\v\\Vivian\\samples\\hello\\hello.vivproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\vtest\\Vivian\\samples\\hello\\hello.vivproj",
+        "projectUniqueName": "G:\\v\\Vivian\\samples\\hello\\hello.vivproj",
         "projectName": "hello",
-        "projectPath": "G:\\vtest\\Vivian\\samples\\hello\\hello.vivproj",
+        "projectPath": "G:\\v\\Vivian\\samples\\hello\\hello.vivproj",
         "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-        "outputPath": "G:\\vtest\\Vivian\\samples\\hello\\obj\\",
+        "outputPath": "G:\\v\\Vivian\\samples\\hello\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -156,12 +156,12 @@ namespace Vivian.CodeAnalysis
                 return value;
             if (node.Type == TypeSymbol.Bool)
                 return Convert.ToBoolean(value);
-            else if (node.Type == TypeSymbol.Int)
+            if (node.Type == TypeSymbol.Int)
                 return Convert.ToInt32(value);
-            else if (node.Type == TypeSymbol.String)
+            if (node.Type == TypeSymbol.String)
                 return Convert.ToString(value);
-            else
-                throw new Exception($"Unexpected type {node.Type}");
+            
+            throw new Exception($"Unexpected type {node.Type}");
         }
         
         private static object EvaluateConstantExpression(BoundExpression n)
@@ -321,6 +321,11 @@ namespace Vivian.CodeAnalysis
                     _random = new Random();
 
                 return _random.Next(max);
+            }
+            
+            else if (node.Function == BuiltinFunctions.ToInt)
+            {
+                return Convert.ToInt32(EvaluateExpression(node.Arguments[0]));
             }
             else
             {

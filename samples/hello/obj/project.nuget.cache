@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ung+9xRMwHf6Vbk6tIMYNUByncXh9EsXTHQtVBsyV1kIC6uWgBooogjya6Tct5Rorh6aurtnvtFH185hDk5fuA==",
+  "dgSpecHash": "KgMqlKBArUFQRHar3JtYQAD+FvvTFaPH1wXpUqEKDk+S9b0xxsORUBHUfqh/BgTTmNZBwFkAi0v4k1jZ5E+QQw==",
   "success": true,
-  "projectFilePath": "G:\\vtest\\Vivian\\samples\\hello\\hello.vivproj",
+  "projectFilePath": "G:\\v\\Vivian\\samples\\hello\\hello.vivproj",
   "expectedPackageFiles": [
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.net.compilers.toolset\\3.9.0-3.final\\microsoft.net.compilers.toolset.3.9.0-3.final.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.9\\microsoft.netcore.app.host.win-x64.3.1.9.nupkg.sha512"

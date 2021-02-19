@@ -4,15 +4,16 @@ namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed class ParameterSyntax : SyntaxNode
     {
-        public ParameterSyntax(SyntaxTree syntaxTree, SyntaxToken identifier, TypeClauseSyntax type) : base(syntaxTree)
+        public ParameterSyntax(SyntaxTree syntaxTree, TypeClauseSyntax type, SyntaxToken identifier) : base(syntaxTree)
         {
-            Identifier = identifier;
             Type = type;
+            Identifier = identifier;
         }
         
         public override SyntaxKind Kind => SyntaxKind.Parameter;
-        public SyntaxToken Identifier { get; }
+        
         public TypeClauseSyntax Type { get; }
+        public SyntaxToken Identifier { get; }
         
         public override IEnumerable<SyntaxNode> GetChildren()
         {

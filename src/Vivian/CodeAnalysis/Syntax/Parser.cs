@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Text;
@@ -119,9 +120,17 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private MemberSyntax ParseMember()
         {
-            if (Current.Kind == SyntaxKind.FunctionKeyword)
-                return ParseFunctionDeclaration();
-
+            switch (Current.Kind)
+            {
+                case SyntaxKind.IntegerKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.VoidKeyword:
+                    if (Peek(2).Kind == SyntaxKind.OpenParenthesisToken)
+                        return ParseFunctionDeclaration();
+                    break;
+            }
             return ParseGlobalStatement();
         }
 
@@ -134,16 +143,14 @@ namespace Vivian.CodeAnalysis.Syntax
         
         private MemberSyntax ParseFunctionDeclaration()
         {
-            var functionKeyword = MatchToken(SyntaxKind.FunctionKeyword);
+            var type = ParseType();
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var openParenthesisToken = MatchToken(SyntaxKind.OpenParenthesisToken);
             var parameters = ParseParameterList();
             var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
-            var type = ParseOptionalTypeClause();
             var body = ParseBlockStatement();
             
-            return new FunctionDeclarationSyntax(_syntaxTree, functionKeyword, identifier, openParenthesisToken, parameters,
-                closeParenthesisToken, type, body);
+            return new FunctionDeclarationSyntax(_syntaxTree, type, identifier, openParenthesisToken, parameters, closeParenthesisToken, body);
         }
 
         private SeparatedSyntaxList<ParameterSyntax> ParseParameterList()
@@ -173,9 +180,9 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private ParameterSyntax ParseParameter()
         {
+            var type = ParseType();
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
-            var type = ParseTypeClause();
-            return new ParameterSyntax(_syntaxTree, identifier, type);
+            return new ParameterSyntax(_syntaxTree, type, identifier);
         }
 
         private StatementSyntax ParseStatement()
@@ -184,8 +191,10 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 case SyntaxKind.OpenBraceToken:
                     return ParseBlockStatement();
-                case SyntaxKind.ConstKeyword:
-                case SyntaxKind.VarKeyword:
+                case SyntaxKind.IntegerKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ObjectKeyword:
                     return ParseVariableDeclaration();
 
                 case SyntaxKind.IfKeyword:
@@ -300,34 +309,46 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private StatementSyntax ParseVariableDeclaration()
         {
-            var expected = Current.Kind == SyntaxKind.ConstKeyword ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword;
-            var keyword = MatchToken(expected);
+            //var expected = Current.Kind == SyntaxKind.ConstKeyword ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword;
+            //var keyword = MatchToken(expected);
+            var type = ParseType();
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
-            var typeClause = ParseOptionalTypeClause();
+            //var typeClause = ParseOptionalTypeClause();
             var equals = MatchToken(SyntaxKind.EqualsToken);
             var initializer = ParseExpression();
-            
-            if (Current.Kind == SyntaxKind.SemicolonToken)
-            {
-                NextToken();
-            }            
-            
-            return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer);
+
+            return new VariableDeclarationSyntax(_syntaxTree, type, identifier, equals, initializer);
         }
 
-        private TypeClauseSyntax? ParseOptionalTypeClause()
+        /*private TypeClauseSyntax? ParseOptionalTypeClause()
         {
             if (Current.Kind != SyntaxKind.ColonToken)
                 return null;
 
             return ParseTypeClause();
-        }
+        }*/
 
-        private TypeClauseSyntax ParseTypeClause()
+        private TypeClauseSyntax ParseType()
         {
-            var colonToken = MatchToken(SyntaxKind.ColonToken);
-            var identifier = MatchToken(SyntaxKind.IdentifierToken);
-            return new TypeClauseSyntax(_syntaxTree, colonToken, identifier);
+            // var colonToken = MatchToken(SyntaxKind.ColonToken);
+            // var identifier = MatchToken(SyntaxKind.IdentifierToken);
+            // return new TypeClauseSyntax(_syntaxTree, identifier);
+
+            switch (Current.Kind)
+            {
+                case SyntaxKind.IntegerKeyword:
+                    return new TypeClauseSyntax(_syntaxTree, MatchToken(SyntaxKind.IntegerKeyword));
+                case SyntaxKind.StringKeyword:
+                    return new TypeClauseSyntax(_syntaxTree, MatchToken(SyntaxKind.StringKeyword));
+                case SyntaxKind.BooleanKeyword:
+                    return new TypeClauseSyntax(_syntaxTree, MatchToken(SyntaxKind.BooleanKeyword));
+                case SyntaxKind.ObjectKeyword:
+                    return new TypeClauseSyntax(_syntaxTree, MatchToken(SyntaxKind.ObjectKeyword));
+                case SyntaxKind.VoidKeyword:
+                    return new TypeClauseSyntax(_syntaxTree, MatchToken(SyntaxKind.VoidKeyword));
+                default:
+                    throw new Exception($"Unknown type {Current.Kind}");
+            }
         }
 
         private BlockStatementSyntax ParseBlockStatement()

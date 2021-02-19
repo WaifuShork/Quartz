@@ -399,11 +399,11 @@ namespace Vivian.CodeAnalysis.Binding
         }
         private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)
         {
-            var isReadOnly = syntax.Keyword.Kind == SyntaxKind.ConstKeyword;
-            var type = BindTypeClause(syntax.TypeClause);
+            // var isReadOnly = syntax.Keyword.Kind == SyntaxKind.ConstKeyword;
+            var type = BindTypeClause(syntax.Type);
             var initializer = BindExpression(syntax.Initializer);
             var variableType = type ?? initializer.Type;
-            var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly, variableType, initializer.ConstantValue);
+            var variable = BindVariableDeclaration(syntax.Identifier, false, variableType, initializer.ConstantValue);
             var convertedInitializer = BindConversion(syntax.Initializer.Location, initializer, variableType);
 
             return new BoundVariableDeclaration(variable, convertedInitializer);
@@ -735,6 +735,8 @@ namespace Vivian.CodeAnalysis.Binding
                     return TypeSymbol.Int;
                 case "string": 
                     return TypeSymbol.String;
+                case "void":
+                    return TypeSymbol.Void;
                 default:
                     return null;
             }

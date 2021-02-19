@@ -1,37 +1,34 @@
 ﻿using System.Collections.Generic;
+using Vivian.CodeAnalysis.Symbols;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed class VariableDeclarationSyntax : StatementSyntax
     {
         public VariableDeclarationSyntax(SyntaxTree syntaxTree, 
-                                         SyntaxToken keyword, 
+                                         TypeClauseSyntax type, 
                                          SyntaxToken identifier, 
-                                         TypeClauseSyntax? typeClause,
                                          SyntaxToken equalsToken, 
                                          ExpressionSyntax initializer) 
                                          : base(syntaxTree)
         {
-            Keyword = keyword;
+            Type = type;
             Identifier = identifier;
-            TypeClause = typeClause;
             EqualsToken = equalsToken;
             Initializer = initializer;
         }
         
         public override SyntaxKind Kind => SyntaxKind.VariableDeclaration;
 
-        public SyntaxToken Keyword { get; }
+        public TypeClauseSyntax Type { get; }
         public SyntaxToken Identifier { get; }
-        public TypeClauseSyntax? TypeClause { get; }
         public SyntaxToken EqualsToken { get; }
         public ExpressionSyntax Initializer { get; }
         
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            yield return Keyword;
+            yield return Type;
             yield return Identifier;
-            yield return TypeClause!;
             yield return EqualsToken;
             yield return Initializer;
         }

@@ -70,6 +70,11 @@
         BreakKeyword,
         ReturnKeyword,
         FunctionKeyword,
+        IntegerKeyword,
+        StringKeyword,
+        BooleanKeyword,
+        ObjectKeyword,
+        VoidKeyword,
 
         // Expressions
         LiteralExpression,

@@ -1,9 +1,11 @@
-function Main()
+void Main()
 {
-    print(Sum(12, 2))
+    void y
+    int x = Sum(12, 12)
+    print(x)
 }
 
-function Sum(x: int, y: int)
+int Sum(int a, int b)
 {
-    return x + y;
+    return a + b;
 }

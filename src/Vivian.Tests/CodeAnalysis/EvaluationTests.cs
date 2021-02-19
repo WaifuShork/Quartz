@@ -72,20 +72,18 @@ namespace Vivian.Tests.CodeAnalysis
         [InlineData("\"abc\" != \"abc\"", false)]
         [InlineData("\"abc\" == \"abc\"", true)]
         
-        [InlineData("{ var a = 0; return (a = 10) * a; }", 100)]
+        [InlineData("{ int a = 0 return (a = 10) * a; }", 100)]
         
-        [InlineData("{ var a = 0; if (a == 0) a = 10; return a; }", 10)]
+        [InlineData("{ int a = 0 if (a == 0) a = 10 return a; }", 10)]
         
-        [InlineData("{ var i = 10; var result = 0; while (i > 0) { result = result + i; i = i - 1; } return result; }", 55)]
+        [InlineData("{ int i = 10 int result = 0 while (i > 0) { result = result + i i = i - 1 } return result; }", 55)]
         
-        [InlineData("{ var result = 0; for (i = 1 to 10) { result = result + i; } return result; }", 55)]
+        [InlineData("{ int result = 0 for (i = 1 to 10) { result = result + i } return result; }", 55)]
         
-        [InlineData("{ var a = 0; do a = a + 1; while (a < 10); return a; }", 10)]
+        [InlineData("{ int a = 0 do a = a + 1 while (a < 10); return a; }", 10)]
         
-        [InlineData("{ var a : object = 0 var b : object = \"b\" return a == b; }", false)]
-        [InlineData("{ var a : object = 0 var b : object = \"b\" return a != b; }", true)]
-        [InlineData("{ var a : object = 0 var b : object = 0 return a == b; }", true)]
-        [InlineData("{ var a : object = 0 var b : object = 0 return a != b; }", false)]
+        [InlineData("{ int a = 0 int b = 0 return a == b; }", true)]
+        [InlineData("{ int a = 0 int b = 0 return a != b; }", false)]
         
         // [InlineData("{ var i = 0 while i < 5 { i = i + 1 if i == 5 continue } i }", 5)]
         // [InlineData("{ var i = 0 do { i = i + 1 if i == 5 continue } while i < 5 i }", 5)]
@@ -106,12 +104,12 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    var x = 10;
-                    var y = 100;
+                    int x = 10
+                    int y = 100
                     {
-                        var x = 100;
+                        int x = 100
                     }            
-                    var [x] = 5;
+                    int [x] = 5
                 }
             ";
             var diagnostics = @"
@@ -124,9 +122,9 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_FunctionParameters_NoInfiniteLoop()
         {
             var text = @"
-                function printer(name: string[[[=]]][)]
+                void printer(string name[[[=]]][)]
                 { 
-                    print(""hi "" + name + ""!"");
+                    print(""hi "" + name + ""!"")
                 }[]
             ";
 
@@ -144,7 +142,7 @@ namespace Vivian.Tests.CodeAnalysis
         [Fact]
         public void Evaluator_AssignmentExpression_Reports_NotAVariable()
         {
-            var text = @"[print] = 42;";
+            var text = @"[print] = 42";
 
             var diagnostics = @"
                 'print' is not a variable.
@@ -156,7 +154,7 @@ namespace Vivian.Tests.CodeAnalysis
         [Fact]
         public void Evaluator_CallExpression_Reports_Undefined()
         {
-            var text = @"[foo](42);";
+            var text = @"[foo](42)";
 
             var diagnostics = @"
                 Function 'foo' does not exist in the current context.
@@ -170,8 +168,8 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    const foo = 42;
-                    [foo](42);
+                    int foo = 42
+                    [foo](42)
                 }
             ";
 
@@ -186,7 +184,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_FunctionReturn_Missing()
         {
             var text = @"
-                function [add](a: int, b: int): int
+                int [add](int a, int b)
                 {
                 }
             ";
@@ -203,8 +201,8 @@ namespace Vivian.Tests.CodeAnalysis
         {
             var text = @"
                 {
-                    const print = 42;
-                    [print](""test"");
+                    int print = 42
+                    [print](""test"")
                 }
             ";
 

@@ -95,6 +95,22 @@ namespace Vivian.CodeAnalysis.Syntax
                 case "return":
                     return SyntaxKind.ReturnKeyword;
                 
+                case "int":
+                    return SyntaxKind.IntegerKeyword;
+                
+                case "string":
+                    return SyntaxKind.StringKeyword;
+                
+                case "bool":
+                    return SyntaxKind.BooleanKeyword;
+                
+                case "object":
+                    return SyntaxKind.ObjectKeyword;
+                
+                case "void":
+                    return SyntaxKind.VoidKeyword;
+
+
                 default:
                     return SyntaxKind.IdentifierToken;
             }
@@ -226,6 +242,17 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.ReturnKeyword:
                     return "return";
+                
+                case SyntaxKind.IntegerKeyword:
+                    return "int";
+                case SyntaxKind.StringKeyword:
+                    return "string";
+                case SyntaxKind.BooleanKeyword:
+                    return "bool";
+                case SyntaxKind.ObjectKeyword:
+                    return "object";
+                case SyntaxKind.VoidKeyword:
+                    return "void";
 
                 default:
                     return null;
