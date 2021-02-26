@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace Vivian
         private bool _showTree;
         private bool _showProgram;
         private static bool _loadingSubmissions;
-        private static readonly Compilation emptyCompilation = Compilation.CreateScript(null);
+        private static readonly Compilation emptyCompilation = Compilation.Create(null);
         
         private readonly Dictionary<VariableSymbol, object> _variables = new();
 
@@ -155,6 +155,7 @@ namespace Vivian
                 Console.ResetColor();
                 return;
             }
+
             compilation.EmitTree(symbol, Console.Out);
         }
 
@@ -184,7 +185,7 @@ namespace Vivian
         protected override void EvaluateSubmission(string text)
         {
             var syntaxTree = SyntaxTree.Parse(text);
-            var compilation = Compilation.CreateScript(_previous, syntaxTree);
+            var compilation = Compilation.Create(syntaxTree);
 
             if (_showTree)
                 syntaxTree.Root.WriteTo(Console.Out);
@@ -192,8 +193,8 @@ namespace Vivian
             if (_showProgram)
                 compilation.EmitTree(Console.Out);
 
-            var result = compilation.Evaluate(_variables);
-
+            var result = compilation.Validate();
+            
             if (!result.Diagnostics.Any())
             {
                 if (result.Value != null)
@@ -211,6 +212,7 @@ namespace Vivian
                 Console.Out.WriteDiagnostics(result.Diagnostics);
             }
         }
+        
         private static string GetSubmissionsDirectory()
         {
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -264,4 +266,4 @@ namespace Vivian
             File.WriteAllText(fileName, text);
         }
     }
-}
+}*/

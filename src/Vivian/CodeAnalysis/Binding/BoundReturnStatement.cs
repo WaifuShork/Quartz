@@ -1,8 +1,11 @@
-﻿namespace Vivian.CodeAnalysis.Binding
+﻿using Vivian.CodeAnalysis.Syntax;
+
+namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundReturnStatement : BoundStatement
     {
-        public BoundReturnStatement(BoundExpression? expression)
+        public BoundReturnStatement(SyntaxNode syntax, BoundExpression? expression)
+            : base(syntax)
         {
             Expression = expression;
         }

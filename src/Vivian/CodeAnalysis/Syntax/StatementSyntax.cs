@@ -2,7 +2,7 @@
 {
     public abstract class StatementSyntax : SyntaxNode
     {
-        public StatementSyntax(SyntaxTree syntaxTree) : base(syntaxTree)
+        private protected StatementSyntax(SyntaxTree syntaxTree) : base(syntaxTree)
         {
             
         }

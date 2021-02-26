@@ -14,6 +14,7 @@ namespace Vivian.Tests.CodeAnalysis
             Text = text;
             Spans = spans;
         }
+
         public string Text { get; }
         public ImmutableArray<TextSpan> Spans { get; }
 
@@ -26,7 +27,7 @@ namespace Vivian.Tests.CodeAnalysis
             var startStack = new Stack<int>();
 
             var position = 0;
-            
+
             foreach (var c in text)
             {
                 if (c == '[')
@@ -53,7 +54,6 @@ namespace Vivian.Tests.CodeAnalysis
             if (startStack.Count != 0)
                 throw new ArgumentException("Missing ']' in text", nameof(text));
 
-
             return new AnnotatedText(textBuilder.ToString(), spanBuilder.ToImmutable());
         }
 
@@ -66,10 +66,11 @@ namespace Vivian.Tests.CodeAnalysis
         public static string[] UnindentLines(string text)
         {
             var lines = new List<string>();
+
             using (var reader = new StringReader(text))
             {
-                string line;
-                while ((line = reader.ReadLine()!) != null)
+                string? line;
+                while ((line = reader.ReadLine()) != null)
                     lines.Add(line);
             }
 
@@ -77,6 +78,7 @@ namespace Vivian.Tests.CodeAnalysis
             for (var i = 0; i < lines.Count; i++)
             {
                 var line = lines[i];
+
                 if (line.Trim().Length == 0)
                 {
                     lines[i] = string.Empty;
@@ -91,6 +93,7 @@ namespace Vivian.Tests.CodeAnalysis
             {
                 if (lines[i].Length == 0)
                     continue;
+
                 lines[i] = lines[i].Substring(minIndentation);
             }
 
@@ -99,7 +102,7 @@ namespace Vivian.Tests.CodeAnalysis
 
             while (lines.Count > 0 && lines[lines.Count - 1].Length == 0)
                 lines.RemoveAt(lines.Count - 1);
-            
+
             return lines.ToArray();
         }
     }

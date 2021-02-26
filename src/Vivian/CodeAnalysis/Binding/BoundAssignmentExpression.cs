@@ -1,10 +1,11 @@
 ﻿using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundAssignmentExpression : BoundExpression
     {
-        public BoundAssignmentExpression(VariableSymbol variable, BoundExpression expression)
+        public BoundAssignmentExpression(SyntaxNode syntax, VariableSymbol variable, BoundExpression expression) : base(syntax)
         {
             Variable = variable;
             Expression = expression;

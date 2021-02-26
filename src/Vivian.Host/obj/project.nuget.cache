@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "l3ZoCuGYWBCFXGwRLjkZlN4SqIfO8x8FkkqnLT38qKyvsFLo1VR9YQD7LBOXB/txYwI5L0iWPdxCRxJwmIg+IQ==",
+  "success": true,
+  "projectFilePath": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.net.compilers.toolset\\3.9.0-3.final\\microsoft.net.compilers.toolset.3.9.0-3.final.nupkg.sha512"
+  ],
+  "logs": []
+}

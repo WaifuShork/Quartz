@@ -1,20 +1,18 @@
-﻿namespace Vivian.CodeAnalysis.Binding
+﻿using Vivian.CodeAnalysis.Syntax;
+
+namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundWhileStatement : BoundLoopStatement
     {
-        public BoundWhileStatement(BoundExpression condition, BoundStatement body, BoundLabel breakLabel, BoundLabel continueLabel) : base(breakLabel, continueLabel)
+        public BoundWhileStatement(SyntaxNode syntax, BoundExpression condition, BoundStatement body, BoundLabel breakLabel, BoundLabel continueLabel)
+            : base(syntax, breakLabel, continueLabel)
         {
             Condition = condition;
             Body = body;
-            //BreakLabel = breakLabel;
-            //ContinueLabel = continueLabel;
         }
 
         public override BoundNodeKind Kind => BoundNodeKind.WhileStatement;
-
         public BoundExpression Condition { get; }
         public BoundStatement Body { get; }
-        //public new BoundLabel BreakLabel { get; }
-        //public new BoundLabel ContinueLabel { get; }
     }
 }

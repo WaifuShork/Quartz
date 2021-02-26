@@ -2,11 +2,11 @@
 {
     public enum SymbolKind
     {
-        Variable,
-        Type,
         Function,
-        Parameter,
+        GlobalVariable,
         LocalVariable,
-        GlobalVariable
+        Parameter,
+        Type,
+        Struct,
     }
 }

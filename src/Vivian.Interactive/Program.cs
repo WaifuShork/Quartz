@@ -6,9 +6,9 @@ namespace Vivian
     {
         internal static void Main()
         {
-            Console.Clear();
+            /*Console.Clear();
             var repl = new VivianRepl();
-            repl.Run();
+            repl.Run();*/
         }
     }
 }

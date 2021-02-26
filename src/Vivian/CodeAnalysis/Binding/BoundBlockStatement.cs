@@ -1,10 +1,12 @@
 ﻿using System.Collections.Immutable;
+using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundBlockStatement : BoundStatement
     {
-        public BoundBlockStatement(ImmutableArray<BoundStatement> statements)
+        public BoundBlockStatement(SyntaxNode syntax, ImmutableArray<BoundStatement> statements)
+            : base(syntax)
         {
             Statements = statements;
         }

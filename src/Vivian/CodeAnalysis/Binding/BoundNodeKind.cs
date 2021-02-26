@@ -2,28 +2,35 @@
 {
     internal enum BoundNodeKind
     {
-        // Expressions
-        LiteralExpression,
-        VariableExpression,
-        AssignmentExpression,
-        UnaryExpression,
-        BinaryExpression,
-        ErrorExpression,
-        CallExpression,
-        ConversionExpression,
-
-        // Statements 
+        // Statements
         BlockStatement,
-        ExpressionStatement,
-        IfStatement,
-        DoWhileStatement,
-        WhileStatement,
-        ForStatement,
-        VariableDeclaration,
-        GotoStatement,
-        LabelStatement,
         ConditionalGotoStatement,
+        DoWhileStatement,
+        ExpressionStatement,
+        ForStatement,
+        GotoStatement,
+        IfStatement,
+        LabelStatement,
+        MemberBlockStatement,
+        NopStatement,
         ReturnStatement,
-        NopStatement
+        SequencePointStatement,
+        VariableDeclaration,
+        WhileStatement,
+
+        // Expressions
+        AssignmentExpression,
+        BinaryExpression,
+        CallExpression,
+        CompoundAssignmentExpression,
+        CompoundFieldAssignmentExpression,
+        ConversionExpression,
+        ErrorExpression,
+        FieldAccessExpression,
+        FieldAssignmentExpression,
+        LiteralExpression,
+        ThisExpression,
+        UnaryExpression,
+        VariableExpression,
     }
 }

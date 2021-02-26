@@ -3,34 +3,32 @@ using Vivian.CodeAnalysis.Symbols;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed class VariableDeclarationSyntax : StatementSyntax
+    public sealed partial class VariableDeclarationSyntax : StatementSyntax
     {
-        public VariableDeclarationSyntax(SyntaxTree syntaxTree, 
-                                         TypeClauseSyntax type, 
-                                         SyntaxToken identifier, 
-                                         SyntaxToken equalsToken, 
-                                         ExpressionSyntax initializer) 
-                                         : base(syntaxTree)
+        internal VariableDeclarationSyntax(SyntaxTree syntaxTree, SyntaxToken keyword, SyntaxToken identifier, TypeClauseSyntax? typeClause, SyntaxToken? equalsToken, ExpressionSyntax? initializer)
+            : base(syntaxTree)
         {
-            Type = type;
+            Keyword = keyword;
             Identifier = identifier;
+            TypeClause = typeClause;
             EqualsToken = equalsToken;
             Initializer = initializer;
         }
-        
-        public override SyntaxKind Kind => SyntaxKind.VariableDeclaration;
 
-        public TypeClauseSyntax Type { get; }
-        public SyntaxToken Identifier { get; }
-        public SyntaxToken EqualsToken { get; }
-        public ExpressionSyntax Initializer { get; }
-        
+        public override SyntaxKind Kind => SyntaxKind.VariableDeclaration;
         public override IEnumerable<SyntaxNode> GetChildren()
         {
-            yield return Type;
+            yield return Keyword;
             yield return Identifier;
+            yield return TypeClause;
             yield return EqualsToken;
             yield return Initializer;
         }
+
+        public SyntaxToken Keyword { get; }
+        public SyntaxToken Identifier { get; }
+        public TypeClauseSyntax? TypeClause { get; }
+        public SyntaxToken? EqualsToken { get; }
+        public ExpressionSyntax? Initializer { get; }
     }
 }

@@ -16,30 +16,22 @@ namespace Vivian.CodeAnalysis
     {
         private BoundGlobalScope? _globalScope;
 
-        private Compilation(bool isScript, Compilation? previous, params SyntaxTree[] syntaxTrees)
+        private Compilation(params SyntaxTree[] syntaxTrees)
         {
-            IsScript = isScript;
-            Previous = previous;
             SyntaxTrees = syntaxTrees.ToImmutableArray();
         }
 
         public static Compilation Create(params SyntaxTree[] syntaxTrees)
         {
-            return new(isScript: false, previous: null, syntaxTrees);
-        }
-        
-        public static Compilation CreateScript(Compilation? previous, params SyntaxTree[] syntaxTrees)
-        {
-            return new(isScript: true, previous, syntaxTrees);
+            return new Compilation(syntaxTrees);
         }
 
-        public bool IsScript { get; }
         public Compilation? Previous { get; }
         public ImmutableArray<SyntaxTree> SyntaxTrees { get; }
-
         public FunctionSymbol? MainFunction => GlobalScope.MainFunction;
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
+        public ImmutableArray<StructSymbol> Structs => GlobalScope.Structs;
 
         internal BoundGlobalScope GlobalScope
         {
@@ -47,9 +39,10 @@ namespace Vivian.CodeAnalysis
             {
                 if (_globalScope == null)
                 {
-                    var globalScope = Binder.BindGlobalScope(IsScript, Previous?.GlobalScope, SyntaxTrees);
+                    var globalScope = Binder.BindGlobalScope(Previous?.GlobalScope, SyntaxTrees);
                     Interlocked.CompareExchange(ref _globalScope, globalScope, null);
                 }
+
                 return _globalScope;
             }
         }
@@ -58,105 +51,65 @@ namespace Vivian.CodeAnalysis
         {
             var submission = this;
             var seenSymbolNames = new HashSet<string>();
+
+            var builtinFunctions = BuiltinFunctions.GetAll().ToList();
+
             while (submission != null)
             {
-                //const ReflectionBindingFlags bindingFlags = 
-                //    ReflectionBindingFlags.Static |
-                //    ReflectionBindingFlags.Public |
-                //    ReflectionBindingFlags.NonPublic;
+                foreach (var @struct in submission.Structs)
+                    if (seenSymbolNames.Add(@struct.Name))
+                        yield return @struct;
 
-                var builtinFunctions = BuiltinFunctions.GetAll().ToList();
-                
-                foreach (var function in submission.Functions) 
+                foreach (var function in submission.Functions)
                     if (seenSymbolNames.Add(function.Name))
                         yield return function;
-                
+
                 foreach (var variable in submission.Variables)
                     if (seenSymbolNames.Add(variable.Name))
                         yield return variable;
-                
+
                 foreach (var builtin in builtinFunctions)
                     if (seenSymbolNames.Add(builtin.Name))
                         yield return builtin;
-                
+
                 submission = submission.Previous;
             }
         }
 
         private BoundProgram GetProgram()
         {
-            var previous = Previous == null ? null : Previous.GetProgram();
-            return Binder.BindProgram(IsScript, previous, GlobalScope);
+            var previous = Previous?.GetProgram();
+            return Binder.BindProgram(previous, GlobalScope);
         }
-        
-        public EvaluationResult Evaluate(Dictionary<VariableSymbol, object> variables)
-        {
-            //var parseDiagnostics = SyntaxTrees.SelectMany(st => st.Diagnostics);
-            //var diagnostics = parseDiagnostics.Concat(GlobalScope.Diagnostics).ToImmutableArray();
-            //if (diagnostics.Any())
-            //    return new EvaluationResult(diagnostics, null);
 
-            if (GlobalScope.Diagnostics.Any())
-            {
-                return new EvaluationResult(GlobalScope.Diagnostics, null);
-            }
-            
+        public ImmutableArray<Diagnostic> Validate()
+        {
+            var program = GetProgram();
+            return program.Diagnostics;
+        }
+
+        // TODO: References should be part of the compilation, not arguments for Emit
+        public ImmutableArray<Diagnostic> Emit(string moduleName, string[] references, string outputPath)
+        {
+            var parseDiagnostics = SyntaxTrees.SelectMany(st => st.Diagnostics);
+            var diagnostics = parseDiagnostics.Concat(GlobalScope.Diagnostics).ToImmutableArray();
+
+            if (diagnostics.HasErrors())
+                return diagnostics;
+
             var program = GetProgram();
 
-            // var appPath = Environment.GetCommandLineArgs()[0];
-            // var appDirectory = Path.GetDirectoryName(appPath);
-            // var cfgPath = Path.Combine(appDirectory, "cfg.dot");
-            //
-            // var cfgStatement = !program.Statement.Statements.Any()  && program.Functions.Any()
-            //                     ? program.Functions.Last().Value 
-            //                     : program.Statement;
-            // var cfg = ControlFlowGraph.Create(cfgStatement);
-            // using (var streamWriter = new StreamWriter(cfgPath))
-            //     cfg.WriteTo(streamWriter);
-            
-            if (program.Diagnostics.Any())
-                return new EvaluationResult(program.Diagnostics, null);
-
-            //var statement = GetStatement();
-            //var evaluator = new Evaluator(program.FunctionBodies, variables);
-            var evaluator = new Evaluator(program, variables);
-            
-            var value = evaluator.Evaluate();
-            return new EvaluationResult(ImmutableArray<Diagnostic>.Empty, value);
+            return Emitter.Emit(program, moduleName, references, outputPath);
         }
-
-        public void EmitTree(TextWriter writer)
-        {
-            if (GlobalScope.MainFunction != null)
-                EmitTree(GlobalScope.MainFunction, writer);
-            else if (GlobalScope.ScriptFunction != null)
-                EmitTree(GlobalScope.ScriptFunction, writer);
-        }
-
+        
         public void EmitTree(FunctionSymbol symbol, TextWriter writer)
         {
             var program = GetProgram();
-            
             symbol.WriteTo(writer);
             writer.WriteLine();
             if (!program.Functions.TryGetValue(symbol, out var body))
                 return;
             body.WriteTo(writer);
-        }
-
-        public ImmutableArray<Diagnostic> Emit(string moduleName, string[] references, string outputPath)
-        {
-            var parseDiagnostics = SyntaxTrees.SelectMany(st => st.Diagnostics);
-
-            var diagnostics = parseDiagnostics.Concat(GlobalScope.Diagnostics).ToImmutableArray();
-            if (diagnostics.Any())
-            {
-                return diagnostics;
-            }
-            
-            var program = GetProgram();
-
-            return Emitter.Emit(program, moduleName, references, outputPath);
         }
     }
 }

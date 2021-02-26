@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Text;
+using Vivian.CodeAnalysis;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Text;
 
@@ -7,53 +8,56 @@ namespace Vivian.CodeAnalysis.Syntax
 {
     internal sealed class Lexer
     {
-        private readonly ImmutableArray<SyntaxTrivia>.Builder _triviaBuilder = ImmutableArray.CreateBuilder<SyntaxTrivia>();
-        private readonly DiagnosticBag _diagnostics = new();
         private readonly SyntaxTree _syntaxTree;
         private readonly SourceText _text;
         private int _position;
-        
+
         private int _start;
         private SyntaxKind _kind;
         private object? _value;
-        
+        private readonly ImmutableArray<SyntaxTrivia>.Builder _triviaBuilder = ImmutableArray.CreateBuilder<SyntaxTrivia>();
+
         public Lexer(SyntaxTree syntaxTree)
         {
             _syntaxTree = syntaxTree;
             _text = syntaxTree.Text;
         }
 
-        public DiagnosticBag Diagnostics => _diagnostics;
-        private char Current => Peak(0);
-        private char Lookahead => Peak(1);
+        public DiagnosticBag Diagnostics { get; } = new DiagnosticBag();
 
-        private char Peak(int offset)
+        private char Current => Peek(0);
+
+        private char Lookahead => Peek(1);
+
+        private char Peek(int offset)
         {
             var index = _position + offset;
-            
+
             if (index >= _text.Length)
                 return '\0';
-            
+
             return _text[index];
         }
 
         public SyntaxToken Lex()
         {
             ReadTrivia(leading: true);
+
             var leadingTrivia = _triviaBuilder.ToImmutable();
             var tokenStart = _position;
 
             ReadToken();
+
             var tokenKind = _kind;
             var tokenValue = _value;
             var tokenLength = _position - _start;
-            
+
             ReadTrivia(leading: false);
-            
+
             var trailingTrivia = _triviaBuilder.ToImmutable();
-            
+
             var tokenText = SyntaxFacts.GetText(tokenKind);
-            if (tokenText == null!)
+            if (tokenText == null)
                 tokenText = _text.ToString(tokenStart, tokenLength);
 
             return new SyntaxToken(_syntaxTree, tokenKind, tokenStart, tokenText, tokenValue, leadingTrivia, trailingTrivia);
@@ -62,15 +66,15 @@ namespace Vivian.CodeAnalysis.Syntax
         private void ReadTrivia(bool leading)
         {
             _triviaBuilder.Clear();
-            
+
             var done = false;
-            
+
             while (!done)
             {
                 _start = _position;
                 _kind = SyntaxKind.BadToken;
                 _value = null;
-                
+
                 switch (Current)
                 {
                     case '\0':
@@ -83,38 +87,28 @@ namespace Vivian.CodeAnalysis.Syntax
                         }
                         else if (Lookahead == '*')
                         {
-                            ReadMultiLineComments();
+                            ReadMultiLineComment();
                         }
                         else
                         {
                             done = true;
                         }
-
                         break;
-                    
-                    case '\r':
                     case '\n':
+                    case '\r':
                         if (!leading)
-                        {
                             done = true;
-                        }
                         ReadLineBreak();
                         break;
-                    
                     case ' ':
                     case '\t':
                         ReadWhiteSpace();
                         break;
-                    
                     default:
                         if (char.IsWhiteSpace(Current))
-                        {
                             ReadWhiteSpace();
-                        }
                         else
-                        {
                             done = true;
-                        }
                         break;
                 }
 
@@ -127,33 +121,163 @@ namespace Vivian.CodeAnalysis.Syntax
                 }
             }
         }
-        
+
+        private void ReadLineBreak()
+        {
+            if (Current == '\r' && Lookahead == '\n')
+            {
+                _position += 2;
+            }
+            else
+            {
+                _position++;
+            }
+
+            _kind = SyntaxKind.LineBreakTrivia;
+        }
+
+        private void ReadWhiteSpace()
+        {
+            var done = false;
+
+            while (!done)
+            {
+                switch (Current)
+                {
+                    case '\0':
+                    case '\r':
+                    case '\n':
+                        done = true;
+                        break;
+                    default:
+                        if (!char.IsWhiteSpace(Current))
+                            done = true;
+                        else
+                            _position++;
+                        break;
+                }
+            }
+
+            _kind = SyntaxKind.WhitespaceTrivia;
+        }
+
+        private void ReadSingleLineComment()
+        {
+            _position += 2;
+            var done = false;
+
+            while (!done)
+            {
+                switch (Current)
+                {
+                    case '\0':
+                    case '\r':
+                    case '\n':
+                        done = true;
+                        break;
+                    default:
+                        _position++;
+                        break;
+                }
+            }
+
+            _kind = SyntaxKind.SingleLineCommentTrivia;
+        }
+
+        private void ReadMultiLineComment()
+        {
+            _position += 2;
+            var done = false;
+
+            while (!done)
+            {
+                switch (Current)
+                {
+                    case '\0':
+                        var span = new TextSpan(_start, 2);
+                        var location = new TextLocation(_text, span);
+                        Diagnostics.ReportUnterminatedMultiLineComment(location);
+                        done = true;
+                        break;
+                    case '*':
+                        if (Lookahead == '/')
+                        {
+                            _position++;
+                            done = true;
+                        }
+                        _position++;
+                        break;
+                    default:
+                        _position++;
+                        break;
+                }
+            }
+
+            _kind = SyntaxKind.MultiLineCommentTrivia;
+        }
+
         private void ReadToken()
         {
             _start = _position;
             _kind = SyntaxKind.BadToken;
             _value = null;
-            
+
             switch (Current)
             {
                 case '\0':
                     _kind = SyntaxKind.EndOfFileToken;
                     break;
-                case '+':
-                    _kind = SyntaxKind.PlusToken;
+                case '.':
+                    _kind = SyntaxKind.DotToken;
                     _position++;
                     break;
-                case '%':
-                    _kind = SyntaxKind.ModuloToken;
+                case '+':
                     _position++;
+                    if (Current != '=')
+                    {
+                        _kind = SyntaxKind.PlusToken;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.PlusEqualsToken;
+                        _position++;
+                    }
                     break;
                 case '-':
-                    _kind = SyntaxKind.MinusToken;
                     _position++;
+                    if (Current != '=')
+                    {
+                        _kind = SyntaxKind.MinusToken;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.MinusEqualsToken;
+                        _position++;
+                    }
                     break;
                 case '*':
-                    _kind = SyntaxKind.StarToken;
                     _position++;
+                    if (Current != '=')
+                    {
+                        _kind = SyntaxKind.StarToken;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.StarEqualsToken;
+                        _position++;
+                    }
+                    break;
+                case '/':
+                    _position++;
+                    if (Current != '=')
+                    {
+                        _kind = SyntaxKind.SlashToken;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.SlashEqualsToken;
+                        _position++;
+                    }
                     break;
                 case '(':
                     _kind = SyntaxKind.OpenParenthesisToken;
@@ -163,24 +287,16 @@ namespace Vivian.CodeAnalysis.Syntax
                     _kind = SyntaxKind.CloseParenthesisToken;
                     _position++;
                     break;
-                case '[':
-                    _kind = SyntaxKind.OpenBracketToken;
-                    _position++;
-                    break;
-                case ']':
-                    _kind = SyntaxKind.CloseBracketToken;
-                    _position++;
-                    break;
                 case '{':
                     _kind = SyntaxKind.OpenBraceToken;
                     _position++;
                     break;
-                case ':':
-                    _kind = SyntaxKind.ColonToken;
-                    _position++;
-                    break;
                 case '}':
                     _kind = SyntaxKind.CloseBraceToken;
+                    _position++;
+                    break;
+                case ':':
+                    _kind = SyntaxKind.ColonToken;
                     _position++;
                     break;
                 case ',':
@@ -192,45 +308,51 @@ namespace Vivian.CodeAnalysis.Syntax
                     _position++;
                     break;
                 case '^':
-                    _kind = SyntaxKind.HatToken;
                     _position++;
-                    break;
-                case '_':
-                    ReadIdentifierOrKeyword();
-                    break;
-                case ';':
-                    _kind = SyntaxKind.SemicolonToken;
-                    _position++;
-                    break;
-                case '/':
-                    _kind = SyntaxKind.SlashToken;
-                    _position++;
+                    if (Current != '=')
+                    {
+                        _kind = SyntaxKind.HatToken;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.HatEqualsToken;
+                        _position++;
+                    }
                     break;
                 case '&':
                     _position++;
-                    if (Current != '&')
-                    {
-                        _kind = SyntaxKind.AmpersandToken;
-                    }
-                    else
+                    if (Current == '&')
                     {
                         _kind = SyntaxKind.AmpersandAmpersandToken;
                         _position++;
                     }
+                    else if (Current == '=')
+                    {
+                        _kind = SyntaxKind.AmpersandEqualsToken;
+                        _position++;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.AmpersandToken;
+                    }
                     break;
                 case '|':
                     _position++;
-                    if (Current != '|')
-                    {
-                        _kind = SyntaxKind.PipeToken;
-                    }
-                    else
+                    if (Current == '|')
                     {
                         _kind = SyntaxKind.PipePipeToken;
                         _position++;
                     }
+                    else if (Current == '=')
+                    {
+                        _kind = SyntaxKind.PipeEqualsToken;
+                        _position++;
+                    }
+                    else
+                    {
+                        _kind = SyntaxKind.PipeToken;
+                    }
                     break;
-
                 case '=':
                     _position++;
                     if (Current != '=')
@@ -239,11 +361,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     }
                     else
                     {
-                        _position++;
                         _kind = SyntaxKind.EqualsEqualsToken;
+                        _position++;
                     }
                     break;
-
                 case '!':
                     _position++;
                     if (Current != '=')
@@ -281,13 +402,16 @@ namespace Vivian.CodeAnalysis.Syntax
                     }
                     break;
                 case '"':
+                case '\'':
                     ReadString();
                     break;
-                case '0': case '1': case '2': case '3': case '4': 
+                case '0': case '1': case '2': case '3': case '4':
                 case '5': case '6': case '7': case '8': case '9':
-                    ReadNumberToken();
+                    ReadNumber();
                     break;
-
+                case '_':
+                    ReadIdentifierOrKeyword();
+                    break;
                 default:
                     if (char.IsLetter(Current))
                     {
@@ -297,20 +421,22 @@ namespace Vivian.CodeAnalysis.Syntax
                     {
                         var span = new TextSpan(_position, 1);
                         var location = new TextLocation(_text, span);
-                        _diagnostics.ReportBadCharacter(location, Current);
+                        Diagnostics.ReportBadCharacter(location, Current);
                         _position++;
                     }
                     break;
             }
         }
-        
+
         private void ReadString()
         {
+            // Skip the current quote
+            var quoteChar = Current;
             _position++;
-            
+
             var sb = new StringBuilder();
             var done = false;
-            
+
             while (!done)
             {
                 switch (Current)
@@ -320,11 +446,12 @@ namespace Vivian.CodeAnalysis.Syntax
                     case '\n':
                         var span = new TextSpan(_start, 1);
                         var location = new TextLocation(_text, span);
-                        _diagnostics.ReportUnterminatedString(location);
+                        Diagnostics.ReportUnterminatedString(location);
                         done = true;
                         break;
+                    case '\'':
                     case '"':
-                        if (Lookahead == '"')
+                        if (Lookahead == quoteChar)
                         {
                             sb.Append(Current);
                             _position += 2;
@@ -342,66 +469,106 @@ namespace Vivian.CodeAnalysis.Syntax
                 }
             }
 
-            _kind = SyntaxKind.StringToken;
-            _value = sb.ToString();
-        }
+            _kind = quoteChar == '"' ? SyntaxKind.StringToken : SyntaxKind.CharToken;
 
-        private void ReadLineBreak()
-        {
-            if (Current == '\r' && Lookahead == '\n')
+            if (quoteChar == '"')
             {
-                _position += 2;
+                _value = sb.ToString();
             }
             else
             {
+                if (sb.Length > 1)
+                {
+                    var span = new TextSpan(_start, 1);
+                    var location = new TextLocation(_text, span);
+
+                    if (sb.Length == 0)
+                    {
+                        Diagnostics.ReportEmptyCharConst(location);
+                    }
+                    else
+                    {
+                        Diagnostics.ReportInvalidCharConst(location);
+                    }
+                }
+
+                _value = sb[0];
+            }
+        }
+
+        private void ReadNumber()
+        {
+            bool hasSeparator = false;
+            bool hasDecimal = false;
+            bool hasMultipleDecimals = false;
+
+            // Allow numbers and underscores as long as there are more digits following them.
+            // This allows _ to act as separators for numeric literals (e.g. 1_000_000)
+            while (char.IsDigit(Current) || (Current == '_' && char.IsDigit(Peek(1))) || (Current == '.' && char.IsDigit(Peek(1))))
+            {
+                if (!hasSeparator && Current == '_')
+                    hasSeparator = true;
+
+                if (Current == '.')
+                {
+                    if (hasDecimal)
+                        hasMultipleDecimals = true;
+
+                    hasDecimal = true;
+                }
+
                 _position++;
             }
-            
-            _kind = SyntaxKind.LineBreakTrivia;
-        }
-        
-        private void ReadWhiteSpace()
-        {
-            var done = false;
-            while (!done)
+
+            var length = _position - _start;
+            var text = _text.ToString(_start, length).Replace("_", string.Empty);
+
+            var span = new TextSpan(_start, length);
+            var location = new TextLocation(_text, span);
+
+            // Underscores followed by a number are valid identifiers
+            if (text.StartsWith('_'))
+                Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
+
+            if (hasMultipleDecimals)
+                Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
+
+            if (hasDecimal)
             {
-                switch (Current)
+                if (!double.TryParse(text, out double fvalue))
                 {
-                    case '\0':
-                    case '\r':
-                    case '\n':
-                        done = true;
-                        break;
-                    default:
-                        if (!char.IsWhiteSpace(Current))
-                            done = true;
-                        else
-                            _position++; 
-                        break;
+                    Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
+                }
+                else
+                {
+                    if (fvalue >= float.MinValue && fvalue <= float.MaxValue)
+                        _value = (float)fvalue;
+                    else if (fvalue >= double.MinValue && fvalue <= double.MaxValue)
+                        _value = fvalue;
+                }
+            }
+            else
+            {
+                if (!ulong.TryParse(text, out ulong ivalue))
+                {
+                    Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Int32);
+                }
+                else
+                {
+                    if (ivalue <= int.MaxValue)
+                        _value = (int)ivalue;
+                    else if (ivalue <= uint.MaxValue)
+                        _value = (uint)ivalue;
+                    else if (ivalue <= long.MaxValue)
+                        _value = ivalue;
+                    else if (ivalue <= ulong.MaxValue)
+                        _value = ivalue;
                 }
             }
 
-            _kind = SyntaxKind.WhitespaceTrivia;
-        }
-        
-        private void ReadNumberToken()
-        {
-            while (char.IsDigit(Current))
-                _position++;
-
-            var length = _position - _start;
-            var text = _text.ToString(_start, length);
-            if (!int.TryParse(text, out var value))
-            {
-                var span = new TextSpan(_start, length);
-                var location = new TextLocation(_text, span);
-                _diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Int);
-            }
-
-            _value = value;
             _kind = SyntaxKind.NumberToken;
         }
-        
+
         private void ReadIdentifierOrKeyword()
         {
             while (char.IsLetterOrDigit(Current) || Current == '_')
@@ -410,61 +577,6 @@ namespace Vivian.CodeAnalysis.Syntax
             var length = _position - _start;
             var text = _text.ToString(_start, length);
             _kind = SyntaxFacts.GetKeywordKind(text);
-        }
-        
-        private void ReadSingleLineComment()
-        {
-            _position += 2;
-            var done = false;
-            
-            while (!done)
-            {
-                switch (Current)
-                {
-                    case '\0':
-                    case '\r':
-                    case '\n':
-                    {
-                        done = true;
-                        break;
-                    }
-                    default:
-                        _position++;
-                        break;
-                }
-            }
-            _kind = SyntaxKind.SingleLineCommentTrivia;
-        }
-        
-        private void ReadMultiLineComments()
-        {
-            _position += 2;
-            var done = false;
-            
-            while (!done)
-            {
-                switch (Current)
-                {
-                    case '\0':
-                        var span = new TextSpan(_start, 2);
-                        var location = new TextLocation(_text, span);
-                        _diagnostics.ReportUnterminatedMultiLineComment(location);
-                        done = true;
-                        break;
-                    case '*':
-                        if (Lookahead == '/')
-                        {
-                            _position++;
-                            done = true;
-                        }
-                        _position++;
-                        break;
-                    default:
-                        _position++;
-                        break;
-                }
-            }
-            _kind = SyntaxKind.MultiLineCommentTrivia;
         }
     }
 }

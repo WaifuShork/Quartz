@@ -1,109 +1,105 @@
 ﻿namespace Vivian.CodeAnalysis.Syntax
 {
     public enum SyntaxKind
-    {
-        // Trivia
-        SkippedTextTrivia,
-        WhitespaceTrivia,        
-        SingleLineCommentTrivia,
-        MultiLineCommentTrivia,        
-        LineBreakTrivia,
-        
-        // Tokens 
-        BadToken,
-        EndOfFileToken,
-        CommaToken,
-        ColonToken,
-        SemicolonToken,
-
-        StringToken,
-        NumberToken,
-
-        // Operator Tokens
-        PlusToken,
-        MinusToken,
-        StarToken,
-        SlashToken,
-        ModuloToken,
-
-        BangToken,
-        IdentifierToken,
-
-        OpenParenthesisToken,
-        CloseParenthesisToken,
-
-        EqualsToken,
-        OpenBraceToken,
-        CloseBraceToken,
-        
-        OpenBracketToken,
-        CloseBracketToken,
-        
-        // Bitwise Tokens
-        TildeToken,
-        AmpersandToken,
-        PipeToken,
-        HatToken,
-
-        // Comparison Tokens
-        AmpersandAmpersandToken,
-        PipePipeToken,
-        EqualsEqualsToken,
-        BangEqualsToken,
-        GreaterToken,
-        LessOrEqualsToken,
-        LessToken,
-        GreaterOrEqualsToken,
-
-        // Keywords 
-        FalseKeyword,
-        TrueKeyword,
-        ConstKeyword,
-        VarKeyword,
-        IfKeyword,
-        ElseKeyword,        
-        WhileKeyword,        
-        ForKeyword,
-        ToKeyword,
-        DoKeyword,
-        ContinueKeyword,
-        BreakKeyword,
-        ReturnKeyword,
-        FunctionKeyword,
-        IntegerKeyword,
-        StringKeyword,
-        BooleanKeyword,
-        ObjectKeyword,
-        VoidKeyword,
-
-        // Expressions
-        LiteralExpression,
-        NameExpression,
-        UnaryExpression,
-        BinaryExpression,
-        ParenthesizedExpression,
-        AssignmentExpression,
-        CallExpression,
-        
-        // Nodes
-        CompilationUnit,
-        TypeClause,
-
-        // Statements
-        BlockStatement,
-        VariableDeclaration,
-        ExpressionStatement,
-        IfStatement,
-        ElseClause,
-        WhileStatement,
-        ForStatement,
-        DoWhileStatement,
-        GlobalStatement,
-        FunctionDeclaration,
-        Parameter,
-        ContinueStatement,
-        BreakStatement,
-        ReturnStatement,
-        
-    }
+        {
+            BadToken,
+    
+            // Trivia
+            LineBreakTrivia,
+            MultiLineCommentTrivia,
+            SingleLineCommentTrivia,
+            SkippedTextTrivia,
+            WhitespaceTrivia,
+    
+            // Tokens
+            AmpersandAmpersandToken,
+            AmpersandEqualsToken,
+            AmpersandToken,
+            BangEqualsToken,
+            BangToken,
+            CharToken,
+            CloseBraceToken,
+            CloseParenthesisToken,
+            ColonToken,
+            CommaToken,
+            DotToken,
+            EndOfFileToken,
+            EqualsEqualsToken,
+            EqualsToken,
+            GreaterOrEqualsToken,
+            GreaterToken,
+            HatEqualsToken,
+            HatToken,
+            IdentifierToken,
+            LessOrEqualsToken,
+            LessToken,
+            MinusEqualsToken,
+            MinusToken,
+            NumberToken,
+            OpenBraceToken,
+            OpenParenthesisToken,
+            PipeEqualsToken,
+            PipePipeToken,
+            PipeToken,
+            PlusEqualsToken,
+            PlusToken,
+            SlashEqualsToken,
+            SlashToken,
+            StarEqualsToken,
+            StarToken,
+            StringToken,
+            TildeToken,
+    
+            // Keywords
+            BreakKeyword,
+            ContinueKeyword,
+            DefaultKeyword,
+            DoKeyword,
+            ElseKeyword,
+            FalseKeyword,
+            ForKeyword,
+            FunctionKeyword,
+            IfKeyword,
+            LetKeyword,
+            ReturnKeyword,
+            StructKeyword,
+            ThisKeyword,
+            ToKeyword,
+            TrueKeyword,
+            VarKeyword,
+            WhileKeyword,
+    
+            // Nodes
+            CompilationUnit,
+            ElseClause,
+            FunctionDeclaration,
+            GlobalStatement,
+            Parameter,
+            StructDeclaration,
+            TypeClause,
+    
+            // Statements
+            BlockStatement,
+            BreakStatement,
+            ContinueStatement,
+            DoWhileStatement,
+            ExpressionStatement,
+            ForStatement,
+            IfStatement,
+            MemberBlockStatement,
+            ReturnStatement,
+            VariableDeclaration,
+            WhileStatement,
+    
+            // Expressions
+            AssignmentExpression,
+            BinaryExpression,
+            CallExpression,
+            CompoundAssignmentExpression,
+            LiteralExpression,
+            MemberAccessExpression,
+            NameExpression,
+            ParenthesizedExpression,
+            UnaryExpression,
+        }
 }

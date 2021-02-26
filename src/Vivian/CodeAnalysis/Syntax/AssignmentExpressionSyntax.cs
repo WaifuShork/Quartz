@@ -2,25 +2,26 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed class AssignmentExpressionSyntax : ExpressionSyntax
+    public sealed partial class AssignmentExpressionSyntax : ExpressionSyntax
     {
-        public AssignmentExpressionSyntax(SyntaxTree syntaxTree, SyntaxToken identifierToken, SyntaxToken equalsToken, ExpressionSyntax expression) : base(syntaxTree)
+        internal AssignmentExpressionSyntax(SyntaxTree syntaxTree, SyntaxToken identifierToken, SyntaxToken assignmentToken, ExpressionSyntax expression)
+            : base(syntaxTree)
         {
             IdentifierToken = identifierToken;
-            EqualsToken = equalsToken;
+            AssignmentToken = assignmentToken;
             Expression = expression;
         }
-        
-        public override SyntaxKind Kind => SyntaxKind.AssignmentExpression;
 
+        public override SyntaxKind Kind => SyntaxKind.AssignmentExpression;
+        
         public SyntaxToken IdentifierToken { get; }
-        public SyntaxToken EqualsToken { get; }
+        public SyntaxToken AssignmentToken { get; }
         public ExpressionSyntax Expression { get; }
         
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return IdentifierToken;
-            yield return EqualsToken;
+            yield return AssignmentToken;
             yield return Expression;
         }
     }

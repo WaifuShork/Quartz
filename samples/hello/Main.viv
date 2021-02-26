@@ -1,11 +1,16 @@
-void Main()
+function main()
 {
-    void y
-    int x = Sum(12, 12)
-    print(x)
+    var p = Point()
+    var x = p.Sum(12.2, 2.1)
+    print(string(x))
 }
 
-int Sum(int a, int b)
+function Point.Sum(x: float64, y: float64): float64
 {
-    return a + b;
+    return x + y
+}
+
+struct Point 
+{
+    var x = 0
 }

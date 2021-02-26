@@ -26,10 +26,8 @@ namespace Vivian.CodeAnalysis.Binding
 
         public sealed class BasicBlock
         {
-
             public BasicBlock()
             {
-
             }
 
             public BasicBlock(bool isStart)
@@ -48,15 +46,18 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 if (IsStart)
                     return "<Start>";
+
                 if (IsEnd)
                     return "<End>";
 
-                using var writer = new StringWriter();
-                using var indentedWriter = new IndentedTextWriter(writer);
-                foreach (var statement in Statements)
-                    statement.WriteTo(indentedWriter);
+                using (var writer = new StringWriter())
+                using (var indentedWriter = new IndentedTextWriter(writer))
+                {
+                    foreach (var statement in Statements)
+                        statement.WriteTo(indentedWriter);
 
-                return writer.ToString();
+                    return writer.ToString();
+                }
             }
         }
 
@@ -75,7 +76,8 @@ namespace Vivian.CodeAnalysis.Binding
 
             public override string ToString()
             {
-                if (Condition == null) return string.Empty;
+                if (Condition == null)
+                    return string.Empty;
 
                 return Condition.ToString();
             }
@@ -83,8 +85,8 @@ namespace Vivian.CodeAnalysis.Binding
 
         public sealed class BasicBlockBuilder
         {
-            private readonly List<BoundStatement> _statements = new();
-            private readonly List<BasicBlock> _blocks = new();
+            private List<BoundStatement> _statements = new List<BoundStatement>();
+            private List<BasicBlock> _blocks = new List<BasicBlock>();
 
             public List<BasicBlock> Build(BoundBlockStatement block)
             {
@@ -96,14 +98,17 @@ namespace Vivian.CodeAnalysis.Binding
                             StartBlock();
                             _statements.Add(statement);
                             break;
+
                         case BoundNodeKind.GotoStatement:
                         case BoundNodeKind.ConditionalGotoStatement:
                         case BoundNodeKind.ReturnStatement:
                             _statements.Add(statement);
                             StartBlock();
                             break;
+
                         case BoundNodeKind.NopStatement:
                         case BoundNodeKind.VariableDeclaration:
+                        case BoundNodeKind.SequencePointStatement:
                         case BoundNodeKind.ExpressionStatement:
                             _statements.Add(statement);
                             break;
@@ -114,6 +119,7 @@ namespace Vivian.CodeAnalysis.Binding
                 }
 
                 EndBlock();
+
                 return _blocks.ToList();
             }
 
@@ -136,19 +142,18 @@ namespace Vivian.CodeAnalysis.Binding
 
         public sealed class GraphBuilder
         {
-            private Dictionary<BoundStatement, BasicBlock> _blockFromStatement = new();
-            private readonly Dictionary<BoundLabel, BasicBlock> _blockFromLabel = new();
-            private readonly List<BasicBlockBranch> _branches = new();
-                
-            private readonly BasicBlock _start = new(isStart: true);
-            private readonly BasicBlock _end = new(isStart: false);
-            
+            private Dictionary<BoundStatement, BasicBlock> _blockFromStatement = new Dictionary<BoundStatement, BasicBlock>();
+            private Dictionary<BoundLabel, BasicBlock> _blockFromLabel = new Dictionary<BoundLabel, BasicBlock>();
+            private List<BasicBlockBranch> _branches = new List<BasicBlockBranch>();
+            private BasicBlock _start = new BasicBlock(isStart: true);
+            private BasicBlock _end = new BasicBlock(isStart: false);
+
             public ControlFlowGraph Build(List<BasicBlock> blocks)
             {
-                if (!blocks.Any())
+                if (blocks.Count == 0)
                     Connect(_start, _end);
                 else
-                    Connect(_start, blocks.First());
+                    Connect(_start, blocks[0]);
 
                 foreach (var block in blocks)
                 {
@@ -160,7 +165,7 @@ namespace Vivian.CodeAnalysis.Binding
                     }
                 }
 
-                for (var i = 0; i < blocks.Count; i++)
+                for (int i = 0; i < blocks.Count; i++)
                 {
                     var current = blocks[i];
                     var next = i == blocks.Count - 1 ? _end : blocks[i + 1];
@@ -171,26 +176,30 @@ namespace Vivian.CodeAnalysis.Binding
                         switch (statement.Kind)
                         {
                             case BoundNodeKind.GotoStatement:
-                                var gs = (BoundGotoStatement) statement;
+                                var gs = (BoundGotoStatement)statement;
                                 var toBlock = _blockFromLabel[gs.Label];
                                 Connect(current, toBlock);
                                 break;
+
                             case BoundNodeKind.ConditionalGotoStatement:
-                                var cgs = (BoundConditionalGotoStatement) statement;
+                                var cgs = (BoundConditionalGotoStatement)statement;
                                 var thenBlock = _blockFromLabel[cgs.Label];
                                 var elseBlock = next;
-                                var negateCondition = Negate(cgs.Condition);
-                                var thenCondition = cgs.JumpIfTrue ? cgs.Condition :negateCondition;
-                                var elseCondition = cgs.JumpIfTrue ? negateCondition : cgs.Condition;
+                                var negatedCondition = Negate(cgs.Condition);
+                                var thenCondition = cgs.JumpIfTrue ? cgs.Condition : negatedCondition;
+                                var elseCondition = cgs.JumpIfTrue ? negatedCondition : cgs.Condition;
                                 Connect(current, thenBlock, thenCondition);
                                 Connect(current, elseBlock, elseCondition);
                                 break;
+
                             case BoundNodeKind.ReturnStatement:
                                 Connect(current, _end);
                                 break;
+
                             case BoundNodeKind.NopStatement:
                             case BoundNodeKind.VariableDeclaration:
                             case BoundNodeKind.LabelStatement:
+                            case BoundNodeKind.SequencePointStatement:
                             case BoundNodeKind.ExpressionStatement:
                                 if (isLastStatementInBlock)
                                     Connect(current, next);
@@ -201,21 +210,38 @@ namespace Vivian.CodeAnalysis.Binding
                         }
                     }
                 }
-                
+
                 ScanAgain:
-                    foreach (var block in blocks)
+                foreach (var block in blocks)
+                {
+                    if (!block.Incoming.Any())
                     {
-                        if (!block.Incoming.Any())
-                        {
-                            RemoveBlock(blocks, block);
-                            goto ScanAgain;
-                        }
+                        RemoveBlock(blocks, block);
+                        goto ScanAgain;
                     }
-                
+                }
+
                 blocks.Insert(0, _start);
                 blocks.Add(_end);
-                
+
                 return new ControlFlowGraph(_start, _end, blocks, _branches);
+            }
+
+            private void Connect(BasicBlock from, BasicBlock to, BoundExpression? condition = null)
+            {
+                if (condition is BoundLiteralExpression l)
+                {
+                    var value = (bool)l.Value;
+                    if (value)
+                        condition = null;
+                    else
+                        return;
+                }
+
+                var branch = new BasicBlockBranch(from, to, condition);
+                from.Outgoing.Add(branch);
+                to.Incoming.Add(branch);
+                _branches.Add(branch);
             }
 
             private void RemoveBlock(List<BasicBlock> blocks, BasicBlock block)
@@ -228,54 +254,35 @@ namespace Vivian.CodeAnalysis.Binding
 
                 foreach (var branch in block.Outgoing)
                 {
-                    branch.From.Incoming.Remove(branch);
+                    branch.To.Incoming.Remove(branch);
                     _branches.Remove(branch);
                 }
-                
+
                 blocks.Remove(block);
             }
 
             private BoundExpression Negate(BoundExpression condition)
             {
-                if (condition is BoundLiteralExpression literal)
-                {
-                    var value = (bool) literal.Value;
-                    return new BoundLiteralExpression(!value);
-                }
+                var negated = BoundNodeFactory.Not(condition.Syntax, condition);
+                if (negated.ConstantValue != null)
+                    return new BoundLiteralExpression(condition.Syntax, negated.ConstantValue.Value);
 
-                var op = BoundUnaryOperator.Bind(SyntaxKind.BangToken, TypeSymbol.Bool);
-                Debug.Assert(op != null);
-                return new BoundUnaryExpression(op, condition);
-            }
-          
-            private void Connect(BasicBlock from, BasicBlock to, BoundExpression? condition = null)
-            {
-                if (condition is BoundLiteralExpression l)
-                {
-                    var value = (bool) l.Value;
-                    
-                    if (value)
-                        condition = null;
-                    else 
-                        return;
-                }
-                
-                var branch = new BasicBlockBranch(from, to, condition);
-                from.Outgoing.Add(branch);
-                to.Incoming.Add(branch);
-                _branches.Add(branch);
+                return negated;
             }
         }
 
         public void WriteTo(TextWriter writer)
         {
-            string Quote(string text) => "\"" + text.Replace("\"", "\\\"") + "\"";
-            
-            
+            static string Quote(string text)
+            {
+                return "\"" + text.TrimEnd().Replace("\\", "\\\\").Replace("\"", "\\\"").Replace(Environment.NewLine, "\\l") + "\"";
+            }
+
             writer.WriteLine("digraph G {");
 
             var blockIds = new Dictionary<BasicBlock, string>();
-            for (var i = 0; i < Blocks.Count; i++)
+
+            for (int i = 0; i < Blocks.Count; i++)
             {
                 var id = $"N{i}";
                 blockIds.Add(Blocks[i], id);
@@ -284,10 +291,9 @@ namespace Vivian.CodeAnalysis.Binding
             foreach (var block in Blocks)
             {
                 var id = blockIds[block];
-                var label = Quote(block.ToString().Replace(Environment.NewLine, "\\l"));
-                writer.WriteLine($"    {id} [label = {label} shape = box]");
+                var label = Quote(block.ToString());
+                writer.WriteLine($"    {id} [label = {label}, shape = box]");
             }
-
 
             foreach (var branch in Branches)
             {
@@ -296,7 +302,7 @@ namespace Vivian.CodeAnalysis.Binding
                 var label = Quote(branch.ToString());
                 writer.WriteLine($"    {fromId} -> {toId} [label = {label}]");
             }
-            
+
             writer.WriteLine("}");
         }
 
@@ -317,7 +323,7 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 var lastStatement = branch.From.Statements.LastOrDefault();
                 if (lastStatement == null || lastStatement.Kind != BoundNodeKind.ReturnStatement)
-                        return false;
+                    return false;
             }
 
             return true;

@@ -1,8 +1,11 @@
-﻿namespace Vivian.CodeAnalysis.Binding
+﻿using Vivian.CodeAnalysis.Syntax;
+
+namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundLabelStatement : BoundStatement
     {
-        public BoundLabelStatement(BoundLabel label)
+        public BoundLabelStatement(SyntaxNode syntax, BoundLabel label)
+            : base(syntax)
         {
             Label = label;
         }
