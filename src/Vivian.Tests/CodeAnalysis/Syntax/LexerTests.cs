@@ -16,11 +16,11 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 var tokens = SyntaxTree.ParseTokens(text, out var diagnostics);
     
                 var token = Assert.Single(tokens);
-                Assert.Equal(SyntaxKind.StringToken, token.Kind);
+                Assert.Equal(SyntaxKind.StringToken, token!.Kind);
                 Assert.Equal(text, token.Text);
     
                 var diagnostic = Assert.Single(diagnostics);
-                Assert.Equal(new TextSpan(0, 1), diagnostic.Location.Span);
+                Assert.Equal(new TextSpan(0, 1), diagnostic!.Location.Span);
                 Assert.Equal("Unterminated string literal.", diagnostic.Message);
             }
     
@@ -48,7 +48,7 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 var tokens = SyntaxTree.ParseTokens(text);
     
                 var token = Assert.Single(tokens);
-                Assert.Equal(kind, token.Kind);
+                Assert.Equal(kind, token!.Kind);
                 Assert.Equal(text, token.Text);
             }
     
@@ -59,8 +59,8 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 var tokens = SyntaxTree.ParseTokens(text, includeEndOfFile: true);
     
                 var token = Assert.Single(tokens);
-                var trivia = Assert.Single(token.LeadingTrivia);
-                Assert.Equal(kind, trivia.Kind);
+                var trivia = Assert.Single(token!.LeadingTrivia);
+                Assert.Equal(kind, trivia!.Kind);
                 Assert.Equal(text, trivia.Text);
             }
     
@@ -93,7 +93,7 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 Assert.Equal(t1Text, tokens[0].Text);
     
                 var separator = Assert.Single(tokens[0].TrailingTrivia);
-                Assert.Equal(separatorKind, separator.Kind);
+                Assert.Equal(separatorKind, separator!.Kind);
                 Assert.Equal(separatorText, separator.Text);
     
                 Assert.Equal(t2Kind, tokens[1].Kind);
@@ -199,147 +199,234 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
             {
                 var t1IsKeyword = t1Kind.IsKeyword();
                 var t2IsKeyword = t2Kind.IsKeyword();
-    
+
                 if (t1Kind == SyntaxKind.IdentifierToken && t2Kind == SyntaxKind.IdentifierToken)
+                {
                     return true;
-    
+                }
+
                 if (t1IsKeyword && t2IsKeyword)
+                {
                     return true;
-    
+                }
+
                 if (t1IsKeyword && t2Kind == SyntaxKind.IdentifierToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.IdentifierToken && t2IsKeyword)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.IdentifierToken && t2Kind == SyntaxKind.NumberToken)
+                {
                     return true;
-    
+                }
+
                 if (t1IsKeyword && t2Kind == SyntaxKind.NumberToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.NumberToken && t2Kind == SyntaxKind.NumberToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.StringToken && t2Kind == SyntaxKind.StringToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.CharToken && t2Kind == SyntaxKind.CharToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.BangToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.BangToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
+                }
     
                 if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.EqualsToken)
-                    return true;
-    
+                {
+                    return true; 
+                }
+
                 if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.PlusToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.PlusToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.MinusToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.MinusToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
+                }
     
                 if (t1Kind == SyntaxKind.StarToken && t2Kind == SyntaxKind.EqualsToken)
                     return true;
-    
+
                 if (t1Kind == SyntaxKind.StarToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.LessToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.LessToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.GreaterToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.GreaterToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.AmpersandToken && t2Kind == SyntaxKind.AmpersandToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.AmpersandToken && t2Kind == SyntaxKind.AmpersandAmpersandToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.AmpersandToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.AmpersandToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.AmpersandToken && t2Kind == SyntaxKind.AmpersandEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.PipeToken && t2Kind == SyntaxKind.PipeToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.PipeToken && t2Kind == SyntaxKind.PipePipeToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.PipeToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.PipeToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.PipeToken && t2Kind == SyntaxKind.PipeEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.HatToken && t2Kind == SyntaxKind.EqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.HatToken && t2Kind == SyntaxKind.EqualsEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.SlashToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.StarToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.SlashEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.StarEqualsToken)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.SingleLineCommentTrivia)
+                {
                     return true;
-    
+                }
+
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.MultiLineCommentTrivia)
+                {
                     return true;
-    
+                }
+
+
                 return false;
             }
     
             private static IEnumerable<(SyntaxKind t1Kind, string t1Text, SyntaxKind t2Kind, string t2Text)> GetTokenPairs()
             {
-                foreach (var t1 in GetTokens())
+                foreach (var (kind, text) in GetTokens())
                 {
-                    foreach (var t2 in GetTokens())
+                    foreach (var (syntaxKind, str) in GetTokens())
                     {
-                        if (!RequiresSeparator(t1.kind, t2.kind))
-                            yield return (t1.kind, t1.text, t2.kind, t2.text);
+                        if (!RequiresSeparator(kind, syntaxKind))
+                        {
+                            yield return (kind, text, syntaxKind, str);
+                        }
                     }
                 }
             }
@@ -348,16 +435,18 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                                         SyntaxKind separatorKind, string separatorText,
                                         SyntaxKind t2Kind, string t2Text)> GetTokenPairsWithSeparator()
             {
-                foreach (var t1 in GetTokens())
+                foreach (var (kind, text) in GetTokens())
                 {
-                    foreach (var t2 in GetTokens())
+                    foreach (var (syntaxKind, text1) in GetTokens())
                     {
-                        if (RequiresSeparator(t1.kind, t2.kind))
+                        if (RequiresSeparator(kind, syntaxKind))
                         {
-                            foreach (var s in GetSeparators())
+                            foreach (var (syntaxKind1, str) in GetSeparators())
                             {
-                                if (!RequiresSeparator(t1.kind, s.kind) && !RequiresSeparator(s.kind, t2.kind))
-                                    yield return (t1.kind, t1.text, s.kind, s.text, t2.kind, t2.text);
+                                if (!RequiresSeparator(kind, syntaxKind1) && !RequiresSeparator(syntaxKind1, syntaxKind))
+                                {
+                                    yield return (kind, text, syntaxKind1, str, syntaxKind, text1);
+                                }
                             }
                         }
                     }

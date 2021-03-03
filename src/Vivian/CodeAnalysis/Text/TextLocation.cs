@@ -1,6 +1,6 @@
 ﻿namespace Vivian.CodeAnalysis.Text
 {
-    public struct TextLocation
+    public readonly struct TextLocation
     {
         public TextLocation(SourceText text, TextSpan span)
         {

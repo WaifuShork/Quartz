@@ -44,15 +44,19 @@ namespace VivianCompiler
 
             if (sourcePaths.Count == 0)
             {
-                Console.Error.WriteLine("error: need at least one source file");
+                await Console.Error.WriteLineAsync("error: need at least one source file");
                 return 1;
             }
 
             if (outputPath == null)
+            {
                 outputPath = Path.ChangeExtension(sourcePaths[0], ".exe");
+            }
 
             if (moduleName == null)
+            {
                 moduleName = Path.GetFileNameWithoutExtension(outputPath);
+            }
 
             var syntaxTrees = new List<SyntaxTree>();
             var hasErrors = false;
@@ -61,7 +65,7 @@ namespace VivianCompiler
             {
                 if (!File.Exists(path))
                 {
-                    Console.Error.WriteLine($"error: file '{path}' doesn't exist");
+                    await Console.Error.WriteLineAsync($"error: file '{path}' doesn't exist");
                     hasErrors = true;
                     continue;
                 }
@@ -71,14 +75,16 @@ namespace VivianCompiler
             {
                 if (!File.Exists(path))
                 {
-                    Console.Error.WriteLine($"error: file '{path}' doesn't exist");
+                    await Console.Error.WriteLineAsync($"error: file '{path}' doesn't exist");
                     hasErrors = true;
                     continue;
                 }
             }
 
             if (hasErrors)
+            {
                 return 1;
+            }
 
             var compilerHost = new ConsoleCompilerHost();
             var compilerService = new Server(compilerHost);
@@ -95,16 +101,15 @@ namespace VivianCompiler
                 }
             }
 
-            if (compilerHost.Errors > 0) {
+            if (compilerHost.Errors > 0) 
+            {
                 Console.Out.WriteBuildSummary(false, compilerHost.Errors, compilerHost.Warnings);
-
                 return 1;
             }
 
             if (!compilerService.EmitBinary(syntaxTrees, moduleName, referencePaths.ToArray(), outputPath))
             {
                 Console.Out.WriteBuildSummary(false, compilerHost.Errors, compilerHost.Warnings);
-
                 return 1;
             }
 

@@ -13,9 +13,13 @@ namespace Vivian.CodeAnalysis.Binding
         public static void WriteTo(this BoundNode node, TextWriter writer)
         {
             if (writer is IndentedTextWriter iw)
+            {
                 WriteTo(node, iw);
+            }
             else
+            {
                 WriteTo(node, new IndentedTextWriter(writer));
+            }
         }
 
         public static void WriteTo(this BoundNode node, IndentedTextWriter writer)
@@ -95,25 +99,35 @@ namespace Vivian.CodeAnalysis.Binding
 
         private static void WriteNestedStatement(this IndentedTextWriter writer, BoundStatement node)
         {
-            var needsIndentation = !(node is BoundBlockStatement);
+            var needsIndentation = node is not BoundBlockStatement;
 
             if (needsIndentation)
+            {
                 writer.Indent++;
+            }
 
             node.WriteTo(writer);
 
             if (needsIndentation)
+            {
                 writer.Indent--;
+            }
         }
 
         private static void WriteNestedExpression(this IndentedTextWriter writer, int parentPrecedence, BoundExpression expression)
         {
             if (expression is BoundUnaryExpression unary)
-                writer.WriteNestedExpression(parentPrecedence, SyntaxFacts.GetUnaryOperatorPrecedence(unary.Op.SyntaxKind), unary);
+            {
+                writer.WriteNestedExpression(parentPrecedence, unary.Op.SyntaxKind.GetUnaryOperatorPrecedence(), unary);
+            }
             else if (expression is BoundBinaryExpression binary)
-                writer.WriteNestedExpression(parentPrecedence, SyntaxFacts.GetBinaryOperatorPrecedence(binary.Op.SyntaxKind), binary);
+            {
+                writer.WriteNestedExpression(parentPrecedence, binary.Op.SyntaxKind.GetBinaryOperatorPrecedence(), binary);
+            }
             else
+            {
                 expression.WriteTo(writer);
+            }
         }
 
         private static void WriteNestedExpression(this IndentedTextWriter writer, int parentPrecedence, int currentPrecedence, BoundExpression expression)
@@ -121,12 +135,16 @@ namespace Vivian.CodeAnalysis.Binding
             var needsParenthesis = parentPrecedence >= currentPrecedence;
 
             if (needsParenthesis)
+            {
                 writer.WritePunctuation(SyntaxKind.OpenParenthesisToken);
+            }
 
             expression.WriteTo(writer);
 
             if (needsParenthesis)
+            {
                 writer.WritePunctuation(SyntaxKind.CloseParenthesisToken);
+            }
         }
 
         private static void WriteBlockStatement(BoundBlockStatement node, IndentedTextWriter writer)
@@ -136,7 +154,9 @@ namespace Vivian.CodeAnalysis.Binding
             writer.Indent++;
 
             foreach (var s in node.Statements)
+            {
                 s.WriteTo(writer);
+            }
 
             writer.Indent--;
             writer.WritePunctuation(SyntaxKind.CloseBraceToken);
@@ -218,7 +238,9 @@ namespace Vivian.CodeAnalysis.Binding
         {
             var unindent = writer.Indent > 0;
             if (unindent)
+            {
                 writer.Indent--;
+            }
 
             writer.WritePunctuation(node.Label.Name);
             writer.WritePunctuation(SyntaxKind.ColonToken);
@@ -342,7 +364,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         private static void WriteUnaryExpression(BoundUnaryExpression node, IndentedTextWriter writer)
         {
-            var precedence = SyntaxFacts.GetUnaryOperatorPrecedence(node.Op.SyntaxKind);
+            var precedence = node.Op.SyntaxKind.GetUnaryOperatorPrecedence();
 
             writer.WritePunctuation(node.Op.SyntaxKind);
             writer.WriteNestedExpression(precedence, node.Operand);
@@ -350,7 +372,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         private static void WriteBinaryExpression(BoundBinaryExpression node, IndentedTextWriter writer)
         {
-            var precedence = SyntaxFacts.GetBinaryOperatorPrecedence(node.Op.SyntaxKind);
+            var precedence = node.Op.SyntaxKind.GetBinaryOperatorPrecedence();
 
             writer.WriteNestedExpression(precedence, node.Left);
             writer.WriteSpace();

@@ -15,11 +15,9 @@ namespace Vivian.CodeAnalysis.Binding
 
         public override string ToString()
         {
-            using (var writer = new StringWriter())
-            {
-                this.WriteTo(writer);
-                return writer.ToString();
-            }
+            using var writer = new StringWriter();
+            this.WriteTo(writer);
+            return writer.ToString();
         }
     }
 }

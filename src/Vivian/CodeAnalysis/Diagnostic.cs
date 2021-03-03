@@ -21,10 +21,13 @@ namespace Vivian.CodeAnalysis
         public string Message { get; }
         public bool IsWarning { get; }
 
-        public DiagnosticLocation DiagnosticLocation {
-            get {
+        public DiagnosticLocation DiagnosticLocation 
+        {
+            get 
+            {
                 // Lazy initialize external location
-                if (_diagnosticLocation == null) {
+                if (_diagnosticLocation == null) 
+                {
                     var start = new Position(Location.StartLine, Location.StartCharacter);
                     var end = new Position(Location.EndLine, Location.EndCharacter);
                     var range = new Range(start, end);
@@ -42,30 +45,29 @@ namespace Vivian.CodeAnalysis
             }
         }
 
-        public string? ContextSourceSnippet {
-            get {
+        public string? ContextSourceSnippet 
+        {
+            get 
+            {
                 var start = Location.Text.Lines[Location.StartLine].Start;
                 var end = Location.Text.Lines[Location.EndLine].End;
 
                 return Location.Text.ToString(start, end - start);
             }
         }
-        public string? TargetSourceSnippet {
-            get {
-                return Location.Text.ToString(Location.Span.Start, Location.Span.End - Location.Span.Start);
-            }
-        }
+        
+        public string? TargetSourceSnippet=>Location.Text.ToString(Location.Span.Start, Location.Span.End - Location.Span.Start);
 
         public override string ToString() => Message;
 
         public static Diagnostic Error(TextLocation location, string message)
         {
-            return new Diagnostic(isError: true, location, message);
+            return new(isError: true, location, message);
         }
 
         public static Diagnostic Warning(TextLocation location, string message)
         {
-            return new Diagnostic(isError: false, location, message);
+            return new(isError: false, location, message);
         }
     }
 }

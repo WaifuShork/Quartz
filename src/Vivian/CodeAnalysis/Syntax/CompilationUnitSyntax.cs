@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class CompilationUnitSyntax : SyntaxNode
+    public sealed class CompilationUnitSyntax : SyntaxNode
     {
         internal CompilationUnitSyntax(SyntaxTree syntaxTree, ImmutableArray<MemberSyntax> members, SyntaxToken endOfFileToken)
             : base(syntaxTree)
@@ -13,12 +13,13 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.CompilationUnit;
+        
+        public ImmutableArray<MemberSyntax> Members { get; }
+        public SyntaxToken EndOfFileToken { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return EndOfFileToken;
         }
-
-        public ImmutableArray<MemberSyntax> Members { get; }
-        public SyntaxToken EndOfFileToken { get; }
     }
 }

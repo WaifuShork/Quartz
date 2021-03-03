@@ -25,13 +25,16 @@ namespace Vivian.CodeAnalysis.Binding
         public bool TryDeclareStruct(StructSymbol @struct)
             => TryDeclareSymbol(@struct);
 
-        private bool TryDeclareSymbol<TSymbol>(TSymbol symbol)
-            where TSymbol : Symbol
+        private bool TryDeclareSymbol<TSymbol>(TSymbol symbol) where TSymbol : Symbol
         {
             if (_symbols == null)
+            {
                 _symbols = new Dictionary<string, Symbol>();
+            }
             else if (_symbols.ContainsKey(symbol.Name))
+            {
                 return false;
+            }
 
             _symbols.Add(symbol.Name, symbol);
 
@@ -41,7 +44,9 @@ namespace Vivian.CodeAnalysis.Binding
         public Symbol? TryLookupSymbol(string name)
         {
             if (_symbols != null && _symbols.TryGetValue(name, out var symbol))
+            {
                 return symbol;
+            }
 
             return Parent?.TryLookupSymbol(name);
         }
@@ -55,11 +60,12 @@ namespace Vivian.CodeAnalysis.Binding
         public ImmutableArray<StructSymbol> GetDeclaredStructs()
             => GetDeclaredSymbols<StructSymbol>();
 
-        private ImmutableArray<TSymbol> GetDeclaredSymbols<TSymbol>()
-            where TSymbol : Symbol
+        private ImmutableArray<TSymbol> GetDeclaredSymbols<TSymbol>() where TSymbol : Symbol
         {
             if (_symbols == null)
+            {
                 return ImmutableArray<TSymbol>.Empty;
+            }
 
             return _symbols.Values.OfType<TSymbol>().ToImmutableArray();
         }

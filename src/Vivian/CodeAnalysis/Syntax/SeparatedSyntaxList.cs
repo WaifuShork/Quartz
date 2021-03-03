@@ -7,15 +7,11 @@ namespace Vivian.CodeAnalysis.Syntax
 {
     public abstract class SeparatedSyntaxList
     {
-        private protected SeparatedSyntaxList()
-        {
-        }
-
+        private protected SeparatedSyntaxList() { }
         public abstract ImmutableArray<SyntaxNode> GetWithSeparators();
     }
 
-    public sealed class SeparatedSyntaxList<T> : SeparatedSyntaxList, IEnumerable<T>
-        where T: SyntaxNode
+    public sealed class SeparatedSyntaxList<T> : SeparatedSyntaxList, IEnumerable<T> where T: SyntaxNode
     {
         private readonly ImmutableArray<SyntaxNode> _nodesAndSeparators;
 

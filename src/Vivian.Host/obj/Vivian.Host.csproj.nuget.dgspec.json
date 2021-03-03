@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {}
+    "G:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {}
   },
   "projects": {
-    "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
+    "G:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+        "projectUniqueName": "G:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
         "projectName": "Vivian.Host",
-        "projectPath": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+        "projectPath": "G:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
         "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-        "outputPath": "G:\\v\\Vivian\\src\\Vivian.Host\\obj\\",
+        "outputPath": "G:\\VivianLang\\Vivian\\src\\Vivian.Host\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

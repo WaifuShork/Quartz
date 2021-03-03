@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class ParenthesizedExpressionSyntax : ExpressionSyntax
+    public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax
     {
         internal ParenthesizedExpressionSyntax(SyntaxTree syntaxTree, SyntaxToken openParenthesisToken, ExpressionSyntax expression, SyntaxToken closeParenthesisToken)
             : base(syntaxTree)
@@ -13,15 +13,16 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.ParenthesizedExpression;
+        
+        public SyntaxToken OpenParenthesisToken { get; }
+        public ExpressionSyntax Expression { get; }
+        public SyntaxToken CloseParenthesisToken { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return OpenParenthesisToken;
             yield return Expression;
             yield return CloseParenthesisToken;
         }
-
-        public SyntaxToken OpenParenthesisToken { get; }
-        public ExpressionSyntax Expression { get; }
-        public SyntaxToken CloseParenthesisToken { get; }
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "l3ZoCuGYWBCFXGwRLjkZlN4SqIfO8x8FkkqnLT38qKyvsFLo1VR9YQD7LBOXB/txYwI5L0iWPdxCRxJwmIg+IQ==",
+  "dgSpecHash": "H2qdRPa2oFTv1wrsZ9miwNblpzjYSF6cGQglNGprLmkiC3Eaw8D+4kDcpk2fnhW0MAlx9+Z9w7XICpNWjutRtA==",
   "success": true,
-  "projectFilePath": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+  "projectFilePath": "G:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.net.compilers.toolset\\3.9.0-3.final\\microsoft.net.compilers.toolset.3.9.0-3.final.nupkg.sha512"
   ],

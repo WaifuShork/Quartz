@@ -3,7 +3,7 @@ using Vivian.CodeAnalysis.Binding;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class DoWhileStatementSyntax : StatementSyntax
+    public sealed class DoWhileStatementSyntax : StatementSyntax
     {
         internal DoWhileStatementSyntax(SyntaxTree syntaxTree, SyntaxToken doKeyword, StatementSyntax body, SyntaxToken whileKeyword, ExpressionSyntax condition)
             : base(syntaxTree)
@@ -15,6 +15,12 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.DoWhileStatement;
+        
+        public SyntaxToken DoKeyword { get; }
+        public StatementSyntax Body { get; }
+        public SyntaxToken WhileKeyword { get; }
+        public ExpressionSyntax Condition { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return DoKeyword;
@@ -22,10 +28,5 @@ namespace Vivian.CodeAnalysis.Syntax
             yield return WhileKeyword;
             yield return Condition;
         }
-
-        public SyntaxToken DoKeyword { get; }
-        public StatementSyntax Body { get; }
-        public SyntaxToken WhileKeyword { get; }
-        public ExpressionSyntax Condition { get; }
     }
 }

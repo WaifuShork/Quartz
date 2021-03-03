@@ -15,11 +15,8 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public SyntaxTree SyntaxTree { get; }
-
         public SyntaxNode? Parent => SyntaxTree.GetParent(this);
-
         public abstract SyntaxKind Kind { get; }
-
         public virtual TextSpan Span
         {
             get
@@ -31,7 +28,6 @@ namespace Vivian.CodeAnalysis.Syntax
                 return TextSpan.FromBounds(Math.Min(first.Start, last.Start), Math.Max(first.End, last.End));
             }
         }
-
         public virtual TextSpan FullSpan
         {
             get
@@ -44,7 +40,7 @@ namespace Vivian.CodeAnalysis.Syntax
             }
         }
 
-        public TextLocation Location => new TextLocation(SyntaxTree.Text, Span);
+        public TextLocation Location => new(SyntaxTree.Text, Span);
 
         public IEnumerable<SyntaxNode> AncestorsAndSelf()
         {
@@ -66,7 +62,9 @@ namespace Vivian.CodeAnalysis.Syntax
         public SyntaxToken GetLastToken()
         {
             if (this is SyntaxToken token)
+            {
                 return token;
+            }
 
             // A syntax node should always contain at least 1 token.
             return GetChildren().Last().GetLastToken();
@@ -87,13 +85,17 @@ namespace Vivian.CodeAnalysis.Syntax
                 foreach (var trivia in token.LeadingTrivia)
                 {
                     if (isToConsole)
+                    {
                         Console.ForegroundColor = ConsoleColor.DarkGray;
+                    }
 
                     writer.Write(indent);
                     writer.Write("├──");
 
                     if (isToConsole)
+                    {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    }
 
                     writer.WriteLine($"L: {trivia.Kind}");
                 }
@@ -103,13 +105,17 @@ namespace Vivian.CodeAnalysis.Syntax
             var tokenMarker = !hasTrailingTrivia && isLast ? "└──" : "├──";
 
             if (isToConsole)
+            {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
+            }
 
             writer.Write(indent);
             writer.Write(tokenMarker);
 
             if (isToConsole)
+            {
                 Console.ForegroundColor = node is SyntaxToken ? ConsoleColor.Blue : ConsoleColor.Cyan;
+            }
 
             writer.Write(node.Kind);
 
@@ -156,16 +162,16 @@ namespace Vivian.CodeAnalysis.Syntax
             var lastChild = node.GetChildren().LastOrDefault();
 
             foreach (var child in node.GetChildren())
+            {
                 PrettyPrint(writer, child, indent, child == lastChild);
+            }
         }
 
         public override string ToString()
         {
-            using (var writer = new StringWriter())
-            {
-                WriteTo(writer);
-                return writer.ToString();
-            }
+            using var writer = new StringWriter();
+            WriteTo(writer);
+            return writer.ToString();
         }
     }
 }

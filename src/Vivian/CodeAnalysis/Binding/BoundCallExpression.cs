@@ -33,6 +33,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         public override BoundNodeKind Kind => BoundNodeKind.CallExpression;
         public override TypeSymbol Type => Function.ReturnType;
+        
         public BoundExpression? Instance { get; }
         public FunctionSymbol Function { get; }
         public ImmutableArray<BoundExpression> Arguments { get; }

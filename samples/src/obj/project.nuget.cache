@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "fytUc3Mm4kv6RgPuJ6e1w7vrQ0CaRvTq9/UenqCssLUC3paMhOIHgA54Nrz1het37abIfqGTLDGRTEwF/SIFkA==",
+  "success": true,
+  "projectFilePath": "G:\\VivianLang\\Vivian\\samples\\src\\Playground.vivproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.9\\microsoft.netcore.app.host.win-x64.3.1.9.nupkg.sha512"
+  ],
+  "logs": []
+}

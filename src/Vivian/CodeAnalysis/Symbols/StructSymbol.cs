@@ -5,7 +5,8 @@ namespace Vivian.CodeAnalysis.Symbols
 {
     public sealed class StructSymbol : TypeSymbol
     {
-        internal StructSymbol(string name, ImmutableArray<ParameterSymbol> ctorParameters, ImmutableArray<VariableSymbol> members, StructDeclarationSyntax? declaration = null) : base(name, null)
+        internal StructSymbol(string name, ImmutableArray<ParameterSymbol> ctorParameters, ImmutableArray<VariableSymbol> members, StructDeclarationSyntax? declaration = null) 
+            : base(name, null)
         {
             Declaration = declaration;
             CtorParameters = ctorParameters;

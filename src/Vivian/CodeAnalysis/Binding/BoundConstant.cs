@@ -8,7 +8,8 @@
         }
 
         public object? Value { get; }
-        public bool IsZero => Value switch {
+        public bool IsZero => Value switch 
+        {
             char i => i == 0,
             sbyte i => i == 0,
             short i => i == 0,

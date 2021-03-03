@@ -2,9 +2,6 @@
 {
     public abstract class MemberSyntax : SyntaxNode
     {
-        private protected MemberSyntax(SyntaxTree syntaxTree)
-            : base(syntaxTree)
-        {
-        }
+        private protected MemberSyntax(SyntaxTree syntaxTree) : base(syntaxTree) { }
     }
 }

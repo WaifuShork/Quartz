@@ -1,0 +1,12 @@
+<Project>
+
+    <PropertyGroup>
+        <DefaultLanguageSourceExtension>.viv</DefaultLanguageSourceExtension>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+
+</Project>

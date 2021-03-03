@@ -13,48 +13,48 @@ namespace Vivian.CodeAnalysis.Binding
                 return op.Kind switch
                 {
                     BoundUnaryOperatorKind.Identity => new BoundConstant(operand.ConstantValue.Value switch
-                        {
-                            char i => i,
-                            sbyte i => i,
-                            short i => i,
-                            int i => i,
-                            long i => i,
-                            byte i => i,
-                            ushort i => i,
-                            uint i => i,
-                            ulong i => i,
-                            float i => i,
-                            double i => i,
-                            decimal i => i,
-                            _ => throw new Exception("Unexpected type")
-                        }),
+                    {
+                        char i => i,
+                        sbyte i => i,
+                        short i => i,
+                        int i => i,
+                        long i => i,
+                        byte i => i,
+                        ushort i => i,
+                        uint i => i,
+                        ulong i => i,
+                        float i => i,
+                        double i => i,
+                        decimal i => i,
+                        _ => throw new Exception("Unexpected type")
+                    }),
                     BoundUnaryOperatorKind.Negation => new BoundConstant(operand.ConstantValue.Value switch
-                        {
-                            char i => -i,
-                            sbyte i => -i,
-                            short i => -i,
-                            int i => -i,
-                            long i => -i,
-                            byte i => -i,
-                            float i => -i,
-                            double i => -i,
-                            decimal i => -i,
-                            _ => throw new Exception("Unexpected type")
-                        }),
-                    BoundUnaryOperatorKind.LogicalNegation => new BoundConstant(!(bool)operand.ConstantValue.Value),
+                    {
+                        char i => -i,
+                        sbyte i => -i,
+                        short i => -i,
+                        int i => -i,
+                        long i => -i,
+                        byte i => -i,
+                        float i => -i,
+                        double i => -i,
+                        decimal i => -i,
+                        _ => throw new Exception("Unexpected type")
+                    }),
+                    BoundUnaryOperatorKind.LogicalNegation => new BoundConstant(!(bool) operand.ConstantValue.Value),
                     BoundUnaryOperatorKind.OnesComplement => new BoundConstant(operand.ConstantValue.Value switch
-                        {
-                            char i => ~i,
-                            sbyte i => ~i,
-                            short i => ~i,
-                            int i => ~i,
-                            long i => ~i,
-                            byte i => ~i,
-                            ushort i => ~i,
-                            uint i => ~i,
-                            ulong i => ~i,
-                            _ => throw new Exception("Unexpected type")
-                        }),
+                    {
+                        char i => ~i,
+                        sbyte i => ~i,
+                        short i => ~i,
+                        int i => ~i,
+                        long i => ~i,
+                        byte i => ~i,
+                        ushort i => ~i,
+                        uint i => ~i,
+                        ulong i => ~i,
+                        _ => throw new Exception("Unexpected type")
+                    }),
                     _ => throw new Exception($"Unexpected unary operator {op.Kind}")
                 };
             }
@@ -92,173 +92,194 @@ namespace Vivian.CodeAnalysis.Binding
                 return null;
 
 
-            var l = leftConstant.Value;
-            var r = rightConstant.Value;
+            var leftConstantValue = leftConstant.Value;
+            var rightConstantValue = rightConstant.Value;
 
             switch (op.Kind)
             {
                 case BoundBinaryOperatorKind.Addition:
                     if (left.Type.IsNumeric)
-                        return new BoundConstant(l switch
+                    {
+                        return new BoundConstant(leftConstantValue switch
                         {
-                            char i => i + (char)r,
-                            sbyte i => i + (sbyte)r,
-                            short i => i + (short)r,
-                            int i => i + (int)r,
-                            long i => i + (long)r,
-                            byte i => i + (byte)r,
-                            ushort i => i + (ushort)r,
-                            uint i => i + (uint)r,
-                            ulong i => i + (ulong)r,
-                            float i => i + (float)r,
-                            double i => i + (double)r,
-                            decimal i => i + (decimal)r,
+                            char i => i + (char)rightConstantValue,
+                            sbyte i => i + (sbyte)rightConstantValue,
+                            short i => i + (short)rightConstantValue,
+                            int i => i + (int)rightConstantValue,
+                            long i => i + (long)rightConstantValue,
+                            byte i => i + (byte)rightConstantValue,
+                            ushort i => i + (ushort)rightConstantValue,
+                            uint i => i + (uint)rightConstantValue,
+                            ulong i => i + (ulong)rightConstantValue,
+                            float i => i + (float)rightConstantValue,
+                            double i => i + (double)rightConstantValue,
+                            decimal i => i + (decimal)rightConstantValue,
                             _ => throw new Exception("Unexpected type")
                         });
+                    }
                     else
-                        return new BoundConstant((string)l + (string)r);
+                    {
+                        return new BoundConstant((string)leftConstantValue + (string)rightConstantValue);
+                    }
+                
                 case BoundBinaryOperatorKind.Subtraction:
-                    return new BoundConstant((int)l - (int)r);
+                    return new BoundConstant((int) leftConstantValue - (int) rightConstantValue);
                 case BoundBinaryOperatorKind.Multiplication:
-                    return new BoundConstant((int)l * (int)r);
+                    return new BoundConstant((int) leftConstantValue * (int) rightConstantValue);
                 case BoundBinaryOperatorKind.Division:
-                    return new BoundConstant((int)l / (int)r);
+                    return new BoundConstant((int) leftConstantValue / (int) rightConstantValue);
+                case BoundBinaryOperatorKind.Modulo:
+                    return new BoundConstant((int) leftConstantValue % (int) rightConstantValue);
                 case BoundBinaryOperatorKind.BitwiseAnd:
                     if (left.Type.IsNumeric)
-                        return new BoundConstant(l switch
+                    {
+                        return new BoundConstant(leftConstantValue switch
                         {
-                            char i => i & (char)r,
-                            sbyte i => i & (sbyte)r,
-                            short i => i & (short)r,
-                            int i => i & (int)r,
-                            long i => i & (long)r,
-                            byte i => i & (byte)r,
-                            ushort i => i & (ushort)r,
-                            uint i => i & (uint)r,
-                            ulong i => i & (ulong)r,
+                            char i => i & (char) rightConstantValue,
+                            sbyte i => i & (sbyte) rightConstantValue,
+                            short i => i & (short) rightConstantValue,
+                            int i => i & (int) rightConstantValue,
+                            long i => i & (long) rightConstantValue,
+                            byte i => i & (byte) rightConstantValue,
+                            ushort i => i & (ushort) rightConstantValue,
+                            uint i => i & (uint) rightConstantValue,
+                            ulong i => i & (ulong) rightConstantValue,
 
                             // Can't do bitwise operations on floats
 
                             _ => throw new Exception("Unexpected type")
                         });
+                    }
                     else
-                        return new BoundConstant((bool)l && (bool)r);
+                    {
+                        return new BoundConstant((bool)leftConstantValue && (bool)rightConstantValue);
+                    }
+                
                 case BoundBinaryOperatorKind.BitwiseOr:
                     if (left.Type.IsNumeric)
-                        return new BoundConstant(l switch
+                    {
+                        return new BoundConstant(leftConstantValue switch
                         {
-                            char i => i | (char)r,
-                            sbyte i => i | (sbyte)r,
-                            short i => i | (short)r,
-                            int i => i | (int)r,
-                            long i => i | (long)r,
-                            byte i => i | (byte)r,
-                            ushort i => i | (ushort)r,
-                            uint i => i | (uint)r,
-                            ulong i => i | (ulong)r,
+                            char i => i | (char)rightConstantValue,
+                            sbyte i => i | (sbyte)rightConstantValue,
+                            short i => i | (short)rightConstantValue,
+                            int i => i | (int)rightConstantValue,
+                            long i => i | (long)rightConstantValue,
+                            byte i => i | (byte)rightConstantValue,
+                            ushort i => i | (ushort)rightConstantValue,
+                            uint i => i | (uint)rightConstantValue,
+                            ulong i => i | (ulong)rightConstantValue,
 
                             // Can't do bitwise operations on floats
 
                             _ => throw new Exception("Unexpected type")
                         });
+                    }
                     else
-                        return new BoundConstant((bool)l || (bool)r);
+                    {
+                        return new BoundConstant((bool)leftConstantValue || (bool)rightConstantValue);
+                    }
+                
                 case BoundBinaryOperatorKind.BitwiseXor:
                     if (left.Type.IsNumeric)
-                        return new BoundConstant(l switch
+                    {
+                        return new BoundConstant(leftConstantValue switch
                         {
-                            char i => i ^ (char)r,
-                            sbyte i => i ^ (sbyte)r,
-                            short i => i ^ (short)r,
-                            int i => i ^ (int)r,
-                            long i => i ^ (long)r,
-                            byte i => i ^ (byte)r,
-                            ushort i => i ^ (ushort)r,
-                            uint i => i ^ (uint)r,
-                            ulong i => i ^ (ulong)r,
+                            char i => i ^ (char)rightConstantValue,
+                            sbyte i => i ^ (sbyte)rightConstantValue,
+                            short i => i ^ (short)rightConstantValue,
+                            int i => i ^ (int)rightConstantValue,
+                            long i => i ^ (long)rightConstantValue,
+                            byte i => i ^ (byte)rightConstantValue,
+                            ushort i => i ^ (ushort)rightConstantValue,
+                            uint i => i ^ (uint)rightConstantValue,
+                            ulong i => i ^ (ulong)rightConstantValue,
 
                             // Can't do bitwise operations on floats
 
                             _ => throw new Exception("Unexpected type")
                         });
+                    }
                     else
-                        return new BoundConstant((bool)l ^ (bool)r);
+                    {
+                        return new BoundConstant((bool)leftConstantValue ^ (bool)rightConstantValue);
+                    }
                 case BoundBinaryOperatorKind.LogicalAnd:
-                    return new BoundConstant((bool)l && (bool)r);
+                    return new BoundConstant((bool)leftConstantValue && (bool)rightConstantValue);
                 case BoundBinaryOperatorKind.LogicalOr:
-                    return new BoundConstant((bool)l || (bool)r);
+                    return new BoundConstant((bool)leftConstantValue || (bool)rightConstantValue);
                 case BoundBinaryOperatorKind.Equals:
-                    return new BoundConstant(Equals(l, r));
+                    return new BoundConstant(Equals(leftConstantValue, rightConstantValue));
                 case BoundBinaryOperatorKind.NotEquals:
-                    return new BoundConstant(!Equals(l, r));
+                    return new BoundConstant(!Equals(leftConstantValue, rightConstantValue));
                 case BoundBinaryOperatorKind.Less:
-                        return new BoundConstant(l switch
-                        {
-                            char i => i < (char)r,
-                            sbyte i => i < (sbyte)r,
-                            short i => i < (short)r,
-                            int i => i < (int)r,
-                            long i => i < (long)r,
-                            byte i => i < (byte)r,
-                            ushort i => i < (ushort)r,
-                            uint i => i < (uint)r,
-                            ulong i => i < (ulong)r,
-                            float i => i < (float)r,
-                            double i => i < (double)r,
-                            decimal i => i < (decimal)r,
-                            _ => throw new Exception("Unexpected type")
-                        });
+                    return new BoundConstant(leftConstantValue switch
+                    {
+                        char i => i < (char)rightConstantValue,
+                        sbyte i => i < (sbyte)rightConstantValue,
+                        short i => i < (short)rightConstantValue,
+                        int i => i < (int)rightConstantValue,
+                        long i => i < (long)rightConstantValue,
+                        byte i => i < (byte)rightConstantValue,
+                        ushort i => i < (ushort)rightConstantValue,
+                        uint i => i < (uint)rightConstantValue,
+                        ulong i => i < (ulong)rightConstantValue,
+                        float i => i < (float)rightConstantValue,
+                        double i => i < (double)rightConstantValue,
+                        decimal i => i < (decimal)rightConstantValue,
+                        _ => throw new Exception("Unexpected type")
+                    });
                 case BoundBinaryOperatorKind.LessOrEquals:
-                        return new BoundConstant(l switch
-                        {
-                            char i => i <= (char)r,
-                            sbyte i => i <= (sbyte)r,
-                            short i => i <= (short)r,
-                            int i => i <= (int)r,
-                            long i => i <= (long)r,
-                            byte i => i <= (byte)r,
-                            ushort i => i <= (ushort)r,
-                            uint i => i <= (uint)r,
-                            ulong i => i <= (ulong)r,
-                            float i => i <= (float)r,
-                            double i => i <= (double)r,
-                            decimal i => i <= (decimal)r,
-                            _ => throw new Exception("Unexpected type")
-                        });
+                    return new BoundConstant(leftConstantValue switch
+                    {
+                        char i => i <= (char)rightConstantValue,
+                        sbyte i => i <= (sbyte)rightConstantValue,
+                        short i => i <= (short)rightConstantValue,
+                        int i => i <= (int)rightConstantValue,
+                        long i => i <= (long)rightConstantValue,
+                        byte i => i <= (byte)rightConstantValue,
+                        ushort i => i <= (ushort)rightConstantValue,
+                        uint i => i <= (uint)rightConstantValue,
+                        ulong i => i <= (ulong)rightConstantValue,
+                        float i => i <= (float)rightConstantValue,
+                        double i => i <= (double)rightConstantValue,
+                        decimal i => i <= (decimal)rightConstantValue,
+                        _ => throw new Exception("Unexpected type")
+                    });
                 case BoundBinaryOperatorKind.Greater:
-                        return new BoundConstant(l switch
-                        {
-                            char i => i > (char)r,
-                            sbyte i => i > (sbyte)r,
-                            short i => i > (short)r,
-                            int i => i > (int)r,
-                            long i => i > (long)r,
-                            byte i => i > (byte)r,
-                            ushort i => i > (ushort)r,
-                            uint i => i > (uint)r,
-                            ulong i => i > (ulong)r,
-                            float i => i > (float)r,
-                            double i => i > (double)r,
-                            decimal i => i > (decimal)r,
-                            _ => throw new Exception("Unexpected type")
-                        });
+                    return new BoundConstant(leftConstantValue switch
+                    {
+                        char i => i > (char)rightConstantValue,
+                        sbyte i => i > (sbyte)rightConstantValue,
+                        short i => i > (short)rightConstantValue,
+                        int i => i > (int)rightConstantValue,
+                        long i => i > (long)rightConstantValue,
+                        byte i => i > (byte)rightConstantValue,
+                        ushort i => i > (ushort)rightConstantValue,
+                        uint i => i > (uint)rightConstantValue,
+                        ulong i => i > (ulong)rightConstantValue,
+                        float i => i > (float)rightConstantValue,
+                        double i => i > (double)rightConstantValue,
+                        decimal i => i > (decimal)rightConstantValue,
+                        _ => throw new Exception("Unexpected type")
+                    });
                 case BoundBinaryOperatorKind.GreaterOrEquals:
-                        return new BoundConstant(l switch
-                        {
-                            char i => i >= (char)r,
-                            sbyte i => i >= (sbyte)r,
-                            short i => i >= (short)r,
-                            int i => i >= (int)r,
-                            long i => i >= (long)r,
-                            byte i => i >= (byte)r,
-                            ushort i => i >= (ushort)r,
-                            uint i => i >= (uint)r,
-                            ulong i => i >= (ulong)r,
-                            float i => i >= (float)r,
-                            double i => i >= (double)r,
-                            decimal i => i >= (decimal)r,
-                            _ => throw new Exception("Unexpected type")
-                        });
+                    return new BoundConstant(leftConstantValue switch
+                    {
+                        char i => i >= (char)rightConstantValue,
+                        sbyte i => i >= (sbyte)rightConstantValue,
+                        short i => i >= (short)rightConstantValue,
+                        int i => i >= (int)rightConstantValue,
+                        long i => i >= (long)rightConstantValue,
+                        byte i => i >= (byte)rightConstantValue,
+                        ushort i => i >= (ushort)rightConstantValue,
+                        uint i => i >= (uint)rightConstantValue,
+                        ulong i => i >= (ulong)rightConstantValue,
+                        float i => i >= (float)rightConstantValue,
+                        double i => i >= (double)rightConstantValue,
+                        decimal i => i >= (decimal)rightConstantValue,
+                        _ => throw new Exception("Unexpected type")
+                    });
                 default:
                     throw new Exception($"Unexpected binary operator {op.Kind}");
             }

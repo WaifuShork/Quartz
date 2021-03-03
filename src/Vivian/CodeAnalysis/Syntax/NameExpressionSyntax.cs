@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class NameExpressionSyntax : ExpressionSyntax
+    public sealed class NameExpressionSyntax : ExpressionSyntax
     {
         internal NameExpressionSyntax(SyntaxTree syntaxTree, SyntaxToken identifierToken)
             : base(syntaxTree)
@@ -11,11 +11,12 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.NameExpression;
+        
+        public SyntaxToken IdentifierToken { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return IdentifierToken;
         }
-
-        public SyntaxToken IdentifierToken { get; }
     }
 }

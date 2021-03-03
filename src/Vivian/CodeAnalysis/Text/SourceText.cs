@@ -15,7 +15,7 @@ namespace Vivian.CodeAnalysis.Text
 
         public static SourceText From(string text, string fileName = "")
         {
-            return new SourceText(text, fileName);
+            return new(text, fileName);
         }
 
         private static ImmutableArray<TextLine> ParseLines(SourceText sourceText, string text)
@@ -43,7 +43,9 @@ namespace Vivian.CodeAnalysis.Text
             }
 
             if (position >= lineStart)
+            {
                 AddLine(result, sourceText, position, lineStart, 0);
+            }
 
             return result.ToImmutable();
         }
@@ -62,10 +64,14 @@ namespace Vivian.CodeAnalysis.Text
             var l = position + 1 >= text.Length ? '\0' : text[position + 1];
 
             if (c == '\r' && l == '\n')
+            {
                 return 2;
+            }
 
             if (c == '\r' || c == '\n')
+            {
                 return 1;
+            }
 
             return 0;
         }
@@ -89,7 +95,9 @@ namespace Vivian.CodeAnalysis.Text
                 var start = Lines[index].Start;
 
                 if (position == start)
+                {
                     return index;
+                }
 
                 if (start > position)
                 {
@@ -105,9 +113,7 @@ namespace Vivian.CodeAnalysis.Text
         }
 
         public override string ToString() => _text;
-
         public string ToString(int start, int length) => _text.Substring(start, length);
-
         public string ToString(TextSpan span) => ToString(span.Start, span.Length);
     }
 }

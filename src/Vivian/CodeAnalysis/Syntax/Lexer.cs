@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Text;
-using Vivian.CodeAnalysis;
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Text;
 
@@ -11,7 +10,6 @@ namespace Vivian.CodeAnalysis.Syntax
         private readonly SyntaxTree _syntaxTree;
         private readonly SourceText _text;
         private int _position;
-
         private int _start;
         private SyntaxKind _kind;
         private object? _value;
@@ -23,7 +21,7 @@ namespace Vivian.CodeAnalysis.Syntax
             _text = syntaxTree.Text;
         }
 
-        public DiagnosticBag Diagnostics { get; } = new DiagnosticBag();
+        public DiagnosticBag Diagnostics { get; } = new();
 
         private char Current => Peek(0);
 
@@ -58,7 +56,9 @@ namespace Vivian.CodeAnalysis.Syntax
 
             var tokenText = SyntaxFacts.GetText(tokenKind);
             if (tokenText == null)
+            {
                 tokenText = _text.ToString(tokenStart, tokenLength);
+            }
 
             return new SyntaxToken(_syntaxTree, tokenKind, tokenStart, tokenText, tokenValue, leadingTrivia, trailingTrivia);
         }
@@ -97,7 +97,9 @@ namespace Vivian.CodeAnalysis.Syntax
                     case '\n':
                     case '\r':
                         if (!leading)
+                        {
                             done = true;
+                        }
                         ReadLineBreak();
                         break;
                     case ' ':
@@ -106,9 +108,13 @@ namespace Vivian.CodeAnalysis.Syntax
                         break;
                     default:
                         if (char.IsWhiteSpace(Current))
+                        {
                             ReadWhiteSpace();
+                        }
                         else
+                        {
                             done = true;
+                        }
                         break;
                 }
 
@@ -151,9 +157,13 @@ namespace Vivian.CodeAnalysis.Syntax
                         break;
                     default:
                         if (!char.IsWhiteSpace(Current))
+                        {
                             done = true;
+                        }
                         else
+                        {
                             _position++;
+                        }
                         break;
                 }
             }
@@ -305,6 +315,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '~':
                     _kind = SyntaxKind.TildeToken;
+                    _position++;
+                    break;
+                case '%':
+                    _kind = SyntaxKind.PercentToken;
                     _position++;
                     break;
                 case '^':
@@ -498,9 +512,9 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private void ReadNumber()
         {
-            bool hasSeparator = false;
-            bool hasDecimal = false;
-            bool hasMultipleDecimals = false;
+            var hasSeparator = false;
+            var hasDecimal = false;
+            var hasMultipleDecimals = false;
 
             // Allow numbers and underscores as long as there are more digits following them.
             // This allows _ to act as separators for numeric literals (e.g. 1_000_000)
@@ -535,7 +549,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             if (hasDecimal)
             {
-                if (!double.TryParse(text, out double fvalue))
+                if (!double.TryParse(text, out var fvalue))
                 {
                     Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
                 }
@@ -549,20 +563,28 @@ namespace Vivian.CodeAnalysis.Syntax
             }
             else
             {
-                if (!ulong.TryParse(text, out ulong ivalue))
+                if (!ulong.TryParse(text, out var ivalue))
                 {
                     Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Int32);
                 }
                 else
                 {
                     if (ivalue <= int.MaxValue)
+                    {
                         _value = (int)ivalue;
+                    }
                     else if (ivalue <= uint.MaxValue)
+                    {
                         _value = (uint)ivalue;
+                    }
                     else if (ivalue <= long.MaxValue)
+                    {
                         _value = ivalue;
+                    }
                     else if (ivalue <= ulong.MaxValue)
+                    {
                         _value = ivalue;
+                    }
                 }
             }
 

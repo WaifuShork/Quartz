@@ -1,18 +1,18 @@
 ﻿using System.Collections.Immutable;
+
 using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Symbols
 {
     public sealed class FunctionSymbol : Symbol
     {
-        internal FunctionSymbol(
-            string name,
-            ImmutableArray<ParameterSymbol> parameters,
-            TypeSymbol returnType,
-            FunctionDeclarationSyntax? declaration = null,
-            FunctionSymbol? overloadFor = null,
-            StructSymbol? receiver = null
-        ) : base(name)
+        internal FunctionSymbol(string name,
+                                ImmutableArray<ParameterSymbol> parameters,
+                                TypeSymbol returnType,
+                                FunctionDeclarationSyntax? declaration = null,
+                                FunctionSymbol? overloadFor = null,
+                                StructSymbol? receiver = null) 
+                                : base(name)
         {
             Parameters = parameters;
             ReturnType = returnType;

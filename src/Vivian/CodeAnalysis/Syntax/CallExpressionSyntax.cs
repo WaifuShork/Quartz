@@ -4,7 +4,7 @@ using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class CallExpressionSyntax : ExpressionSyntax
+    public sealed class CallExpressionSyntax : ExpressionSyntax
     {
         private CallExpressionSyntax(SyntaxTree syntaxTree, ExpressionSyntax identifier, SyntaxToken openParenthesisToken, SeparatedSyntaxList<ExpressionSyntax> arguments, SyntaxToken closeParenthesisToken)
             : base(syntaxTree)
@@ -24,6 +24,16 @@ namespace Vivian.CodeAnalysis.Syntax
         { }
 
         public override SyntaxKind Kind => SyntaxKind.CallExpression;
+        
+        public ExpressionSyntax FullyQualifiedIdentifier { get; }
+        public SyntaxToken Identifier => FullyQualifiedIdentifier.Kind == SyntaxKind.NameExpression 
+                                        ? ((NameExpressionSyntax)FullyQualifiedIdentifier).IdentifierToken 
+                                        : ((MemberAccessExpressionSyntax)FullyQualifiedIdentifier).IdentifierToken;
+        
+        public SyntaxToken OpenParenthesisToken { get; }
+        public SeparatedSyntaxList<ExpressionSyntax> Arguments { get; }
+        public SyntaxToken CloseParenthesisToken { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return FullyQualifiedIdentifier;
@@ -31,11 +41,5 @@ namespace Vivian.CodeAnalysis.Syntax
             yield return OpenParenthesisToken;
             yield return CloseParenthesisToken;
         }
-
-        public ExpressionSyntax FullyQualifiedIdentifier { get; }
-        public SyntaxToken Identifier => FullyQualifiedIdentifier.Kind == SyntaxKind.NameExpression ? ((NameExpressionSyntax)FullyQualifiedIdentifier).IdentifierToken : ((MemberAccessExpressionSyntax)FullyQualifiedIdentifier).IdentifierToken;
-        public SyntaxToken OpenParenthesisToken { get; }
-        public SeparatedSyntaxList<ExpressionSyntax> Arguments { get; }
-        public SyntaxToken CloseParenthesisToken { get; }
     }
 }

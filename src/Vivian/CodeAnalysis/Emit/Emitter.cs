@@ -21,8 +21,14 @@ namespace Vivian.CodeAnalysis.Emit
     {
         private const TypeAttributes _classAttributes = TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit;
 
-        private readonly DiagnosticBag _diagnostics = new DiagnosticBag();
-
+        private readonly DiagnosticBag _diagnostics = new();
+        private readonly Dictionary<SourceText, Document> _documents = new();
+        private readonly Dictionary<StructSymbol, TypeDefinition> _structs = new();
+        private readonly Dictionary<FunctionSymbol, MethodDefinition> _methods = new();
+        private readonly Dictionary<VariableSymbol, VariableDefinition> _locals = new();
+        private readonly Dictionary<BoundLabel, int> _labels = new();
+        private readonly List<(int InstructionIndex, BoundLabel Target)> _fixups = new();
+        
         private readonly Dictionary<TypeSymbol, TypeReference> _knownTypes;
         private readonly MethodReference _objectCtor;
         private readonly MethodReference _objectEqualsReference;
@@ -51,17 +57,11 @@ namespace Vivian.CodeAnalysis.Emit
         private readonly MethodReference _randomCtorReference;
         private readonly MethodReference _randomNextReference;
         private readonly AssemblyDefinition _assemblyDefinition;
-        private readonly Dictionary<StructSymbol, TypeDefinition> _structs = new Dictionary<StructSymbol, TypeDefinition>();
-        private readonly Dictionary<FunctionSymbol, MethodDefinition> _methods = new Dictionary<FunctionSymbol, MethodDefinition>();
-        private readonly Dictionary<VariableSymbol, VariableDefinition> _locals = new Dictionary<VariableSymbol, VariableDefinition>();
-        private readonly Dictionary<BoundLabel, int> _labels = new Dictionary<BoundLabel, int>();
-        private readonly List<(int InstructionIndex, BoundLabel Target)> _fixups = new List<(int InstructionIndex, BoundLabel Target)>();
-
+        
         private readonly TypeDefinition _typeDefinition;
         private FieldDefinition? _randomFieldDefinition;
-        private readonly Dictionary<SourceText, Document> _documents = new Dictionary<SourceText, Document>();
 
-        // TOOD: This constructor does too much. Resolution should be factored out.
+        // TODO: This constructor does too much. Resolution should be factored out.
         private Emitter(string moduleName, string[] references)
         {
             var assemblies = new List<AssemblyDefinition>();
@@ -146,7 +146,9 @@ namespace Vivian.CodeAnalysis.Emit
                     foreach (var method in methods)
                     {
                         if (method.Parameters.Count != parameterTypeNames.Length)
+                        {
                             continue;
+                        }
 
                         var allParametersMatch = true;
 
@@ -160,7 +162,9 @@ namespace Vivian.CodeAnalysis.Emit
                         }
 
                         if (!allParametersMatch)
+                        {
                             continue;
+                        }
 
                         return _assemblyDefinition.MainModule.ImportReference(method);
                     }
@@ -213,7 +217,7 @@ namespace Vivian.CodeAnalysis.Emit
 
             var objectType = _knownTypes[TypeSymbol.Object];
 
-            if (objectType != null)
+            if (objectType != null!)
             {
                 _typeDefinition = new TypeDefinition("", "Program", TypeAttributes.Abstract | TypeAttributes.Sealed, objectType);
                 _assemblyDefinition.MainModule.Types.Add(_typeDefinition);
@@ -227,7 +231,9 @@ namespace Vivian.CodeAnalysis.Emit
         public static ImmutableArray<Diagnostic> Emit(BoundProgram program, string moduleName, string[] references, string outputPath)
         {
             if (program.Diagnostics.HasErrors())
+            {
                 return program.Diagnostics;
+            }
 
             var emitter = new Emitter(moduleName, references);
             return emitter.Emit(program, outputPath);
@@ -236,33 +242,45 @@ namespace Vivian.CodeAnalysis.Emit
         public ImmutableArray<Diagnostic> Emit(BoundProgram program, string outputPath)
         {
             if (_diagnostics.Any())
+            {
                 return _diagnostics.ToImmutableArray();
+            }
 
             foreach (var structWithBody in program.Structs)
+            {
                 EmitStructDeclaration(structWithBody.Key);
+            }
 
-            foreach (var structWithBody in program.Structs)
-                EmitStructBody(structWithBody.Key, structWithBody.Value);
+            foreach (var (@struct, body) in program.Structs)
+            {
+                EmitStructBody(@struct, body);
+            }
 
             foreach (var functionWithBody in program.Functions)
+            {
                 EmitFunctionDeclaration(functionWithBody.Key);
+            }
 
-            foreach (var functionWithBody in program.Functions)
-                EmitFunctionBody(functionWithBody.Key, functionWithBody.Value);
+            foreach (var (function, body) in program.Functions)
+            {
+                EmitFunctionBody(function, body);
+            }
 
             if (program.MainFunction != null)
+            {
                 _assemblyDefinition.EntryPoint = _methods[program.MainFunction];
+            }
 
-            // TODO: We should not emit this attribute unless we produce a debug build
+            // TODO: should not emit this attribute unless we produce a debug build
             var debuggableAttribute = new CustomAttribute(_debuggableAttributeCtorReference);
             debuggableAttribute.ConstructorArguments.Add(new CustomAttributeArgument(_knownTypes[TypeSymbol.Bool], true));
             debuggableAttribute.ConstructorArguments.Add(new CustomAttributeArgument(_knownTypes[TypeSymbol.Bool], true));
             _assemblyDefinition.CustomAttributes.Add(debuggableAttribute);
 
-            // TODO: We should not be computing paths in here.
+            // TODO: should not be computing paths in here.
             var symbolsPath = Path.ChangeExtension(outputPath, ".pdb");
 
-            // TODO: We should support not emitting symbols
+            // TODO: should support not emitting symbols
             using (var outputStream = File.Create(outputPath))
             using (var symbolsStream = File.Create(symbolsPath))
             {
@@ -289,8 +307,7 @@ namespace Vivian.CodeAnalysis.Emit
             _knownTypes.Add(key, classType);
 
             // Forward-declare empty constructor
-            var emptyCtorDefinition = new MethodDefinition(
-                ".ctor",
+            var emptyCtorDefinition = new MethodDefinition(".ctor",
                 MethodAttributes.Public |
                 MethodAttributes.SpecialName |
                 MethodAttributes.RTSpecialName |
@@ -301,8 +318,7 @@ namespace Vivian.CodeAnalysis.Emit
             classType.Methods.Insert(0, emptyCtorDefinition);
 
             // Forward-declare initializer constructor
-            var defaultCtorDefintion = new MethodDefinition(
-                ".ctor",
+            var defaultCtorDefinition = new MethodDefinition(".ctor",
                 MethodAttributes.Public |
                 MethodAttributes.SpecialName |
                 MethodAttributes.RTSpecialName |
@@ -311,7 +327,7 @@ namespace Vivian.CodeAnalysis.Emit
             );
 
             // This constructor will be the second one on the class
-            classType.Methods.Insert(1, defaultCtorDefintion);
+            classType.Methods.Insert(1, defaultCtorDefinition);
         }
 
         private void EmitStructBody(StructSymbol key, BoundBlockStatement value)
@@ -366,12 +382,12 @@ namespace Vivian.CodeAnalysis.Emit
             var constructor = structType.Methods[1];
             var ilProcessor = constructor.Body.GetILProcessor();
 
-            // Call base .ctor(), which sould in turn call the object.ctor()
+            // Call base .ctor(), which should in turn call the object.ctor()
             ilProcessor.Emit(OpCodes.Ldarg_0);
             ilProcessor.Emit(OpCodes.Call, structType.Methods[0]);
 
             // Assign each parameter
-            for (int i = 0; i < @struct.CtorParameters.Length; i++)
+            for (var i = 0; i < @struct.CtorParameters.Length; i++)
             {
                 var ctorParam = @struct.CtorParameters[i];
                 var paramType = _knownTypes[ctorParam.Type];
@@ -435,12 +451,13 @@ namespace Vivian.CodeAnalysis.Emit
             var ilProcessor = method.Body.GetILProcessor();
 
             foreach (var statement in body.Statements)
+            {
                 EmitStatement(ilProcessor, statement);
+            }
 
             foreach (var (InstructionIndex, Target) in _fixups)
             {
-                var targetLabel = Target;
-                var targetInstructionIndex = _labels[targetLabel];
+                var targetInstructionIndex = _labels[Target];
                 var targetInstruction = ilProcessor.Body.Instructions[targetInstructionIndex];
                 var instructionToFixup = ilProcessor.Body.Instructions[InstructionIndex];
                 instructionToFixup.Operand = targetInstruction;
@@ -452,12 +469,9 @@ namespace Vivian.CodeAnalysis.Emit
 
             method.DebugInformation.Scope = new ScopeDebugInformation(method.Body.Instructions[0], method.Body.Instructions.Last());
 
-            foreach (var local in _locals)
+            foreach (var (symbol, definition) in _locals)
             {
-                var symbol = local.Key;
-                var definition = local.Value;
                 var debugInfo = new VariableDebugInformation(definition, symbol.Name);
-
                 method.DebugInformation.Scope.Variables.Add(debugInfo);
             }
         }
@@ -545,7 +559,9 @@ namespace Vivian.CodeAnalysis.Emit
         private void EmitReturnStatement(ILProcessor ilProcessor, BoundReturnStatement node)
         {
             if (node.Expression != null)
+            {
                 EmitExpression(ilProcessor, node.Expression);
+            }
 
             ilProcessor.Emit(OpCodes.Ret);
         }
@@ -875,12 +891,17 @@ namespace Vivian.CodeAnalysis.Emit
                 case BoundBinaryOperatorKind.Division:
                     ilProcessor.Emit(OpCodes.Div);
                     break;
-                // TODO: Implement short-circuit evaluation #111
+                case BoundBinaryOperatorKind.Modulo:
+                    ilProcessor.Emit(OpCodes.Rem);
+                    break;
+                
+                // TODO: Implement short-circuit evaluation 
                 case BoundBinaryOperatorKind.LogicalAnd:
                 case BoundBinaryOperatorKind.BitwiseAnd:
                     ilProcessor.Emit(OpCodes.And);
                     break;
-                // TODO: Implement short-circuit evaluation #111
+                
+                // TODO: Implement short-circuit evaluation 
                 case BoundBinaryOperatorKind.LogicalOr:
                 case BoundBinaryOperatorKind.BitwiseOr:
                     ilProcessor.Emit(OpCodes.Or);
@@ -981,15 +1002,21 @@ namespace Vivian.CodeAnalysis.Emit
                     binaryExpression.Right.Type == TypeSymbol.String)
                 {
                     foreach (var result in Flatten(binaryExpression.Left))
+                    {
                         yield return result;
+                    }
 
                     foreach (var result in Flatten(binaryExpression.Right))
+                    {
                         yield return result;
+                    }
                 }
                 else
                 {
                     if (node.Type != TypeSymbol.String)
+                    {
                         throw new Exception($"Unexpected node type in string concatenation: {node.Type}");
+                    }
 
                     yield return node;
                 }
@@ -1004,10 +1031,12 @@ namespace Vivian.CodeAnalysis.Emit
                 {
                     if (node.ConstantValue != null)
                     {
-                        var stringValue = (string)node.ConstantValue.Value;
+                        var stringValue = (string)node.ConstantValue.Value!;
 
                         if (string.IsNullOrEmpty(stringValue))
+                        {
                             continue;
+                        }
 
                         sb ??= new StringBuilder();
                         sb.Append(stringValue);
@@ -1025,7 +1054,9 @@ namespace Vivian.CodeAnalysis.Emit
                 }
 
                 if (sb?.Length > 0)
+                {
                     yield return new BoundLiteralExpression(syntax, sb.ToString());
+                }
             }
         }
 
@@ -1034,12 +1065,16 @@ namespace Vivian.CodeAnalysis.Emit
             if (node.Function == BuiltinFunctions.Rnd)
             {
                 if (_randomFieldDefinition == null)
+                {
                     EmitRandomField();
+                }
 
                 ilProcessor.Emit(OpCodes.Ldsfld, _randomFieldDefinition);
 
                 foreach (var argument in node.Arguments)
+                {
                     EmitExpression(ilProcessor, argument);
+                }
 
                 ilProcessor.Emit(OpCodes.Callvirt, _randomNextReference);
                 return;
@@ -1067,14 +1102,18 @@ namespace Vivian.CodeAnalysis.Emit
                 }
 
                 foreach (var argument in node.Arguments)
+                {
                     EmitExpression(ilProcessor, argument);
+                }
 
                 ilProcessor.Emit(OpCodes.Callvirt, methodDefinition);
             }
             else
             {
                 foreach (var argument in node.Arguments)
+                {
                     EmitExpression(ilProcessor, argument);
+                }
 
                 if (node.Function == BuiltinFunctions.Input)
                 {
@@ -1132,7 +1171,9 @@ namespace Vivian.CodeAnalysis.Emit
                               node.Expression.Type.IsNumeric;
 
             if (needsBoxing)
+            {
                 ilProcessor.Emit(OpCodes.Box, _knownTypes[node.Expression.Type]);
+            }
 
             if (node.Type == TypeSymbol.Object)
             {
@@ -1196,7 +1237,7 @@ namespace Vivian.CodeAnalysis.Emit
             }
             else
             {
-                throw new Exception($"Unexpected convertion from {node.Expression.Type} to {node.Type}");
+                throw new Exception($"Unexpected conversion from {node.Expression.Type} to {node.Type}");
             }
         }
     }

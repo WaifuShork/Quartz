@@ -9,38 +9,56 @@ namespace Vivian.CodeAnalysis.Binding
         public BoundLiteralExpression(SyntaxNode syntax, object? value)
             : base(syntax)
         {
-            if (value is bool)
-                Type = TypeSymbol.Bool;
-            else if (value is sbyte)
-                Type = TypeSymbol.Int8;
-            else if (value is short)
-                Type = TypeSymbol.Int16;
-            else if (value is int)
-                Type = TypeSymbol.Int32;
-            else if (value is long)
-                Type = TypeSymbol.Int64;
-            else if (value is byte)
-                Type = TypeSymbol.Int8;
-            else if (value is ushort)
-                Type = TypeSymbol.UInt16;
-            else if (value is uint)
-                Type = TypeSymbol.UInt32;
-            else if (value is ulong)
-                Type = TypeSymbol.UInt64;
-            else if (value is float)
-                Type = TypeSymbol.Float32;
-            else if (value is double)
-                Type = TypeSymbol.Float64;
-            else if (value is decimal)
-                Type = TypeSymbol.Decimal;
-            else if (value is char)
-                Type = TypeSymbol.Char;
-            else if (value is string)
-                Type = TypeSymbol.String;
-            else if (value is null)
-                Type = TypeSymbol.Void;
-            else
-                throw new Exception($"Unexpected literal '{value}' of type {value.GetType()}");
+            switch (value)
+            {
+                case bool:
+                    Type = TypeSymbol.Bool;
+                    break;
+                case sbyte:
+                    Type = TypeSymbol.Int8;
+                    break;
+                case short:
+                    Type = TypeSymbol.Int16;
+                    break;
+                case int:
+                    Type = TypeSymbol.Int32;
+                    break;
+                case long:
+                    Type = TypeSymbol.Int64;
+                    break;
+                case byte:
+                    Type = TypeSymbol.Int8;
+                    break;
+                case ushort:
+                    Type = TypeSymbol.UInt16;
+                    break;
+                case uint:
+                    Type = TypeSymbol.UInt32;
+                    break;
+                case ulong:
+                    Type = TypeSymbol.UInt64;
+                    break;
+                case float:
+                    Type = TypeSymbol.Float32;
+                    break;
+                case double:
+                    Type = TypeSymbol.Float64;
+                    break;
+                case decimal:
+                    Type = TypeSymbol.Decimal;
+                    break;
+                case char:
+                    Type = TypeSymbol.Char;
+                    break;
+                case string:
+                    Type = TypeSymbol.String;
+                    break;
+                case null:
+                    Type = TypeSymbol.Void;
+                    break;
+                default:
+                    throw new Exception($"Unexpected literal '{value}' of type {value.GetType()}");
+            }
 
             ConstantValue = new BoundConstant(value);
         }

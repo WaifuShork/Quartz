@@ -6,13 +6,13 @@ namespace Vivian.CodeAnalysis.Binding
     internal sealed class BoundGlobalScope
     {
         public BoundGlobalScope(BoundGlobalScope? previous,
-            ImmutableArray<Diagnostic> diagnostics,
-            FunctionSymbol? mainFunction,
-            FunctionSymbol? scriptFunction,
-            ImmutableArray<StructSymbol> structs,
-            ImmutableArray<FunctionSymbol> functions,
-            ImmutableArray<VariableSymbol> variables,
-            ImmutableArray<BoundStatement> statements)
+                                ImmutableArray<Diagnostic> diagnostics,
+                                FunctionSymbol? mainFunction,
+                                FunctionSymbol? scriptFunction,
+                                ImmutableArray<StructSymbol> structs,
+                                ImmutableArray<FunctionSymbol> functions,
+                                ImmutableArray<VariableSymbol> variables,
+                                ImmutableArray<BoundStatement> statements)
         {
             Previous = previous;
             Diagnostics = diagnostics;

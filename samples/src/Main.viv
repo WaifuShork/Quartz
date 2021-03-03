@@ -1,0 +1,5 @@
+function Main()
+{
+    var math = Math()
+    print(string(math.PISum(22)))
+}

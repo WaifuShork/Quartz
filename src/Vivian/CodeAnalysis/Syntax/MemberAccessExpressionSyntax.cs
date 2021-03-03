@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class MemberAccessExpressionSyntax : ExpressionSyntax
+    public sealed class MemberAccessExpressionSyntax : ExpressionSyntax
     {
         internal MemberAccessExpressionSyntax(SyntaxTree syntaxTree, ExpressionSyntax expression, SyntaxToken operatorToken, SyntaxToken identifierToken)
             : base(syntaxTree)
@@ -13,16 +13,16 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.MemberAccessExpression;
+        
+        public SyntaxToken IdentifierToken { get; }
+        public SyntaxToken OperatorToken { get; }
+        public ExpressionSyntax Expression { get; }
+
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return IdentifierToken;
             yield return OperatorToken;
             yield return Expression;
         }
-
-        public SyntaxToken IdentifierToken { get; }
-        public SyntaxToken OperatorToken { get; }
-        public ExpressionSyntax Expression { get; }
-
     }
 }

@@ -11,8 +11,9 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
             [MemberData(nameof(GetBinaryOperatorPairsData))]
             public void Parser_BinaryExpression_HonorsPrecedences(SyntaxKind op1, SyntaxKind op2)
             {
-                var op1Precedence = SyntaxFacts.GetBinaryOperatorPrecedence(op1);
-                var op2Precedence = SyntaxFacts.GetBinaryOperatorPrecedence(op2);
+                var op1Precedence = op1.GetBinaryOperatorPrecedence();
+                var op2Precedence = op2.GetBinaryOperatorPrecedence();
+                
                 var op1Text = SyntaxFacts.GetText(op1);
                 var op2Text = SyntaxFacts.GetText(op2);
                 var text = $"a {op1Text} b {op2Text} c";
@@ -29,19 +30,19 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                     //  /   \
                     // a     b
     
-                    using (var e = new AssertingEnumerator(expression))
-                    {
-                        e.AssertNode(SyntaxKind.BinaryExpression);
-                        e.AssertNode(SyntaxKind.BinaryExpression);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "a");
-                        e.AssertToken(op1, op1Text);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "b");
-                        e.AssertToken(op2, op2Text);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "c");
-                    }
+                    using var e = new AssertingEnumerator(expression);
+                    
+                    e.AssertNode(SyntaxKind.BinaryExpression);
+                    e.AssertNode(SyntaxKind.BinaryExpression);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "a");
+                    e.AssertToken(op1, op1Text);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "b");
+                    e.AssertToken(op2, op2Text);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "c");
+                    
                 }
                 else
                 {
@@ -50,20 +51,20 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                     // a    op2
                     //     /   \
                     //    b     c
-    
-                    using (var e = new AssertingEnumerator(expression))
-                    {
-                        e.AssertNode(SyntaxKind.BinaryExpression);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "a");
-                        e.AssertToken(op1, op1Text);
-                        e.AssertNode(SyntaxKind.BinaryExpression);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "b");
-                        e.AssertToken(op2, op2Text);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "c");
-                    }
+
+                    using var e = new AssertingEnumerator(expression);
+                    
+                    e.AssertNode(SyntaxKind.BinaryExpression);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "a");
+                    e.AssertToken(op1, op1Text);
+                    e.AssertNode(SyntaxKind.BinaryExpression);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "b");
+                    e.AssertToken(op2, op2Text);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "c");
+                    
                 }
             }
     
@@ -71,8 +72,8 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
             [MemberData(nameof(GetUnaryOperatorPairsData))]
             public void Parser_UnaryExpression_HonorsPrecedences(SyntaxKind unaryKind, SyntaxKind binaryKind)
             {
-                var unaryPrecedence = SyntaxFacts.GetUnaryOperatorPrecedence(unaryKind);
-                var binaryPrecedence = SyntaxFacts.GetBinaryOperatorPrecedence(binaryKind);
+                var unaryPrecedence = unaryKind.GetUnaryOperatorPrecedence();
+                var binaryPrecedence = binaryKind.GetBinaryOperatorPrecedence();
                 var unaryText = SyntaxFacts.GetText(unaryKind);
                 var binaryText = SyntaxFacts.GetText(binaryKind);
                 var text = $"{unaryText} a {binaryText} b";
@@ -88,18 +89,18 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                     // unary   b
                     //   |
                     //   a
-    
-                    using (var e = new AssertingEnumerator(expression))
-                    {
-                        e.AssertNode(SyntaxKind.BinaryExpression);
-                        e.AssertNode(SyntaxKind.UnaryExpression);
-                        e.AssertToken(unaryKind, unaryText);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "a");
-                        e.AssertToken(binaryKind, binaryText);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "b");
-                    }
+
+                    using var e = new AssertingEnumerator(expression);
+                    
+                    e.AssertNode(SyntaxKind.BinaryExpression);
+                    e.AssertNode(SyntaxKind.UnaryExpression);
+                    e.AssertToken(unaryKind, unaryText);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "a");
+                    e.AssertToken(binaryKind, binaryText);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "b");
+                    
                 }
                 else
                 {
@@ -108,18 +109,17 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                     //  binary
                     //  /   \
                     // a     b
-    
-                    using (var e = new AssertingEnumerator(expression))
-                    {
-                        e.AssertNode(SyntaxKind.UnaryExpression);
-                        e.AssertToken(unaryKind, unaryText);
-                        e.AssertNode(SyntaxKind.BinaryExpression);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "a");
-                        e.AssertToken(binaryKind, binaryText);
-                        e.AssertNode(SyntaxKind.NameExpression);
-                        e.AssertToken(SyntaxKind.IdentifierToken, "b");
-                    }
+
+                    using var e = new AssertingEnumerator(expression);
+                    
+                    e.AssertNode(SyntaxKind.UnaryExpression);
+                    e.AssertToken(unaryKind, unaryText);
+                    e.AssertNode(SyntaxKind.BinaryExpression);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "a");
+                    e.AssertToken(binaryKind, binaryText);
+                    e.AssertNode(SyntaxKind.NameExpression);
+                    e.AssertToken(SyntaxKind.IdentifierToken, "b");
                 }
             }
     

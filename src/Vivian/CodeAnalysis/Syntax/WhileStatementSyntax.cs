@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class WhileStatementSyntax : StatementSyntax
+    public sealed class WhileStatementSyntax : StatementSyntax
     {
         internal WhileStatementSyntax(SyntaxTree syntaxTree, SyntaxToken whileKeyword, ExpressionSyntax condition, StatementSyntax body)
             : base(syntaxTree)
@@ -13,15 +13,16 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.WhileStatement;
+        
+        public SyntaxToken WhileKeyword { get; }
+        public ExpressionSyntax Condition { get; }
+        public StatementSyntax Body { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return WhileKeyword;
             yield return Condition;
             yield return Body;
         }
-
-        public SyntaxToken WhileKeyword { get; }
-        public ExpressionSyntax Condition { get; }
-        public StatementSyntax Body { get; }
     }
 }

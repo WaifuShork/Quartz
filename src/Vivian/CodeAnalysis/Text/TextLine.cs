@@ -15,8 +15,8 @@
         public int Length { get; }
         public int End => Start + Length;
         public int LengthIncludingLineBreak { get; }
-        public TextSpan Span => new TextSpan(Start, Length);
-        public TextSpan SpanIncludingLineBreak => new TextSpan(Start, LengthIncludingLineBreak);
+        public TextSpan Span => new(Start, Length);
+        public TextSpan SpanIncludingLineBreak => new(Start, LengthIncludingLineBreak);
         public override string ToString() => Text.ToString(Span);
     }
 }

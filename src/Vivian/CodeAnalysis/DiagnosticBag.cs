@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mono.Cecil;
-using Vivian.CodeAnalysis;
+
 using Vivian.CodeAnalysis.Symbols;
 using Vivian.CodeAnalysis.Syntax;
 using Vivian.CodeAnalysis.Text;
@@ -12,7 +12,7 @@ namespace Vivian.CodeAnalysis
 {
     internal sealed class DiagnosticBag : IEnumerable<Diagnostic>
     {
-        private readonly List<Diagnostic> _diagnostics = new List<Diagnostic>();
+        private readonly List<Diagnostic> _diagnostics = new();
 
         public IEnumerator<Diagnostic> GetEnumerator() => _diagnostics.GetEnumerator();
 
@@ -172,6 +172,7 @@ namespace Vivian.CodeAnalysis
             var message = $"'{name}' is not a function.";
             ReportError(location, message);
         }
+        
         internal void ReportCannotUseThisOutsideOfReceiverFunctions(TextLocation location, string name)
         {
             var message = $"This can only be used in functions with a struct receiver.  Function '{name}' has no receiver defined.";
@@ -268,21 +269,21 @@ namespace Vivian.CodeAnalysis
             ReportError(location, message);
         }
 
-        public void ReportRequiredTypeNotFound(string? ev2Name, string metadataName)
+        public void ReportRequiredTypeNotFound(string? vivianName, string metadataName)
         {
-            var message = ev2Name == null
+            var message = vivianName == null
                 ? $"The required type '{metadataName}' cannot be resolved among the given references."
-                : $"The required type '{ev2Name}' ('{metadataName}') cannot be resolved among the given references.";
+                : $"The required type '{vivianName}' ('{metadataName}') cannot be resolved among the given references.";
             ReportError(default, message);
         }
 
-        public void ReportRequiredTypeAmbiguous(string? ev2Name, string metadataName, TypeDefinition[] foundTypes)
+        public void ReportRequiredTypeAmbiguous(string? vivianName, string metadataName, TypeDefinition[] foundTypes)
         {
             var assemblyNames = foundTypes.Select(t => t.Module.Assembly.Name.Name);
             var assemblyNameList = string.Join(", ", assemblyNames);
-            var message = ev2Name == null
+            var message = vivianName == null
                 ? $"The required type '{metadataName}' was found in multiple references: {assemblyNameList}."
-                : $"The required type '{ev2Name}' ('{metadataName}') was found in multiple references: {assemblyNameList}.";
+                : $"The required type '{vivianName}' ('{metadataName}') was found in multiple references: {assemblyNameList}.";
             ReportError(default, message);
         }
 
@@ -307,7 +308,9 @@ namespace Vivian.CodeAnalysis
                     var firstStatement = ((BlockStatementSyntax)node).Statements.FirstOrDefault();
                     // Report just for non empty blocks.
                     if (firstStatement != null)
+                    {
                         ReportUnreachableCode(firstStatement);
+                    }
                     return;
                 case SyntaxKind.VariableDeclaration:
                     ReportUnreachableCode(((VariableDeclarationSyntax)node).Keyword.Location);

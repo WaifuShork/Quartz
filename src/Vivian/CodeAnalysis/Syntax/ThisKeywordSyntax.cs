@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    internal sealed partial class ThisKeywordSyntax : ExpressionSyntax
+    internal sealed class ThisKeywordSyntax : ExpressionSyntax
     {
         internal ThisKeywordSyntax(SyntaxTree syntaxTree, SyntaxToken keyword)
             : base(syntaxTree)
@@ -11,11 +11,11 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.ThisKeyword;
+        
+        public SyntaxToken Keyword { get; }
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return Keyword;
         }
-
-        public SyntaxToken Keyword { get; }
     }
 }

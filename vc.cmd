@@ -3,4 +3,8 @@
 REM Vars
 set "SLNDIR=%~dp0src"
 
-dotnet run --project "%SLNDIR%\Vivian.Compiler\Vivian.Compiler.csproj" -- %*
+REM Restore + Builde
+dotnet build "%SLNDIR%\Vivian.Compiler" --nologo || exit /b
+
+REM Run 
+dotnet run -p  "%SLNDIR%\Vivian.Compiler" --no-build -- %*

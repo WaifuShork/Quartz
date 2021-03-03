@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class BinaryExpressionSyntax : ExpressionSyntax
+    public sealed class BinaryExpressionSyntax : ExpressionSyntax
     {
         internal BinaryExpressionSyntax(SyntaxTree syntaxTree, ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right)
             : base(syntaxTree)
@@ -14,7 +14,6 @@ namespace Vivian.CodeAnalysis.Syntax
 
         public override SyntaxKind Kind => SyntaxKind.BinaryExpression;
         
-
         public ExpressionSyntax Left { get; }
         public SyntaxToken OperatorToken { get; }
         public ExpressionSyntax Right { get; }

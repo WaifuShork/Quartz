@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class ReturnStatementSyntax : StatementSyntax
+    public sealed class ReturnStatementSyntax : StatementSyntax
     {
         internal ReturnStatementSyntax(SyntaxTree syntaxTree, SyntaxToken returnKeyword, ExpressionSyntax? expression)
             : base(syntaxTree)
@@ -12,13 +12,14 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.ReturnStatement;
+        
+        public SyntaxToken ReturnKeyword { get; }
+        public ExpressionSyntax? Expression { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return ReturnKeyword;
-            yield return Expression;
+            yield return Expression!;
         }
-
-        public SyntaxToken ReturnKeyword { get; }
-        public ExpressionSyntax? Expression { get; }
     }
 }

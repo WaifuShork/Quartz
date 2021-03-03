@@ -214,19 +214,38 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private StatementSyntax ParseStatement()
         {
-            return Current.Kind switch
+            switch (Current.Kind)
             {
-                SyntaxKind.BreakKeyword => ParseBreakStatement(),
-                SyntaxKind.ContinueKeyword => ParseContinueStatement(),
-                SyntaxKind.DoKeyword => ParseDoWhileStatement(),
-                SyntaxKind.ForKeyword => ParseForStatement(),
-                SyntaxKind.IfKeyword => ParseIfStatement(),
-                SyntaxKind.LetKeyword or SyntaxKind.VarKeyword => ParseVariableDeclaration(),
-                SyntaxKind.OpenBraceToken => ParseBlockStatement(),
-                SyntaxKind.ReturnKeyword => ParseReturnStatement(),
-                SyntaxKind.WhileKeyword => ParseWhileStatement(),
-                _ => ParseExpressionStatement(),
-            };
+                case SyntaxKind.BreakKeyword:
+                    return ParseBreakStatement();
+                
+                case SyntaxKind.ContinueKeyword:
+                    return ParseContinueStatement();
+                
+                case SyntaxKind.DoKeyword:
+                    return ParseDoWhileStatement();
+                
+                case SyntaxKind.ForKeyword:
+                    return ParseForStatement();
+                
+                case SyntaxKind.IfKeyword:
+                    return ParseIfStatement();
+                
+                case SyntaxKind.VarKeyword or SyntaxKind.LetKeyword:
+                    return ParseVariableDeclaration();
+                
+                case SyntaxKind.OpenBraceToken:
+                    return ParseBlockStatement();
+                
+                case SyntaxKind.ReturnKeyword:
+                    return ParseReturnStatement();
+                
+                case SyntaxKind.WhileKeyword:
+                    return ParseWhileStatement();
+                
+                default:
+                    return ParseExpressionStatement();
+            }
         }
 
         private BlockStatementSyntax ParseBlockStatement()
@@ -316,16 +335,16 @@ namespace Vivian.CodeAnalysis.Syntax
 
                 return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer);
             }
-            else
-            {
-                return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, null, null);
-            }
+            
+            return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, null, null);
         }
 
         private TypeClauseSyntax? ParseOptionalTypeClause()
         {
             if (Current.Kind != SyntaxKind.ColonToken)
+            {
                 return null;
+            }
 
             return ParseTypeClause();
         }

@@ -23,11 +23,12 @@ namespace Vivian.CodeAnalysis
 
         public static Compilation Create(params SyntaxTree[] syntaxTrees)
         {
-            return new Compilation(syntaxTrees);
+            return new(syntaxTrees);
         }
 
         public Compilation? Previous { get; }
         public ImmutableArray<SyntaxTree> SyntaxTrees { get; }
+        
         public FunctionSymbol? MainFunction => GlobalScope.MainFunction;
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
@@ -56,21 +57,25 @@ namespace Vivian.CodeAnalysis
 
             while (submission != null)
             {
-                foreach (var @struct in submission.Structs)
-                    if (seenSymbolNames.Add(@struct.Name))
-                        yield return @struct;
+                foreach (var @struct in submission.Structs.Where(@struct => seenSymbolNames.Add(@struct.Name)))
+                {
+                    yield return @struct;
+                }
 
-                foreach (var function in submission.Functions)
-                    if (seenSymbolNames.Add(function.Name))
-                        yield return function;
+                foreach (var function in submission.Functions.Where(function => seenSymbolNames.Add(function.Name)))
+                {
+                    yield return function;
+                }
 
-                foreach (var variable in submission.Variables)
-                    if (seenSymbolNames.Add(variable.Name))
-                        yield return variable;
+                foreach (var variable in submission.Variables.Where(variable => seenSymbolNames.Add(variable.Name)))
+                {
+                    yield return variable;
+                }
 
-                foreach (var builtin in builtinFunctions)
-                    if (seenSymbolNames.Add(builtin.Name))
-                        yield return builtin;
+                foreach (var builtin in builtinFunctions.Where(builtin => seenSymbolNames.Add(builtin.Name)))
+                {
+                    yield return builtin;
+                }
 
                 submission = submission.Previous;
             }
@@ -100,16 +105,6 @@ namespace Vivian.CodeAnalysis
             var program = GetProgram();
 
             return Emitter.Emit(program, moduleName, references, outputPath);
-        }
-        
-        public void EmitTree(FunctionSymbol symbol, TextWriter writer)
-        {
-            var program = GetProgram();
-            symbol.WriteTo(writer);
-            writer.WriteLine();
-            if (!program.Functions.TryGetValue(symbol, out var body))
-                return;
-            body.WriteTo(writer);
         }
     }
 }

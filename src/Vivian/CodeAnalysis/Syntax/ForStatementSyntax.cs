@@ -2,7 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
-    public sealed partial class ForStatementSyntax : StatementSyntax
+    public sealed class ForStatementSyntax : StatementSyntax
     {
         internal ForStatementSyntax(SyntaxTree syntaxTree, SyntaxToken keyword, SyntaxToken identifier, SyntaxToken equalsToken, ExpressionSyntax lowerBound, SyntaxToken toKeyword, ExpressionSyntax upperBound, StatementSyntax body)
             : base(syntaxTree)
@@ -17,6 +17,15 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.ForStatement;
+        
+        public SyntaxToken Keyword { get; }
+        public SyntaxToken Identifier { get; }
+        public SyntaxToken EqualsToken { get; }
+        public ExpressionSyntax LowerBound { get; }
+        public SyntaxToken ToKeyword { get; }
+        public ExpressionSyntax UpperBound { get; }
+        public StatementSyntax Body { get; }
+        
         public override IEnumerable<SyntaxNode> GetChildren()
         {
             yield return Keyword;
@@ -27,13 +36,5 @@ namespace Vivian.CodeAnalysis.Syntax
             yield return UpperBound;
             yield return Body;
         }
-
-        public SyntaxToken Keyword { get; }
-        public SyntaxToken Identifier { get; }
-        public SyntaxToken EqualsToken { get; }
-        public ExpressionSyntax LowerBound { get; }
-        public SyntaxToken ToKeyword { get; }
-        public ExpressionSyntax UpperBound { get; }
-        public StatementSyntax Body { get; }
     }
 }

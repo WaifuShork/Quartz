@@ -50,14 +50,16 @@ namespace Vivian.CodeAnalysis.Binding
                 if (IsEnd)
                     return "<End>";
 
-                using (var writer = new StringWriter())
-                using (var indentedWriter = new IndentedTextWriter(writer))
-                {
-                    foreach (var statement in Statements)
-                        statement.WriteTo(indentedWriter);
+                using var writer = new StringWriter();
+                using var indentedWriter = new IndentedTextWriter(writer);
 
-                    return writer.ToString();
+                foreach (var statement in Statements)
+                {
+                    statement.WriteTo(indentedWriter);
                 }
+
+                return writer.ToString();
+                
             }
         }
 
@@ -77,7 +79,9 @@ namespace Vivian.CodeAnalysis.Binding
             public override string ToString()
             {
                 if (Condition == null)
+                {
                     return string.Empty;
+                }
 
                 return Condition.ToString();
             }
@@ -85,8 +89,8 @@ namespace Vivian.CodeAnalysis.Binding
 
         public sealed class BasicBlockBuilder
         {
-            private List<BoundStatement> _statements = new List<BoundStatement>();
-            private List<BasicBlock> _blocks = new List<BasicBlock>();
+            private readonly List<BoundStatement> _statements = new();
+            private readonly List<BasicBlock> _blocks = new();
 
             public List<BasicBlock> Build(BoundBlockStatement block)
             {
@@ -142,18 +146,22 @@ namespace Vivian.CodeAnalysis.Binding
 
         public sealed class GraphBuilder
         {
-            private Dictionary<BoundStatement, BasicBlock> _blockFromStatement = new Dictionary<BoundStatement, BasicBlock>();
-            private Dictionary<BoundLabel, BasicBlock> _blockFromLabel = new Dictionary<BoundLabel, BasicBlock>();
-            private List<BasicBlockBranch> _branches = new List<BasicBlockBranch>();
-            private BasicBlock _start = new BasicBlock(isStart: true);
-            private BasicBlock _end = new BasicBlock(isStart: false);
+            private readonly Dictionary<BoundStatement, BasicBlock> _blockFromStatement = new();
+            private readonly Dictionary<BoundLabel, BasicBlock> _blockFromLabel = new();
+            private readonly List<BasicBlockBranch> _branches = new();
+            private readonly BasicBlock _start = new(isStart: true);
+            private readonly BasicBlock _end = new(isStart: false);
 
             public ControlFlowGraph Build(List<BasicBlock> blocks)
             {
                 if (blocks.Count == 0)
+                {
                     Connect(_start, _end);
+                }
                 else
+                {
                     Connect(_start, blocks[0]);
+                }
 
                 foreach (var block in blocks)
                 {
@@ -161,11 +169,13 @@ namespace Vivian.CodeAnalysis.Binding
                     {
                         _blockFromStatement.Add(statement, block);
                         if (statement is BoundLabelStatement labelStatement)
+                        {
                             _blockFromLabel.Add(labelStatement.Label, block);
+                        }
                     }
                 }
 
-                for (int i = 0; i < blocks.Count; i++)
+                for (var i = 0; i < blocks.Count; i++)
                 {
                     var current = blocks[i];
                     var next = i == blocks.Count - 1 ? _end : blocks[i + 1];
@@ -229,13 +239,17 @@ namespace Vivian.CodeAnalysis.Binding
 
             private void Connect(BasicBlock from, BasicBlock to, BoundExpression? condition = null)
             {
-                if (condition is BoundLiteralExpression l)
+                if (condition is BoundLiteralExpression literal)
                 {
-                    var value = (bool)l.Value;
+                    var value = (bool) literal.Value!;
                     if (value)
+                    {
                         condition = null;
+                    }
                     else
+                    {
                         return;
+                    }
                 }
 
                 var branch = new BasicBlockBranch(from, to, condition);
@@ -265,7 +279,9 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 var negated = BoundNodeFactory.Not(condition.Syntax, condition);
                 if (negated.ConstantValue != null)
+                {
                     return new BoundLiteralExpression(condition.Syntax, negated.ConstantValue.Value);
+                }
 
                 return negated;
             }
@@ -282,7 +298,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             var blockIds = new Dictionary<BasicBlock, string>();
 
-            for (int i = 0; i < Blocks.Count; i++)
+            for (var i = 0; i < Blocks.Count; i++)
             {
                 var id = $"N{i}";
                 blockIds.Add(Blocks[i], id);
@@ -323,7 +339,9 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 var lastStatement = branch.From.Statements.LastOrDefault();
                 if (lastStatement == null || lastStatement.Kind != BoundNodeKind.ReturnStatement)
+                {
                     return false;
+                }
             }
 
             return true;
