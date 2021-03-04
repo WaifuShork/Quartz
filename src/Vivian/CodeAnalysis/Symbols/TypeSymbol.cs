@@ -16,7 +16,7 @@
         public static readonly TypeSymbol UInt64 = new("uint64", 0, isIntegral: true);
         public static readonly TypeSymbol Float32 = new("float32", 0, isFloat: true);
         public static readonly TypeSymbol Float64 = new("float64", 0, isFloat: true);
-        public static readonly TypeSymbol Decimal = new("decimal", 0, isDecimal: true);
+        public static readonly TypeSymbol Decimal = new("float128", 0, isDecimal: true);
         public static readonly TypeSymbol String = new("string", string.Empty);
         public static readonly TypeSymbol Void = new("void", null);
 

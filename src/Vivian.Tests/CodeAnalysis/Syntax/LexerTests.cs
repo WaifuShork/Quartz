@@ -136,25 +136,33 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
             public static IEnumerable<object[]> GetTokensData()
             {
                 foreach (var (kind, text) in GetTokens())
+                {
                     yield return new object[] { kind, text };
+                }
             }
     
             public static IEnumerable<object[]> GetSeparatorsData()
             {
                 foreach (var (kind, text) in GetSeparators())
+                {
                     yield return new object[] { kind, text };
+                }
             }
     
             public static IEnumerable<object[]> GetTokenPairsData()
             {
                 foreach (var (t1Kind, t1Text, t2Kind, t2Text) in GetTokenPairs())
+                {
                     yield return new object[] { t1Kind, t1Text, t2Kind, t2Text };
+                }
             }
     
             public static IEnumerable<object[]> GetTokenPairsWithSeparatorData()
             {
                 foreach (var (t1Kind, t1Text, separatorKind, separatorText, t2Kind, t2Text) in GetTokenPairsWithSeparator())
+                {
                     yield return new object[] { t1Kind, t1Text, separatorKind, separatorText, t2Kind, t2Text };
+                }
             }
     
             private static IEnumerable<(SyntaxKind kind, string text)> GetTokens()
@@ -409,6 +417,11 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 }
 
                 if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.MultiLineCommentTrivia)
+                {
+                    return true;
+                }
+
+                if (t1Kind == SyntaxKind.EqualsGreaterThanToken && t2Kind == SyntaxKind.GreaterToken)
                 {
                     return true;
                 }

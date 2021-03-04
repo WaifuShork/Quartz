@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\VivianLang\\Vivian\\samples\\src\\Playground.vivproj",
-      "projectName": "Playground",
-      "projectPath": "G:\\VivianLang\\Vivian\\samples\\src\\Playground.vivproj",
+      "projectUniqueName": "G:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
+      "projectName": "Core",
+      "projectPath": "G:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "G:\\VivianLang\\Vivian\\samples\\src\\obj\\",
+      "outputPath": "G:\\VivianLang\\Vivian\\Core.Library\\src\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

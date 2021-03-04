@@ -41,6 +41,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.PlusToken or 
                      SyntaxKind.MinusToken:
+                    
                 case SyntaxKind.EqualsEqualsToken or 
                      SyntaxKind.BangEqualsToken or 
                      SyntaxKind.LessToken or
@@ -96,12 +97,12 @@ namespace Vivian.CodeAnalysis.Syntax
                     return SyntaxKind.FalseKeyword;
                 case "for":
                     return SyntaxKind.ForKeyword;
-                case "function":
+                case "new":
                     return SyntaxKind.FunctionKeyword;
                 case "if":
                     return SyntaxKind.IfKeyword;
-                case "let":
-                    return SyntaxKind.LetKeyword;
+                case "const":
+                    return SyntaxKind.ConstKeyword;
                 case "return":
                     return SyntaxKind.ReturnKeyword;
                 case "struct":
@@ -156,6 +157,8 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.CloseParenthesisToken:
                     return ")";
                 
+                case SyntaxKind.SemicolonToken:
+                    return ";";
                 case SyntaxKind.PlusToken:
                     return "+";
                 case SyntaxKind.SlashToken:
@@ -168,6 +171,8 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "!";
                 case SyntaxKind.ColonToken:
                     return ":";
+                case SyntaxKind.EqualsGreaterThanToken:
+                    return "=>";
                 case SyntaxKind.CommaToken:
                     return ",";
                 case SyntaxKind.DotToken:
@@ -252,11 +257,11 @@ namespace Vivian.CodeAnalysis.Syntax
                 
                 case SyntaxKind.VarKeyword:
                     return "var";
-                case SyntaxKind.LetKeyword:
-                    return "let";
+                case SyntaxKind.ConstKeyword:
+                    return "const";
                 
                 case SyntaxKind.FunctionKeyword:
-                    return "function";
+                    return "new";
                 case SyntaxKind.DefaultKeyword:
                     return "default";
                 

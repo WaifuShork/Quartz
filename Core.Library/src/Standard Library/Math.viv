@@ -1,0 +1,318 @@
+struct Math
+{
+    var E: float64 = 2.7182818284590452354;
+    var PI: float64 = 3.14159265358979323846;
+    var Tau: float64 = 6.283185307179586476925;
+}
+
+new Math.Int8_Clamp(value: int8, min: int8, max: int8) => int8 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.Int16_Clamp(value: int16, min: int16, max: int16) => int16 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.Int32_Clamp(value: int32, min: int32, max: int32) => int32 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.UInt8_Clamp(value: uint8, min: uint8, max: uint8) => uint8 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.UInt16_Clamp(value: uint16, min: uint16, max: uint16) => uint16 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.UInt32_Clamp(value: uint32, min: uint32, max: uint32) => uint32 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.UInt64_Clamp(value: uint64, min: uint64, max: uint64) => uint64 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.Float32_Clamp(value: float32, min: float32, max: float32) => float32 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.Float64_Clamp(value: float64, min: float64, max: float64) => float64 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.Float128_Clamp(value: float128, min: float128, max: float128) => float128 
+{
+    if (min > max)
+    {
+        print("MinMaxException: " + string(min) + " " + string(max));
+    }
+
+    if (value < min)
+    {
+        return min;
+    }
+    else if (value > max)
+    {
+        return max;
+    }
+    return value;
+}
+
+new Math.Int8_Max(value1: int8, value2: int8) => int8 
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.Int16_Max(value1: int16, value2: int16) => int16 
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.Int32_Max(value1: int32, value2: int32) => int32 
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.Int64_Max(value1: int64, value2: int64) => int64 
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.UInt8_Max(value1: uint8, value2: uint8) => uint8 
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.UInt16_Max(value1: uint16, value2: uint16) => uint16
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.UInt32_Max(value1: uint32, value2: uint32) => uint32
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.UInt64_Max(value1: uint64, value2: uint64) => uint64
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.Float32_Max(value1: float32, value2: float32) => float32
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.Float64_Max(value1: float64, value2: float64) => float64
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}
+
+new Math.Float128_Max(value1: float128, value2: float128) => float128
+{
+    if (value1 >= value2)
+    {
+        return value1;
+    }
+    else
+    {
+        return value2;
+    }
+}

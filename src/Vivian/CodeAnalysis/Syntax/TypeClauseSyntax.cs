@@ -12,6 +12,7 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public override SyntaxKind Kind => SyntaxKind.TypeClause;
+        
         public SyntaxToken ColonToken { get; }
         public SyntaxToken Identifier { get; }
         

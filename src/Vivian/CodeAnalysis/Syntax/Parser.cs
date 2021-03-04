@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Text.RegularExpressions;
 using Vivian.CodeAnalysis;
 using Vivian.CodeAnalysis.Binding;
 using Vivian.CodeAnalysis.Text;
@@ -68,7 +69,9 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             var index = _position + offset;
             if (index >= _tokens.Length)
+            {
                 return _tokens[^1];
+            }
 
             return _tokens[index];
         }
@@ -85,7 +88,9 @@ namespace Vivian.CodeAnalysis.Syntax
         private SyntaxToken MatchToken(SyntaxKind kind)
         {
             if (Current.Kind == kind)
+            {
                 return NextToken();
+            }
 
             Diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind);
             return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
@@ -94,7 +99,9 @@ namespace Vivian.CodeAnalysis.Syntax
         private SyntaxToken MatchToken(SyntaxKind kind1, SyntaxKind kind2)
         {
             if (Current.Kind == kind1 || Current.Kind == kind2)
+            {
                 return NextToken();
+            }
 
             Diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind1);
             return new SyntaxToken(_syntaxTree, kind1, Current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
@@ -126,7 +133,9 @@ namespace Vivian.CodeAnalysis.Syntax
                 // already tried to parse an expression statement
                 // and reported one.
                 if (Current == startToken)
+                {
                     NextToken();
+                }
             }
 
             return members.ToImmutable();
@@ -135,10 +144,14 @@ namespace Vivian.CodeAnalysis.Syntax
         private MemberSyntax ParseMember()
         {
             if (Current.Kind == SyntaxKind.FunctionKeyword)
+            {
                 return ParseFunctionDeclaration();
+            }
 
             if (Current.Kind == SyntaxKind.StructKeyword)
+            {
                 return ParseStructDeclaration();
+            }
 
             return ParseGlobalStatement();
         }
@@ -147,7 +160,7 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             SyntaxToken identifier;
             SyntaxToken? dotToken, receiver;
-
+            
             var functionKeyword = MatchToken(SyntaxKind.FunctionKeyword);
 
             if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind == SyntaxKind.DotToken)
@@ -169,7 +182,7 @@ namespace Vivian.CodeAnalysis.Syntax
             var type = ParseOptionalTypeClause();
             var body = ParseBlockStatement();
 
-            return new FunctionDeclarationSyntax(_syntaxTree, functionKeyword, receiver, dotToken, identifier, openParenthesisToken, parameters, closeParenthesisToken, type, body);
+            return new FunctionDeclarationSyntax(_syntaxTree, functionKeyword, receiver, dotToken, identifier, openParenthesisToken, parameters, closeParenthesisToken, type!, body);
         }
 
         private SeparatedSyntaxList<ParameterSyntax> ParseParameterList()
@@ -231,7 +244,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.IfKeyword:
                     return ParseIfStatement();
                 
-                case SyntaxKind.VarKeyword or SyntaxKind.LetKeyword:
+                case SyntaxKind.VarKeyword or SyntaxKind.ConstKeyword:
                     return ParseVariableDeclaration();
                 
                 case SyntaxKind.OpenBraceToken:
@@ -262,15 +275,10 @@ namespace Vivian.CodeAnalysis.Syntax
                 var statement = ParseStatement();
                 statements.Add(statement);
 
-                // If ParseStatement() did not consume any tokens,
-                // we need to skip the current token and continue
-                // in order to avoid an infinite loop.
-                //
-                // We don't need to report an error, because we'll
-                // already tried to parse an expression statement
-                // and reported one.
                 if (Current == startToken)
+                {
                     NextToken();
+                }
             }
 
             var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);
@@ -300,16 +308,11 @@ namespace Vivian.CodeAnalysis.Syntax
 
                 var statement = ParseVariableDeclaration();
                 statements.Add(statement);
-
-                // If ParseStatement() did not consume any tokens,
-                // we need to skip the current token and continue
-                // in order to avoid an infinite loop.
-                //
-                // We don't need to report an error, because we'll
-                // already tried to parse an expression statement
-                // and reported one.
+                
                 if (Current == startToken)
+                {
                     NextToken();
+                }
             }
 
             var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);
@@ -319,21 +322,28 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private StatementSyntax ParseVariableDeclaration()
         {
-            var expected = Current.Kind == SyntaxKind.LetKeyword ? SyntaxKind.LetKeyword : SyntaxKind.VarKeyword;
+            var expected = Current.Kind == SyntaxKind.ConstKeyword ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword;
             var keyword = MatchToken(expected);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
 
             var typeClause = ParseOptionalTypeClause();
-
-            // A type can be omitted when it can be inferred from the initializer
-            // An initializer can be omitted when a type is present AND the variable is not read-only
-            // A variable that is read-only must be initialized
-            if (typeClause == null || Current.Kind == SyntaxKind.EqualsToken || expected == SyntaxKind.LetKeyword)
+            
+            if (typeClause == null || Current.Kind == SyntaxKind.EqualsToken || expected == SyntaxKind.ConstKeyword)
             {
                 var equals = MatchToken(SyntaxKind.EqualsToken);
                 var initializer = ParseExpression();
 
+                if (Current.Kind == SyntaxKind.SemicolonToken)
+                {
+                    NextToken();
+                }
+
                 return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer);
+            }
+            
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
             }
             
             return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, null, null);
@@ -341,7 +351,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private TypeClauseSyntax? ParseOptionalTypeClause()
         {
-            if (Current.Kind != SyntaxKind.ColonToken)
+            if (Current.Kind != SyntaxKind.EqualsGreaterThanToken && Current.Kind != SyntaxKind.ColonToken)
             {
                 return null;
             }
@@ -351,24 +361,29 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private TypeClauseSyntax ParseTypeClause()
         {
-            var colonToken = MatchToken(SyntaxKind.ColonToken);
+            var expected = Current.Kind == SyntaxKind.EqualsGreaterThanToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken;
+            var token = MatchToken(expected);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
-            return new TypeClauseSyntax(_syntaxTree, colonToken, identifier);
+            return new TypeClauseSyntax(_syntaxTree, token, identifier);
         }
 
         private StatementSyntax ParseIfStatement()
         {
             var keyword = MatchToken(SyntaxKind.IfKeyword);
+            var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var condition = ParseExpression();
+            var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
             var statement = ParseStatement();
             var elseClause = ParseOptionalElseClause();
-            return new IfStatementSyntax(_syntaxTree, keyword, condition, statement, elseClause);
+            return new IfStatementSyntax(_syntaxTree, keyword, openParenthesis, condition, closeParenthesis, statement, elseClause);
         }
 
         private ElseClauseSyntax? ParseOptionalElseClause()
         {
             if (Current.Kind != SyntaxKind.ElseKeyword)
+            {
                 return null;
+            }
 
             var keyword = NextToken();
             var statement = ParseStatement();
@@ -378,9 +393,12 @@ namespace Vivian.CodeAnalysis.Syntax
         private StatementSyntax ParseWhileStatement()
         {
             var keyword = MatchToken(SyntaxKind.WhileKeyword);
+            var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var condition = ParseExpression();
+            var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
             var body = ParseStatement();
-            return new WhileStatementSyntax(_syntaxTree, keyword, condition, body);
+
+            return new WhileStatementSyntax(_syntaxTree, keyword, openParenthesis, condition, closeParenthesis, body);
         }
 
         private StatementSyntax ParseDoWhileStatement()
@@ -388,31 +406,47 @@ namespace Vivian.CodeAnalysis.Syntax
             var doKeyword = MatchToken(SyntaxKind.DoKeyword);
             var body = ParseStatement();
             var whileKeyword = MatchToken(SyntaxKind.WhileKeyword);
+            var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var condition = ParseExpression();
-            return new DoWhileStatementSyntax(_syntaxTree, doKeyword, body, whileKeyword, condition);
+            var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }
+            return new DoWhileStatementSyntax(_syntaxTree, doKeyword, body, whileKeyword, openParenthesis, condition, closeParenthesis);
         }
 
         private StatementSyntax ParseForStatement()
         {
             var keyword = MatchToken(SyntaxKind.ForKeyword);
+            var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var equalsToken = MatchToken(SyntaxKind.EqualsToken);
             var lowerBound = ParseExpression();
             var toKeyword = MatchToken(SyntaxKind.ToKeyword);
             var upperBound = ParseExpression();
+            var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
             var body = ParseStatement();
-            return new ForStatementSyntax(_syntaxTree, keyword, identifier, equalsToken, lowerBound, toKeyword, upperBound, body);
+            return new ForStatementSyntax(_syntaxTree, keyword, openParenthesis, identifier, equalsToken, lowerBound, toKeyword, upperBound, closeParenthesis, body);
         }
 
         private StatementSyntax ParseBreakStatement()
         {
             var keyword = MatchToken(SyntaxKind.BreakKeyword);
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }
             return new BreakStatementSyntax(_syntaxTree, keyword);
         }
 
         private StatementSyntax ParseContinueStatement()
         {
             var keyword = MatchToken(SyntaxKind.ContinueKeyword);
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }
             return new ContinueStatementSyntax(_syntaxTree, keyword);
         }
 
@@ -424,6 +458,10 @@ namespace Vivian.CodeAnalysis.Syntax
             var isEof = Current.Kind == SyntaxKind.EndOfFileToken;
             var sameLine = !isEof && keywordLine == currentLine;
             var expression = sameLine ? ParseExpression() : null;
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }
             return new ReturnStatementSyntax(_syntaxTree, keyword, expression);
         }
 
@@ -432,19 +470,12 @@ namespace Vivian.CodeAnalysis.Syntax
             var expression = ParseExpression();
             return new ExpressionStatementSyntax(_syntaxTree, expression);
         }
-
-        /// <summary>
-        /// AssignExpr <- Expr (AssignOp Expr)?
-        /// </summary>
+        
         private ExpressionSyntax ParseExpression()
         {
             return ParseBinaryExpression();
         }
-
-        /// <summary>
-        /// UnaryExpr := (Op)? Expr
-        /// BinaryExpr := UnaryExpr Op BinaryExpr
-        /// </summary>
+        
         private ExpressionSyntax ParseBinaryExpression(int parentPrecedence = 0)
         {
             ExpressionSyntax left;
@@ -537,7 +568,9 @@ namespace Vivian.CodeAnalysis.Syntax
             var identifier = ParseNameExpression(withSuffix);
 
             if (Peek(0).Kind == SyntaxKind.OpenParenthesisToken)
+            {
                 return ParseCallExpression(identifier);
+            }
 
             return identifier;
         }
@@ -547,12 +580,17 @@ namespace Vivian.CodeAnalysis.Syntax
             var openParenthesisToken = MatchToken(SyntaxKind.OpenParenthesisToken);
             var arguments = ParseArguments();
             var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
-
+            
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }
+            
             return identifier switch
             {
                 NameExpressionSyntax id => new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken),
                 MemberAccessExpressionSyntax id => new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken),
-                _ => throw new System.Exception("Unexpected expression kind.")
+                _ => throw new Exception("Unexpected expression kind.")
             };
         }
 
@@ -592,10 +630,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             return ParseMemberAccess();
         }
-
-        /// <summary>
-        /// MemberExpr <- Identifier (DOT Identifier)*
-        /// </summary>
+        
         private MemberAccessExpressionSyntax ParseMemberAccess()
         {
             var queue = new Queue<SyntaxToken>();
@@ -617,7 +652,12 @@ namespace Vivian.CodeAnalysis.Syntax
 
             var firstIdentifier = queue.Dequeue();
 
-            ExpressionSyntax firstChild = firstIdentifier.Kind == SyntaxKind.ThisKeyword
+            if (Current.Kind == SyntaxKind.SemicolonToken)
+            {
+                NextToken();
+            }
+            
+            var firstChild = firstIdentifier.Kind == SyntaxKind.ThisKeyword
                 ? new ThisKeywordSyntax(_syntaxTree, firstIdentifier)
                 : (ExpressionSyntax)new NameExpressionSyntax(_syntaxTree, firstIdentifier);
 
@@ -626,14 +666,17 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private MemberAccessExpressionSyntax ParseMemberAccessInternal(Queue<SyntaxToken> queue, ExpressionSyntax child)
         {
-            // PERF: Change to iteration instead of recursion
             var dotToken = queue.Dequeue();
             var identifier = queue.Dequeue();
 
             if (queue.Count > 0)
+            {
                 return ParseMemberAccessInternal(queue, new MemberAccessExpressionSyntax(_syntaxTree, child, dotToken, identifier));
+            }
             else
+            {
                 return new MemberAccessExpressionSyntax(_syntaxTree, child, dotToken, identifier);
+            }
         }
     }
 }

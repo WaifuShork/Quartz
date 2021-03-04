@@ -1,0 +1,11 @@
+G:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.exe
+G:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.deps.json
+G:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.runtimeconfig.json
+G:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.runtimeconfig.dev.json
+G:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.dll
+G:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.pdb
+G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.vivprojAssemblyReference.cache
+G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.vivproj.CoreCompileInputs.cache
+G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.dll
+G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.pdb
+G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.genruntimeconfig.cache

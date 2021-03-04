@@ -1,4 +1,5 @@
-﻿using ReflectionBindingFlags = System.Reflection.BindingFlags;
+﻿using System;
+using ReflectionBindingFlags = System.Reflection.BindingFlags;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;

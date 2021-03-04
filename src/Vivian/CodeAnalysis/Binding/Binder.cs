@@ -26,7 +26,9 @@ namespace Vivian.CodeAnalysis.Binding
             if (function != null)
             {
                 foreach (var parameter in function.Parameters)
+                {
                     _scope.TryDeclareVariable(parameter);
+                }
             }
         }
 
@@ -96,6 +98,7 @@ namespace Vivian.CodeAnalysis.Binding
             var functions = binder._scope.GetDeclaredFunctions();
 
             FunctionSymbol? mainFunction = functions.FirstOrDefault(f => f.Name == "Main");
+            
             FunctionSymbol? scriptFunction = null;
 
             if (mainFunction != null)
@@ -235,7 +238,7 @@ namespace Vivian.CodeAnalysis.Binding
                     boundMembers.Add(d.Variable);
                 }
 
-                if (varDeclarationSyntax.Keyword.Kind == SyntaxKind.LetKeyword)
+                if (varDeclarationSyntax.Keyword.Kind == SyntaxKind.ConstKeyword)
                 {
                     // These are not candidates for ctorParameters because they are read-only
                     continue;
@@ -465,7 +468,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         private BoundStatement BindVariableDeclaration(VariableDeclarationSyntax syntax)
         {
-            var isReadOnly = syntax.Keyword.Kind == SyntaxKind.LetKeyword;
+            var isReadOnly = syntax.Keyword.Kind == SyntaxKind.ConstKeyword;
             var type = BindTypeClause(syntax.TypeClause);
 
             if (syntax.Initializer != null && syntax.Initializer.Kind != SyntaxKind.DefaultKeyword)
@@ -1398,6 +1401,8 @@ namespace Vivian.CodeAnalysis.Binding
 
                 case "string":
                     return TypeSymbol.String;
+                case "void":
+                    return TypeSymbol.Void;
 
                 default:
                     var maybeSymbol = _scope.TryLookupSymbol(name);

@@ -1,0 +1,7 @@
+new Main() => void
+{
+    var console = Console();
+    console.WriteLine("Name? ");
+    var input = console.ReadLine();
+    console.WriteLine(input);
+}

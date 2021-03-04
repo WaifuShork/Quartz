@@ -171,7 +171,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         private static void WriteVariableDeclaration(BoundVariableDeclaration node, IndentedTextWriter writer)
         {
-            writer.WriteKeyword(node.Variable.IsReadOnly ? SyntaxKind.LetKeyword : SyntaxKind.VarKeyword);
+            writer.WriteKeyword(node.Variable.IsReadOnly ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword);
             writer.WriteSpace();
             writer.WriteIdentifier(node.Variable.Name);
             writer.WriteSpace();

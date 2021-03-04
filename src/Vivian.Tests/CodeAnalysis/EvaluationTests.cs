@@ -127,7 +127,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_FunctionReturn_Missing()
         {
             const string? text = @"
-                function [add](a: int32, b: int32): int32
+                new [add](a: int32, b: int32 ) 
                 {
                 }
             ";
@@ -145,7 +145,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"
                 {
                     var x = 0
-                    if [10]
+                    if([10])
                         x = 10
                 }
             ";
@@ -163,7 +163,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"
                 {
                     var x = 0
-                    while [10]
+                    while([10])
                         x = 10
                 }
             ";
@@ -183,7 +183,7 @@ namespace Vivian.Tests.CodeAnalysis
                     var x = 0
                     do
                         x = 10
-                    while [10]
+                    while([10])
                 }
             ";
 
@@ -200,7 +200,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"
                 {
                     var result = 0
-                    for i = [false] to 10
+                    for(i = [false] to 10)
                         result = result + i
                 }
             ";
@@ -218,7 +218,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"
                 {
                     var result = 0
-                    for i = 1 to [true]
+                    for(i = 1 to [true])
                         result = result + i
                 }
             ";
@@ -304,7 +304,7 @@ namespace Vivian.Tests.CodeAnalysis
         }
 
          [Fact]
-        public void Evaluator_CompoundExpression_Assignemnt_NonDefinedVariable_Reports_Undefined()
+        public void Evaluator_CompoundExpression_Assignment_NonDefinedVariable_Reports_Undefined()
         {
             const string? text = @"[x] += 10";
 
@@ -332,7 +332,7 @@ namespace Vivian.Tests.CodeAnalysis
         {
             const string? text = @"
                 {
-                    let x = 10
+                    const x = 10
                     x [=] 0
                 }
             ";
@@ -349,7 +349,7 @@ namespace Vivian.Tests.CodeAnalysis
         {
             const string? text = @"
                 {
-                    let x = 10
+                    const x = 10
                     x [+=] 1
                 }
             ";
@@ -395,7 +395,7 @@ namespace Vivian.Tests.CodeAnalysis
         {
             const string? text = @"
                 {
-                    let foo = 42
+                    const foo = 42
                     [foo](42)
                 }
             ";
@@ -412,7 +412,7 @@ namespace Vivian.Tests.CodeAnalysis
         {
             const string? text = @"
                 {
-                    let print = 42
+                    const print = 42
                     [print](""test"")
                 }
             ";
@@ -428,7 +428,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Void_Function_Should_Not_Return_Value()
         {
             const string? text = @"
-                function test()
+                new test() => void
                 {
                     return [1]
                 }
@@ -445,7 +445,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Function_With_ReturnValue_Should_Not_Return_Void()
         {
             const string? text = @"
-                function test(): int32
+                new test() => int32
                 {
                     [return]
                 }
@@ -462,7 +462,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Not_All_Code_Paths_Return_Value()
         {
             const string? text = @"
-                function [test](n: int32): bool
+                new [test](int32 n) => bool
                 {
                     if (n > 10)
                        return true
@@ -480,12 +480,12 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Expression_Must_Have_Value()
         {
             const string? text = @"
-                function test(n: int32)
+                void test(int32 n)
                 {
                     return
                 }
 
-                let value = [test(100)]
+                const value = [test(100)]
             ";
 
             const string? diagnostics = @"
@@ -499,10 +499,10 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_IfStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                function test()
+                new test() => bool
                 {
-                    let x = 4 * 3
-                    if x > 12
+                    const x = 4 * 3
+                    if(x > 12)
                     {
                         [print](""x"")
                     }
@@ -523,9 +523,9 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_ElseStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                function test(): int32
+                new test() => bool
                 {
-                    if true
+                    if(true)
                     {
                         return 1
                     }
@@ -547,9 +547,9 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_WhileStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                function test()
+                new test() => bool
                 {
-                    while false
+                    while(false)
                     {
                         [continue]
                     }
@@ -579,7 +579,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Parameter_Already_Declared()
         {
             const string? text = @"
-                function sum(a: int32, b: int32, [a: int32]): int32
+                new sum(a: int32, b: int32, [a: int32]) => int32
                 {
                     return a + b + c
                 }
@@ -596,7 +596,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Function_Must_Have_Name()
         {
             const string? text = @"
-                function [(]a: int32, b: int32): int32
+                new [(]b: int32, b: int32) => int32
                 {
                     return a + b
                 }
@@ -613,11 +613,11 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Wrong_Argument_Type()
         {
             const string? text = @"
-                function test(n: int32): bool
+                new test(n: int32) => bool
                 {
                     return n > 10
                 }
-                let testValue = ""string""
+                const testValue = ""string""
                 test([testValue])
             ";
 
@@ -632,7 +632,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Bad_Type()
         {
             const string? text = @"
-                function test(n: [invalidtype])
+                new test(n: [invalidtype]) => void
                 {
                 }
             ";
@@ -648,7 +648,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Cannot_Access_Member()
         {
             const string? text = @"
-                var p: int32 = 0
+                var p = 0
 
                 print([p].[[length]])
             ";
@@ -672,7 +672,9 @@ namespace Vivian.Tests.CodeAnalysis
             var expectedDiagnostics = AnnotatedText.UnindentLines(diagnosticText);
 
             if (annotatedText.Spans.Length != expectedDiagnostics.Length)
+            {
                 throw new Exception("ERROR: Must mark as many spans as there are expected diagnostics");
+            }
 
             Assert.Equal(expectedDiagnostics.Length, diagnostics.Length);
 

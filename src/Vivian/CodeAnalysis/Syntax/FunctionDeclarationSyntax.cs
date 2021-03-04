@@ -13,7 +13,7 @@ namespace Vivian.CodeAnalysis.Syntax
                                            SyntaxToken openParenthesisToken,
                                            SeparatedSyntaxList<ParameterSyntax> parameters,
                                            SyntaxToken closeParenthesisToken,
-                                           TypeClauseSyntax? type,
+                                           TypeClauseSyntax type,
                                            BlockStatementSyntax body) 
                                            : base(syntaxTree)
         {
@@ -37,7 +37,7 @@ namespace Vivian.CodeAnalysis.Syntax
         public SyntaxToken OpenParenthesisToken { get; }
         public SeparatedSyntaxList<ParameterSyntax> Parameters { get; }
         public SyntaxToken CloseParenthesisToken { get; }
-        public TypeClauseSyntax? Type { get; }
+        public TypeClauseSyntax Type { get; }
         public BlockStatementSyntax Body { get; }
         
         public override IEnumerable<SyntaxNode> GetChildren()
@@ -48,7 +48,7 @@ namespace Vivian.CodeAnalysis.Syntax
             yield return Identifier;
             yield return OpenParenthesisToken;
             yield return CloseParenthesisToken;
-            yield return Type!;
+            yield return Type;
             yield return Body;
         }
     }

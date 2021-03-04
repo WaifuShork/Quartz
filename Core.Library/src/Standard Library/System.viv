@@ -1,0 +1,15 @@
+struct Console
+{
+    var Text: string = "";
+}
+
+new Console.WriteLine(text: string) => void 
+{
+    this.Text = text
+    print(this.Text);
+}
+
+new Console.ReadLine() => string
+{
+    return input();
+}

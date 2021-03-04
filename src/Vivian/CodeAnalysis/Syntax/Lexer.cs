@@ -32,7 +32,9 @@ namespace Vivian.CodeAnalysis.Syntax
             var index = _position + offset;
 
             if (index >= _text.Length)
+            {
                 return '\0';
+            }
 
             return _text[index];
         }
@@ -321,6 +323,10 @@ namespace Vivian.CodeAnalysis.Syntax
                     _kind = SyntaxKind.PercentToken;
                     _position++;
                     break;
+                case ';':
+                    _kind = SyntaxKind.SemicolonToken;
+                    _position++;
+                    break;
                 case '^':
                     _position++;
                     if (Current != '=')
@@ -369,14 +375,20 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '=':
                     _position++;
-                    if (Current != '=')
+                    if (Current != '=' && Current != '>')
                     {
                         _kind = SyntaxKind.EqualsToken;
                     }
-                    else
+                    else switch (Current)
                     {
-                        _kind = SyntaxKind.EqualsEqualsToken;
-                        _position++;
+                        case '>':
+                            _kind = SyntaxKind.EqualsGreaterThanToken;
+                            _position++;
+                            break;
+                        case '=':
+                            _kind = SyntaxKind.EqualsEqualsToken; 
+                            _position++; 
+                            break;
                     }
                     break;
                 case '!':

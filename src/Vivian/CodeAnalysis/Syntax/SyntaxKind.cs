@@ -21,6 +21,7 @@
         CloseBraceToken,
         CloseParenthesisToken,
         ColonToken,
+        EqualsGreaterThanToken,
         CommaToken,
         DotToken,
         EndOfFileToken,
@@ -50,6 +51,7 @@
         StarToken,
         StringToken,
         TildeToken,
+        SemicolonToken,
 
         // Keywords
         BreakKeyword,
@@ -61,7 +63,7 @@
         ForKeyword,
         FunctionKeyword,
         IfKeyword,
-        LetKeyword,
+        ConstKeyword,
         ReturnKeyword,
         StructKeyword,
         ThisKeyword,
