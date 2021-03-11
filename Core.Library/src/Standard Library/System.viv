@@ -1,15 +1,15 @@
-struct Console
+class Console
 {
     var Text: string = "";
 }
 
-new Console.WriteLine(text: string) => void 
+procedure Console.WriteLine(text: string) => void 
 {
     this.Text = text
     print(this.Text);
 }
 
-new Console.ReadLine() => string
+procedure Console.ReadLine() => string
 {
     return input();
 }

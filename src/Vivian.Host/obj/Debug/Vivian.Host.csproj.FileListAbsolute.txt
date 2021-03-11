@@ -22,3 +22,15 @@ G:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.dll
 G:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\ref\Vivian.Host.dll
 G:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.pdb
 G:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csprojAssemblyReference.cache
+D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.deps.json
+D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.dll
+D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\ref\Vivian.Host.dll
+D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.pdb
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csprojAssemblyReference.cache
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.GeneratedMSBuildEditorConfig.editorconfig
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfoInputs.cache
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfo.cs
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csproj.CoreCompileInputs.cache
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.dll
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\ref\Vivian.Host.dll
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.pdb

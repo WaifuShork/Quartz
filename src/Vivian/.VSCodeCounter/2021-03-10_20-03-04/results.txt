@@ -1,0 +1,148 @@
+Date : 2021-03-10 20:03:04
+Directory : d:\VivianLang\Vivian\src\Vivian
+Total : 114 files,  8596 codes, 181 comments, 1440 blanks, all 10217 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |        113 |      8,582 |        181 |      1,435 |     10,198 |
+| XML      |          1 |         14 |          0 |          5 |         19 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                           | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                              |        114 |      8,596 |        181 |      1,440 |     10,217 |
+| CodeAnalysis                                                                                   |        111 |      8,301 |        166 |      1,380 |      9,847 |
+| CodeAnalysis\Binding                                                                           |         49 |      3,530 |         37 |        607 |      4,174 |
+| CodeAnalysis\Emit                                                                              |          1 |      1,041 |         33 |        170 |      1,244 |
+| CodeAnalysis\Lowering                                                                          |          1 |        206 |         70 |         41 |        317 |
+| CodeAnalysis\Symbols                                                                           |         11 |        279 |          0 |         32 |        311 |
+| CodeAnalysis\Syntax                                                                            |         40 |      2,609 |         23 |        407 |      3,039 |
+| CodeAnalysis\Text                                                                              |          4 |        158 |          0 |         32 |        190 |
+| CompilerService                                                                                |          1 |        122 |         14 |         26 |        162 |
+| IO                                                                                             |          1 |        159 |          1 |         29 |        189 |
++------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                       | language | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\Binder.cs                                 | C#       |      1,141 |         27 |        251 |      1,419 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundAssignmentExpression.cs              | C#       |         17 |          0 |          3 |         20 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundBinaryExpression.cs                  | C#       |         22 |          0 |          3 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundBinaryOperator.cs                    | C#       |         87 |          0 |         12 |         99 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundBinaryOperatorKind.cs                | C#       |         22 |          0 |          0 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundBlockStatement.cs                    | C#       |         15 |          0 |          3 |         18 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundCallExpression.cs                    | C#       |         35 |          0 |          6 |         41 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundCompoundAssignmentExpression.cs      | C#       |         20 |          0 |          2 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundCompoundFieldAssignmentExpression.cs | C#       |         22 |          0 |          3 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundConditionalGotoStatement.cs          | C#       |         18 |          0 |          2 |         20 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundConstant.cs                          | C#       |         27 |          0 |          1 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundConversionExpression.cs              | C#       |         16 |          0 |          2 |         18 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundDoWhileStatement.cs                  | C#       |         16 |          0 |          2 |         18 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundErrorExpression.cs                   | C#       |         14 |          0 |          2 |         16 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundExpression.cs                        | C#       |         13 |          0 |          2 |         15 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundExpressionStatement.cs               | C#       |         14 |          0 |          2 |         16 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundFieldAccessExpression.cs             | C#       |         18 |          0 |          3 |         21 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundFieldAssignmentExpression.cs         | C#       |         20 |          0 |          2 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundForStatement.cs                      | C#       |         21 |          0 |          2 |         23 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundGlobalScope.cs                       | C#       |         34 |          0 |          2 |         36 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundGotoStatement.cs                     | C#       |         14 |          0 |          2 |         16 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundIfStatement.cs                       | C#       |         18 |          0 |          2 |         20 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundLabel.cs                             | C#       |         12 |          0 |          2 |         14 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundLabelStatement.cs                    | C#       |         14 |          0 |          2 |         16 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundLiteralExpression.cs                 | C#       |         68 |          0 |          3 |         71 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundLocalFieldAccessExpression.cs        | C#       |         18 |          0 |          2 |         20 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundLoopStatement.cs                     | C#       |         15 |          0 |          2 |         17 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundMemberBlockStatement.cs              | C#       |         15 |          0 |          3 |         18 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundNode.cs                              | C#       |         20 |          0 |          3 |         23 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundNodeFactory.cs                       | C#       |         74 |          0 |         25 |         99 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundNodeKind.cs                          | C#       |         33 |          2 |          1 |         36 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundNodePrinter.cs                       | C#       |        368 |          0 |         48 |        416 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundNopStatement.cs                      | C#       |         10 |          0 |          2 |         12 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundProgram.cs                           | C#       |         28 |          0 |          2 |         30 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundReturnStatement.cs                   | C#       |         14 |          0 |          2 |         16 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundScope.cs                             | C#       |         57 |          0 |         16 |         73 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundSequencePointStatement.cs            | C#       |         17 |          0 |          3 |         20 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundStatement.cs                         | C#       |          8 |          0 |          1 |          9 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundThisExpression.cs                    | C#       |         16 |          0 |          2 |         18 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundTreeRewriter.cs                      | C#       |        328 |          0 |         70 |        398 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundUnaryExpression.cs                   | C#       |         20 |          0 |          2 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundUnaryOperator.cs                     | C#       |         61 |          0 |          8 |         69 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundUnaryOperatorKind.cs                 | C#       |         10 |          0 |          0 |         10 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundVariableDeclaration.cs               | C#       |         17 |          0 |          2 |         19 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundVariableExpression.cs                | C#       |         17 |          0 |          2 |         19 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\BoundWhileStatement.cs                    | C#       |         16 |          0 |          2 |         18 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\ConstantFolding.cs                        | C#       |        263 |          5 |         21 |        289 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\ControlFlowGraph.cs                       | C#       |        295 |          0 |         55 |        350 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Binding\Conversion.cs                             | C#       |         92 |          3 |         17 |        112 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Compilation.cs                                    | C#       |         89 |          1 |         21 |        111 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Diagnostic.cs                                     | C#       |         59 |          1 |         13 |         73 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\DiagnosticBag.cs                                  | C#       |        299 |          1 |         53 |        353 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\DiagnosticExtensions.cs                           | C#       |         17 |          0 |          2 |         19 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Emit\Emitter.cs                                   | C#       |      1,041 |         33 |        170 |      1,244 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\EvaluationResult.cs                               | C#       |         14 |          0 |          2 |         16 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Lowering\Lowerer.cs                               | C#       |        206 |         70 |         41 |        317 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\BuiltinFunctions.cs                       | C#       |         17 |          0 |          2 |         19 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\FunctionSymbol.cs                         | C#       |         28 |          0 |          3 |         31 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\GlobalVariableSymbol.cs                   | C#       |         10 |          0 |          1 |         11 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\LocalVariableSymbol.cs                    | C#       |         10 |          0 |          1 |         11 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\ParameterSymbol.cs                        | C#       |         13 |          0 |          2 |         15 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\StructSymbol.cs                           | C#       |         19 |          0 |          3 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\Symbol.cs                                 | C#       |         23 |          0 |          4 |         27 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\SymbolKind.cs                             | C#       |         12 |          0 |          0 |         12 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\SymbolPrinter.cs                          | C#       |         94 |          0 |         11 |        105 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\TypeSymbol.cs                             | C#       |         37 |          0 |          3 |         40 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Symbols\VariableSymbol.cs                         | C#       |         16 |          0 |          2 |         18 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\AssignmentExpressionSyntax.cs              | C#       |         24 |          0 |          4 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\BinaryExpressionSyntax.cs                  | C#       |         24 |          0 |          4 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\BlockStatementSyntax.cs                    | C#       |         24 |          0 |          4 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\BreakStatementSyntax.cs                    | C#       |         18 |          0 |          4 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\CallExpressionSyntax.cs                    | C#       |         38 |          0 |          7 |         45 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\CompilationUnitSyntax.cs                   | C#       |         21 |          0 |          4 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ContinueStatementSyntax.cs                 | C#       |         18 |          0 |          4 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\DefaultKeywordSyntax.cs                    | C#       |         18 |          0 |          4 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\DoWhileStatementSyntax.cs                  | C#       |         40 |          0 |          4 |         44 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ElseClauseSyntax.cs                        | C#       |         21 |          0 |          4 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ExpressionStatementSyntax.cs               | C#       |         18 |          0 |          4 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ExpressionSyntax.cs                        | C#       |          7 |          0 |          0 |          7 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ForStatementSyntax.cs                      | C#       |         51 |          0 |          4 |         55 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\FunctionDeclarationSyntax.cs               | C#       |         51 |          0 |          4 |         55 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\GlobalStatementSyntax.cs                   | C#       |         18 |          0 |          4 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\IfStatementSyntax.cs                       | C#       |         39 |          0 |          5 |         44 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\Lexer.cs                                   | C#       |        558 |          4 |         54 |        616 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\LiteralExpressionSyntax.cs                 | C#       |         22 |          0 |          5 |         27 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\MemberAccessExpressionSyntax.cs            | C#       |         24 |          0 |          4 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\MemberBlockStatementSyntax.cs              | C#       |         24 |          0 |          4 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\MemberSyntax.cs                            | C#       |          7 |          0 |          0 |          7 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\NameExpressionSyntax.cs                    | C#       |         18 |          0 |          4 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ParameterSyntax.cs                         | C#       |         21 |          0 |          4 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ParenthesizedExpressionSyntax.cs           | C#       |         24 |          0 |          4 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\Parser.cs                                  | C#       |        550 |          7 |        125 |        682 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ReturnStatementSyntax.cs                   | C#       |         21 |          0 |          4 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\SeparatedSyntaxList.cs                     | C#       |         38 |          0 |         10 |         48 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\StatementSyntax.cs                         | C#       |          7 |          0 |          0 |          7 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\StructDeclarationSyntax.cs                 | C#       |         24 |          0 |          4 |         28 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\SyntaxFacts.cs                             | C#       |        301 |          0 |         32 |        333 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\SyntaxKind.cs                              | C#       |         96 |          6 |          6 |        108 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\SyntaxNode.cs                              | C#       |        139 |          3 |         35 |        177 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\SyntaxToken.cs                             | C#       |         47 |          3 |          6 |         56 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\SyntaxTree.cs                              | C#       |        108 |          0 |         21 |        129 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\SyntaxTrivia.cs                            | C#       |         19 |          0 |          2 |         21 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\ThisKeywordSyntax.cs                       | C#       |         18 |          0 |          3 |         21 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\TypeClauseSyntax.cs                        | C#       |         21 |          0 |          4 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\UnaryExpressionSyntax.cs                   | C#       |         21 |          0 |          4 |         25 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\VariableDeclarationSyntax.cs               | C#       |         36 |          0 |          4 |         40 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Syntax\WhileStatementSyntax.cs                    | C#       |         35 |          0 |          4 |         39 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Text\SourceText.cs                                | C#       |         94 |          0 |         25 |        119 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Text\TextLine.cs                                  | C#       |         21 |          0 |          1 |         22 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Text\TextLocation.cs                              | C#       |         18 |          0 |          2 |         20 |
+| d:\VivianLang\Vivian\src\Vivian\CodeAnalysis\Text\TextSpan.cs                                  | C#       |         25 |          0 |          4 |         29 |
+| d:\VivianLang\Vivian\src\Vivian\CompilerService\Server.cs                                      | C#       |        122 |         14 |         26 |        162 |
+| d:\VivianLang\Vivian\src\Vivian\IO\TextWriterExtensions.cs                                     | C#       |        159 |          1 |         29 |        189 |
+| d:\VivianLang\Vivian\src\Vivian\Vivian.csproj                                                  | XML      |         14 |          0 |          5 |         19 |
+| Total                                                                                          |          |      8,596 |        181 |      1,440 |     10,217 |
++------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

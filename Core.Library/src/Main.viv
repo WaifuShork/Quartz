@@ -1,4 +1,4 @@
-new Main() => void
+procedure Main() => void
 {
     var console = Console();
     console.WriteLine("Name? ");

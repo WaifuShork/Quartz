@@ -97,7 +97,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     return SyntaxKind.FalseKeyword;
                 case "for":
                     return SyntaxKind.ForKeyword;
-                case "new":
+                case "procedure":
                     return SyntaxKind.FunctionKeyword;
                 case "if":
                     return SyntaxKind.IfKeyword;
@@ -105,7 +105,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     return SyntaxKind.ConstKeyword;
                 case "return":
                     return SyntaxKind.ReturnKeyword;
-                case "struct":
+                case "class":
                     return SyntaxKind.StructKeyword;
                 case "this":
                     return SyntaxKind.ThisKeyword;
@@ -241,7 +241,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "return";
                 
                 case SyntaxKind.StructKeyword:
-                    return "struct";
+                    return "class";
                 case SyntaxKind.ThisKeyword:
                     return "this";
                 
@@ -261,7 +261,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     return "const";
                 
                 case SyntaxKind.FunctionKeyword:
-                    return "new";
+                    return "procedure";
                 case SyntaxKind.DefaultKeyword:
                     return "default";
                 

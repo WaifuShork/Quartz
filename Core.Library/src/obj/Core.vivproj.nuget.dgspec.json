@@ -1,21 +1,18 @@
 {
   "format": 1,
   "restore": {
-    "G:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj": {}
+    "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj": {}
   },
   "projects": {
-    "G:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj": {
+    "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
+        "projectUniqueName": "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
         "projectName": "Core",
-        "projectPath": "G:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
+        "projectPath": "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
         "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-        "outputPath": "G:\\VivianLang\\Vivian\\Core.Library\\src\\obj\\",
+        "outputPath": "D:\\VivianLang\\Vivian\\Core.Library\\src\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -25,10 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://dotnet.myget.org/F/roslyn/api/v3/index.json": {},
-          "https://nuget.emzi0767.com/api/v3/index.json": {},
-          "https://www.myget.org/F/discord-net/api/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
@@ -50,18 +44,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[3.1.9, 3.1.9]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

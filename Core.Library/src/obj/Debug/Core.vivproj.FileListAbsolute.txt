@@ -9,3 +9,14 @@ G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.vivproj.CoreCompileInputs.c
 G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.dll
 G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.pdb
 G:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.genruntimeconfig.cache
+D:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.exe
+D:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.deps.json
+D:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.runtimeconfig.json
+D:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.runtimeconfig.dev.json
+D:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.dll
+D:\VivianLang\Vivian\Core.Library\src\bin\Debug\Core.pdb
+D:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.vivprojAssemblyReference.cache
+D:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.vivproj.CoreCompileInputs.cache
+D:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.dll
+D:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.pdb
+D:\VivianLang\Vivian\Core.Library\src\obj\Debug\Core.genruntimeconfig.cache
