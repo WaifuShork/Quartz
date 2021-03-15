@@ -6,9 +6,9 @@ namespace Vivian.CodeAnalysis
 {
     public static class DiagnosticExtensions
     {
-        public static bool HasErrors(this ImmutableArray<Diagnostic> diagnostics)
+        public static bool HasWarnings(this ImmutableArray<Diagnostic> diagnostics)
         {
-            return diagnostics.Any(d => d.IsError);
+            return diagnostics.Any(d => d.IsWarning);
         }
 
         public static bool HasErrors(this IEnumerable<Diagnostic> diagnostics)

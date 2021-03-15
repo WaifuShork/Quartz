@@ -65,7 +65,7 @@
         IfKeyword,
         ConstKeyword,
         ReturnKeyword,
-        StructKeyword,
+        ClassKeyword,
         ThisKeyword,
         ToKeyword,
         TrueKeyword,

@@ -10,6 +10,8 @@ using Vivian.CodeAnalysis.Text;
 
 namespace Vivian.CodeAnalysis
 {
+    // VE - Vivian Error
+    // VE - Vivian Warning
     internal sealed class DiagnosticBag : IEnumerable<Diagnostic>
     {
         private readonly List<Diagnostic> _diagnostics = new();
@@ -29,6 +31,7 @@ namespace Vivian.CodeAnalysis
             _diagnostics.Add(diagnostic);
         }
 
+        // TODO: Emit warnings for IDE debugging/editor warnings
         private void ReportWarning(TextLocation location, string message)
         {
             var diagnostic = Diagnostic.Warning(location, message);
@@ -43,7 +46,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportInvalidNumber(TextLocation location, string text, TypeSymbol type)
         {
-            var message = $"The number {text} isn't valid {type}.";
+            var message = $"The number '{text}' isn't valid <{type}>.";
             ReportError(location, message);
         }
 
@@ -97,7 +100,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportUndefinedBinaryOperator(TextLocation location, string operatorText, TypeSymbol leftType, TypeSymbol rightType)
         {
-            var message = $"Binary operator '{operatorText}' is not defined for types '{leftType}' and '{rightType}'.";
+            var message = $"Binary operator '{operatorText}' is not defined for types <{leftType}> and <{rightType}>.";
             ReportError(location, message);
         }
 
@@ -107,9 +110,9 @@ namespace Vivian.CodeAnalysis
             ReportError(location, message);
         }
 
-        public void ReportUndefinedStructField(TextLocation location, string name)
+        public void ReportUndefinedClassField(TextLocation location, string name)
         {
-            var message = $"Struct field '{name}' doesn't exist.";
+            var message = $"Class field '{name}' doesn't exist.";
             ReportError(location, message);
         }
 
@@ -125,9 +128,9 @@ namespace Vivian.CodeAnalysis
             ReportError(location, message);
         }
 
-        public void ReportNotAStruct(TextLocation location, string name)
+        public void ReportNotAClass(TextLocation location, string name)
         {
-            var message = $"'{name}' is not a struct.";
+            var message = $"'{name}' is not a valid class.";
             ReportError(location, message);
         }
 
@@ -145,7 +148,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportCannotConvertImplicitly(TextLocation location, TypeSymbol fromType, TypeSymbol toType)
         {
-            var message = $"Cannot convert type '{fromType}' to '{toType}'. An explicit conversion exists (are you missing a cast?)";
+            var message = $"Cannot convert type <{fromType}> to <{toType}>. An explicit conversion exists (are you missing a cast?)";
             ReportError(location, message);
         }
 
@@ -175,13 +178,13 @@ namespace Vivian.CodeAnalysis
         
         internal void ReportCannotUseThisOutsideOfReceiverFunctions(TextLocation location, string name)
         {
-            var message = $"This can only be used in functions with a struct receiver.  Function '{name}' has no receiver defined.";
+            var message = $"This can only be used in functions with a class receiver. Function '{name}' has no receiver defined.";
             ReportError(location, message);
         }
 
         internal void ReportCannotUseThisOutsideOfAFunction(TextLocation location)
         {
-            const string? message = "This can only by used in functions with a struct receiver.";
+            const string? message = "This can only by used in functions with a class receiver.";
             ReportError(location, message);
         }
 
@@ -235,7 +238,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportInvalidAssignmentExpressionStatement(TextLocation location)
         {
-            const string? message = "Only field declarations and assignment expressions are allowed in structs.";
+            const string? message = "Only field declarations and assignment expressions are allowed in classes.";
             ReportError(location, message);
         }
 
@@ -247,13 +250,13 @@ namespace Vivian.CodeAnalysis
 
         public void ReportMainMustHaveCorrectSignature(TextLocation location)
         {
-            const string? message = "main must not take arguments and not return anything.";
+            const string? message = "Main must not take arguments and not return anything.";
             ReportError(location, message);
         }
 
         public void ReportCannotMixMainAndGlobalStatements(TextLocation location)
         {
-            const string? message = "Cannot declare main function when global statements are used.";
+            const string? message = "Cannot declare Main function when global statements are used.";
             ReportError(location, message);
         }
 
@@ -265,7 +268,7 @@ namespace Vivian.CodeAnalysis
 
         internal void ReportCannotAccessMember(TextLocation location, string text)
         {
-            var message = $"Cannot access members of '{text}'. Only members of structs can be accessed using the '.' operator.";
+            var message = $"Cannot access members of '{text}'. Only members of classes can be accessed using the '.' operator.";
             ReportError(location, message);
         }
 
@@ -347,6 +350,5 @@ namespace Vivian.CodeAnalysis
                     throw new Exception($"Unexpected syntax {node.Kind}");
             }
         }
-
     }
 }

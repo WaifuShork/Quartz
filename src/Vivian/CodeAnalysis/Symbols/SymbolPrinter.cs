@@ -92,7 +92,7 @@ namespace Vivian.CodeAnalysis.Symbols
 
         private static void WriteStructTo(StructSymbol @struct, TextWriter writer)
         {
-            writer.WriteKeyword(SyntaxKind.StructKeyword);
+            writer.WriteKeyword(SyntaxKind.ClassKeyword);
             writer.WriteSpace();
             writer.WriteIdentifier(@struct.Name);
         }

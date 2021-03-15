@@ -148,7 +148,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 return ParseFunctionDeclaration();
             }
 
-            if (Current.Kind == SyntaxKind.StructKeyword)
+            if (Current.Kind == SyntaxKind.ClassKeyword)
             {
                 return ParseStructDeclaration();
             }
@@ -288,7 +288,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private MemberSyntax ParseStructDeclaration()
         {
-            var keyword = MatchToken(SyntaxKind.StructKeyword);
+            var keyword = MatchToken(SyntaxKind.ClassKeyword);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             var body = ParseStructBlockStatement();
 

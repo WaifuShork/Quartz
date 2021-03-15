@@ -1,0 +1,10 @@
+class String
+{
+    var Text: string = "";
+    var Empty: string = "";
+}
+
+procedure String.Concat(a: string, b: string) => string
+{
+    return a + b;
+}

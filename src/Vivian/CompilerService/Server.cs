@@ -108,10 +108,7 @@ namespace Vivian.CompilerService
             return syntaxTrees;
         }
 
-        public bool EmitBinary(IEnumerable<SyntaxTree> syntaxTrees,
-                         string moduleName,
-                         string[] referencePaths,
-                         string outputPath)
+        public bool EmitBinary(IEnumerable<SyntaxTree> syntaxTrees, string moduleName, string[] referencePaths, string outputPath)
         {
             var compilation = Compilation.Create(syntaxTrees.ToArray());
 
@@ -139,7 +136,6 @@ namespace Vivian.CompilerService
         public Task Shutdown(CancellationToken cancellationToken = default)
         {
             _shutDownRequested = true;
-
             return Task.CompletedTask;
         }
 

@@ -11,8 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\EV2.Host\EV2.Host.csproj" />
-        <ProjectReference Include="..\EV2\EV2.csproj" />
         <ProjectReference Include="..\Vivian.Host\Vivian.Host.csproj" />
         <ProjectReference Include="..\Vivian\Vivian.csproj" />
     </ItemGroup>

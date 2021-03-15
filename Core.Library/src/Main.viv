@@ -1,7 +1,9 @@
-procedure Main() => void
+using System;
+
+class Program
 {
-    var console = Console();
-    console.WriteLine("Name? ");
-    var input = console.ReadLine();
-    console.WriteLine(input);
+    procedure Main() => void
+    {
+        Console.PrintLn("Hello world");
+    }
 }

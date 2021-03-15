@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Vivian.Host;
-using System.Linq;
-using Vivian.CompilerService;
 using System.Threading;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using Microsoft.Extensions.Logging;
-using Uri = OmniSharp.Extensions.LanguageServer.Protocol.DocumentUri;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
+using Uri = OmniSharp.Extensions.LanguageServer.Protocol.DocumentUri;
+
 using Vivian.CodeAnalysis.Syntax;
 using Vivian.CodeAnalysis;
+using Vivian.Host;
+using System.Linq;
+using Vivian.CompilerService;
 
 namespace Vivian.VLanguageServer
 {
@@ -29,7 +30,7 @@ namespace Vivian.VLanguageServer
 
     internal sealed class LspHost : IHost
     {
-        private readonly Uri? _workerSpaceRoot;
+        private readonly Uri _workerSpaceRoot;
         private readonly int _maxNumberOfProblems = 100;
         private readonly Server _server;
         private readonly ILogger<LspHost> _logger;
@@ -89,7 +90,7 @@ namespace Vivian.VLanguageServer
 
             var syntaxTrees = await _server.Parse(source, cancellationToken);
 
-            return syntaxTrees.FirstOrDefault();
+            return syntaxTrees.FirstOrDefault()!;
         }
 
         internal async Task<Compilation?> ValidateTextDocumentAsync(Uri docUri, CancellationToken cancellationToken)
@@ -112,7 +113,7 @@ namespace Vivian.VLanguageServer
             _logger.LogInformation("Compiler requested shutdown.");
         }
 
-        public void ClearDiagnotics(Uri documentUri)
+        public void ClearDiagnostics(Uri documentUri)
         {
             _languageServer.TextDocument.PublishDiagnostics(new PublishDiagnosticsParams()
             {
@@ -133,11 +134,11 @@ namespace Vivian.VLanguageServer
                     Diagnostics = kv.Select(d => new OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic()
                     {
                         Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(
-                            new OmniSharp.Extensions.LanguageServer.Protocol.Models.Position(d.DiagnosticLocation.Range.Start.Line, d.DiagnosticLocation.Range.Start.Character),
-                            new OmniSharp.Extensions.LanguageServer.Protocol.Models.Position(d.DiagnosticLocation.Range.End.Line, d.DiagnosticLocation.Range.End.Character)
+                                new OmniSharp.Extensions.LanguageServer.Protocol.Models.Position(d.DiagnosticLocation.Range.Start.Line, d.DiagnosticLocation.Range.Start.Character),
+                                new OmniSharp.Extensions.LanguageServer.Protocol.Models.Position(d.DiagnosticLocation.Range.End.Line, d.DiagnosticLocation.Range.End.Character)
                         ),
                         Severity = d.IsError ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning,
-                        Source = "EV2",
+                        Source = "Vivian",
                         Message = d.Message
                     }).ToArray()
                 });
@@ -146,8 +147,6 @@ namespace Vivian.VLanguageServer
             }
         }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
     }
 }

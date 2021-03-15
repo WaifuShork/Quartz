@@ -8,7 +8,7 @@ using Vivian.IO;
 
 namespace VivianCompiler
 {
-    internal class ConsoleCompilerHost : IHost, IDisposable
+    internal class ConsoleCompilerHost : IHost
     {
         public int Errors = 0;
         public int Warnings = 0;

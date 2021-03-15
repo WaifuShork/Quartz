@@ -17,30 +17,29 @@ namespace Vivian.VLanguageServer
         private static async Task MainAsync(string[] args)
         {
             var server = await LanguageServer.From(
-                options =>
-                    options
-                        .WithInput(Console.OpenStandardInput())
-                        .WithOutput(Console.OpenStandardOutput())
-                        .ConfigureLogging(lb =>
+                options => options
+                    .WithInput(Console.OpenStandardInput())
+                    .WithOutput(Console.OpenStandardOutput())
+                    .ConfigureLogging(lb =>
+                    {
+                        lb.AddLanguageProtocolLogging()
+                            .SetMinimumLevel(LogLevel.Debug);
+                    })
+                    .WithHandler<TextDocumentHandler>()
+                    .WithHandler<SemanticTokensHandler>()
+                    .WithServices(x => x.AddLogging(b => b.SetMinimumLevel(LogLevel.Trace)))
+                    .WithServices(s =>
+                    {
+                        s.AddSingleton(provider =>
                         {
-                            lb.AddLanguageProtocolLogging()
-                                .SetMinimumLevel(LogLevel.Debug);
-                        })
-                        .WithHandler<TextDocumentHandler>()
-                        .WithHandler<SemanticTokensHandler>()
-                        .WithServices(x => x.AddLogging(b => b.SetMinimumLevel(LogLevel.Trace)))
-                        .WithServices(s =>
-                        {
-                            s.AddSingleton(provider =>
-                            {
-                                var lsf = provider.GetService<ILanguageServerFacade>();
-                                var loggerFactory = provider.GetService<ILoggerFactory>();
-                                var logger = loggerFactory.CreateLogger<LspHost>();
+                            var lsf = provider.GetService<ILanguageServerFacade>();
+                            var loggerFactory = provider.GetService<ILoggerFactory>();
+                            var logger = loggerFactory.CreateLogger<LspHost>();
 
-                                return new LspHost(logger, lsf);
-                            });
-                        })
-                    );
+                            return new LspHost(logger, lsf!);
+                        });
+                    })
+                );
             await server.WaitForExit;
         }
     }

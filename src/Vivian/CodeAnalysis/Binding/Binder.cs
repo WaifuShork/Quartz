@@ -1138,7 +1138,7 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 if (BindExpression(syntax.Expression) is not BoundVariableExpression expr)
                 {
-                    Diagnostics.ReportNotAStruct(syntax.Expression.Location, syntax.Expression.ToString());
+                    Diagnostics.ReportNotAClass(syntax.Expression.Location, syntax.Expression.ToString());
                     return new BoundErrorExpression(syntax);
                 }
 
@@ -1163,7 +1163,7 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 if (BindExpression(syntax.Expression) is not BoundFieldAccessExpression expr)
                 {
-                    Diagnostics.ReportNotAStruct(syntax.Expression.Location, syntax.Expression.ToString());
+                    Diagnostics.ReportNotAClass(syntax.Expression.Location, syntax.Expression.ToString());
                     return new BoundErrorExpression(syntax);
                 }
 
@@ -1221,7 +1221,7 @@ namespace Vivian.CodeAnalysis.Binding
                     return new BoundThisExpression(syntax.Expression, _function.Receiver);
                 }
 
-                Diagnostics.ReportUndefinedStructField(syntax.IdentifierToken.Location, syntax.IdentifierToken.Text);
+                Diagnostics.ReportUndefinedClassField(syntax.IdentifierToken.Location, syntax.IdentifierToken.Text);
                 return new BoundErrorExpression(syntax);
             }
             else
@@ -1287,11 +1287,11 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 if (variable is BoundVariableExpression v)
                 {
-                    Diagnostics.ReportNotAStruct(variable.Syntax.Location, v.Variable.Name);
+                    Diagnostics.ReportNotAClass(variable.Syntax.Location, v.Variable.Name);
                 }
                 else if (variable is BoundFieldAccessExpression f)
                 {
-                    Diagnostics.ReportNotAStruct(variable.Syntax.Location, f.StructMember.Name);
+                    Diagnostics.ReportNotAClass(variable.Syntax.Location, f.StructMember.Name);
                 }
                 else
                 {

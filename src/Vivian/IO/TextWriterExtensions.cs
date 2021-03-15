@@ -60,7 +60,6 @@ namespace Vivian.IO
         {
             var text = SyntaxFacts.GetText(kind);
             Debug.Assert(kind.IsKeyword() && text != null);
-
             writer.WriteKeyword(text);
         }
 
@@ -133,9 +132,9 @@ namespace Vivian.IO
             }
 
             foreach (var diagnostic in enumerable.Where(d => d.DiagnosticLocation.Uri != null)
-                                                  .OrderBy(d => d.DiagnosticLocation.Uri.AbsolutePath)
-                                                  .ThenBy(d => d.DiagnosticLocation.Range.Start)
-                                                  .ThenBy(d => d.DiagnosticLocation.Range.End))
+                                                 .OrderBy(d => d.DiagnosticLocation.Uri.AbsolutePath)
+                                                 .ThenBy(d => d.DiagnosticLocation.Range.Start)
+                                                 .ThenBy(d => d.DiagnosticLocation.Range.End))
             {
                 var text = diagnostic.ContextSourceSnippet;
                 var fileName = diagnostic.DiagnosticLocation.Uri.LocalPath;
@@ -154,18 +153,20 @@ namespace Vivian.IO
 
                 if (text != null) 
                 {
-                    var lines = text.Split('\n', StringSplitOptions.None);
+                    var lines = text.Split('\n');
                     string prefix;
                     string error;
                     string suffix;
 
                     // Simple case, there is just 1 line
-                    if (lines.Length == 1) {
+                    if (lines.Length == 1) 
+                    {
                         prefix = lines[0][0..diagnostic.DiagnosticLocation.Range.Start.Character];
                         suffix = lines[0][diagnostic.DiagnosticLocation.Range.End.Character..^0];
                         error = lines[0][diagnostic.DiagnosticLocation.Range.Start.Character..diagnostic.DiagnosticLocation.Range.End.Character];
                     }
-                    else {
+                    else 
+                    {
                         prefix = lines[0][0..diagnostic.DiagnosticLocation.Range.Start.Character];
                         suffix = lines[^1][diagnostic.DiagnosticLocation.Range.End.Character..^0];
                         error = diagnostic.TargetSourceSnippet ?? string.Empty;

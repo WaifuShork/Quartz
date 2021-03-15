@@ -2439,8 +2439,6 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj",
-      "G:\\v\\Vivian\\src\\EV2\\EV2.csproj",
       "Microsoft.Extensions.Logging.Console >= 5.0.0",
       "Microsoft.NET.Compilers.ToolSet >= 3.9.0-3.final",
       "OmniSharp.Extensions.LanguageServer >= 0.18.3",
@@ -2449,21 +2447,17 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ashle\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\ashle\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
+      "projectUniqueName": "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
       "projectName": "Vivian.LanguageServer",
-      "projectPath": "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
+      "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\obj\\",
+      "outputPath": "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
         "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -2473,26 +2467,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://dotnet.myget.org/F/roslyn/api/v3/index.json": {},
-        "https://nuget.emzi0767.com/api/v3/index.json": {},
-        "https://www.myget.org/F/discord-net/api/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj": {
-              "projectPath": "G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj"
+            "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
+              "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj"
             },
-            "G:\\v\\Vivian\\src\\EV2\\EV2.csproj": {
-              "projectPath": "G:\\v\\Vivian\\src\\EV2\\EV2.csproj"
-            },
-            "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
-              "projectPath": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj"
-            },
-            "G:\\v\\Vivian\\src\\Vivian\\Vivian.csproj": {
-              "projectPath": "G:\\v\\Vivian\\src\\Vivian\\Vivian.csproj"
+            "D:\\VivianLang\\Vivian\\src\\Vivian\\Vivian.csproj": {
+              "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian\\Vivian.csproj"
             }
           }
         }
@@ -2535,28 +2520,8 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    },
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'G:\\v\\Vivian\\src\\EV2\\EV2.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "G:\\v\\Vivian\\src\\EV2\\EV2.csproj",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    }
-  ]
+  }
 }

@@ -1,21 +1,18 @@
 {
   "format": 1,
   "restore": {
-    "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj": {}
+    "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj": {}
   },
   "projects": {
-    "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
+    "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+        "projectUniqueName": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
         "projectName": "Vivian.Host",
-        "projectPath": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+        "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
         "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-        "outputPath": "G:\\v\\Vivian\\src\\Vivian.Host\\obj\\",
+        "outputPath": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -25,10 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://dotnet.myget.org/F/roslyn/api/v3/index.json": {},
-          "https://nuget.emzi0767.com/api/v3/index.json": {},
-          "https://www.myget.org/F/discord-net/api/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
@@ -66,22 +60,19 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj": {
+    "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
+        "projectUniqueName": "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
         "projectName": "Vivian.LanguageServer",
-        "projectPath": "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
+        "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
         "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-        "outputPath": "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\obj\\",
+        "outputPath": "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -91,26 +82,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://dotnet.myget.org/F/roslyn/api/v3/index.json": {},
-          "https://nuget.emzi0767.com/api/v3/index.json": {},
-          "https://www.myget.org/F/discord-net/api/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj": {
-                "projectPath": "G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj"
+              "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
+                "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj"
               },
-              "G:\\v\\Vivian\\src\\EV2\\EV2.csproj": {
-                "projectPath": "G:\\v\\Vivian\\src\\EV2\\EV2.csproj"
-              },
-              "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
-                "projectPath": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj"
-              },
-              "G:\\v\\Vivian\\src\\Vivian\\Vivian.csproj": {
-                "projectPath": "G:\\v\\Vivian\\src\\Vivian\\Vivian.csproj"
+              "D:\\VivianLang\\Vivian\\src\\Vivian\\Vivian.csproj": {
+                "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian\\Vivian.csproj"
               }
             }
           }
@@ -153,22 +135,19 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "G:\\v\\Vivian\\src\\Vivian\\Vivian.csproj": {
+    "D:\\VivianLang\\Vivian\\src\\Vivian\\Vivian.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\v\\Vivian\\src\\Vivian\\Vivian.csproj",
+        "projectUniqueName": "D:\\VivianLang\\Vivian\\src\\Vivian\\Vivian.csproj",
         "projectName": "Vivian",
-        "projectPath": "G:\\v\\Vivian\\src\\Vivian\\Vivian.csproj",
+        "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian\\Vivian.csproj",
         "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-        "outputPath": "G:\\v\\Vivian\\src\\Vivian\\obj\\",
+        "outputPath": "D:\\VivianLang\\Vivian\\src\\Vivian\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -178,17 +157,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://dotnet.myget.org/F/roslyn/api/v3/index.json": {},
-          "https://nuget.emzi0767.com/api/v3/index.json": {},
-          "https://www.myget.org/F/discord-net/api/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
-                "projectPath": "G:\\v\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj"
+              "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj": {
+                "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj"
               }
             }
           }
@@ -231,7 +207,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

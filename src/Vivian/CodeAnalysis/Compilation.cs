@@ -31,6 +31,7 @@ namespace Vivian.CodeAnalysis
         public ImmutableArray<SyntaxTree> SyntaxTrees { get; }
         
         public FunctionSymbol? MainFunction => GlobalScope.MainFunction;
+        
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
         public ImmutableArray<StructSymbol> Structs => GlobalScope.Structs;
@@ -101,7 +102,9 @@ namespace Vivian.CodeAnalysis
             var diagnostics = parseDiagnostics.Concat(GlobalScope.Diagnostics).ToImmutableArray();
 
             if (diagnostics.HasErrors())
+            {
                 return diagnostics;
+            }
 
             var program = GetProgram();
 

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Gx4tJ/UIf2P/eh75HJ30Q/tUNuZ6D9xy4XYYaSts8mdVWbkcywPTwLpFhoP8dgRaYCEht5/Ucec7m2RcXA8QZA==",
-  "success": false,
-  "projectFilePath": "G:\\v\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
+  "dgSpecHash": "HpGLsWxUB9k++l9LaWWXLGOy1s4zNsgLho5PmtVuecjkD2/yLJQf8glihfrgxMMITWCJS0hTnZIBPWFpaEMw8g==",
+  "success": true,
+  "projectFilePath": "D:\\VivianLang\\Vivian\\src\\Vivian.LanguageServer\\Vivian.LanguageServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ashle\\.nuget\\packages\\mediatr\\8.1.0\\mediatr.8.1.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
@@ -20,54 +20,35 @@
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.net.compilers.toolset\\3.9.0-3.final\\microsoft.net.compilers.toolset.3.9.0-3.final.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.netcore.platforms\\3.0.0\\microsoft.netcore.platforms.3.0.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.visualstudio.threading\\16.7.56\\microsoft.visualstudio.threading.16.7.56.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.visualstudio.threading.analyzers\\16.7.56\\microsoft.visualstudio.threading.analyzers.16.7.56.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.visualstudio.validation\\15.5.31\\microsoft.visualstudio.validation.15.5.31.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\microsoft.win32.registry\\4.6.0\\microsoft.win32.registry.4.6.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\mono.cecil\\0.11.3\\mono.cecil.0.11.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\nerdbank.streams\\2.6.81\\nerdbank.streams.2.6.81.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\omnisharp.extensions.jsonrpc\\0.18.3\\omnisharp.extensions.jsonrpc.0.18.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\omnisharp.extensions.languageprotocol\\0.18.3\\omnisharp.extensions.languageprotocol.0.18.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\omnisharp.extensions.languageserver\\0.18.3\\omnisharp.extensions.languageserver.0.18.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\omnisharp.extensions.languageserver.shared\\0.18.3\\omnisharp.extensions.languageserver.shared.0.18.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.globalization\\4.3.0\\system.globalization.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.globalization\\4.3.0\\system.globalization.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.io.pipelines\\4.7.3\\system.io.pipelines.4.7.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.net.websockets\\4.3.0\\system.net.websockets.4.3.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.reactive\\4.4.1\\system.reactive.4.4.1.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.resources.resourcemanager\\4.3.0\\system.resources.resourcemanager.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.resources.resourcemanager\\4.3.0\\system.resources.resourcemanager.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.7.1\\system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.security.accesscontrol\\4.6.0\\system.security.accesscontrol.4.6.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.security.principal.windows\\4.6.0\\system.security.principal.windows.4.6.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.3\\system.threading.tasks.extensions.4.5.3.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "G:\\v\\Vivian\\src\\EV2.Host\\EV2.Host.csproj",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    },
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'G:\\v\\Vivian\\src\\EV2\\EV2.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "G:\\v\\Vivian\\src\\EV2\\EV2.csproj",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    }
-  ]
+  "logs": []
 }

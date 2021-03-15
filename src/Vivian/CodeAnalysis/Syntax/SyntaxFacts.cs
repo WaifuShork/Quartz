@@ -106,7 +106,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case "return":
                     return SyntaxKind.ReturnKeyword;
                 case "class":
-                    return SyntaxKind.StructKeyword;
+                    return SyntaxKind.ClassKeyword;
                 case "this":
                     return SyntaxKind.ThisKeyword;
                 case "to":
@@ -240,7 +240,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.ReturnKeyword:
                     return "return";
                 
-                case SyntaxKind.StructKeyword:
+                case SyntaxKind.ClassKeyword:
                     return "class";
                 case SyntaxKind.ThisKeyword:
                     return "this";
