@@ -297,7 +297,7 @@ namespace Vivian.CodeAnalysis
             ReportError(default, message);
         }
 
-        public void ReportUnreachableCode(TextLocation location)
+        private void ReportUnreachableCode(TextLocation location)
         {
             const string? message = "Unreachable code detected.";
             ReportWarning(location, message);

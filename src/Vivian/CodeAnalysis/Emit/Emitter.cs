@@ -23,7 +23,7 @@ namespace Vivian.CodeAnalysis.Emit
 
         private readonly DiagnosticBag _diagnostics = new();
         private readonly Dictionary<SourceText, Document> _documents = new();
-        private readonly Dictionary<StructSymbol, TypeDefinition> _structs = new();
+        private readonly Dictionary<ClassSymbol, TypeDefinition> _structs = new();
         private readonly Dictionary<FunctionSymbol, MethodDefinition> _methods = new();
         private readonly Dictionary<VariableSymbol, VariableDefinition> _locals = new();
         private readonly Dictionary<BoundLabel, int> _labels = new();
@@ -296,9 +296,9 @@ namespace Vivian.CodeAnalysis.Emit
             return _diagnostics.ToImmutableArray();
         }
 
-        private void EmitStructDeclaration(StructSymbol key)
+        private void EmitStructDeclaration(ClassSymbol key)
         {
-            // Structs are actually implemented as classes to align more closely with the C-style understanding of structs.
+            // Classes are actually implemented as classes to align more closely with the C-style understanding of structs.
             // They are reference types rather than the .NET value types.
             var classType = new TypeDefinition("", key.Name, _classAttributes, _knownTypes[TypeSymbol.Object]);
 
@@ -330,7 +330,7 @@ namespace Vivian.CodeAnalysis.Emit
             classType.Methods.Insert(1, defaultCtorDefinition);
         }
 
-        private void EmitStructBody(StructSymbol key, BoundBlockStatement value)
+        private void EmitStructBody(ClassSymbol key, BoundBlockStatement value)
         {
             var structType = _structs[key];
 
@@ -376,7 +376,7 @@ namespace Vivian.CodeAnalysis.Emit
             constructor.Body.Optimize();
         }
 
-        private void EmitDefaultConstructorForStruct(StructSymbol @struct, BoundBlockStatement value, TypeDefinition structType)
+        private void EmitDefaultConstructorForStruct(ClassSymbol @class, BoundBlockStatement value, TypeDefinition structType)
         {
             // Create empty constructor
             var constructor = structType.Methods[1];
@@ -387,9 +387,9 @@ namespace Vivian.CodeAnalysis.Emit
             ilProcessor.Emit(OpCodes.Call, structType.Methods[0]);
 
             // Assign each parameter
-            for (var i = 0; i < @struct.CtorParameters.Length; i++)
+            for (var i = 0; i < @class.CtorParameters.Length; i++)
             {
-                var ctorParam = @struct.CtorParameters[i];
+                var ctorParam = @class.CtorParameters[i];
                 var paramType = _knownTypes[ctorParam.Type];
                 const ParameterAttributes parameterAttributes = ParameterAttributes.None;
                 var parameterDefinition = new ParameterDefinition(ctorParam.Name, parameterAttributes, paramType);
@@ -648,7 +648,7 @@ namespace Vivian.CodeAnalysis.Emit
 
         private void EmitFieldAssignmentExpression(ILProcessor ilProcessor, BoundFieldAssignmentExpression node)
         {
-            var structSymbol = node.StructInstance.Type as StructSymbol;
+            var structSymbol = node.StructInstance.Type as ClassSymbol;
 
             Debug.Assert(structSymbol != null);
 
@@ -674,7 +674,7 @@ namespace Vivian.CodeAnalysis.Emit
         {
             EmitExpression(ilProcessor, node.StructInstance);
 
-            var structSymbol = node.StructInstance.Type as StructSymbol;
+            var structSymbol = node.StructInstance.Type as ClassSymbol;
 
             Debug.Assert(structSymbol != null);
 

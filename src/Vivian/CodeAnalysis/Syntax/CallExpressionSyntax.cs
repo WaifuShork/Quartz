@@ -4,6 +4,7 @@ using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Syntax
 {
+    // TODO: This is a painful class and I dislike its implementation
     public sealed class CallExpressionSyntax : ExpressionSyntax
     {
         private CallExpressionSyntax(SyntaxTree syntaxTree, ExpressionSyntax identifier, SyntaxToken openParenthesisToken, SeparatedSyntaxList<ExpressionSyntax> arguments, SyntaxToken closeParenthesisToken)

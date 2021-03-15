@@ -11,7 +11,7 @@ namespace Vivian.CodeAnalysis.Symbols
                                 TypeSymbol returnType,
                                 FunctionDeclarationSyntax? declaration = null,
                                 FunctionSymbol? overloadFor = null,
-                                StructSymbol? receiver = null) 
+                                ClassSymbol? receiver = null) 
                                 : base(name)
         {
             Parameters = parameters;
@@ -26,6 +26,6 @@ namespace Vivian.CodeAnalysis.Symbols
         public ImmutableArray<ParameterSymbol> Parameters { get; }
         public TypeSymbol ReturnType { get; }
         public FunctionSymbol? OverloadFor { get; }
-        public StructSymbol? Receiver { get; }
+        public ClassSymbol? Receiver { get; }
     }
 }

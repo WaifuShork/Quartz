@@ -5,7 +5,7 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundThisExpression : BoundExpression
     {
-        public BoundThisExpression(SyntaxNode syntax, StructSymbol instance)
+        public BoundThisExpression(SyntaxNode syntax, ClassSymbol instance)
             : base(syntax)
         {
             Instance = instance;
@@ -13,6 +13,6 @@ namespace Vivian.CodeAnalysis.Binding
 
         public override TypeSymbol Type => Instance;
         public override BoundNodeKind Kind => BoundNodeKind.ThisExpression;
-        public StructSymbol Instance { get; }
+        public ClassSymbol Instance { get; }
     }
 }

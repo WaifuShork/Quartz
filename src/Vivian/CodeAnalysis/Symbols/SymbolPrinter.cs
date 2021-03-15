@@ -26,8 +26,8 @@ namespace Vivian.CodeAnalysis.Symbols
                 case SymbolKind.Type:
                     WriteTypeTo((TypeSymbol)symbol, writer);
                     break;
-                case SymbolKind.Struct:
-                    WriteStructTo((StructSymbol)symbol, writer);
+                case SymbolKind.Class:
+                    WriteStructTo((ClassSymbol)symbol, writer);
                     break;
                 default:
                     throw new Exception($"Unexpected symbol: {symbol.Kind}");
@@ -90,11 +90,11 @@ namespace Vivian.CodeAnalysis.Symbols
             symbol.Type.WriteTo(writer);
         }
 
-        private static void WriteStructTo(StructSymbol @struct, TextWriter writer)
+        private static void WriteStructTo(ClassSymbol @class, TextWriter writer)
         {
             writer.WriteKeyword(SyntaxKind.ClassKeyword);
             writer.WriteSpace();
-            writer.WriteIdentifier(@struct.Name);
+            writer.WriteIdentifier(@class.Name);
         }
 
         private static void WriteTypeTo(TypeSymbol symbol, TextWriter writer)

@@ -22,7 +22,7 @@ namespace Vivian.CodeAnalysis.Lowering
 
         public static BoundBlockStatement Lower(Symbol symbol, BoundStatement statement)
         {
-            if (!(symbol is FunctionSymbol || symbol is StructSymbol))
+            if (!(symbol is FunctionSymbol || symbol is ClassSymbol))
             {
                 throw new Exception($"Symbol of type {symbol.Kind} not expected in Lowerer.");
             }

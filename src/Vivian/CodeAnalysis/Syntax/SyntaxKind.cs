@@ -78,7 +78,7 @@
         FunctionDeclaration,
         GlobalStatement,
         Parameter,
-        StructDeclaration,
+        ClassDeclaration,
         TypeClause,
 
         // Statements

@@ -2,7 +2,6 @@
 using ReflectionBindingFlags = System.Reflection.BindingFlags;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -34,7 +33,7 @@ namespace Vivian.CodeAnalysis
         
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
-        public ImmutableArray<StructSymbol> Structs => GlobalScope.Structs;
+        public ImmutableArray<ClassSymbol> Classes => GlobalScope.Structs;
 
         internal BoundGlobalScope GlobalScope
         {
@@ -59,9 +58,9 @@ namespace Vivian.CodeAnalysis
 
             while (submission != null)
             {
-                foreach (var @struct in submission.Structs.Where(@struct => seenSymbolNames.Add(@struct.Name)))
+                foreach (var @class in submission.Classes.Where(@class => seenSymbolNames.Add(@class.Name)))
                 {
-                    yield return @struct;
+                    yield return @class;
                 }
 
                 foreach (var function in submission.Functions.Where(function => seenSymbolNames.Add(function.Name)))
@@ -104,6 +103,12 @@ namespace Vivian.CodeAnalysis
             if (diagnostics.HasErrors())
             {
                 return diagnostics;
+            }
+
+            // TODO: implement warning system
+            if (diagnostics.HasWarnings())
+            {
+                Console.Out.WriteLine(diagnostics);
             }
 
             var program = GetProgram();

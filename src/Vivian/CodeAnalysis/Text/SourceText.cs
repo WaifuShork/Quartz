@@ -13,6 +13,14 @@ namespace Vivian.CodeAnalysis.Text
             Lines = ParseLines(this, text);
         }
 
+        public ImmutableArray<TextLine> Lines { get; }
+
+        public char this[int index] => _text[index];
+
+        public int Length => _text.Length;
+
+        public string FileName { get; }
+        
         public static SourceText From(string text, string fileName = "")
         {
             return new(text, fileName);
@@ -76,13 +84,7 @@ namespace Vivian.CodeAnalysis.Text
             return 0;
         }
 
-        public ImmutableArray<TextLine> Lines { get; }
-
-        public char this[int index] => _text[index];
-
-        public int Length => _text.Length;
-
-        public string FileName { get; }
+        
 
         public int GetLineIndex(int position)
         {

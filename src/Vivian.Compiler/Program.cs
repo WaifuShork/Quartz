@@ -33,7 +33,7 @@ namespace VivianCompiler
             };
 
             options.Parse(args);
-
+            
             if (helpRequested)
             {
                 options.WriteOptionDescriptions(Console.Out);

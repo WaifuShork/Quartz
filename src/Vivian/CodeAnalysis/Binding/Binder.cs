@@ -46,7 +46,7 @@ namespace Vivian.CodeAnalysis.Binding
                     binder.Diagnostics.ToImmutableArray(),
                     null,
                     null,
-                    ImmutableArray<StructSymbol>.Empty,
+                    ImmutableArray<ClassSymbol>.Empty,
                     ImmutableArray<FunctionSymbol>.Empty,
                     ImmutableArray<VariableSymbol>.Empty,
                     ImmutableArray<BoundStatement>.Empty);
@@ -54,7 +54,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             // Phase 1: Forward declare structs
             var structDeclarations = syntaxTrees.SelectMany(st => st.Root.Members)
-                                               .OfType<StructDeclarationSyntax>();
+                                               .OfType<ClassDeclarationSyntax>();
 
             foreach (var @struct in structDeclarations)
             {
@@ -148,11 +148,11 @@ namespace Vivian.CodeAnalysis.Binding
                     null,
                     null,
                     ImmutableDictionary<FunctionSymbol, BoundBlockStatement>.Empty,
-                    ImmutableDictionary<StructSymbol, BoundBlockStatement>.Empty);
+                    ImmutableDictionary<ClassSymbol, BoundBlockStatement>.Empty);
             }
 
             var functionBodies = ImmutableDictionary.CreateBuilder<FunctionSymbol, BoundBlockStatement>();
-            var structBodies = ImmutableDictionary.CreateBuilder<StructSymbol, BoundBlockStatement>();
+            var structBodies = ImmutableDictionary.CreateBuilder<ClassSymbol, BoundBlockStatement>();
             var diagnostics = ImmutableArray.CreateBuilder<Diagnostic>();
 
             foreach (var @struct in globalScope.Structs)
@@ -168,7 +168,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             foreach (var function in globalScope.Functions)
             {
-                if (function.ReturnType is StructSymbol) { continue; }
+                if (function.ReturnType is ClassSymbol) { continue; }
 
                 var binder = new Binder(parentScope, function);
                 var body = binder.BindStatement(function.Declaration!.Body);
@@ -221,7 +221,7 @@ namespace Vivian.CodeAnalysis.Binding
                                     structBodies.ToImmutable());
         }
 
-        private void BindStructDeclaration(StructDeclarationSyntax syntax)
+        private void BindStructDeclaration(ClassDeclarationSyntax syntax)
         {
             // Peek into the struct body and generate a constructor based on all writeable members
             var members = syntax.Body.Statement.OfType<VariableDeclarationSyntax>();
@@ -264,7 +264,7 @@ namespace Vivian.CodeAnalysis.Binding
             }
 
             string structIdentifier = syntax.Identifier.Text;
-            var @struct = new StructSymbol(structIdentifier, ctorParameters.ToImmutable(), boundMembers.ToImmutable(), syntax);
+            var @struct = new ClassSymbol(structIdentifier, ctorParameters.ToImmutable(), boundMembers.ToImmutable(), syntax);
 
             if (structIdentifier != null! && !_scope.TryDeclareStruct(@struct))
             {
@@ -304,7 +304,7 @@ namespace Vivian.CodeAnalysis.Binding
             }
 
             var type = BindTypeClause(syntax.Type) ?? TypeSymbol.Void;
-            var receiver = BindTypeClause(syntax.Receiver) as StructSymbol;
+            var receiver = BindTypeClause(syntax.Receiver) as ClassSymbol;
 
             var function = new FunctionSymbol(syntax.Identifier.Text, parameters.ToImmutable(), type, syntax, receiver: receiver);
 
@@ -575,7 +575,7 @@ namespace Vivian.CodeAnalysis.Binding
                 Diagnostics.ReportUndefinedType(typeSyntax.Identifier.Location, typeSyntax.Identifier.Text);
             }
 
-            if (type is StructSymbol s)
+            if (type is ClassSymbol s)
             {
                 // Struct types default to calling their empty constructor
                 var ctorSyntaxToken = new NameExpressionSyntax(syntax.SyntaxTree, new SyntaxToken(syntax.SyntaxTree, SyntaxKind.IdentifierToken, syntax.Span.End, s.Name, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty));
@@ -673,7 +673,9 @@ namespace Vivian.CodeAnalysis.Binding
 
             _scope = new BoundScope(_scope);
 
-            var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly: true, TypeSymbol.Int32);
+            // We don't want the loop variable to be read-only because the user needs
+            // more control over the loop
+            var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly: false, TypeSymbol.Int32);
             var body = BindLoopBody(syntax.Body, out var breakLabel, out var continueLabel);
 
             _scope = _scope.Parent!;
@@ -1005,7 +1007,7 @@ namespace Vivian.CodeAnalysis.Binding
             // parameter.
             var type = LookupType(syntax.Identifier.Text);
 
-            if (syntax.Arguments.Count == 1 && type is not StructSymbol && type is TypeSymbol t)
+            if (syntax.Arguments.Count == 1 && type is not ClassSymbol && type is TypeSymbol t)
             {
                 return BindConversion(syntax.Arguments[0], t, allowExplicit: true);
             }
@@ -1026,7 +1028,7 @@ namespace Vivian.CodeAnalysis.Binding
                 return new BoundErrorExpression(syntax);
             }
 
-            if (symbol is StructSymbol)
+            if (symbol is ClassSymbol)
             {
                 symbol = _scope.TryLookupSymbol(syntax.Identifier.Text + ".ctor");
             }
@@ -1094,9 +1096,9 @@ namespace Vivian.CodeAnalysis.Binding
                 boundArguments[i] = BindConversion(argumentLocation, argument, parameter.Type);
             }
 
-            if (syntax.FullyQualifiedIdentifier is MemberAccessExpressionSyntax @struct)
+            if (syntax.FullyQualifiedIdentifier is MemberAccessExpressionSyntax @class)
             {
-                var instance = BindMemberAccessExpression(@struct);
+                var instance = BindMemberAccessExpression(@class);
                 switch (instance)
                 {
                     case BoundVariableExpression i:
@@ -1283,7 +1285,7 @@ namespace Vivian.CodeAnalysis.Binding
         private VariableSymbol? BindFieldReference(BoundExpression variable, SyntaxToken memberIdentifier)
         {
             // Get type of variable, make sure it's a struct
-            if (variable.Type.Kind != SymbolKind.Struct)
+            if (variable.Type.Kind != SymbolKind.Class)
             {
                 if (variable is BoundVariableExpression v)
                 {
@@ -1302,7 +1304,7 @@ namespace Vivian.CodeAnalysis.Binding
             }
 
             // Check if the struct has a member with the name of memberIdentifier
-            var type = (StructSymbol)variable.Type;
+            var type = (ClassSymbol)variable.Type;
 
             foreach (var member in type.Members)
             {

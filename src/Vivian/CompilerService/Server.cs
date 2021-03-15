@@ -61,7 +61,7 @@ namespace Vivian.CompilerService
             // Debugger.Launch();
 
             // Use ParallelOptions instance to store the CancellationToken
-            ParallelOptions po = new ParallelOptions()
+            var parallelOptions = new ParallelOptions()
             {
                 CancellationToken = cancellationToken,
                 MaxDegreeOfParallelism = Environment.ProcessorCount
@@ -81,11 +81,11 @@ namespace Vivian.CompilerService
                 // Load files in parallel
                 try
                 {
-                    Parallel.ForEach(sourcePaths, po, (path) =>
+                    Parallel.ForEach(sourcePaths, parallelOptions, (path) =>
                     {
                         var syntaxTree = SyntaxTree.Load(path);
                         syntaxTrees.Add(syntaxTree);
-                        po.CancellationToken.ThrowIfCancellationRequested();
+                        parallelOptions.CancellationToken.ThrowIfCancellationRequested();
                     });
                 }
                 catch (OperationCanceledException e)
@@ -112,7 +112,7 @@ namespace Vivian.CompilerService
         {
             var compilation = Compilation.Create(syntaxTrees.ToArray());
 
-            if (compilation == null)
+            if (compilation == null!)
             {
                 return false;
             }

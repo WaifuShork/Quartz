@@ -1,0 +1,34 @@
+procedure Main() => void
+{
+    var vector = Vector3(10.0, 10.0, 10.0);
+    var sum = vector.Sum();
+    print(string(sum));
+    var b = Test(1);
+    print(string(b));
+
+    for (i = 0 to 10)
+    {
+        for (j = 0 to 10)
+        {
+            print("Inner");
+        }
+        print("Outer");
+    }
+}
+
+procedure Test(a: int32) => int32
+{
+    return a;
+}
+
+class Vector3
+{
+    var X: float32 = 0;
+    var Y: float32 = 0;
+    var Z: float32 = 0;
+}
+
+procedure Vector3.Sum() => float32
+{
+    return this.X + this.Y + this.Z;
+}

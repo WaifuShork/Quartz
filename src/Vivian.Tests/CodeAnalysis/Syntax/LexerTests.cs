@@ -420,13 +420,48 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                 {
                     return true;
                 }
-
-                if (t1Kind == SyntaxKind.EqualsGreaterThanToken && t2Kind == SyntaxKind.GreaterToken)
+                
+                
+                if (t1Kind == SyntaxKind.StarToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
                 {
                     return true;
                 }
-
-
+                
+                if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.MinusToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.PlusToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.SlashToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.PipeToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.GreaterToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
                 return false;
             }
     

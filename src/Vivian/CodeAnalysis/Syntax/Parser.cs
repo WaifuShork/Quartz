@@ -40,13 +40,17 @@ namespace Vivian.CodeAnalysis.Syntax
                         foreach (var badToken in badTokens)
                         {
                             foreach (var lt in badToken.LeadingTrivia)
+                            {
                                 leadingTrivia.Insert(index++, lt);
+                            }
 
                             var trivia = new SyntaxTrivia(syntaxTree, SyntaxKind.SkippedTextTrivia, badToken.Position, badToken.Text);
                             leadingTrivia.Insert(index++, trivia);
 
                             foreach (var tt in badToken.TrailingTrivia)
+                            {
                                 leadingTrivia.Insert(index++, tt);
+                            }
                         }
 
                         badTokens.Clear();
@@ -91,7 +95,9 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 return NextToken();
             }
-
+            
+            // If the token doesn't match, we return an error and manufacture a fake token 
+            // so that the syntax tree doesn't become malformed.
             Diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind);
             return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
         }
@@ -103,6 +109,8 @@ namespace Vivian.CodeAnalysis.Syntax
                 return NextToken();
             }
 
+            // If the token doesn't match, we return an error and manufacture a fake token 
+            // so that the syntax tree doesn't become malformed.
             Diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind1);
             return new SyntaxToken(_syntaxTree, kind1, Current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
         }
@@ -150,7 +158,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             if (Current.Kind == SyntaxKind.ClassKeyword)
             {
-                return ParseStructDeclaration();
+                return ParseClassDeclaration();
             }
 
             return ParseGlobalStatement();
@@ -286,16 +294,17 @@ namespace Vivian.CodeAnalysis.Syntax
             return new BlockStatementSyntax(_syntaxTree, openBraceToken, statements.ToImmutable(), closeBraceToken);
         }
 
-        private MemberSyntax ParseStructDeclaration()
+        private MemberSyntax ParseClassDeclaration()
         {
             var keyword = MatchToken(SyntaxKind.ClassKeyword);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
-            var body = ParseStructBlockStatement();
+            var body = ParseClassBlockStatement();
 
-            return new StructDeclarationSyntax(_syntaxTree, keyword, identifier, body);
+            return new ClassDeclarationSyntax(_syntaxTree, keyword, identifier, body);
         }
 
-        private MemberBlockStatementSyntax ParseStructBlockStatement()
+        // TODO: Properly implement fields, properties, and methods inside classes
+        private MemberBlockStatementSyntax ParseClassBlockStatement()
         {
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
 
@@ -512,16 +521,23 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private ExpressionSyntax ParsePrimaryExpression()
         {
-            return Current.Kind switch
+            switch (Current.Kind)
             {
-                SyntaxKind.CharToken => ParseCharLiteral(),
-                SyntaxKind.DefaultKeyword => ParseDefaultLiteral(),
-                SyntaxKind.FalseKeyword or SyntaxKind.TrueKeyword => ParseBooleanLiteral(),
-                SyntaxKind.NumberToken => ParseNumberLiteral(),
-                SyntaxKind.OpenParenthesisToken => ParseParenthesizedExpression(),
-                SyntaxKind.StringToken => ParseStringLiteral(),
-                _ => ParseNameOrCallExpression(withSuffix: true),
-            };
+                case SyntaxKind.CharToken:
+                    return ParseCharLiteral();
+                case SyntaxKind.DefaultKeyword:
+                    return ParseDefaultLiteral();
+                case SyntaxKind.FalseKeyword or SyntaxKind.TrueKeyword:
+                    return ParseBooleanLiteral();
+                case SyntaxKind.NumberToken:
+                    return ParseNumberLiteral();
+                case SyntaxKind.OpenParenthesisToken:
+                    return ParseParenthesizedExpression();
+                case SyntaxKind.StringToken:
+                    return ParseStringLiteral();
+                default:
+                    return ParseNameOrCallExpression(withSuffix: true);
+            }
         }
 
         private ExpressionSyntax ParseDefaultLiteral()
@@ -585,13 +601,16 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 NextToken();
             }
-            
-            return identifier switch
+
+            switch (identifier)
             {
-                NameExpressionSyntax id => new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken),
-                MemberAccessExpressionSyntax id => new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken),
-                _ => throw new Exception("Unexpected expression kind.")
-            };
+                case NameExpressionSyntax id:
+                    return new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken);
+                case MemberAccessExpressionSyntax id:
+                    return new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken);
+                default:
+                    throw new Exception("Unexpected expression kind.");
+            }
         }
 
         private SeparatedSyntaxList<ExpressionSyntax> ParseArguments()

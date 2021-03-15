@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj": {}
+    "D:\\VivianLang\\Vivian\\std\\src\\Core.vivproj": {}
   },
   "projects": {
-    "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj": {
+    "D:\\VivianLang\\Vivian\\std\\src\\Core.vivproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
+        "projectUniqueName": "D:\\VivianLang\\Vivian\\std\\src\\Core.vivproj",
         "projectName": "Core",
-        "projectPath": "D:\\VivianLang\\Vivian\\Core.Library\\src\\Core.vivproj",
+        "projectPath": "D:\\VivianLang\\Vivian\\std\\src\\Core.vivproj",
         "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-        "outputPath": "D:\\VivianLang\\Vivian\\Core.Library\\src\\obj\\",
+        "outputPath": "D:\\VivianLang\\Vivian\\std\\src\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",

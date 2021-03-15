@@ -22,8 +22,8 @@ namespace Vivian.CodeAnalysis.Binding
         public bool TryDeclareFunction(FunctionSymbol function)
             => TryDeclareSymbol(function);
 
-        public bool TryDeclareStruct(StructSymbol @struct)
-            => TryDeclareSymbol(@struct);
+        public bool TryDeclareStruct(ClassSymbol @class)
+            => TryDeclareSymbol(@class);
 
         private bool TryDeclareSymbol<TSymbol>(TSymbol symbol) where TSymbol : Symbol
         {
@@ -57,8 +57,8 @@ namespace Vivian.CodeAnalysis.Binding
         public ImmutableArray<FunctionSymbol> GetDeclaredFunctions()
             => GetDeclaredSymbols<FunctionSymbol>();
 
-        public ImmutableArray<StructSymbol> GetDeclaredStructs()
-            => GetDeclaredSymbols<StructSymbol>();
+        public ImmutableArray<ClassSymbol> GetDeclaredStructs()
+            => GetDeclaredSymbols<ClassSymbol>();
 
         private ImmutableArray<TSymbol> GetDeclaredSymbols<TSymbol>() where TSymbol : Symbol
         {

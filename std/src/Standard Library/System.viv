@@ -5,8 +5,7 @@ class Console
 
 procedure Console.WriteLine(text: string) => void 
 {
-    this.Text = text
-    print(this.Text);
+    print(text);
 }
 
 procedure Console.ReadLine() => string

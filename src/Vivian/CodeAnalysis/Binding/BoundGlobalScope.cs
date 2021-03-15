@@ -9,7 +9,7 @@ namespace Vivian.CodeAnalysis.Binding
                                 ImmutableArray<Diagnostic> diagnostics,
                                 FunctionSymbol? mainFunction,
                                 FunctionSymbol? scriptFunction,
-                                ImmutableArray<StructSymbol> structs,
+                                ImmutableArray<ClassSymbol> structs,
                                 ImmutableArray<FunctionSymbol> functions,
                                 ImmutableArray<VariableSymbol> variables,
                                 ImmutableArray<BoundStatement> statements)
@@ -28,7 +28,7 @@ namespace Vivian.CodeAnalysis.Binding
         public ImmutableArray<Diagnostic> Diagnostics { get; }
         public FunctionSymbol? MainFunction { get; }
         public FunctionSymbol? ScriptFunction { get; }
-        public ImmutableArray<StructSymbol> Structs { get; }
+        public ImmutableArray<ClassSymbol> Structs { get; }
         public ImmutableArray<FunctionSymbol> Functions { get; }
         public ImmutableArray<VariableSymbol> Variables { get; }
         public ImmutableArray<BoundStatement> Statements { get; }

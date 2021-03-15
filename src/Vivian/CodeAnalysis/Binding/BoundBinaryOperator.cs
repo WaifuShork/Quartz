@@ -45,9 +45,7 @@ namespace Vivian.CodeAnalysis.Binding
             foreach (var type in numericTypes)
             {
                 _operators.Add(new BoundBinaryOperator(SyntaxKind.PlusToken, BoundBinaryOperatorKind.Addition, type));
-                
                 _operators.Add(new BoundBinaryOperator(SyntaxKind.PercentToken, BoundBinaryOperatorKind.Modulo, type));
-                
                 _operators.Add(new BoundBinaryOperator(SyntaxKind.MinusToken, BoundBinaryOperatorKind.Subtraction, type));
                 _operators.Add(new BoundBinaryOperator(SyntaxKind.StarToken, BoundBinaryOperatorKind.Multiplication, type));
                 _operators.Add(new BoundBinaryOperator(SyntaxKind.SlashToken, BoundBinaryOperatorKind.Division, type));

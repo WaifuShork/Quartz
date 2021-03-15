@@ -30,7 +30,7 @@ namespace Vivian.VLanguageServer
 
     internal sealed class LspHost : IHost
     {
-        private readonly Uri _workerSpaceRoot;
+        private readonly Uri? _workerSpaceRoot;
         private readonly int _maxNumberOfProblems = 100;
         private readonly Server _server;
         private readonly ILogger<LspHost> _logger;

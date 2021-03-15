@@ -3,9 +3,9 @@ using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.CodeAnalysis.Symbols
 {
-    public sealed class StructSymbol : TypeSymbol
+    public sealed class ClassSymbol : TypeSymbol
     {
-        internal StructSymbol(string name, ImmutableArray<ParameterSymbol> ctorParameters, ImmutableArray<VariableSymbol> members, StructDeclarationSyntax? declaration = null) 
+        internal ClassSymbol(string name, ImmutableArray<ParameterSymbol> ctorParameters, ImmutableArray<VariableSymbol> members, ClassDeclarationSyntax? declaration = null) 
             : base(name, null)
         {
             Declaration = declaration;
@@ -13,9 +13,9 @@ namespace Vivian.CodeAnalysis.Symbols
             Members = members;
         }
 
-        public override SymbolKind Kind => SymbolKind.Struct;
+        public override SymbolKind Kind => SymbolKind.Class;
 
-        public StructDeclarationSyntax? Declaration { get; }
+        public ClassDeclarationSyntax? Declaration { get; }
         public ImmutableArray<ParameterSymbol> CtorParameters { get; }
         public ImmutableArray<VariableSymbol> Members { get; }
     }

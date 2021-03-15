@@ -5,7 +5,7 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundLocalFieldAccessExpression : BoundExpression
     {
-        public BoundLocalFieldAccessExpression(SyntaxNode syntax, StructSymbol instance, VariableSymbol structMember)
+        public BoundLocalFieldAccessExpression(SyntaxNode syntax, ClassSymbol instance, VariableSymbol structMember)
             : base(syntax)
         {
             Instance = instance;
@@ -14,7 +14,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         public override TypeSymbol Type => StructMember.Type;
         public override BoundNodeKind Kind => BoundNodeKind.ThisExpression;
-        public StructSymbol Instance { get; }
+        public ClassSymbol Instance { get; }
         public VariableSymbol StructMember { get; }
     }
 }

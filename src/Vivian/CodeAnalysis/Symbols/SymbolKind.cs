@@ -7,6 +7,6 @@
         LocalVariable,
         Parameter,
         Type,
-        Struct,
+        Class,
     }
 }

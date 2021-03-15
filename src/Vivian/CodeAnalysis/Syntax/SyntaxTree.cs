@@ -10,9 +10,7 @@ namespace Vivian.CodeAnalysis.Syntax
     {
         private Dictionary<SyntaxNode, SyntaxNode?>? _parents;
 
-        private delegate void ParseHandler(SyntaxTree syntaxTree,
-                                           out CompilationUnitSyntax root,
-                                           out ImmutableArray<Diagnostic> diagnostics);
+        private delegate void ParseHandler(SyntaxTree syntaxTree, out CompilationUnitSyntax root, out ImmutableArray<Diagnostic> diagnostics);
 
         private SyntaxTree(SourceText text, ParseHandler handler)
         {
