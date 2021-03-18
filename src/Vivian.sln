@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Compiler", "Vivian.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Host", "Vivian.Host\Vivian.Host.csproj", "{AFD88917-7A58-48AF-A1BC-66ACCA96CF40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.LanguageServer", "Vivian.LanguageServer\Vivian.LanguageServer.csproj", "{2A839E52-AD04-4007-98FB-03DBE90CE275}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

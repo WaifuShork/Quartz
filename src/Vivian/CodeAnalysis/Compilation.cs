@@ -113,7 +113,7 @@ namespace Vivian.CodeAnalysis
 
             var program = GetProgram();
 
-            return Emitter.Emit(program, moduleName, references, outputPath);
+            return ILEmitter.Emit(program, moduleName, references, outputPath);
         }
     }
 }

@@ -19,7 +19,7 @@
         <VivianScriptExt Condition="$([MSBuild]::IsOSPlatform('Windows'))">.cmd</VivianScriptExt>
         
         <VivianCompilerScript Condition="'$(VivianCompilerScript)' == ''">vc$(VivianScriptExt)</VivianCompilerScript>
-         <VivianCompileCommand>"$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)..\', '$(VivianCompilerScript)'))" $(VivianCompilerArgs)</VivianCompileCommand>
+        <VivianCompileCommand>"$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)..\', '$(VivianCompilerScript)'))" $(VivianCompilerArgs)</VivianCompileCommand>
     </PropertyGroup>
         <Exec Command="$(VivianCompileCommand)" />
     </Target>

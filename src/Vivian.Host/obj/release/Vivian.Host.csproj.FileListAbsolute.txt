@@ -9,3 +9,4 @@ D:\VivianLang\Vivian\src\Vivian.Host\obj\release\Vivian.Host.csproj.CoreCompileI
 D:\VivianLang\Vivian\src\Vivian.Host\obj\release\Vivian.Host.dll
 D:\VivianLang\Vivian\src\Vivian.Host\obj\release\ref\Vivian.Host.dll
 D:\VivianLang\Vivian\src\Vivian.Host\obj\release\Vivian.Host.pdb
+D:\VivianLang\Vivian\src\Vivian.Host\obj\Release\Vivian.Host.csprojAssemblyReference.cache

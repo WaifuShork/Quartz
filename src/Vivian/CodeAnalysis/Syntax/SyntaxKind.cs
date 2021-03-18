@@ -104,5 +104,6 @@
         NameExpression,
         ParenthesizedExpression,
         UnaryExpression,
+        NamespaceDeclaration
     }
 }

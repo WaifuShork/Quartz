@@ -85,8 +85,8 @@ namespace Vivian.CodeAnalysis.Binding
 
             // Check global statements
             var firstGlobalStatementPerSyntaxTree = syntaxTrees.Select(st => st.Root.Members.OfType<GlobalStatementSyntax>().FirstOrDefault())
-                                                                .Where(g => g != null)
-                                                                .ToArray();
+                                                               .Where(g => g != null)
+                                                               .ToArray();
 
             if (firstGlobalStatementPerSyntaxTree.Length > 1)
             {
@@ -220,11 +220,11 @@ namespace Vivian.CodeAnalysis.Binding
                                     functionBodies.ToImmutable(),
                                     structBodies.ToImmutable());
         }
-
+        
         private void BindStructDeclaration(ClassDeclarationSyntax syntax)
         {
             // Peek into the struct body and generate a constructor based on all writeable members
-            var members = syntax.Body.Statement.OfType<VariableDeclarationSyntax>();
+            var members = syntax.Body.Statements.OfType<VariableDeclarationSyntax>();
 
             var ctorParameters = ImmutableArray.CreateBuilder<ParameterSymbol>();
             var boundMembers = ImmutableArray.CreateBuilder<VariableSymbol>();
@@ -407,7 +407,7 @@ namespace Vivian.CodeAnalysis.Binding
             var statements = ImmutableArray.CreateBuilder<BoundStatement>();
             _scope = new BoundScope(_scope);
 
-            foreach (var statementSyntax in syntax.Statement)
+            foreach (var statementSyntax in syntax.Statements)
             {
                 if (statementSyntax.Kind != SyntaxKind.VariableDeclaration)
                 {
@@ -417,7 +417,7 @@ namespace Vivian.CodeAnalysis.Binding
                 var statement = BindVariableDeclaration((VariableDeclarationSyntax)statementSyntax);
                 statements.Add(statement);
             }
-
+            
             return new BoundMemberBlockStatement(syntax, statements.ToImmutable());
         }
 

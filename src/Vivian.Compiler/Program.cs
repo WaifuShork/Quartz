@@ -23,7 +23,7 @@ namespace VivianCompiler
 
             var options = new OptionSet
             {
-                "usage: ev2c <source-paths> [options]",
+                "usage: Vivian <source-paths> [options]",
                 { "r=", "The {path} of an assembly to reference", v => referencePaths.Add(v) },
                 { "o=", "The output {path} of the assembly to create", v => outputPath = v },
                 { "m=", "The {name} of the module", v => moduleName = v },
