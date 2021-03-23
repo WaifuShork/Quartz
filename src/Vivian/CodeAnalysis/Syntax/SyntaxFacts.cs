@@ -129,7 +129,9 @@ namespace Vivian.CodeAnalysis.Syntax
             foreach (var kind in kinds)
             {
                 if (GetUnaryOperatorPrecedence(kind) > 0)
+                {
                     yield return kind;
+                }
             }
         }
 
@@ -140,7 +142,9 @@ namespace Vivian.CodeAnalysis.Syntax
             foreach (var kind in kinds)
             {
                 if (GetBinaryOperatorPrecedence(kind) > 0)
+                {
                     yield return kind;
+                }
             }
         }
 
@@ -287,7 +291,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         public static bool IsAssignmentOperator(this SyntaxKind kind)
         {
-            return kind == SyntaxKind.PlusEqualsToken || 
+            return kind == SyntaxKind.PlusEqualsToken ||
                    kind == SyntaxKind.MinusEqualsToken || 
                    kind == SyntaxKind.StarEqualsToken || 
                    kind == SyntaxKind.SlashEqualsToken || 

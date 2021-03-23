@@ -1,10 +1,10 @@
-@echo off
+@echo off 
 
-REM Vars
-set "SLNDIR=%~dp0src"
+REM Clean (clean because of issues with builds often)
+dotnet clean "src\Vivian.sln" --nologo
 
-REM Restore + Build
-dotnet build "%SLNDIR%\Vivian.sln" --nologo || exit /b
+REM Build
+dotnet build "src\Vivian.sln" --nologo || exit /b 
 
 REM Test
-dotnet test "%SLNDIR%\Vivian.Tests" --nologo --no-build
+dotnet test "src\Vivian.Tests" --nologo --no-build

@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\VivianLang\\Vivian\\std\\src\\Core.vivproj",
+      "projectUniqueName": "D:\\Vivian\\Vivian\\std\\src\\Core.vivproj",
       "projectName": "Core",
-      "projectPath": "D:\\VivianLang\\Vivian\\std\\src\\Core.vivproj",
+      "projectPath": "D:\\Vivian\\Vivian\\std\\src\\Core.vivproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "D:\\VivianLang\\Vivian\\std\\src\\obj\\",
+      "outputPath": "D:\\Vivian\\Vivian\\std\\src\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",

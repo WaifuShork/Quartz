@@ -22,7 +22,7 @@ namespace Vivian.CodeAnalysis.Binding
         public bool TryDeclareFunction(FunctionSymbol function)
             => TryDeclareSymbol(function);
 
-        public bool TryDeclareStruct(ClassSymbol @class)
+        public bool TryDeclareClass(ClassSymbol @class)
             => TryDeclareSymbol(@class);
 
         private bool TryDeclareSymbol<TSymbol>(TSymbol symbol) where TSymbol : Symbol

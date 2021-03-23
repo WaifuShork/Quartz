@@ -33,7 +33,7 @@ namespace Vivian.CodeAnalysis
         
         public ImmutableArray<FunctionSymbol> Functions => GlobalScope.Functions;
         public ImmutableArray<VariableSymbol> Variables => GlobalScope.Variables;
-        public ImmutableArray<ClassSymbol> Classes => GlobalScope.Structs;
+        public ImmutableArray<ClassSymbol> Classes => GlobalScope.Classes;
 
         internal BoundGlobalScope GlobalScope
         {

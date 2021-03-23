@@ -14,7 +14,7 @@ namespace Vivian.CodeAnalysis.Binding
     {
         private readonly FunctionSymbol? _function;
 
-        private readonly Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)> _loopStack = new Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)>();
+        private readonly Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)> _loopStack = new();
         private int _labelCounter;
         private BoundScope _scope;
 
@@ -31,6 +31,8 @@ namespace Vivian.CodeAnalysis.Binding
                 }
             }
         }
+        
+        public DiagnosticBag Diagnostics { get; } = new();
 
         public static BoundGlobalScope BindGlobalScope(BoundGlobalScope? previous, ImmutableArray<SyntaxTree> syntaxTrees)
         {
@@ -41,6 +43,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             if (binder.Diagnostics.Any())
             {
+                // TODO?: Namespace/Module scoping
                 return new BoundGlobalScope(
                     previous,
                     binder.Diagnostics.ToImmutableArray(),
@@ -53,12 +56,12 @@ namespace Vivian.CodeAnalysis.Binding
             }
 
             // Phase 1: Forward declare structs
-            var structDeclarations = syntaxTrees.SelectMany(st => st.Root.Members)
+            var classDeclarations = syntaxTrees.SelectMany(st => st.Root.Members)
                                                .OfType<ClassDeclarationSyntax>();
 
-            foreach (var @struct in structDeclarations)
+            foreach (var @class in classDeclarations)
             {
-                binder.BindStructDeclaration(@struct);
+                binder.BindStructDeclaration(@class);
             }
 
             // Phase 2: Forward declare functions
@@ -91,7 +94,9 @@ namespace Vivian.CodeAnalysis.Binding
             if (firstGlobalStatementPerSyntaxTree.Length > 1)
             {
                 foreach (var globalStatement in firstGlobalStatementPerSyntaxTree)
+                {
                     binder.Diagnostics.ReportOnlyOneFileCanHaveGlobalStatements(globalStatement!.Location);
+                }
             }
 
             // Check for main/script with global statements
@@ -116,7 +121,9 @@ namespace Vivian.CodeAnalysis.Binding
                     binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(mainFunction.Declaration!.Identifier.Location);
 
                     foreach (var globalStatement in firstGlobalStatementPerSyntaxTree)
+                    {
                         binder.Diagnostics.ReportCannotMixMainAndGlobalStatements(globalStatement!.Location);
+                    }
                 }
                 else
                 {
@@ -155,13 +162,13 @@ namespace Vivian.CodeAnalysis.Binding
             var structBodies = ImmutableDictionary.CreateBuilder<ClassSymbol, BoundBlockStatement>();
             var diagnostics = ImmutableArray.CreateBuilder<Diagnostic>();
 
-            foreach (var @struct in globalScope.Structs)
+            foreach (var @class in globalScope.Classes)
             {
                 var binder = new Binder(parentScope, null);
-                var body = binder.BindMemberBlockStatement(@struct.Declaration!.Body);
-                var loweredBody = Lowerer.Lower(@struct, body);
+                var body = binder.BindMemberBlockStatement(@class.Declaration!.Body);
+                var loweredBody = Lowerer.Lower(@class, body);
 
-                structBodies.Add(@struct, loweredBody);
+                structBodies.Add(@class, loweredBody);
 
                 diagnostics.AddRange(binder.Diagnostics);
             }
@@ -223,9 +230,10 @@ namespace Vivian.CodeAnalysis.Binding
         
         private void BindStructDeclaration(ClassDeclarationSyntax syntax)
         {
-            // Peek into the struct body and generate a constructor based on all writeable members
+            // Peek into the class body and generate a constructor based on all writeable members
             var members = syntax.Body.Statements.OfType<VariableDeclarationSyntax>();
 
+            // TODO: "constructor Class()" // implement actual constructors for more control
             var ctorParameters = ImmutableArray.CreateBuilder<ParameterSymbol>();
             var boundMembers = ImmutableArray.CreateBuilder<VariableSymbol>();
 
@@ -253,8 +261,7 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 else if (parameterType == null && varDeclarationSyntax.Initializer == null)
                 {
-                    // We don't need to do error reporting here (e.g. report on duplicate members) because that will be
-                    // done later in the BindMemberBlockStatement
+                    // Error reporting done in BindMemberBlockStatement
                     continue;
                 }
 
@@ -263,19 +270,19 @@ namespace Vivian.CodeAnalysis.Binding
                 ctorParameters.Add(parameter);
             }
 
-            string structIdentifier = syntax.Identifier.Text;
-            var @struct = new ClassSymbol(structIdentifier, ctorParameters.ToImmutable(), boundMembers.ToImmutable(), syntax);
+            string classIdentifier = syntax.Identifier.Text;
+            var @class = new ClassSymbol(classIdentifier, ctorParameters.ToImmutable(), boundMembers.ToImmutable(), syntax);
 
-            if (structIdentifier != null! && !_scope.TryDeclareStruct(@struct))
+            if (classIdentifier != null! && !_scope.TryDeclareClass(@class))
             {
-                Diagnostics.ReportSymbolAlreadyDeclared(syntax.Identifier.Location, @struct.Name);
+                Diagnostics.ReportSymbolAlreadyDeclared(syntax.Identifier.Location, @class.Name);
             }
 
             // Declare Built-in Constructors
-            var ctor = new FunctionSymbol(structIdentifier + ".ctor", ImmutableArray<ParameterSymbol>.Empty, @struct);
-            var ctorWithParams = new FunctionSymbol(structIdentifier + ".ctor", ctorParameters.ToImmutable(), @struct, overloadFor: ctor);
+            var ctor = new FunctionSymbol(classIdentifier + ".ctor", ImmutableArray<ParameterSymbol>.Empty, @class);
+            var ctorWithParams = new FunctionSymbol(classIdentifier + ".ctor", ctorParameters.ToImmutable(), @class, overloadFor: ctor);
 
-            if (structIdentifier != null && !_scope.TryDeclareFunction(ctorWithParams))
+            if (classIdentifier != null && !_scope.TryDeclareFunction(ctorWithParams))
             {
                 Diagnostics.ReportSymbolAlreadyDeclared(syntax.Identifier.Location, ctor.Name);
             }
@@ -332,9 +339,9 @@ namespace Vivian.CodeAnalysis.Binding
 
                 var scope = new BoundScope(parent);
 
-                foreach (var s in previous.Structs)
+                foreach (var s in previous.Classes)
                 {
-                    scope.TryDeclareStruct(s);
+                    scope.TryDeclareClass(s);
                 }
 
                 foreach (var f in previous.Functions)
@@ -365,7 +372,6 @@ namespace Vivian.CodeAnalysis.Binding
             return result;
         }
 
-        public DiagnosticBag Diagnostics { get; } = new();
 
         private static BoundStatement BindErrorStatement(SyntaxNode syntax)
         {
@@ -577,7 +583,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             if (type is ClassSymbol s)
             {
-                // Struct types default to calling their empty constructor
+                // Class types default to calling their empty constructor
                 var ctorSyntaxToken = new NameExpressionSyntax(syntax.SyntaxTree, new SyntaxToken(syntax.SyntaxTree, SyntaxKind.IdentifierToken, syntax.Span.End, s.Name, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty));
                 var openParenToken = new SyntaxToken(syntax.SyntaxTree, SyntaxKind.OpenParenthesisToken, syntax.Span.End, "(", null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
                 var closeParenToken = new SyntaxToken(syntax.SyntaxTree, SyntaxKind.CloseParenthesisToken, syntax.Span.End, ")", null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
@@ -1130,106 +1136,101 @@ namespace Vivian.CodeAnalysis.Binding
                     return false;
                 }
             }
-
             return true;
         }
 
         private BoundExpression BindMemberAccessExpression(MemberAccessExpressionSyntax syntax)
         {
-            if (syntax.Expression.Kind == SyntaxKind.NameExpression)
+            switch (syntax.Expression.Kind)
             {
-                if (BindExpression(syntax.Expression) is not BoundVariableExpression expr)
+                case SyntaxKind.NameExpression:
                 {
-                    Diagnostics.ReportNotAClass(syntax.Expression.Location, syntax.Expression.ToString());
+                    if (BindExpression(syntax.Expression) is not BoundVariableExpression expr)
+                    {
+                        Diagnostics.ReportNotAClass(syntax.Expression.Location, syntax.Expression.ToString());
+                        return new BoundErrorExpression(syntax);
+                    }
+
+                    var variable = BindFieldReference(expr, syntax.IdentifierToken);
+
+                    if (variable != null)
+                    {
+                        return new BoundFieldAccessExpression(syntax, expr, variable);
+                    }
+
+                    var func = BindFunctionReference(syntax.IdentifierToken);
+
+                    if (func != null)
+                    {
+                        return expr;
+                    }
+
+                    Diagnostics.ReportCannotAccessMember(syntax.IdentifierToken.Location, ((NameExpressionSyntax)syntax.Expression).IdentifierToken.Text);
                     return new BoundErrorExpression(syntax);
                 }
-
-                var variable = BindFieldReference(expr, syntax.IdentifierToken);
-
-                if (variable != null)
+                case SyntaxKind.MemberAccessExpression:
                 {
-                    return new BoundFieldAccessExpression(syntax, expr, variable);
-                }
+                    if (BindExpression(syntax.Expression) is not BoundFieldAccessExpression expr)
+                    {
+                        Diagnostics.ReportNotAClass(syntax.Expression.Location, syntax.Expression.ToString());
+                        return new BoundErrorExpression(syntax);
+                    }
 
-                var func = BindFunctionReference(syntax.IdentifierToken);
+                    var variable = BindFieldReference(expr, syntax.IdentifierToken);
 
-                if (func != null)
-                {
-                    return expr;
-                }
+                    if (variable != null)
+                    {
+                        return new BoundFieldAccessExpression(syntax, expr, variable);
+                    }
 
-                Diagnostics.ReportCannotAccessMember(syntax.IdentifierToken.Location, ((NameExpressionSyntax)syntax.Expression).IdentifierToken.Text);
-                return new BoundErrorExpression(syntax);
-            }
-            else if (syntax.Expression.Kind == SyntaxKind.MemberAccessExpression)
-            {
-                if (BindExpression(syntax.Expression) is not BoundFieldAccessExpression expr)
-                {
-                    Diagnostics.ReportNotAClass(syntax.Expression.Location, syntax.Expression.ToString());
+                    var func = BindFunctionReference(syntax.IdentifierToken);
+
+                    if (func != null)
+                    {
+                        return expr;
+                    }
+
+                    Diagnostics.ReportCannotAccessMember(syntax.IdentifierToken.Location, ((MemberAccessExpressionSyntax)syntax.Expression).IdentifierToken.Text);
                     return new BoundErrorExpression(syntax);
                 }
-
-                var variable = BindFieldReference(expr, syntax.IdentifierToken);
-
-                if (variable != null)
-                {
-                    return new BoundFieldAccessExpression(syntax, expr, variable);
-                }
-
-                var func = BindFunctionReference(syntax.IdentifierToken);
-
-                if (func != null)
-                {
-                    return expr;
-                }
-
-                Diagnostics.ReportCannotAccessMember(syntax.IdentifierToken.Location, ((MemberAccessExpressionSyntax)syntax.Expression).IdentifierToken.Text);
-                return new BoundErrorExpression(syntax);
-            }
-            else if (syntax.Expression.Kind == SyntaxKind.ThisKeyword)
-            {
-                if (_function == null)
-                {
+                case SyntaxKind.ThisKeyword when _function == null:
                     Diagnostics.ReportCannotUseThisOutsideOfAFunction(syntax.Expression.Location);
                     return new BoundErrorExpression(syntax);
-                }
-
-                if (_function.Receiver == null)
-                {
+                case SyntaxKind.ThisKeyword when _function.Receiver == null:
                     Diagnostics.ReportCannotUseThisOutsideOfReceiverFunctions(syntax.Expression.Location, _function.Name);
                     return new BoundErrorExpression(syntax);
-                }
-
-                // Check if the struct has a member with the name of memberIdentifier
-                VariableSymbol? variable = null;
-
-                foreach (var member in _function.Receiver.Members)
+                
+                // Check if the class has a member with the name of memberIdentifier
+                case SyntaxKind.ThisKeyword:
                 {
-                    if (member.Name == syntax.IdentifierToken.Text)
+                    VariableSymbol? variable = null;
+
+                    foreach (var member in _function.Receiver.Members)
                     {
-                          variable = member;
+                        if (member.Name == syntax.IdentifierToken.Text)
+                        {
+                            variable = member;
+                        }
                     }
+
+                    if (variable != null)
+                    {
+                        return new BoundFieldAccessExpression(syntax, new BoundThisExpression(syntax.Expression, _function.Receiver), variable);
+                    }
+
+                    var function = BindFunctionReference(syntax.IdentifierToken);
+
+                    if (function != null)
+                    {
+                        return new BoundThisExpression(syntax.Expression, _function.Receiver);
+                    }
+
+                    Diagnostics.ReportUndefinedClassField(syntax.IdentifierToken.Location, syntax.IdentifierToken.Text);
+                    return new BoundErrorExpression(syntax);
                 }
-
-                if (variable != null)
-                {
-                    return new BoundFieldAccessExpression(syntax, new BoundThisExpression(syntax.Expression, _function.Receiver), variable);
-                }
-
-                var function = BindFunctionReference(syntax.IdentifierToken);
-
-                if (function != null)
-                {
-                    return new BoundThisExpression(syntax.Expression, _function.Receiver);
-                }
-
-                Diagnostics.ReportUndefinedClassField(syntax.IdentifierToken.Location, syntax.IdentifierToken.Text);
-                return new BoundErrorExpression(syntax);
-            }
-            else
-            {
-                Diagnostics.ReportCannotAccessMember(syntax.Expression.Location, syntax.Expression.ToString());
-                return new BoundErrorExpression(syntax);
+                default:
+                    Diagnostics.ReportCannotAccessMember(syntax.Expression.Location, syntax.Expression.ToString());
+                    return new BoundErrorExpression(syntax);
             }
         }
 

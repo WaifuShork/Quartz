@@ -1,10 +1,8 @@
-#!/bin/bash
+# Clean (clean because of issues with builds often)
+dotnet clean "../src/Vivian.Compiler" --nologo
 
-# Vars
-slndir="$(dirname "${BASH_SOURCE[0]}")/src"
-
-# Restore + Build
-dotnet build "$slndir/Vivian.Compiler" --nologo || exit
+# Build
+dotnet build "../src/Vivian.Compiler" --nologo || exit
 
 # Run
-dotnet run -p "$slndir/Vivian.Compiler" --no-build -- "$@"
+dotnet run --project "../src/Vivian.Compiler" --no-build -- "$@"

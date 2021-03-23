@@ -4,6 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>9.0</LangVersion>
         <RootNamespace>Vivian</RootNamespace>
+        <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>

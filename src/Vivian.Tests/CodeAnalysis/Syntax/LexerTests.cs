@@ -462,6 +462,36 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
                     return true;
                 }
                 
+                if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.GreaterToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.AmpersandToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.LessToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.EqualsToken && t2Kind == SyntaxKind.GreaterOrEqualsToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.HatToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
+                if (t1Kind == SyntaxKind.BangToken && t2Kind == SyntaxKind.EqualsGreaterThanToken)
+                {
+                    return true;
+                }
+                
                 return false;
             }
     

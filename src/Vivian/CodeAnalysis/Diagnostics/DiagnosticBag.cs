@@ -94,7 +94,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportUndefinedUnaryOperator(TextLocation location, string operatorText, TypeSymbol operandType)
         {
-            var message = $"Unary operator '{operatorText}' is not defined for type '{operandType}'.";
+            var message = $"Unary operator '{operatorText}' is not defined for type <{operandType}>.";
             ReportError(location, message);
         }
 
@@ -142,7 +142,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportCannotConvert(TextLocation location, TypeSymbol fromType, TypeSymbol toType)
         {
-            var message = $"Cannot convert type '{fromType}' to '{toType}'.";
+            var message = $"Cannot convert type <{fromType}> to <{toType}>.";
             ReportError(location, message);
         }
 
@@ -226,7 +226,7 @@ namespace Vivian.CodeAnalysis
 
         public void ReportMissingReturnExpression(TextLocation location, TypeSymbol returnType)
         {
-            var message = $"An expression of type '{returnType}' is expected.";
+            var message = $"An expression of type <{returnType}> is expected.";
             ReportError(location, message);
         }
 

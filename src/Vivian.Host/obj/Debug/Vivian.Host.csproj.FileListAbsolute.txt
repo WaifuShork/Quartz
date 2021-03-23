@@ -25,7 +25,6 @@ G:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csprojAssemblyReferen
 D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.deps.json
 D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.dll
 D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\ref\Vivian.Host.dll
-D:\VivianLang\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.pdb
 D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csprojAssemblyReference.cache
 D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.GeneratedMSBuildEditorConfig.editorconfig
 D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfoInputs.cache
@@ -33,4 +32,13 @@ D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfo.cs
 D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csproj.CoreCompileInputs.cache
 D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.dll
 D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\ref\Vivian.Host.dll
-D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.pdb
+D:\Vivian\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.deps.json
+D:\Vivian\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.dll
+D:\Vivian\Vivian\src\Vivian.Host\bin\Debug\ref\Vivian.Host.dll
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csprojAssemblyReference.cache
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.GeneratedMSBuildEditorConfig.editorconfig
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfoInputs.cache
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfo.cs
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csproj.CoreCompileInputs.cache
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.dll
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\ref\Vivian.Host.dll

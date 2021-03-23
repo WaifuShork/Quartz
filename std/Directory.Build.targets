@@ -15,11 +15,10 @@
         <VivianCompilerArgs>$(VivianCompilerArgs) /o "@(IntermediateAssembly)"</VivianCompilerArgs>
         <VivianCompilerArgs>$(VivianCompilerArgs) @(ReferencePath->'/r "%(Identity)"', ' ')</VivianCompilerArgs>
 
-        <VivianScriptExt Condition="$([MSBuild]::IsOSUnixLike())">.sh</VivianScriptExt>
-        <VivianScriptExt Condition="$([MSBuild]::IsOSPlatform('Windows'))">.cmd</VivianScriptExt>
+        <VivianScriptExt Condition="$([MSBuild]::IsOSPlatform('Windows'))">.exe</VivianScriptExt>
         
-        <VivianCompilerScript Condition="'$(VivianCompilerScript)' == ''">vc$(VivianScriptExt)</VivianCompilerScript>
-        <VivianCompileCommand>"$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)..\', '$(VivianCompilerScript)'))" $(VivianCompilerArgs)</VivianCompileCommand>
+        <VivianCompilerScript Condition="'$(VivianCompilerScript)' == ''">vivian$(VivianScriptExt)</VivianCompilerScript>
+        <VivianCompileCommand>"$(VivianCompilerScript)" $(VivianCompilerArgs)</VivianCompileCommand>
     </PropertyGroup>
         <Exec Command="$(VivianCompileCommand)" />
     </Target>

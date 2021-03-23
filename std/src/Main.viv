@@ -1,9 +1,18 @@
 procedure Main() => void
 {
-    print("hello world");
+    var point = Point(2.6, 3.4, 4.3);
+    var v = point.Sum();
+    print(string(v));
 }
 
-class Console
+class Point
 {
-    var x = "hello";
+    var x = 0.0;
+    var y = 0.0;
+    var z = 0.0;
+}
+
+procedure Point.Sum() => float32
+{
+    return this.x + this.y + this.z;
 }

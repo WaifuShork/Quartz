@@ -105,7 +105,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_FunctionParameters_NoInfiniteLoop()
         {
             const string? text = @"
-                function hi(name: string[[[=]]][[)]]
+                procedure hi(name: string[[[=]]][[)]] => string
                 {
                     print(""Hi "" + name + ""!"" )
                 }[]
@@ -127,7 +127,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_FunctionReturn_Missing()
         {
             const string? text = @"
-                new [add](a: int32, b: int32 ) 
+                procedure [add](a: int32, b: int32) => int32 
                 {
                 }
             ";
@@ -151,7 +151,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type 'int32' to 'bool'.
+                Cannot convert type <int32> to <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -169,7 +169,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type 'int32' to 'bool'.
+                Cannot convert type <int32> to <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -188,7 +188,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type 'int32' to 'bool'.
+                Cannot convert type <int32> to <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -206,7 +206,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type 'bool' to 'int32'.
+                Cannot convert type <bool> to <int32>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -224,7 +224,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type 'bool' to 'int32'.
+                Cannot convert type <bool> to <int32>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -260,7 +260,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"[+]true";
 
             const string? diagnostics = @"
-                Unary operator '+' is not defined for type 'bool'.
+                Unary operator '+' is not defined for type <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -272,7 +272,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"10 [*] false";
 
             const string? diagnostics = @"
-                Binary operator '*' is not defined for types 'int32' and 'bool'.
+                Binary operator '*' is not defined for types <int32> and <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -285,7 +285,7 @@ namespace Vivian.Tests.CodeAnalysis
                          x [+=] false";
 
             const string? diagnostics = @"
-                Binary operator '+=' is not defined for types 'int32' and 'bool'.
+                Binary operator '+=' is not defined for types <int32> and <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -372,7 +372,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type 'bool' to 'int32'.
+                Cannot convert type <bool> to <int32>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -428,7 +428,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Void_Function_Should_Not_Return_Value()
         {
             const string? text = @"
-                new test() => void
+                procedure test() => void
                 {
                     return [1]
                 }
@@ -445,14 +445,14 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Function_With_ReturnValue_Should_Not_Return_Void()
         {
             const string? text = @"
-                new test() => int32
+                procedure test() => int32
                 {
                     [return]
                 }
             ";
 
             const string? diagnostics = @"
-                An expression of type 'int32' is expected.
+                An expression of type <int32> is expected.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -462,7 +462,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Not_All_Code_Paths_Return_Value()
         {
             const string? text = @"
-                new [test](int32 n) => bool
+                procedure [test](n: int32) => bool
                 {
                     if (n > 10)
                        return true
@@ -480,7 +480,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Expression_Must_Have_Value()
         {
             const string? text = @"
-                void test(int32 n)
+                procedure test(n: int32) => void
                 {
                     return
                 }
@@ -499,7 +499,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_IfStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                new test() => bool
+                procedure test() => bool
                 {
                     const x = 4 * 3
                     if(x > 12)
@@ -523,7 +523,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_ElseStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                new test() => bool
+                procedure test() => bool
                 {
                     if(true)
                     {
@@ -547,7 +547,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_WhileStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                new test() => bool
+                procedure test() => bool
                 {
                     while(false)
                     {
@@ -579,7 +579,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Parameter_Already_Declared()
         {
             const string? text = @"
-                new sum(a: int32, b: int32, [a: int32]) => int32
+                procedure sum(a: int32, b: int32, [a: int32]) => int32
                 {
                     return a + b + c
                 }
@@ -596,7 +596,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Function_Must_Have_Name()
         {
             const string? text = @"
-                new [(]b: int32, b: int32) => int32
+                procedure [(]b: int32, b: int32) => int32
                 {
                     return a + b
                 }
@@ -613,7 +613,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Wrong_Argument_Type()
         {
             const string? text = @"
-                new test(n: int32) => bool
+                procedure test(n: int32) => bool
                 {
                     return n > 10
                 }
@@ -622,7 +622,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type 'string' to 'int32'. An explicit conversion exists (are you missing a cast?)
+                Cannot convert type <string> to <int32>. An explicit conversion exists (are you missing a cast?)
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -632,7 +632,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Bad_Type()
         {
             const string? text = @"
-                new test(n: [invalidtype]) => void
+                procedure test(n: [invalidtype]) => void
                 {
                 }
             ";
@@ -654,9 +654,9 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                'p' is not a struct.
+                'p' is not a valid class.
                 'length' is not a function.
-                Cannot access members of 'p'. Only members of structs can be accessed using the '.' operator.
+                Cannot access members of 'p'. Only members of classes can be accessed using the '.' operator.
             ";
 
             AssertDiagnostics(text, diagnostics);

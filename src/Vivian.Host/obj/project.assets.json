@@ -216,11 +216,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+      "projectUniqueName": "D:\\Vivian\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
       "projectName": "Vivian.Host",
-      "projectPath": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
+      "projectPath": "D:\\Vivian\\Vivian\\src\\Vivian.Host\\Vivian.Host.csproj",
       "packagesPath": "C:\\Users\\ashle\\.nuget\\packages\\",
-      "outputPath": "D:\\VivianLang\\Vivian\\src\\Vivian.Host\\obj\\",
+      "outputPath": "D:\\Vivian\\Vivian\\src\\Vivian.Host\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ashle\\AppData\\Roaming\\NuGet\\NuGet.Config",

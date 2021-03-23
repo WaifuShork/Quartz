@@ -1,7 +1,7 @@
 ﻿using Vivian.CodeAnalysis.Text;
 using Xunit;
 
-namespace WSC.Tests.CodeAnalysis.Text
+namespace Vivian.Tests.CodeAnalysis.Text
 {
     public class SourceTextTests
         {
