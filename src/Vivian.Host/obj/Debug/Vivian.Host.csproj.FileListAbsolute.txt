@@ -35,7 +35,6 @@ D:\VivianLang\Vivian\src\Vivian.Host\obj\Debug\ref\Vivian.Host.dll
 D:\Vivian\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.deps.json
 D:\Vivian\Vivian\src\Vivian.Host\bin\Debug\Vivian.Host.dll
 D:\Vivian\Vivian\src\Vivian.Host\bin\Debug\ref\Vivian.Host.dll
-D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csprojAssemblyReference.cache
 D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.GeneratedMSBuildEditorConfig.editorconfig
 D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfoInputs.cache
 D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfo.cs

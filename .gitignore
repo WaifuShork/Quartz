@@ -2,3 +2,23 @@
 .vscode
 /src/.idea
 src/Vivian.sln.DotSettings.user
+
+# Vivian
+src/Vivian/bin
+src/Vivian/obj
+src/Vivian/.VSCodeCounter
+
+# Vivian Compiler
+src/Vivian.Compiler/bin
+src/Vivian.Compiler/obj
+src/Vivian.Compiler/.VSCodeCounter
+
+# Vivian Host
+src/Vivian.Host/bin
+src/Vivian.Host/obj
+src/Vivian.Host/.VSCodeCounter
+
+# Vivian Tests
+src/Vivian.Tests/bin
+src/Vivian.Tests/obj
+src/Vivian.Tests/.VSCodeCounter
