@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Compiler", "Vivian.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Host", "Vivian.Host\Vivian.Host.csproj", "{AFD88917-7A58-48AF-A1BC-66ACCA96CF40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vivian.Sdk", "Vivian.Sdk\Vivian.Sdk.csproj", "{E4E40638-5438-40E8-B20C-1E231AF6D7DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +86,17 @@ Global
 		{2A839E52-AD04-4007-98FB-03DBE90CE275}.Release|x64.Build.0 = Release|Any CPU
 		{2A839E52-AD04-4007-98FB-03DBE90CE275}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A839E52-AD04-4007-98FB-03DBE90CE275}.Release|x86.Build.0 = Release|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Debug|x64.Build.0 = Debug|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Release|x64.ActiveCfg = Release|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Release|x64.Build.0 = Release|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4E40638-5438-40E8-B20C-1E231AF6D7DF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

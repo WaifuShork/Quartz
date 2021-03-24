@@ -249,11 +249,11 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.ForKeyword:
                     return ParseForStatement();
                 
+                case SyntaxKind.ConstKeyword or SyntaxKind.VarKeyword:
+                    return ParseVariableDeclaration();
+                
                 case SyntaxKind.IfKeyword:
                     return ParseIfStatement();
-                
-                case SyntaxKind.VarKeyword or SyntaxKind.ConstKeyword:
-                    return ParseVariableDeclaration();
 
                 case SyntaxKind.OpenBraceToken:
                     return ParseBlockStatement();
@@ -307,7 +307,6 @@ namespace Vivian.CodeAnalysis.Syntax
         private MemberBlockStatementSyntax ParseClassBlockStatement()
         {
             var statements = ImmutableArray.CreateBuilder<StatementSyntax>();
-            var members = ImmutableArray.CreateBuilder<MemberSyntax>();
 
             var openBraceToken = MatchToken(SyntaxKind.OpenBraceToken);
 
@@ -315,21 +314,13 @@ namespace Vivian.CodeAnalysis.Syntax
                    Current.Kind != SyntaxKind.CloseBraceToken)
             {
                 var startToken = Current;
-
-                StatementSyntax statement;
-                MemberSyntax member;
-
+                
                 if (Current.Kind == SyntaxKind.VarKeyword || Current.Kind == SyntaxKind.ConstKeyword)
                 {
-                    statement = ParseVariableDeclaration();
+                    var statement = ParseStatement();
                     statements.Add(statement);
                 }
-                else if (Current.Kind == SyntaxKind.FunctionKeyword)
-                {
-                    member = ParseFunctionDeclaration();
-                    members.Add(member);
-                }
-                
+            
                 if (Current == startToken)
                 {
                     NextToken();
@@ -338,7 +329,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             var closeBraceToken = MatchToken(SyntaxKind.CloseBraceToken);
 
-            return new MemberBlockStatementSyntax(_syntaxTree, openBraceToken, statements.ToImmutable(), members.ToImmutable(), closeBraceToken);
+            return new MemberBlockStatementSyntax(_syntaxTree, openBraceToken, statements.ToImmutable(), closeBraceToken);
         }
 
         private StatementSyntax ParseVariableDeclaration()
@@ -368,8 +359,9 @@ namespace Vivian.CodeAnalysis.Syntax
             }
             
             return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, null, null);
+           
         }
-
+        
         private TypeClauseSyntax? ParseOptionalTypeClause()
         {
             if (Current.Kind != SyntaxKind.EqualsGreaterThanToken && Current.Kind != SyntaxKind.ColonToken)
@@ -627,7 +619,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case MemberAccessExpressionSyntax id:
                     return new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken);
                 default:
-                    throw new Exception("Unexpected expression kind.");
+                    throw new InternalCompilerException($"Unexpected expression kind: {Current.Kind}");
             }
         }
 

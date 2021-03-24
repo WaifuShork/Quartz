@@ -1,0 +1,16 @@
+﻿<ProjectSchemaDefinitions
+    xmlns="http://schemas.microsoft.com/build/2009/properties">
+
+    <ContentType
+        Name="VivianFile"
+        DisplayName="Vivian file"
+        ItemType="Compile">
+    </ContentType>
+
+    <ItemType Name="Compile" DisplayName="Vivian compiler"/>
+    <ItemType Name="AdditionalFiles" DisplayName="Vivian analyzer additional file"/>
+    <ItemType Name="EditorConfigFiles" DisplayName=".editorconfig file" />
+
+    <FileExtension Name=".viv" ContentType="VivianFile"/>
+
+</ProjectSchemaDefinitions>

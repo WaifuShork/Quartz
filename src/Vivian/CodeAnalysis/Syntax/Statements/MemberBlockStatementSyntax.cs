@@ -5,12 +5,11 @@ namespace Vivian.CodeAnalysis.Syntax
 {
     public sealed class MemberBlockStatementSyntax : MemberSyntax
     {
-        internal MemberBlockStatementSyntax(SyntaxTree syntaxTree, SyntaxToken openBrace, ImmutableArray<StatementSyntax> statements, ImmutableArray<MemberSyntax> members, SyntaxToken closeBrace)
+        internal MemberBlockStatementSyntax(SyntaxTree syntaxTree, SyntaxToken openBrace, ImmutableArray<StatementSyntax> statements, SyntaxToken closeBrace)
             : base(syntaxTree)
         {
             OpenBrace = openBrace;
             Statements = statements;
-            Members = members;
             CloseBrace = closeBrace;
         }
 
@@ -18,7 +17,6 @@ namespace Vivian.CodeAnalysis.Syntax
         
         public SyntaxToken OpenBrace { get; }
         public ImmutableArray<StatementSyntax> Statements { get; }
-        public ImmutableArray<MemberSyntax> Members { get; }
         public SyntaxToken CloseBrace { get; }
         
         public override IEnumerable<SyntaxNode> GetChildren()

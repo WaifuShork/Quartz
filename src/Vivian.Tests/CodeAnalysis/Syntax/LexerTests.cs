@@ -21,7 +21,7 @@ namespace Vivian.Tests.CodeAnalysis.Syntax
     
                 var diagnostic = Assert.Single(diagnostics);
                 Assert.Equal(new TextSpan(0, 1), diagnostic!.Location.Span);
-                Assert.Equal("Unterminated string literal.", diagnostic.Message);
+                Assert.Equal("VE0006: Unterminated string literal.", diagnostic.Message);
             }
     
             [Fact]

@@ -30,10 +30,18 @@ namespace Vivian.CodeAnalysis.Emit
         private readonly List<(int InstructionIndex, BoundLabel Target)> _fixups = new();
         
         private readonly Dictionary<TypeSymbol, TypeReference> _knownTypes;
+
+        private readonly MethodReference _consoleReadLineReference;
+        private readonly MethodReference _consoleReadKeyReference;
+        
+        private readonly MethodReference _consoleWriteLineReference;
+        private readonly MethodReference _consoleWriteReference;
+        
+        private readonly MethodReference _readAllTextReference;
+        private readonly MethodReference _writeAllTextReference;
+
         private readonly MethodReference _objectCtor;
         private readonly MethodReference _objectEqualsReference;
-        private readonly MethodReference _consoleReadLineReference;
-        private readonly MethodReference _consoleWriteLineReference;
         private readonly MethodReference _stringConcat2Reference;
         private readonly MethodReference _stringConcat3Reference;
         private readonly MethodReference _stringConcat4Reference;
@@ -184,10 +192,19 @@ namespace Vivian.CodeAnalysis.Emit
                 return null!;
             }
 
+            _readAllTextReference = ResolveMethod("System.IO.File", "ReadAllText", new [] { "System.String" });
+            _writeAllTextReference = ResolveMethod("System.IO.File", "WriteAllText", new [] { "System.String", "System.String" });
+
             _objectCtor = ResolveMethod("System.Object", ".ctor", Array.Empty<string>());
             _objectEqualsReference = ResolveMethod("System.Object", "Equals", new [] { "System.Object", "System.Object" });
+            
+            
             _consoleReadLineReference = ResolveMethod("System.Console", "ReadLine", Array.Empty<string>());
+            _consoleReadKeyReference = ResolveMethod("System.Console", "ReadKey", Array.Empty<string>());
+            
             _consoleWriteLineReference = ResolveMethod("System.Console", "WriteLine", new [] { "System.Object" });
+            _consoleWriteReference = ResolveMethod("System.Console", "Write", new[] { "System.Object" });
+            
             _stringConcat2Reference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String" });
             _stringConcat3Reference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String", "System.String" });
             _stringConcat4Reference = ResolveMethod("System.String", "Concat", new [] { "System.String", "System.String", "System.String", "System.String" });
@@ -365,7 +382,7 @@ namespace Vivian.CodeAnalysis.Emit
                 }
                 else
                 {
-                    throw new Exception($"Unexpected statement type {field.Kind}. Expected BoundVariableDeclaration.");
+                    throw new InternalCompilerException($"Unexpected statement type {field.Kind}. Expected BoundVariableDeclaration.");
                 }
             }
 
@@ -505,7 +522,7 @@ namespace Vivian.CodeAnalysis.Emit
                     EmitSequencePointStatement(ilProcessor, (BoundSequencePointStatement)node);
                     break;
                 default:
-                    throw new Exception($"Unexpected node kind {node.Kind}");
+                    throw new InternalCompilerException($"Unexpected node kind {node.Kind}");
             }
         }
 
@@ -637,7 +654,7 @@ namespace Vivian.CodeAnalysis.Emit
                     EmitVariableExpression(ilProcessor, (BoundVariableExpression)node);
                     break;
                 default:
-                    throw new Exception($"Unexpected node kind {node.Kind}");
+                    throw new InternalCompilerException($"Unexpected node kind {node.Kind}");
             }
         }
 
@@ -781,7 +798,7 @@ namespace Vivian.CodeAnalysis.Emit
             }
             else
             {
-                throw new Exception($"Unexpected constant expression type: {node.Type}");
+                throw new InternalCompilerException($"Unexpected constant expression type: {node.Type}");
             }
         }
 
@@ -934,7 +951,7 @@ namespace Vivian.CodeAnalysis.Emit
                     ilProcessor.Emit(OpCodes.Ceq);
                     break;
                 default:
-                    throw new Exception($"Unexpected binary operator {SyntaxFacts.GetText(node.Op.SyntaxKind)}({node.Left.Type}, {node.Right.Type})");
+                    throw new InternalCompilerException($"Unexpected binary operator {SyntaxFacts.GetText(node.Op.SyntaxKind)}({node.Left.Type}, {node.Right.Type})");
             }
         }
 
@@ -1115,13 +1132,29 @@ namespace Vivian.CodeAnalysis.Emit
                     EmitExpression(ilProcessor, argument);
                 }
 
-                if (node.Function == BuiltinFunctions.Input)
+                if (node.Function == BuiltinFunctions.ReadLine)
                 {
                     ilProcessor.Emit(OpCodes.Call, _consoleReadLineReference);
                 }
-                else if (node.Function == BuiltinFunctions.Print)
+                else if (node.Function == BuiltinFunctions.ReadKey)
+                {
+                    ilProcessor.Emit(OpCodes.Call, _consoleReadKeyReference);
+                }
+                else if (node.Function == BuiltinFunctions.WriteLine)
                 {
                     ilProcessor.Emit(OpCodes.Call, _consoleWriteLineReference);
+                }
+                else if (node.Function == BuiltinFunctions.Write)
+                {
+                    ilProcessor.Emit(OpCodes.Call, _consoleWriteReference);
+                }
+                else if (node.Function == BuiltinFunctions.ReadAllText)
+                {
+                    ilProcessor.Emit(OpCodes.Call, _readAllTextReference);
+                }
+                else if (node.Function == BuiltinFunctions.WriteAllText)
+                {
+                    ilProcessor.Emit(OpCodes.Call, _writeAllTextReference);
                 }
                 else if (node.Function.Name.EndsWith(".ctor"))
                 {
@@ -1237,7 +1270,7 @@ namespace Vivian.CodeAnalysis.Emit
             }
             else
             {
-                throw new Exception($"Unexpected conversion from {node.Expression.Type} to {node.Type}");
+                throw new InternalCompilerException($"Unexpected conversion from {node.Expression.Type} to {node.Type}");
             }
         }
     }

@@ -538,7 +538,9 @@ namespace Vivian.CodeAnalysis.Syntax
                 if (Current == '.')
                 {
                     if (hasDecimal)
+                    {
                         hasMultipleDecimals = true;
+                    }
 
                     hasDecimal = true;
                 }
@@ -554,10 +556,14 @@ namespace Vivian.CodeAnalysis.Syntax
 
             // Underscores followed by a number are valid identifiers
             if (text.StartsWith('_'))
+            {
                 Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
+            }
 
             if (hasMultipleDecimals)
+            {
                 Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
+            }
 
             if (hasDecimal)
             {
@@ -568,9 +574,13 @@ namespace Vivian.CodeAnalysis.Syntax
                 else
                 {
                     if (fvalue >= float.MinValue && fvalue <= float.MaxValue)
+                    {
                         _value = (float)fvalue;
+                    }
                     else if (fvalue >= double.MinValue && fvalue <= double.MaxValue)
+                    {
                         _value = fvalue;
+                    }
                 }
             }
             else
@@ -606,7 +616,9 @@ namespace Vivian.CodeAnalysis.Syntax
         private void ReadIdentifierOrKeyword()
         {
             while (char.IsLetterOrDigit(Current) || Current == '_')
+            {
                 _position++;
+            }
 
             var length = _position - _start;
             var text = _text.ToString(_start, length);

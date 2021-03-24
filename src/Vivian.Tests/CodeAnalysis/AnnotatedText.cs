@@ -37,7 +37,9 @@ namespace Vivian.Tests.CodeAnalysis
                 else if (c == ']')
                 {
                     if (startStack.Count == 0)
+                    {
                         throw new ArgumentException("Too many ']' in text", nameof(text));
+                    }
 
                     var start = startStack.Pop();
                     var end = position;
@@ -52,7 +54,9 @@ namespace Vivian.Tests.CodeAnalysis
             }
 
             if (startStack.Count != 0)
+            {
                 throw new ArgumentException("Missing ']' in text", nameof(text));
+            }
 
             return new AnnotatedText(textBuilder.ToString(), spanBuilder.ToImmutable());
         }
@@ -71,7 +75,9 @@ namespace Vivian.Tests.CodeAnalysis
             {
                 string? line;
                 while ((line = reader.ReadLine()) != null)
+                {
                     lines.Add(line);
+                }
             }
 
             var minIndentation = int.MaxValue;
@@ -92,16 +98,22 @@ namespace Vivian.Tests.CodeAnalysis
             for (var i = 0; i < lines.Count; i++)
             {
                 if (lines[i].Length == 0)
+                {
                     continue;
+                }
 
                 lines[i] = lines[i].Substring(minIndentation);
             }
 
             while (lines.Count > 0 && lines[0].Length == 0)
+            {
                 lines.RemoveAt(0);
+            }
 
             while (lines.Count > 0 && lines[lines.Count - 1].Length == 0)
+            {
                 lines.RemoveAt(lines.Count - 1);
+            }
 
             return lines.ToArray();
         }

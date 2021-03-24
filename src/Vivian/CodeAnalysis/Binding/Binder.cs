@@ -55,13 +55,13 @@ namespace Vivian.CodeAnalysis.Binding
                     ImmutableArray<BoundStatement>.Empty);
             }
 
-            // Phase 1: Forward declare structs
+            // Phase 1: Forward declare classes
             var classDeclarations = syntaxTrees.SelectMany(st => st.Root.Members)
                                                .OfType<ClassDeclarationSyntax>();
 
             foreach (var @class in classDeclarations)
             {
-                binder.BindStructDeclaration(@class);
+                binder.BindClassDeclaration(@class);
             }
 
             // Phase 2: Forward declare functions
@@ -73,7 +73,7 @@ namespace Vivian.CodeAnalysis.Binding
                 binder.BindFunctionDeclaration(function);
             }
 
-            // Phase 3: Bind all global statements
+            // Phase 2: Bind all global statements
             var globalStatements = syntaxTrees.SelectMany(st => st.Root.Members)
                                               .OfType<GlobalStatementSyntax>();
 
@@ -228,19 +228,19 @@ namespace Vivian.CodeAnalysis.Binding
                                     structBodies.ToImmutable());
         }
         
-        private void BindStructDeclaration(ClassDeclarationSyntax syntax)
+        private void BindClassDeclaration(ClassDeclarationSyntax syntax)
         {
             // Peek into the class body and generate a constructor based on all writeable members
-            var members = syntax.Body.Statements.OfType<VariableDeclarationSyntax>();
+            var variableMembers = syntax.Body.Statements.OfType<VariableDeclarationSyntax>();
+            var functionsMembers = syntax.Body.Statements.OfType<FunctionDeclarationSyntax>();
 
             // TODO: "constructor Class()" // implement actual constructors for more control
             var ctorParameters = ImmutableArray.CreateBuilder<ParameterSymbol>();
             var boundMembers = ImmutableArray.CreateBuilder<VariableSymbol>();
 
-            foreach (var varDeclarationSyntax in members)
+            foreach (var varDeclarationSyntax in variableMembers)
             {
                 var declaration = BindVariableDeclaration(varDeclarationSyntax);
-
                 if (declaration is BoundVariableDeclaration d)
                 {
                     boundMembers.Add(d.Variable);
@@ -266,11 +266,15 @@ namespace Vivian.CodeAnalysis.Binding
                 }
 
                 var parameter = new ParameterSymbol(parameterName, parameterType!, ctorParameters.Count);
-
                 ctorParameters.Add(parameter);
             }
 
-            string classIdentifier = syntax.Identifier.Text;
+            foreach (var funcDeclaration in functionsMembers)
+            {
+                BindFunctionDeclaration(funcDeclaration);
+            }
+
+            var classIdentifier = syntax.Identifier.Text;
             var @class = new ClassSymbol(classIdentifier, ctorParameters.ToImmutable(), boundMembers.ToImmutable(), syntax);
 
             if (classIdentifier != null! && !_scope.TryDeclareClass(@class))
@@ -434,7 +438,7 @@ namespace Vivian.CodeAnalysis.Binding
                 case SyntaxKind.BlockStatement:
                     return BindBlockStatement((BlockStatementSyntax) syntax);
                 case SyntaxKind.VariableDeclaration:
-                    return BindVariableDeclaration((VariableDeclarationSyntax) syntax);
+                    return BindVariableDeclaration((VariableDeclarationSyntax) syntax); 
                 case SyntaxKind.IfStatement:
                     return BindIfStatement((IfStatementSyntax) syntax);
                 case SyntaxKind.WhileStatement:
@@ -452,7 +456,7 @@ namespace Vivian.CodeAnalysis.Binding
                 case SyntaxKind.ExpressionStatement:
                     return BindExpressionStatement((ExpressionStatementSyntax) syntax);
                 default:
-                    throw new Exception($"Unexpected syntax {syntax.Kind}");
+                    throw new InternalCompilerException($"Unexpected syntax: {syntax.Kind}");
             }
         }
 
@@ -807,7 +811,7 @@ namespace Vivian.CodeAnalysis.Binding
                 case SyntaxKind.MemberAccessExpression:
                     return BindMemberAccessExpression((MemberAccessExpressionSyntax) syntax);
                 default:
-                    throw new Exception($"Unexpected syntax {syntax.Kind}");
+                    throw new InternalCompilerException($"Unexpected syntax: {syntax.Kind}");
             }
         }
 
@@ -1298,7 +1302,7 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 else
                 {
-                    throw new Exception($"Unexpected expression type '{variable.Kind}'.");
+                    throw new InternalCompilerException($"Unexpected expression type '{variable.Kind}'.");
                 }
 
                 return null;

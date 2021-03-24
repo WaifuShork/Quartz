@@ -4,7 +4,7 @@
         <Nullable>Enable</Nullable>
         <LangVersion>Preview</LangVersion>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>

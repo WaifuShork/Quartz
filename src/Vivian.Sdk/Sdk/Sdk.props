@@ -1,0 +1,12 @@
+﻿<Project>
+
+    <!-- Indicate whether `Vivian.Sdk` is being used. -->
+    <PropertyGroup>
+        <UsingVivianSdk>true</UsingVivianSdk>
+    </PropertyGroup>
+
+    <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props"/>
+
+    <Import Project="..\Core\Vivian.Core.props" Condition="'$(MSBuildProjectExtension)' == '.vivproj'"/>
+
+</Project> 

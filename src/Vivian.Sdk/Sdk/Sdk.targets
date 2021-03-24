@@ -1,0 +1,9 @@
+﻿<Project>
+
+    <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.vivproj'">
+        <LanguageTargets>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..\Core\Vivian.Core.targets'))</LanguageTargets>
+    </PropertyGroup>
+
+    <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets"/>
+
+</Project> 

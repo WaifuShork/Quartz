@@ -1,0 +1,19 @@
+﻿<Project>
+
+    <Import Project="$(MSBuildToolsPath)\Microsoft.Managed.Before.targets" Condition="Exists('$(MSBuildToolsPath)\Microsoft.Managed.Before.targets')"/>
+
+    <ImportGroup Condition="'$(IsCrossTargetingBuild)' == 'true'">
+        <Import Project="$(MSBuildToolsPath)\Microsoft.Common.CrossTargeting.targets"/>
+        <Import Project="Vivian.OuterBuild.targets"/>
+    </ImportGroup>
+
+    <Import Project="Vivian.ProjectSystem.targets"/>
+
+    <ImportGroup Condition="'$(IsCrossTargetingBuild)' != 'true'">
+        <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets"/>
+        <Import Project="Vivian.CoreCompile.targets"/>
+    </ImportGroup>
+
+    <Import Project="$(MSBuildToolsPath)\Microsoft.Managed.After.targets" Condition="Exists('$(MSBuildToolsPath)\Microsoft.Managed.After.targets')"/>
+
+</Project> 

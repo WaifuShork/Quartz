@@ -70,7 +70,7 @@
         ToKeyword,
         TrueKeyword,
         VarKeyword,
-        WhileKeyword,
+        WhileKeyword,        
 
         // Nodes
         CompilationUnit,
@@ -104,6 +104,6 @@
         NameExpression,
         ParenthesizedExpression,
         UnaryExpression,
-        NamespaceDeclaration
+        NamespaceDeclaration,
     }
 }

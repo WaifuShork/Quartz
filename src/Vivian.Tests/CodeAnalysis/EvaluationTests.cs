@@ -24,7 +24,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                'x' is already declared.
+                VE0020: 'x' is already declared.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -38,7 +38,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Division by zero.
+                VE0002: Division by zero.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -52,8 +52,8 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
-                Unexpected token <EndOfFileToken>, expected <CloseBraceToken>.
+                VE0008: Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
+                VE0008: Unexpected token <EndOfFileToken>, expected <CloseBraceToken>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -63,11 +63,11 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_InvokeFunctionArguments_Missing()
         {
             const string? text = @"
-                print([)]
+                WriteLine([)]
             ";
 
             const string? diagnostics = @"
-                Function 'print' requires 1 arguments but was given 0.
+                VE0026: Function 'WriteLine' requires 1 arguments but was given 0.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -77,11 +77,11 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_InvokeFunctionArguments_Exceeding()
         {
             const string? text = @"
-                print(""Hello""[, "" "", "" world!""])
+                WriteLine(""Hello""[, "" "", "" world!""])
             ";
 
             const string? diagnostics = @"
-                Function 'print' requires 1 arguments but was given 3.
+                VE0026: Function 'WriteLine' requires 1 arguments but was given 3.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -91,38 +91,16 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_InvokeFunctionArguments_NoInfiniteLoop()
         {
             const string? text = @"
-                print(""Hi""=[)]
+                WriteLine(""Hi""=[)]
             ";
 
             const string? diagnostics = @"
-                Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
+                VE0008: Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
             ";
 
             AssertDiagnostics(text, diagnostics);
         }
-
-        [Fact]
-        public void Evaluator_FunctionParameters_NoInfiniteLoop()
-        {
-            const string? text = @"
-                procedure hi(name: string[[[=]]][[)]] => string
-                {
-                    print(""Hi "" + name + ""!"" )
-                }[]
-            ";
-
-            const string? diagnostics = @"
-                Unexpected token <EqualsToken>, expected <CloseParenthesisToken>.
-                Unexpected token <EqualsToken>, expected <OpenBraceToken>.
-                Unexpected token <EqualsToken>, expected <IdentifierToken>.
-                Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
-                Unexpected token <CloseParenthesisToken>, expected <IdentifierToken>.
-                Unexpected token <EndOfFileToken>, expected <CloseBraceToken>.
-            ";
-
-            AssertDiagnostics(text, diagnostics);
-        }
-
+        
         [Fact]
         public void Evaluator_FunctionReturn_Missing()
         {
@@ -133,7 +111,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Not all code paths return a value.
+                VE0029: Not all code paths return a value.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -151,7 +129,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type <int32> to <bool>.
+                VE0018: Cannot convert type <int32> to <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -169,7 +147,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type <int32> to <bool>.
+                VE0018: Cannot convert type <int32> to <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -188,7 +166,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type <int32> to <bool>.
+                VE0018: Cannot convert type <int32> to <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -206,7 +184,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type <bool> to <int32>.
+                VE0018: Cannot convert type <bool> to <int32>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -224,7 +202,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type <bool> to <int32>.
+                VE0018: Cannot convert type <bool> to <int32>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -236,7 +214,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"[x] * 10";
 
             const string? diagnostics = @"
-                Variable 'x' doesn't exist.
+                VE0014: Variable 'x' doesn't exist.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -248,7 +226,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"1 + []";
 
             const string? diagnostics = @"
-                Unexpected token <EndOfFileToken>, expected <IdentifierToken>.
+                VE0008: Unexpected token <EndOfFileToken>, expected <IdentifierToken>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -260,7 +238,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"[+]true";
 
             const string? diagnostics = @"
-                Unary operator '+' is not defined for type <bool>.
+                VE0010: Unary operator '+' is not defined for type <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -272,7 +250,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"10 [*] false";
 
             const string? diagnostics = @"
-                Binary operator '*' is not defined for types <int32> and <bool>.
+                VE0011: Binary operator '*' is not defined for types <int32> and <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -285,7 +263,7 @@ namespace Vivian.Tests.CodeAnalysis
                          x [+=] false";
 
             const string? diagnostics = @"
-                Binary operator '+=' is not defined for types <int32> and <bool>.
+                VE0011: Binary operator '+=' is not defined for types <int32> and <bool>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -297,7 +275,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"[x] = 10";
 
             const string? diagnostics = @"
-                Variable 'x' doesn't exist.
+                VE0014: Variable 'x' doesn't exist.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -309,7 +287,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"[x] += 10";
 
             const string? diagnostics = @"
-                Variable 'x' doesn't exist.
+                VE0014: Variable 'x' doesn't exist.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -318,10 +296,10 @@ namespace Vivian.Tests.CodeAnalysis
         [Fact]
         public void Evaluator_AssignmentExpression_Reports_NotAVariable()
         {
-            const string? text = @"[print] = 42";
+            const string? text = @"[WriteLine] = 42";
 
             const string? diagnostics = @"
-                'print' is not a variable.
+                VE0015: 'WriteLine' is not a variable.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -338,7 +316,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Variable 'x' is read-only and cannot be assigned to.
+                VE0021: Variable 'x' is read-only and cannot be assigned to.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -355,7 +333,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Variable 'x' is read-only and cannot be assigned to.
+                VE0021: Variable 'x' is read-only and cannot be assigned to.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -372,7 +350,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type <bool> to <int32>.
+                VE0018: Cannot convert type <bool> to <int32>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -384,7 +362,7 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"[foo](42)";
 
             const string? diagnostics = @"
-                Function 'foo' doesn't exist.
+                VE0022: Function 'foo' doesn't exist.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -401,7 +379,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                'foo' is not a function.
+                VE0023: 'foo' is not a function.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -418,7 +396,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                'print' is not a function.
+                VE0023: 'print' is not a function.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -435,7 +413,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Since the function 'test' does not return a value the 'return' keyword cannot be followed by an expression.
+                VE0030: Since the function 'test' does not return a value the 'return' keyword cannot be followed by an expression.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -452,7 +430,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                An expression of type <int32> is expected.
+                VE0032: An expression of type <int32> is expected.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -470,7 +448,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Not all code paths return a value.
+                VE0029: Not all code paths return a value.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -489,7 +467,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Expression must have a value.
+                VE0027: Expression must have a value.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -499,22 +477,22 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_IfStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                procedure test() => bool
+                procedure test() => void
                 {
                     const x = 4 * 3
                     if(x > 12)
                     {
-                        [print](""x"")
+                        [WriteLine](""x"")
                     }
                     else
                     {
-                        print(""x"")
+                        WriteLine(""x"")
                     }
                 }
             ";
 
             const string? diagnostics = @"
-                Unreachable code detected.
+                VE0045: Unreachable code detected.
             ";
             AssertDiagnostics(text, diagnostics);
         }
@@ -523,7 +501,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_ElseStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                procedure test() => bool
+                procedure test() => int32
                 {
                     if(true)
                     {
@@ -537,7 +515,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Unreachable code detected.
+                VE0045: Unreachable code detected.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -547,7 +525,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_WhileStatement_Reports_NotReachableCode_Warning()
         {
             const string? text = @"
-                procedure test() => bool
+                procedure test() => void 
                 {
                     while(false)
                     {
@@ -557,7 +535,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Unreachable code detected.
+                VE0045: Unreachable code detected.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -569,7 +547,7 @@ namespace Vivian.Tests.CodeAnalysis
         public void Evaluator_Invalid_Break_Or_Continue(string text, string keyword)
         {
             var diagnostics = $@"
-                The keyword '{keyword}' can only be used inside of loops.
+                VE0028: The keyword '{keyword}' can only be used inside of loops.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -586,7 +564,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                A parameter with the name 'a' already exists.
+                VE0012: A parameter with the name 'a' already exists.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -603,7 +581,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Unexpected token <OpenParenthesisToken>, expected <IdentifierToken>.
+                VE0008: Unexpected token <OpenParenthesisToken>, expected <IdentifierToken>.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -622,7 +600,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Cannot convert type <string> to <int32>. An explicit conversion exists (are you missing a cast?)
+                VE0019: Cannot convert type <string> to <int32>. An explicit conversion exists (are you missing a cast?)
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -638,7 +616,7 @@ namespace Vivian.Tests.CodeAnalysis
             ";
 
             const string? diagnostics = @"
-                Type 'invalidtype' doesn't exist.
+               VE0017: Type 'invalidtype' doesn't exist.
             ";
 
             AssertDiagnostics(text, diagnostics);
@@ -650,13 +628,13 @@ namespace Vivian.Tests.CodeAnalysis
             const string? text = @"
                 var p = 0
 
-                print([p].[[length]])
+                WriteLine([p].[[length]])
             ";
 
             const string? diagnostics = @"
-                'p' is not a valid class.
-                'length' is not a function.
-                Cannot access members of 'p'. Only members of classes can be accessed using the '.' operator.
+                VE0016: 'p' is not a valid class.
+                VE0023: 'length' is not a function.
+                VE0039: Cannot access members of 'p'. Only members of classes can be accessed using the '.' operator.
             ";
 
             AssertDiagnostics(text, diagnostics);

@@ -1,0 +1,8 @@
+D:\Vivian\Vivian\src\Vivian.Sdk\bin\Debug\Vivian.Build.Tasks.deps.json
+D:\Vivian\Vivian\src\Vivian.Sdk\bin\Debug\Vivian.Build.Tasks.dll
+D:\Vivian\Vivian\src\Vivian.Sdk\bin\Debug\Vivian.Build.Tasks.pdb
+D:\Vivian\Vivian\src\Vivian.Sdk\obj\Debug\Vivian.Sdk.AssemblyInfoInputs.cache
+D:\Vivian\Vivian\src\Vivian.Sdk\obj\Debug\Vivian.Sdk.AssemblyInfo.cs
+D:\Vivian\Vivian\src\Vivian.Sdk\obj\Debug\Vivian.Sdk.csproj.CoreCompileInputs.cache
+D:\Vivian\Vivian\src\Vivian.Sdk\obj\Debug\Vivian.Build.Tasks.dll
+D:\Vivian\Vivian\src\Vivian.Sdk\obj\Debug\Vivian.Build.Tasks.pdb
