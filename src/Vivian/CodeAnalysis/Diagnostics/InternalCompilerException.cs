@@ -5,10 +5,7 @@ namespace Vivian.CodeAnalysis
 {
     internal class InternalCompilerException : Exception
     {
-        public InternalCompilerException(string message)
-        {
-            Console.Error.WriteLine(message);
-            // throw new Exception(message);
-        }
+        public InternalCompilerException(string message) : base(message)
+        { }
     }
 }

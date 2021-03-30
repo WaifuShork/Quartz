@@ -120,7 +120,7 @@ namespace Vivian.CodeAnalysis.Emit
                 _knownTypes.Add(typeSymbol, typeReference);
             }
 
-            TypeReference ResolveType(string? ev2Name, string metadataName)
+            TypeReference ResolveType(string? vivianName, string metadataName)
             {
                 var foundTypes = assemblies.SelectMany(a => a.Modules)
                                            .SelectMany(m => m.Types)
@@ -132,11 +132,11 @@ namespace Vivian.CodeAnalysis.Emit
                 }
                 else if (foundTypes.Length == 0)
                 {
-                    _diagnostics.ReportRequiredTypeNotFound(ev2Name, metadataName);
+                    _diagnostics.ReportRequiredTypeNotFound(vivianName, metadataName);
                 }
                 else
                 {
-                    _diagnostics.ReportRequiredTypeAmbiguous(ev2Name, metadataName, foundTypes);
+                    _diagnostics.ReportRequiredTypeAmbiguous(vivianName, metadataName, foundTypes);
                 }
 
                 return null!;

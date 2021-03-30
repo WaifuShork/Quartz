@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Vivian.ConfigurationParser\Vivian.ConfigurationParser.csproj" />
+      <ProjectReference Include="..\Vivian.Tools\Vivian.Tools.csproj" />
       <ProjectReference Include="..\Vivian\Vivian.csproj" />
     </ItemGroup>
 
