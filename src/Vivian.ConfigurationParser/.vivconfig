@@ -1,0 +1,15 @@
+﻿{
+  "compilerOptions": {
+    "output": "bin/Debug/Program.exe"
+  },
+  
+  "includes": [
+    "System.Runtime.dll",
+    "System.Runtime.Extensions.dll",
+    "System.Console.dll"
+  ],
+  "references": [
+    "Program.viv",
+    "Foo.viv"
+  ]
+}

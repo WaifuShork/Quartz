@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vivian.CodeAnalysis
+namespace Vivian.Diagnostics
 {
     public class Position : IComparable
     {

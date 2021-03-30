@@ -54,6 +54,7 @@ namespace Vivian.IO
             writer.WriteLine($"Build {(success ? "Succeeded" : "Failed" )}.");
             writer.WriteLine($"{warnings,5} Warning(s)");
             writer.WriteLine($"{errors,5} Error(s)");
+            writer.ResetColor();
         }
 
         public static void WriteKeyword(this TextWriter writer, SyntaxKind kind)
@@ -119,71 +120,59 @@ namespace Vivian.IO
             writer.ResetColor();
         }
 
-        public static void WriteDiagnostics(this TextWriter writer, IEnumerable<IDiagnostic> diagnostics)
+        public static void WriteDiagnostics(this TextWriter writer, IEnumerable<Diagnostic> diagnostics)
         {
-            var enumerable = diagnostics.ToList();
-            
-            foreach (var diagnostic in enumerable.Where(d => d.DiagnosticLocation.Uri == null))
+            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text == null))
             {
                 var messageColor = diagnostic.IsWarning ? ConsoleColor.DarkYellow : ConsoleColor.DarkRed;
                 writer.SetForeground(messageColor);
                 writer.WriteLine(diagnostic.Message);
                 writer.ResetColor();
             }
-
-            foreach (var diagnostic in enumerable.Where(d => d.DiagnosticLocation.Uri != null)
-                                                 .OrderBy(d => d.DiagnosticLocation.Uri.AbsolutePath)
-                                                 .ThenBy(d => d.DiagnosticLocation.Range.Start)
-                                                 .ThenBy(d => d.DiagnosticLocation.Range.End))
+ 
+            foreach (var diagnostic in diagnostics.Where(d => d.Location.Text != null)
+                                                  .OrderBy(d => d.Location.FileName)
+                                                  .ThenBy(d => d.Location.Span.Start)
+                                                  .ThenBy(d => d.Location.Span.Length))
             {
-                var text = diagnostic.ContextSourceSnippet;
-                var fileName = diagnostic.DiagnosticLocation.Uri.LocalPath;
-                var startLine = diagnostic.DiagnosticLocation.Range.Start.Line;
-                var startCharacter = diagnostic.DiagnosticLocation.Range.Start.Character;
-                var endLine = diagnostic.DiagnosticLocation.Range.End.Line;
-                var endCharacter = diagnostic.DiagnosticLocation.Range.End.Character;
-
+                var text = diagnostic.Location.Text;
+                var fileName = diagnostic.Location.FileName;
+                var startLine = diagnostic.Location.StartLine + 1;
+                var startCharacter = diagnostic.Location.StartCharacter + 1;
+                var endLine = diagnostic.Location.EndLine + 1;
+                var endCharacter = diagnostic.Location.EndCharacter + 1;
+ 
+                var span = diagnostic.Location.Span;
+                var lineIndex = text.GetLineIndex(span.Start);
+                var line = text.Lines[lineIndex];
+ 
                 writer.WriteLine();
-
+ 
                 var messageColor = diagnostic.IsWarning ? ConsoleColor.DarkYellow : ConsoleColor.DarkRed;
                 writer.SetForeground(messageColor);
                 writer.Write($"{fileName}({startLine},{startCharacter},{endLine},{endCharacter}): ");
                 writer.WriteLine(diagnostic);
                 writer.ResetColor();
-
-                if (text != null) 
-                {
-                    var lines = text.Split('\n');
-                    string prefix;
-                    string error;
-                    string suffix;
-
-                    // Simple case, there is just 1 line
-                    if (lines.Length == 1) 
-                    {
-                        prefix = lines[0][0..diagnostic.DiagnosticLocation.Range.Start.Character];
-                        suffix = lines[0][diagnostic.DiagnosticLocation.Range.End.Character..^0];
-                        error = lines[0][diagnostic.DiagnosticLocation.Range.Start.Character..diagnostic.DiagnosticLocation.Range.End.Character];
-                    }
-                    else 
-                    {
-                        prefix = lines[0][0..diagnostic.DiagnosticLocation.Range.Start.Character];
-                        suffix = lines[^1][diagnostic.DiagnosticLocation.Range.End.Character..^0];
-                        error = diagnostic.TargetSourceSnippet ?? string.Empty;
-                    }
-
-                    writer.Write("    ");
-                    writer.Write(prefix);
-                    writer.SetForeground(messageColor);
-                    writer.Write(error);
-                    writer.ResetColor();
-
-                    writer.Write(suffix);
-
-                    writer.WriteLine();
-                }
+ 
+                var prefixSpan = TextSpan.FromBounds(line.Start, span.Start);
+                var suffixSpan = TextSpan.FromBounds(span.End, line.End);
+ 
+                var prefix = text.ToString(prefixSpan);
+                var error = text.ToString(span);
+                var suffix = text.ToString(suffixSpan);
+ 
+                writer.Write("    ");
+                writer.Write(prefix);
+ 
+                writer.SetForeground(ConsoleColor.DarkRed);
+                writer.Write(error);
+                writer.ResetColor();
+ 
+                writer.Write(suffix);
+ 
+                writer.WriteLine();
             }
-
+ 
             writer.WriteLine();
         }
     }

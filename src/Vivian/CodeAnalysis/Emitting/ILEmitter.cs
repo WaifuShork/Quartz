@@ -64,11 +64,13 @@ namespace Vivian.CodeAnalysis.Emit
         private readonly TypeReference _randomReference;
         private readonly MethodReference _randomCtorReference;
         private readonly MethodReference _randomNextReference;
+        
         private readonly AssemblyDefinition _assemblyDefinition;
         
         private readonly TypeDefinition _typeDefinition;
         private FieldDefinition? _randomFieldDefinition;
-
+        
+        
         // TODO: This constructor does too much. Resolution should be factored out.
         private ILEmitter(string moduleName, string[] references)
         {
@@ -108,6 +110,7 @@ namespace Vivian.CodeAnalysis.Emit
             };
 
             var assemblyName = new AssemblyNameDefinition(moduleName, new Version(1, 0));
+            
             _assemblyDefinition = AssemblyDefinition.CreateAssembly(assemblyName, moduleName, ModuleKind.Console);
             _knownTypes = new Dictionary<TypeSymbol, TypeReference>();
 
@@ -197,8 +200,7 @@ namespace Vivian.CodeAnalysis.Emit
 
             _objectCtor = ResolveMethod("System.Object", ".ctor", Array.Empty<string>());
             _objectEqualsReference = ResolveMethod("System.Object", "Equals", new [] { "System.Object", "System.Object" });
-            
-            
+
             _consoleReadLineReference = ResolveMethod("System.Console", "ReadLine", Array.Empty<string>());
             _consoleReadKeyReference = ResolveMethod("System.Console", "ReadKey", Array.Empty<string>());
             

@@ -101,7 +101,7 @@ namespace Vivian.CompilerService
             {
                 if (tree.Diagnostics.Length > 0)
                 {
-                    _host.PublishDiagnostics(tree.Diagnostics, cancellationToken);
+                     _host.PublishDiagnostics(tree.Diagnostics, cancellationToken);
                 }
             }
 

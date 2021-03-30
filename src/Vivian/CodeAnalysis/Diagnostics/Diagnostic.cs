@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using Vivian.CodeAnalysis.Text;
+using Vivian.Diagnostics;
 
 namespace Vivian.CodeAnalysis
 {
-    public sealed class Diagnostic : IDiagnostic
+    public class Diagnostic
     {
         private DiagnosticLocation? _diagnosticLocation;
 
@@ -21,7 +22,7 @@ namespace Vivian.CodeAnalysis
         public string Message { get; }
         public bool IsWarning { get; }
 
-        public DiagnosticLocation DiagnosticLocation 
+        /*public DiagnosticLocation DiagnosticLocation 
         {
             get 
             {
@@ -43,9 +44,9 @@ namespace Vivian.CodeAnalysis
 
                 return _diagnosticLocation;
             }
-        }
+        }*/
 
-        public string? ContextSourceSnippet 
+        /*public string? ContextSourceSnippet 
         {
             get 
             {
@@ -54,7 +55,7 @@ namespace Vivian.CodeAnalysis
 
                 return Location.Text.ToString(start, end - start);
             }
-        }
+        }*/
         
         public string? TargetSourceSnippet=>Location.Text.ToString(Location.Span.Start, Location.Span.End - Location.Span.Start);
 

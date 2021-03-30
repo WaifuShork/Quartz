@@ -41,3 +41,4 @@ D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.AssemblyInfo.cs
 D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csproj.CoreCompileInputs.cache
 D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.dll
 D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\ref\Vivian.Host.dll
+D:\Vivian\Vivian\src\Vivian.Host\obj\Debug\Vivian.Host.csprojAssemblyReference.cache

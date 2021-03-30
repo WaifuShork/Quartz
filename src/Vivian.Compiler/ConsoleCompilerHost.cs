@@ -16,9 +16,9 @@ namespace VivianCompiler
 
         public void Dispose() { }
         
-        public void PublishDiagnostics(IEnumerable<IDiagnostic> diag, CancellationToken cancellationToken)
+        public void PublishDiagnostics(IEnumerable<Diagnostic> diag, CancellationToken cancellationToken)
         {
-            var diagnostics = diag as IDiagnostic[] ?? diag.ToArray();
+            var diagnostics = diag as Diagnostic[] ?? diag.ToArray();
             Errors += diagnostics.Count(d => d.IsError);
             Warnings += diagnostics.Count(d => d.IsWarning);
             

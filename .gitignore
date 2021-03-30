@@ -28,3 +28,8 @@ src/Vivian.Tests/.VSCodeCounter
 src/Vivian.Sdk/bin
 src/Vivian.Sdk/obj
 src/Vivian.Sdk/.VSCodeCounter
+
+# Vivian Sdk
+src/Vivian.ConfigurationParser/bin
+src/Vivian.ConfigurationParser/obj
+src/Vivian.ConfigurationParser/.VSCodeCounter

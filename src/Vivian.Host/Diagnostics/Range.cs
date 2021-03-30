@@ -1,4 +1,4 @@
-﻿namespace Vivian.CodeAnalysis
+﻿namespace Vivian.Diagnostics
 {
     public class Range
     {

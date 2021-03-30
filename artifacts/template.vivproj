@@ -1,0 +1,20 @@
+<Project>
+    <Target Name="CreateManifestResourceNames"/>
+    
+    <Target Name="CoreCompile" DependsOnTargets="$(CoreCompileDependsOn)"/>
+    <ItemGroup> 
+        <ReferencePath Remove="@(ReferencePath)"
+                       Condition="'%(FileName)' != 'System.Console' AND
+                                  '%(FileName)' != 'System.Runtime' AND
+                                  '%(FileName)' != 'System.Runtime.Extensions' AND
+                                  '%(FileName)' != 'System.IO.FileSystem'" />
+    </ItemGroup>
+    
+    <PropertyGroup>
+        <VivianCompilerArgs>@(Compile-> '"%(Identity)"', ' ')</VivianCompilerArgs>
+        <VivianCompilerArgs>$(VivianCompilerArgs) /o </VivianCompilerArgs>
+        
+    </PropertyGroup>
+    
+    
+</Project>
