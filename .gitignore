@@ -4,6 +4,10 @@
 /src/.idea
 src/Vivian.sln.DotSettings.user
 
+artifacts
+src/Vivian.Installer/artifacts
+src/Vivian.Installer/vivian
+
 # Vivian
 src/Vivian/bin
 src/Vivian/obj
@@ -14,22 +18,17 @@ src/Vivian.Compiler/bin
 src/Vivian.Compiler/obj
 src/Vivian.Compiler/.VSCodeCounter
 
-# Vivian Host
-src/Vivian.Host/bin
-src/Vivian.Host/obj
-src/Vivian.Host/.VSCodeCounter
+# Vivian Tools
+src/Vivian.Tools/bin
+src/Vivian.Tools/obj
+src/Vivian.Tools/.VSCodeCounter
 
 # Vivian Tests
 src/Vivian.Tests/bin
 src/Vivian.Tests/obj
 src/Vivian.Tests/.VSCodeCounter
 
-# Vivian Sdk
-src/Vivian.Sdk/bin
-src/Vivian.Sdk/obj
-src/Vivian.Sdk/.VSCodeCounter
-
-# Vivian Sdk
-src/Vivian.ConfigurationParser/bin
-src/Vivian.ConfigurationParser/obj
-src/Vivian.ConfigurationParser/.VSCodeCounter
+# Vivian Installer
+src/Vivian.Installer/bin
+src/Vivian.Installer/obj
+src/Vivian.Installer/.VSCodeCounter

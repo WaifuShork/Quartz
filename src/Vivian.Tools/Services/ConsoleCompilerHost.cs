@@ -10,8 +10,8 @@ namespace Vivian.Tools.Services
 {
     internal class ConsoleCompilerHost : IHost
     {
-        public int Errors = 0;
-        public int Warnings = 0;
+        public int Errors;
+        public int Warnings;
 
         public void Dispose() { }
         

@@ -56,27 +56,13 @@
         "dependencies": {
           "Microsoft.NET.Compilers.ToolSet": "3.9.0-3.final",
           "Mono.Cecil": "0.11.3",
-          "System.Collections.Immutable": "5.0.0",
-          "Vivian.Host": "1.0.0"
+          "System.Collections.Immutable": "5.0.0"
         },
         "compile": {
           "bin/placeholder/Vivian.dll": {}
         },
         "runtime": {
           "bin/placeholder/Vivian.dll": {}
-        }
-      },
-      "Vivian.Host/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "Microsoft.NET.Compilers.ToolSet": "3.9.0-3.final"
-        },
-        "compile": {
-          "bin/placeholder/Vivian.Host.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Vivian.Host.dll": {}
         }
       }
     }
@@ -376,11 +362,6 @@
       "type": "project",
       "path": "../Vivian/Vivian.csproj",
       "msbuildProject": "../Vivian/Vivian.csproj"
-    },
-    "Vivian.Host/1.0.0": {
-      "type": "project",
-      "path": "../Vivian.Host/Vivian.Host.csproj",
-      "msbuildProject": "../Vivian.Host/Vivian.Host.csproj"
     }
   },
   "projectFileDependencyGroups": {

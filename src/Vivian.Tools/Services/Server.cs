@@ -12,8 +12,8 @@ namespace Vivian.Tools.Services
     public class Server
     {
         private readonly IHost _host;
-        private bool _shutDownRequested = false;
-        private bool _isExiting = false;
+        private bool _shutDownRequested;
+        private bool _isExiting;
 
         public Server(IHost host)
         {
@@ -40,8 +40,10 @@ namespace Vivian.Tools.Services
 
                 var program = Compilation.Create(tree);
                 cancellationToken.ThrowIfCancellationRequested();
+                
                 var diagnostics = program.Validate();
                 cancellationToken.ThrowIfCancellationRequested();
+                
                 if (diagnostics.Length > 0)
                 {
                     _host.PublishDiagnostics(diagnostics, cancellationToken);

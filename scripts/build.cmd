@@ -8,8 +8,8 @@ dotnet build "..\src\Vivian.sln" --nologo || exit /b
 
 dotnet build "..\src\Vivian\Vivian.csproj" --nologo || exit /b 
 dotnet build "..\src\Vivian.Compiler\Vivian.Compiler.csproj" --nologo || exit /b 
-dotnet build "..\src\Vivian.Host\Vivian.Host.csproj" --nologo || exit /b 
-dotnet build "..\src\Vivian.Sdk\Vivian.Sdk.csproj" --nologo || exit /b 
+dotnet build "..\src\Vivian.Tools\Vivian.Tools.csproj" --nologo || exit /b 
+dotnet build "..\src\Vivian.Installer\Vivian.Installer.csproj" --nologo || exit /b 
 
 REM Test
 dotnet test "..\src\Vivian.Tests" --nologo --no-build

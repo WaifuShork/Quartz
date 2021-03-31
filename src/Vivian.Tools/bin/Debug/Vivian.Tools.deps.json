@@ -59,19 +59,10 @@
         "dependencies": {
           "Microsoft.Net.Compilers.Toolset": "3.9.0-3.final",
           "Mono.Cecil": "0.11.3",
-          "System.Collections.Immutable": "5.0.0",
-          "Vivian.Host": "1.0.0"
+          "System.Collections.Immutable": "5.0.0"
         },
         "runtime": {
           "Vivian.dll": {}
-        }
-      },
-      "Vivian.Host/1.0.0": {
-        "dependencies": {
-          "Microsoft.Net.Compilers.Toolset": "3.9.0-3.final"
-        },
-        "runtime": {
-          "Vivian.Host.dll": {}
         }
       }
     }
@@ -118,11 +109,6 @@
       "hashPath": "system.collections.immutable.5.0.0.nupkg.sha512"
     },
     "Vivian/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Vivian.Host/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

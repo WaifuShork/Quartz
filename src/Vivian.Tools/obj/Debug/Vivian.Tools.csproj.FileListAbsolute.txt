@@ -1,9 +1,7 @@
 D:\Vivian\Vivian\src\Vivian.Tools\bin\Debug\Vivian.Tools.deps.json
 D:\Vivian\Vivian\src\Vivian.Tools\bin\Debug\Vivian.Tools.dll
 D:\Vivian\Vivian\src\Vivian.Tools\bin\Debug\ref\Vivian.Tools.dll
-D:\Vivian\Vivian\src\Vivian.Tools\bin\Debug\Vivian.Tools.pdb
 D:\Vivian\Vivian\src\Vivian.Tools\bin\Debug\Vivian.dll
-D:\Vivian\Vivian\src\Vivian.Tools\bin\Debug\Vivian.Host.dll
 D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\Vivian.Tools.csprojAssemblyReference.cache
 D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\Vivian.Tools.GeneratedMSBuildEditorConfig.editorconfig
 D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\Vivian.Tools.AssemblyInfoInputs.cache
@@ -12,4 +10,3 @@ D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\Vivian.Tools.csproj.CoreCompileInput
 D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\Vivian.Tools.csproj.CopyComplete
 D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\Vivian.Tools.dll
 D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\ref\Vivian.Tools.dll
-D:\Vivian\Vivian\src\Vivian.Tools\obj\Debug\Vivian.Tools.pdb

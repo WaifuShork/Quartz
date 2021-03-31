@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 using Mono.Options;
 
 using Vivian.IO;
@@ -15,7 +15,6 @@ namespace Vivian.Tools
     {
         private string _configPath;
         private string _projectName;
-        private string _projectPath;
         
         private bool _helpRequested;
         private OptionSet _options;
@@ -29,14 +28,15 @@ namespace Vivian.Tools
         private string _moduleName;
         private string _outputPath;
 
-        private bool _isCompilingProject;
+        private bool _isBuildingProject;
+        private bool _isRunningProject;
         private bool _isCreatingTemplate;
 
         public int RunVivianTools(string[] args)
         {
             ParseOptions(args);
 
-            if (_isCompilingProject)
+            if (_isBuildingProject)
             { 
                 CompileProgram();
                 return 0;
@@ -59,24 +59,21 @@ namespace Vivian.Tools
             {
                 "Usage: vivian [options]",
                 "Usage: vivian [config-path]",
-                {"c|compile=", "The {path} of the .vivconfig file", v =>
+                {"b|build=", "The {path} of the .vivconfig file", v =>
                 {
-                    _isCompilingProject = true;
+                    _isBuildingProject = true;
                     _configPath = v;
                 }},
-                {"n|new=", "Creates a new Vivian project with a {name} and {path}", (name, path) => 
+                {"r|run=", "The {path} of the .vivconfig file", v =>
+                {
+                    _isBuildingProject = true;
+                    _isRunningProject = true;
+                    _configPath = v;
+                }},
+                {"n|new=", "Creates a new Vivian project with a {name} and {path}", v => 
                 {
                     _isCreatingTemplate = true;
-                    _projectName = name;
-
-                    if (string.IsNullOrWhiteSpace(path))
-                    {
-                        _projectPath = name;
-                    }
-                    else
-                    {
-                        _projectPath = path;
-                    }
+                    _projectName = v;
                 }},
                 {"?|h|help", "Display help.", _ => _helpRequested = true}
             };
@@ -155,7 +152,6 @@ namespace Vivian.Tools
         private void CompileProgram()
         {
             ParseConfig();
-            
             var syntaxTrees = new List<SyntaxTree>();
             var hasErrors = false;
  
@@ -191,6 +187,12 @@ namespace Vivian.Tools
             compilerService.Initialize();
             compilerService.EmitBinary(syntaxTrees, _moduleName, _references, _outputPath);
 
+            if (_isRunningProject)
+            {
+                // run project
+                Console.Out.WriteLine("If you see this message then `vivian -run [project]` is not implemented yet");
+            }
+            
             compilerService.Shutdown();
             compilerService.Exit();
 
@@ -204,10 +206,17 @@ namespace Vivian.Tools
             {
                 CreateWindowsTemplate(projectName);
             }
-
-            if (OperatingSystem.IsLinux())
+            else if (OperatingSystem.IsLinux())
             {
                 CreateLinuxTemplate(projectName);
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                throw new NotImplementedException("MacOS is currently unsupported. Apologies!");
+            }
+            else
+            {
+                throw new Exception("Operating System not supported");
             }
         }
 
@@ -235,22 +244,20 @@ namespace Vivian.Tools
             if (Directory.Exists(projectName))
             {
                 // Build project structure
-                Directory.CreateDirectory(@$"{projectName}/modules");
-                Directory.CreateDirectory(@$"{projectName}/msbuild/config");
-                Directory.CreateDirectory(@$"{projectName}/out");
+                //Directory.CreateDirectory(@$"{projectName}/modules");
+                //Directory.CreateDirectory(@$"{projectName}/msbuild/config");
+                //Directory.CreateDirectory(@$"{projectName}/out");
+
+                if (!Directory.Exists(@"C:/Program Files/vivian"))
+                {
+                    Console.Error.WriteLine("Unable to locate vivian templates");
+                    return;
+                }
                 
-                File.Copy(@"C:/Program Files/vivian/template/.vivconfig", $"{projectName}/.vivconfig");
-                File.Copy(@"C:/Program Files/vivian/template/Main.viv", $"{projectName}/Program.viv");
-            }
-            
-            try
-            {
-                // Copy files from the dotnet 3.1 reference folder to pull
-                DirectoryCopy("C:/Program Files/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1", $"{projectName}/modules", false);
-            }
-            catch (DirectoryNotFoundException)
-            {
-                Console.Error.WriteLine("Unable to locate dependency modules. Please ensure you have the right version of dotnet SDK installed");
+                DirectoryExtensions.DirectoryCopy(@"C:/Program Files/vivian/templates/console", $@"{projectName}", true);
+                
+                //File.Copy(@"C:/Program Files/vivian/template/.vivconfig", $"{projectName}/.vivconfig");
+                //File.Copy(@"C:/Program Files/vivian/template/console/Main.viv", $"{projectName}/Program.viv");
             }
         }
         
@@ -282,6 +289,12 @@ namespace Vivian.Tools
                 Directory.CreateDirectory(@$"{projectName}/msbuild/config");
                 Directory.CreateDirectory(@$"{projectName}/out");
                 
+                if (!Directory.Exists(@"/usr/shared/vivian"))
+                {
+                    Console.Error.WriteLine("Unable to locate vivian templates");
+                    return;
+                }
+                
                 File.Copy(@"/usr/shared/vivian/template/.vivconfig", $"{projectName}/.vivconfig");
                 File.Copy(@"/usr/shared/vivian/template/Main.viv", $"{projectName}/Program.viv");
             }
@@ -289,7 +302,7 @@ namespace Vivian.Tools
             try
             {
                 // Copy files from the dotnet 3.1 reference folder to pull
-                DirectoryCopy("/usr/shared/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1", $"{projectName}/modules", false);
+                DirectoryExtensions.DirectoryCopy("/usr/shared/dotnet/packs/Microsoft.NETCore.App.Ref/3.1.0/ref/netcoreapp3.1", $"{projectName}/modules", false);
             }
             catch (DirectoryNotFoundException)
             {
@@ -297,39 +310,6 @@ namespace Vivian.Tools
             }
         }
         
-        private void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
-        {
-            // Get the subdirectories for the specified directory.
-            var directory = new DirectoryInfo(sourceDirName);
-
-            if (!directory.Exists)
-            {
-                throw new DirectoryNotFoundException($"Source directory does not exist or could not be found: {sourceDirName}");
-            }
-
-            var directories = directory.GetDirectories();
         
-            // If the destination directory doesn't exist, create it.       
-            Directory.CreateDirectory(destDirName);        
-
-            // Get the files in the directory and copy them to the new location.
-            var files = directory.GetFiles();
-
-            foreach (var file in files)
-            {
-                var tempPath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(tempPath, false);
-            }
-
-            // If copying subdirectories, copy them and their contents to new location.
-            if (copySubDirs)
-            {
-                foreach (var subDir in directories)
-                {
-                    var tempPath = Path.Combine(destDirName, subDir.Name);
-                    DirectoryCopy(subDir.FullName, tempPath, copySubDirs);
-                }
-            }
-        }
     }
 }

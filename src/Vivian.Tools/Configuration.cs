@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 #nullable disable
 namespace Vivian.Tools
 {
+    // .vivconfig file structure
     [JsonObjectAttribute]
     public class CompilerOptions
     {
