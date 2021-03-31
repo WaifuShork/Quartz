@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
+
 using Vivian.Tools;
 
 #nullable  disable
@@ -43,18 +43,20 @@ namespace Vivian.Installer
         // TODO: What happens if the user has insufficient permissions?
         private static void InstallVivianTools(string path)
         {
-            if (OperatingSystem.IsLinux())
+            var root = Path.GetPathRoot(Environment.SystemDirectory);
+            
+            if (OperatingSystem.IsWindows())
             {
                 if (string.IsNullOrWhiteSpace(path))
                 {
-                    path = @"C:\Program Files\vivian";
+                    path = @$"{root}Program Files\vivian";
                 }
             }
-            else if (OperatingSystem.IsWindows())
+            else if (OperatingSystem.IsLinux())
             {
                 if (string.IsNullOrWhiteSpace(path))
                 {
-                    path = @"\usr\shared\vivian";
+                    path = @$"\{root}shared\vivian";
                 }
             }
             else
@@ -65,13 +67,23 @@ namespace Vivian.Installer
             // Attempt to create the directory for both Windows and Linux. 
             try
             {
-                Directory.CreateDirectory(path);
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
                 
                 DirectoryExtensions.DirectoryCopy(@"vivian", @$"{path}", true);
 
                 if (_isAddingToPath)
                 {
-                    Environment.SetEnvironmentVariable("Path", @$"{path}");
+                    if (OperatingSystem.IsWindows())
+                    {
+                        Environment.SetEnvironmentVariable("Path", @$"{path}");
+                    }
+                    else if (OperatingSystem.IsLinux())
+                    {
+                        
+                    }
                 }
             }
             catch (UnauthorizedAccessException)

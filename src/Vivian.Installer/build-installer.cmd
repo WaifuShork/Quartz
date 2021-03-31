@@ -12,3 +12,4 @@ dotnet publish -p:PublishProfile=%name%
 
 move "artifacts\vivian\Vivian.Installer.exe" "artifacts\vivian\vivian-installer.exe"
 robocopy "vivian" "artifacts\vivian" /E
+robocopy "..\..\artifacts\vivian" "artifacts\vivian\vivian"
