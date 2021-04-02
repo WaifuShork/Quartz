@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8DKPp5KNb1p7iXFhj+wmxmsWE4ZO+hOayKX9M60S3Y9MkNpbW+iGGAUA2c+Hm5rFHUuo/w+hIWeSV/5Ybo9u4Q==",
+  "dgSpecHash": "MHlHlzwS28RrQpcHrk08J6S1ZDuoGnJePmyYcYswNYEvMynUJZnOKuwkm0aHrD9r19cgzR80i72xu8xHvU3peA==",
   "success": true,
   "projectFilePath": "D:\\Vivian\\Vivian\\src\\Vivian.Tools\\Vivian.Tools.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,10 @@
     "C:\\Users\\ashle\\.nuget\\packages\\mono.cecil\\0.11.3\\mono.cecil.0.11.3.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\mono.options\\6.6.0.161\\mono.options.6.6.0.161.nupkg.sha512",
     "C:\\Users\\ashle\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
-    "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512"
+    "C:\\Users\\ashle\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\5.0.3\\microsoft.netcore.app.runtime.win-x64.5.0.3.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\5.0.3\\microsoft.windowsdesktop.app.runtime.win-x64.5.0.3.nupkg.sha512",
+    "C:\\Users\\ashle\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\5.0.3\\microsoft.aspnetcore.app.runtime.win-x64.5.0.3.nupkg.sha512"
   ],
   "logs": []
 }

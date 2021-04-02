@@ -8,6 +8,8 @@
 #   - test
 #   - publish
 
+Import-Module BitsTransfer
+
 # <----------------->
 # Test project
 function Test-Vivian
@@ -57,6 +59,8 @@ function Set-Structure
     # Installer
     New-Item "..\artifacts\installer\win-x64\vivian" -ItemType Directory
     
+    
+   
     # Apparently I'm a dumbass because I can't take the whole directory without it being fucked
     Copy-Item "..\resources\installer\win-x64\ref_modules" -Destination "..\artifacts\installer\win-x64\vivian" -Recurse
     Copy-Item "..\resources\installer\win-x64\templates" -Destination "..\artifacts\installer\win-x64\vivian" -Recurse
@@ -116,7 +120,6 @@ function Set-Vivian64Compiler
 
 function Set-AddCompilerToInstallation
 {
-    # Lets try this again
     Copy-Item "..\artifacts\compiler\vivian\win-x64\clrcompression.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
     Copy-Item "..\artifacts\compiler\vivian\win-x64\clrjit.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
     Copy-Item "..\artifacts\compiler\vivian\win-x64\coreclr.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
@@ -124,3 +127,11 @@ function Set-AddCompilerToInstallation
     Copy-Item "..\artifacts\compiler\vivian\win-x64\vivian.exe" -Destination "..\artifacts\installer\win-x64\vivian\"
 
 } Set-AddCompilerToInstallation
+
+function Set-ZippedFolders
+{
+    Compress-Archive -LiteralPath "..\artifacts\compiler\vivian\win-x64" -DestinationPath "..\artifacts\compiler\vivian\win-x64"
+
+    Compress-Archive -LiteralPath "..\artifacts\installer\win-x64" -DestinationPath "..\artifacts\installer\win-x64"
+
+} Set-ZippedFolders
