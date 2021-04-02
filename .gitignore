@@ -3,10 +3,7 @@
 .vscode
 /src/.idea
 src/Vivian.sln.DotSettings.user
-
 artifacts
-src/Vivian.Installer/artifacts
-src/Vivian.Installer/vivian
 
 # Vivian
 src/Vivian/bin
@@ -22,6 +19,7 @@ src/Vivian.Compiler/.VSCodeCounter
 src/Vivian.Tools/bin
 src/Vivian.Tools/obj
 src/Vivian.Tools/.VSCodeCounter
+src/Vivian.Tools/TestResults
 
 # Vivian Tests
 src/Vivian.Tests/bin

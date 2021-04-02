@@ -5,6 +5,7 @@
         <LangVersion>9.0</LangVersion>
         <RootNamespace>Vivian</RootNamespace>
         <DebugType>embedded</DebugType>
+        <Configuration>Release</Configuration>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-
+using System.Text;
 using Vivian.Tools;
 
 #nullable  disable
@@ -8,23 +8,31 @@ namespace Vivian.Installer
 {
     internal class Program
     {
-        private static string _installationPath;
         private static bool _isAddingToPath;
         
         private static void Main()
         {
+            var unicode = new UnicodeEncoding();
             var logo = File.ReadAllText(@"vivian\logo.txt");
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Out.WriteLine(logo);
             Console.ResetColor();
 
-            Console.Out.Write("Please specify the path you'd like to install to: ");
-            _installationPath = Console.In.ReadLine();
-            
-            Console.Out.Write("Would you like to add Vivian Tools to PATH? ([Y]es / [N]o): ");
+            Console.Out.Write("Confirm installation of Vivian Tools? ([Y]es / [N]o): ");
             var input = Console.In.ReadLine();
 
-            if (input != null)
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                if (input.ToLowerInvariant() == "n" && input.ToLowerInvariant() != "y")
+                {
+                    Environment.Exit(0);
+                }
+            }
+            
+            Console.Out.Write("Would you like to add Vivian Tools to PATH? ([Y]es / [N]o): ");
+            input = Console.In.ReadLine();
+
+            if (!string.IsNullOrWhiteSpace(input))
             {
                 if (input.ToLowerInvariant() == "y")
                 {
@@ -36,13 +44,12 @@ namespace Vivian.Installer
                 }
             }
 
-            InstallVivianTools(_installationPath!);
+            InstallVivianTools();
         }
-        
-        // TODO: Does directory already exist? 
-        // TODO: What happens if the user has insufficient permissions?
-        private static void InstallVivianTools(string path)
+
+        private static void InstallVivianTools()
         {
+            var path = string.Empty;
             var root = Path.GetPathRoot(Environment.SystemDirectory);
             
             if (OperatingSystem.IsWindows())
@@ -78,7 +85,7 @@ namespace Vivian.Installer
                 {
                     if (OperatingSystem.IsWindows())
                     {
-                        Environment.SetEnvironmentVariable("Path", @$"{path}");
+                        Environment.SetEnvironmentVariable("Path", @$"{path}", EnvironmentVariableTarget.User);
                     }
                     else if (OperatingSystem.IsLinux())
                     {
