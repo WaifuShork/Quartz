@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "output": "./out/Program.exe",
+    "moduleName": "Program"
+  },
+
+  "files": [
+    "Program.viv"
+  ],
+  
+  "references": [
+    "modules/System.Runtime.dll",
+    "modules/System.Runtime.Extensions.dll",
+    "modules/System.Console.dll",
+    "modules/System.IO.FileSystem.dll"
+  ]
+}

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿#nullable disable
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
-#nullable disable
 namespace Vivian.Tools
 {
     // .vivconfig file structure

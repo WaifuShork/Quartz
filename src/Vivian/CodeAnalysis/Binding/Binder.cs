@@ -102,7 +102,7 @@ namespace Vivian.CodeAnalysis.Binding
             // Check for main/script with global statements
             var functions = binder._scope.GetDeclaredFunctions();
 
-            FunctionSymbol? mainFunction = functions.FirstOrDefault(f => f.Name == "Main");
+            var mainFunction = functions.FirstOrDefault(f => f.Name == "Main");
             
             FunctionSymbol? scriptFunction = null;
 

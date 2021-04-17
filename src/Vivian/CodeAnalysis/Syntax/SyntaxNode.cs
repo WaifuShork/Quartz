@@ -133,7 +133,9 @@ namespace Vivian.CodeAnalysis.Syntax
             }
 
             if (isToConsole)
+            {
                 Console.ResetColor();
+            }
 
             writer.WriteLine();
 
@@ -145,13 +147,17 @@ namespace Vivian.CodeAnalysis.Syntax
                     var triviaMarker = isLast && isLastTrailingTrivia ? "└──" : "├──";
 
                     if (isToConsole)
+                    {
                         Console.ForegroundColor = ConsoleColor.DarkGray;
+                    }
 
                     writer.Write(indent);
                     writer.Write(triviaMarker);
 
                     if (isToConsole)
+                    {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    }
 
                     writer.WriteLine($"T: {trivia.Kind}");
                 }

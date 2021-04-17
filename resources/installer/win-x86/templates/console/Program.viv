@@ -1,0 +1,4 @@
+procedure Main() => void
+{
+    WriteLine("Hello world");
+}

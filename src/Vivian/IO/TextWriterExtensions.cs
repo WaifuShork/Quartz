@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+
 using Vivian.CodeAnalysis;
 using Vivian.CodeAnalysis.Syntax;
 using Vivian.CodeAnalysis.Text;
@@ -48,13 +49,42 @@ namespace Vivian.IO
             }
         }
 
+        public static void WriteError<T>(this TextWriter writer, T message)
+        {
+            writer.WriteColor(message, ConsoleColor.Red);
+        }
+        
+        public static void WriteSuccess<T>(this TextWriter writer, T message)
+        {
+            writer.WriteColor(message, ConsoleColor.Green);
+        }
+        
+        public static void WriteColor<T>(this TextWriter writer, T message, ConsoleColor color = ConsoleColor.White, bool isNewLine = true)
+        {
+            if (message == null)
+            {
+                writer.WriteLine();
+                return;
+            }
+            
+            Console.ForegroundColor = color;
+            if (isNewLine)
+            {
+                writer.WriteLine(message);
+            }
+            else
+            {
+                writer.Write(message);
+            }
+            Console.ResetColor();
+        }
+        
         public static void WriteBuildSummary(this TextWriter writer, bool success, int errors, int warnings)
         {
-            writer.SetForeground(success ? ConsoleColor.Green : ConsoleColor.DarkRed);
-            writer.WriteLine($"Build {(success ? "Succeeded" : "Failed" )}.");
-            writer.WriteLine($"{warnings,5} Warning(s)");
-            writer.WriteLine($"{errors,5} Error(s)");
-            writer.ResetColor();
+            var color = success ? ConsoleColor.Green : ConsoleColor.DarkRed;
+            writer.WriteColor($"Build {(success ? "Succeeded" : "Failed")}.\n" +
+                              $"{warnings,5} Warnings(s)\n" +
+                              $"{errors,5} Errors(s)\n", color);
         }
 
         public static void WriteKeyword(this TextWriter writer, SyntaxKind kind)

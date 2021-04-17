@@ -1,14 +1,11 @@
-﻿using Vivian.Tools;
+﻿using System.Threading.Tasks;
+using Vivian.Tools;
 
 namespace VivianCompiler
 {
     internal static class Program
     {
-        private static int Main(string[] args)
-        {
-            var vivianTools = new VivianTools();
-            vivianTools.RunVivianTools(args);
-            return 0;
-        }
+        private static void Main(string[] args)
+            => new VivianTools().RunVivianTools(args);
     }
 }
