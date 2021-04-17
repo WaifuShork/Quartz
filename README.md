@@ -1,5 +1,5 @@
 <h1 align="center" style="position: relative;">
-<img width="1000" style="border-radius: 50%;" src="logo.png" alt="Vivian Logo" /><br>
+<img width="700" style="border-radius: 50%;" src="logo.png" alt="Vivian Logo" /><br>
 <a href="https://github.com/WaifuShork/Vivian/actions">
     <img src="https://github.com/WaifuShork/Vivian/actions/workflows/dotnet.yml/badge.svg" />
 </a>
