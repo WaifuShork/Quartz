@@ -11,12 +11,17 @@
         <SelfContained>true</SelfContained>
         <PublishReadyToRun>true</PublishReadyToRun>
         <Configuration>Release</Configuration>
+        <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <OutputType>Exe</OutputType>
     </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="..\..\resources\vivian-x64.zip" />
+    </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Vivian\Vivian.csproj" />
       <ProjectReference Include="..\Vivian.Tools\Vivian.Tools.csproj" />
     </ItemGroup>
 

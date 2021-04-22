@@ -4,5 +4,5 @@ build_property.TargetPlatformMinVersion =
 build_property.UsingMicrosoftNETSdkWeb = 
 build_property.ProjectTypeGuids = 
 build_property.PublishSingleFile = true
-build_property.IncludeAllContentForSelfExtract = 
+build_property.IncludeAllContentForSelfExtract = true
 build_property._SupportedPlatformList = Android,iOS,Linux,macOS,Windows

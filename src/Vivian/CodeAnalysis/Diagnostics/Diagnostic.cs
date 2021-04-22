@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using Vivian.CodeAnalysis.Text;
+﻿using Vivian.CodeAnalysis.Text;
 
 namespace Vivian.CodeAnalysis
 {
@@ -9,16 +7,18 @@ namespace Vivian.CodeAnalysis
         private Diagnostic(bool isError, TextLocation location, string message)
         {
             IsError = isError;
+            IsWarning = !IsError;
+
             Location = location;
             Message = message;
-            IsWarning = !IsError;
         }
 
         public bool IsError { get; }
+        public bool IsWarning { get; }
+        
         public TextLocation Location { get; }
         public string Message { get; }
-        public bool IsWarning { get; }
-
+        
         public string? TargetSourceSnippet => Location.Text.ToString(Location.Span.Start, Location.Span.End - Location.Span.Start);
 
         public override string ToString() => Message;

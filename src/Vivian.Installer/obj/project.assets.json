@@ -469,6 +469,7 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "Microsoft.NET.Compilers.ToolSet >= 3.9.0-3.final",
+      "Vivian >= 1.0.0",
       "Vivian.Tools >= 1.0.0"
     ]
   },
@@ -506,6 +507,9 @@
           "projectReferences": {
             "D:\\Vivian\\Vivian\\src\\Vivian.Tools\\Vivian.Tools.csproj": {
               "projectPath": "D:\\Vivian\\Vivian\\src\\Vivian.Tools\\Vivian.Tools.csproj"
+            },
+            "D:\\Vivian\\Vivian\\src\\Vivian\\Vivian.csproj": {
+              "projectPath": "D:\\Vivian\\Vivian\\src\\Vivian\\Vivian.csproj"
             }
           }
         }

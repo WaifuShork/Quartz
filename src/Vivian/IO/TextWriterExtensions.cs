@@ -1,13 +1,14 @@
 ﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
 
 using Vivian.CodeAnalysis;
-using Vivian.CodeAnalysis.Syntax;
 using Vivian.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Syntax;
 
 namespace Vivian.IO
 {
@@ -49,9 +50,41 @@ namespace Vivian.IO
             }
         }
 
+        // Async
+        public static async Task WriteErrorAsync<T>(this TextWriter writer, T message)
+        {
+            await writer.WriteColorAsync(message, ConsoleColor.DarkRed);
+        }
+
+        public static async Task WriteSuccessAsync<T>(this TextWriter writer, T message)
+        {
+            await writer.WriteColorAsync(message, ConsoleColor.Green);
+        }
+
+        public static async Task WriteColorAsync<T>(this TextWriter writer, T message, ConsoleColor color = ConsoleColor.White, bool isNewLine = true)
+        {
+            if (message == null)
+            {
+                await writer.WriteLineAsync();
+                return;
+            }
+
+            Console.ForegroundColor = color;
+            if (isNewLine)
+            {
+                await writer.WriteLineAsync(message.ToString());
+            }
+            else
+            {
+                await writer.WriteAsync(message.ToString());
+            }
+            Console.ResetColor();
+        }
+        
+        // Sync
         public static void WriteError<T>(this TextWriter writer, T message)
         {
-            writer.WriteColor(message, ConsoleColor.Red);
+            writer.WriteColor(message, ConsoleColor.DarkRed);
         }
         
         public static void WriteSuccess<T>(this TextWriter writer, T message)
@@ -59,7 +92,7 @@ namespace Vivian.IO
             writer.WriteColor(message, ConsoleColor.Green);
         }
         
-        public static void WriteColor<T>(this TextWriter writer, T message, ConsoleColor color = ConsoleColor.White, bool isNewLine = true)
+        public static void WriteColor<T>(this TextWriter writer, T message, ConsoleColor color = ConsoleColor.White, bool newLine = true)
         {
             if (message == null)
             {
@@ -68,7 +101,7 @@ namespace Vivian.IO
             }
             
             Console.ForegroundColor = color;
-            if (isNewLine)
+            if (newLine)
             {
                 writer.WriteLine(message);
             }
@@ -78,7 +111,7 @@ namespace Vivian.IO
             }
             Console.ResetColor();
         }
-        
+
         public static void WriteBuildSummary(this TextWriter writer, bool success, int errors, int warnings)
         {
             var color = success ? ConsoleColor.Green : ConsoleColor.DarkRed;
@@ -96,30 +129,22 @@ namespace Vivian.IO
 
         public static void WriteKeyword(this TextWriter writer, string text)
         {
-            writer.SetForeground(ConsoleColor.Blue);
-            writer.Write(text);
-            writer.ResetColor();
+            writer.WriteColor(text, ConsoleColor.Blue, newLine: false);
         }
 
         public static void WriteIdentifier(this TextWriter writer, string text)
         {
-            writer.SetForeground(ConsoleColor.DarkYellow);
-            writer.Write(text);
-            writer.ResetColor();
+            writer.WriteColor(text, ConsoleColor.DarkYellow, newLine: false);
         }
 
         public static void WriteNumber(this TextWriter writer, string text)
         {
-            writer.SetForeground(ConsoleColor.Cyan);
-            writer.Write(text);
-            writer.ResetColor();
+            writer.WriteColor(text, ConsoleColor.Cyan, newLine: false);
         }
 
         public static void WriteString(this TextWriter writer, string text)
         {
-            writer.SetForeground(ConsoleColor.Magenta);
-            writer.Write(text);
-            writer.ResetColor();
+            writer.WriteColor(text, ConsoleColor.Magenta, newLine: false);
         }
 
         public static void WriteSpace(this TextWriter writer)
@@ -129,10 +154,7 @@ namespace Vivian.IO
 
         public static void WriteComment(this TextWriter writer, string text)
         {
-            writer.SetForeground(ConsoleColor.DarkGreen);
-            writer.Write("// ");
-            writer.Write(text);
-            writer.ResetColor();
+            writer.WriteColor($"// {text}", ConsoleColor.DarkGreen, newLine: false);
         }
 
         public static void WritePunctuation(this TextWriter writer, SyntaxKind kind)
@@ -145,19 +167,17 @@ namespace Vivian.IO
 
         public static void WritePunctuation(this TextWriter writer, string text)
         {
-            writer.SetForeground(ConsoleColor.DarkGray);
-            writer.Write(text);
-            writer.ResetColor();
+            writer.WriteColor(text, ConsoleColor.DarkGray, newLine: false);
         }
 
-        public static void WriteDiagnostics(this TextWriter writer, IEnumerable<Diagnostic> diagnostics)
+        public static void WriteDiagnostics(this TextWriter writer, IEnumerable<Diagnostic> diag)
         {
+            var diagnostics = diag.ToList();
+            
             foreach (var diagnostic in diagnostics.Where(d => d.Location.Text == null))
             {
                 var messageColor = diagnostic.IsWarning ? ConsoleColor.DarkYellow : ConsoleColor.DarkRed;
-                writer.SetForeground(messageColor);
-                writer.WriteLine(diagnostic.Message);
-                writer.ResetColor();
+                writer.WriteColor(diagnostic.Message, messageColor);
             }
  
             foreach (var diagnostic in diagnostics.Where(d => d.Location.Text != null)
@@ -167,6 +187,7 @@ namespace Vivian.IO
             {
                 var text = diagnostic.Location.Text;
                 var fileName = diagnostic.Location.FileName;
+                
                 var startLine = diagnostic.Location.StartLine + 1;
                 var startCharacter = diagnostic.Location.StartCharacter + 1;
                 var endLine = diagnostic.Location.EndLine + 1;
@@ -179,11 +200,8 @@ namespace Vivian.IO
                 writer.WriteLine();
  
                 var messageColor = diagnostic.IsWarning ? ConsoleColor.DarkYellow : ConsoleColor.DarkRed;
-                writer.SetForeground(messageColor);
-                writer.Write($"{fileName}({startLine},{startCharacter},{endLine},{endCharacter}): ");
-                writer.WriteLine(diagnostic);
-                writer.ResetColor();
- 
+                writer.WriteColor($"{fileName}: ({startLine}, {startCharacter} :: {endLine}, {endCharacter}): {diagnostic}", messageColor);
+                
                 var prefixSpan = TextSpan.FromBounds(line.Start, span.Start);
                 var suffixSpan = TextSpan.FromBounds(span.End, line.End);
  
@@ -191,16 +209,11 @@ namespace Vivian.IO
                 var error = text.ToString(span);
                 var suffix = text.ToString(suffixSpan);
  
-                writer.Write("    ");
-                writer.Write(prefix);
- 
-                writer.SetForeground(ConsoleColor.DarkRed);
-                writer.Write(error);
-                writer.ResetColor();
- 
-                writer.Write(suffix);
- 
-                writer.WriteLine();
+                writer.Write($"    {prefix}");
+               
+                writer.WriteColor(error, ConsoleColor.DarkRed, newLine: false);
+                
+                writer.WriteLine(suffix);
             }
  
             writer.WriteLine();

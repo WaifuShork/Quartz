@@ -31,17 +31,16 @@ function Test-Vivian
         Write-Output "Not all tests passed. Terminating build."
         exit
     }
-} Test-Vivian
+} 
 
 # <----------------->
 # Clean, Restore, and Build solution file
-function Set-SolutionBuildAndRestore
+function Set-SolutionRestore
 {
     [string]$solutionDir = "..\Vivian.sln"
     dotnet.exe restore $solutionDir --force 
-    dotnet.exe build $solutionDir -c Release --nologo --force
-
-} Set-SolutionBuildAndRestore
+    # dotnet.exe build $solutionDir -c Release --nologo --force
+} 
 
 # <----------------->
 # Clean previous builds & Setup structure
@@ -54,28 +53,85 @@ function Set-Structure
     New-Item -Path "..\artifacts" -ItemType Directory
 
     # Installer
-    New-Item "..\artifacts\installer\win-x64\vivian" -ItemType Directory
-    New-Item "..\artifacts\installer\win-x86\vivian" -ItemType Directory
+    New-Item "..\artifacts\installer\win-x64" -ItemType Directory
 
-    # Apparently I'm a dumbass because I can't take the whole directory without it being fucked
-    Copy-Item "..\resources\installer\win-x64\ref_modules" -Destination "..\artifacts\installer\win-x64\vivian" -Recurse
-    Copy-Item "..\resources\installer\win-x64\templates" -Destination "..\artifacts\installer\win-x64\vivian" -Recurse
-    Copy-Item "..\resources\installer\win-x64\logo.txt" -Destination "..\artifacts\installer\win-x64\vivian"
+    [string]$file = "..\resources\vivian-x64.zip"
+    if (Test-Path -Path $file  -PathType Leaf) 
+    {
+        try 
+        {
+            $null = Remove-Item $file -Force
+            Write-Host "Removed Vivian-x64.zip"
+        }
+        catch 
+        {
+            throw $_.Exception.Message
+        }
+    }
+    else 
+    {
+        Write-Host $file + " did not exist, generating with build"    
+    }
 
-    Copy-Item "..\resources\installer\win-x86\ref_modules" -Destination "..\artifacts\installer\win-x86\vivian" -Recurse
-    Copy-Item "..\resources\installer\win-x86\templates" -Destination "..\artifacts\installer\win-x86\vivian" -Recurse
-    Copy-Item "..\resources\installer\win-x86\logo.txt" -Destination "..\artifacts\installer\win-x86\vivian"
+    [string]$compilerFile = "..\resources\temp\Vivian.Compiler.exe"
+    if (Test-Path -Path $compilerFile -PathType Leaf) 
+    {
+        try 
+        {
+            $null = Remove-Item $compilerFile -Force
+        }
+        catch 
+        {
+            throw $_.Exception.Message
+        }
+    }
 
-    # Compiler 
-    # New-Item -Path '..\artifacts\compiler\vivian\win-x64' -ItemType Directory
-    # Portable build of compiler still needs references for the templates
-    Copy-Item "..\resources\installer\win-x64\ref_modules" -Destination "..\artifacts\compiler\vivian\win-x64\ref_modules" -Recurse
-    Copy-Item "..\resources\installer\win-x64\templates" -Destination "..\artifacts\compiler\vivian\win-x64" -Recurse
+    if (Test-Path -Path "..\resources\temp\vivian.exe" -PathType Leaf) 
+    {
+        try 
+        {
+            $null = Remove-Item "..\resources\temp\vivian.exe" -Force
+        }
+        catch 
+        {
+            throw $_.Exception.Message
+        }
+    }
+} 
 
-    Copy-Item "..\resources\installer\win-x86\ref_modules" -Destination "..\artifacts\compiler\vivian\win-x86\ref_modules" -Recurse
-    Copy-Item "..\resources\installer\win-x86\templates" -Destination "..\artifacts\compiler\vivian\win-x86" -Recurse
+# <----------------->
+# x64 Windows Vivian Compiler
+function Set-Vivian64Compiler
+{
+    Write-Output "Building compiler..."
+    [string]$projectPath = "..\src\Vivian.Compiler"
+    [string]$outputDir = "..\resources\temp\"
 
-} Set-Structure
+    dotnet.exe publish $projectPath `
+                       -o $outputDir -r win-x64 `
+                       -p:PublishReadyToRun=true `
+                       -p:PublishSingleFile=true `
+                       -p:PublishTrimmed=true `
+                       -p:PublishReadyToRunShowWarnings=false `
+                       -p:IncludeNativeLibrariesForSelfExtract=true `
+                       -c Release  `
+                       --self-contained true `
+                       -v normal `
+                       --force --nologo
+}
+
+# <----------------->
+# Generate installer resources
+function Set-GenerateResources
+{
+    Rename-Item -Path "..\resources\temp\Vivian.Compiler.exe" -NewName "vivian.exe"
+
+    Compress-Archive -LiteralPath "..\resources\temp\ref_modules", `
+                                  "..\resources\temp\templates", `
+                                  "..\resources\temp\logo.txt", `
+                                  "..\resources\temp\vivian.exe" `
+                                   -DestinationPath "..\resources\vivian-x64.zip"
+}
 
 # <----------------->
 # x64 Windows Vivian Installer
@@ -91,101 +147,42 @@ function Set-Windows64Installer
               -p:PublishSingleFile=true `
               -p:PublishTrimmed=true `
               -p:PublishReadyToRunShowWarnings=false `
+              -p:IncludeNativeLibrariesForSelfExtract=true `
               -c Release --force --nologo `
               --self-contained true `
               -v normal
 
-    Rename-Item '..\artifacts\installer\win-x64\Vivian.Installer.exe' 'vivian-installer.exe'
+    Rename-Item "..\artifacts\installer\win-x64\Vivian.Installer.exe" -NewName "vivian-installer.exe"
+} 
 
-} Set-Windows64Installer
+Test-Vivian
+Set-SolutionRestore
+Set-Structure
+Set-Vivian64Compiler
+Set-GenerateResources
+Set-Windows64Installer
 
-# <----------------->
-# x64 Windows Vivian Installer
-function Set-Windows86Installer
-{
-    Write-Output "Building installer..."
-    [string]$projectPath = "..\src\Vivian.Installer"
-    [string]$outputDir = "..\artifacts\installer\win-x86"
+# function Set-AddCompilerToInstallation
+# {
+#     Copy-Item "..\artifacts\compiler\vivian\win-x64\clrcompression.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x64\clrjit.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x64\coreclr.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x64\mscordaccore.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x64\vivian.exe" -Destination "..\artifacts\installer\win-x64\vivian\"
+# 
+#     Copy-Item "..\artifacts\compiler\vivian\win-x86\clrcompression.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x86\clrjit.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x86\coreclr.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x86\mscordaccore.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
+#     Copy-Item "..\artifacts\compiler\vivian\win-x86\vivian.exe" -Destination "..\artifacts\installer\win-x86\vivian\"
+# 
+# } Set-AddCompilerToInstallation
 
-    dotnet.exe publish $projectPath `
-              -o $outputDir -r win-x86 `
-              -p:PublishReadyToRun=true `
-              -p:PublishSingleFile=true `
-              -p:PublishTrimmed=true `
-              -p:PublishReadyToRunShowWarnings=false `
-              -c Release --force --nologo `
-              --self-contained true `
-              -v normal
-
-    Rename-Item '..\artifacts\installer\win-x86\Vivian.Installer.exe' 'vivian-installer.exe'
-
-} Set-Windows86Installer
-
-# <----------------->
-# x64 Windows Vivian Compiler
-function Set-Vivian64Compiler
-{
-    Write-Output "Building compiler..."
-    [string]$projectPath = "..\src\Vivian.Compiler"
-    [string]$outputDir = "..\artifacts\compiler\vivian\win-x64"
-
-    dotnet.exe publish $projectPath `
-              -o $outputDir -r win-x64 `
-              -p:PublishReadyToRun=true `
-              -p:PublishSingleFile=true `
-              -p:PublishTrimmed=true `
-              -p:PublishReadyToRunShowWarnings=false `
-              -c Release --force --nologo `
-              --self-contained true `
-              -v normal
-
-    Rename-Item '..\artifacts\compiler\vivian\win-x64\Vivian.Compiler.exe' 'vivian.exe'
-
-} Set-Vivian64Compiler
-
-# <----------------->
-# x86 Windows Vivian Compiler
-function Set-Vivian86Compiler
-{
-    Write-Output "Building compiler..."
-    [string]$projectPath = "..\src\Vivian.Compiler"
-    [string]$outputDir = "..\artifacts\compiler\vivian\win-x86"
-
-    dotnet.exe publish $projectPath `
-              -o $outputDir -r win-x86 `
-              -p:PublishReadyToRun=true `
-              -p:PublishSingleFile=true `
-              -p:PublishTrimmed=true `
-              -p:PublishReadyToRunShowWarnings=false `
-              -c Release --force --nologo `
-              --self-contained true `
-              -v normal
-
-    Rename-Item '..\artifacts\compiler\vivian\win-x86\Vivian.Compiler.exe' 'vivian.exe'
-
-} Set-Vivian86Compiler
-
-function Set-AddCompilerToInstallation
-{
-    Copy-Item "..\artifacts\compiler\vivian\win-x64\clrcompression.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x64\clrjit.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x64\coreclr.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x64\mscordaccore.dll" -Destination "..\artifacts\installer\win-x64\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x64\vivian.exe" -Destination "..\artifacts\installer\win-x64\vivian\"
-
-    Copy-Item "..\artifacts\compiler\vivian\win-x86\clrcompression.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x86\clrjit.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x86\coreclr.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x86\mscordaccore.dll" -Destination "..\artifacts\installer\win-x86\vivian\"
-    Copy-Item "..\artifacts\compiler\vivian\win-x86\vivian.exe" -Destination "..\artifacts\installer\win-x86\vivian\"
-
-} Set-AddCompilerToInstallation
-
-function Set-ZippedFolders
-{
-    Compress-Archive -LiteralPath "..\artifacts\compiler\vivian\win-x64" -DestinationPath "..\artifacts\compiler\vivian\win-x64"
-    Compress-Archive -LiteralPath "..\artifacts\compiler\vivian\win-x86" -DestinationPath "..\artifacts\compiler\vivian\win-x86"
-    Compress-Archive -LiteralPath "..\artifacts\installer\win-x64" -DestinationPath "..\artifacts\installer\win-x64"
-    Compress-Archive -LiteralPath "..\artifacts\installer\win-x86" -DestinationPath "..\artifacts\installer\win-x86"
-
-} Set-ZippedFolders
+# function Set-ZippedFolders
+# {
+#     Compress-Archive -LiteralPath "..\artifacts\compiler\vivian\win-x64" -DestinationPath "..\artifacts\compiler\vivian\win-x64"
+#     Compress-Archive -LiteralPath "..\artifacts\compiler\vivian\win-x86" -DestinationPath "..\artifacts\compiler\vivian\win-x86"
+#     Compress-Archive -LiteralPath "..\artifacts\installer\win-x64" -DestinationPath "..\artifacts\installer\win-x64"
+#     Compress-Archive -LiteralPath "..\artifacts\installer\win-x86" -DestinationPath "..\artifacts\installer\win-x86"
+# 
+# } Set-ZippedFolders
