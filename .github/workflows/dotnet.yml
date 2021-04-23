@@ -1,4 +1,4 @@
-name: .NET
+name: .NET Core Workflow
 
 on:
   push:
@@ -8,18 +8,21 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
+    
+    - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Restore dependencies
+        
+    - name: Restore Dependencies
       run: dotnet restore Vivian.sln
-    - name: Build
-      run: dotnet build Vivian.sln --no-restore
+      
+    - name: Build Solution
+      run: dotnet build Vivian.sln --no-restore --nologo
+    
     - name: Test
       run: dotnet test src/Vivian.Tests --no-build --verbosity normal
