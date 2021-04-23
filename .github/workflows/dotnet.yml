@@ -27,14 +27,3 @@ jobs:
     
     - name: Test
       run: dotnet test src/Vivian.Tests --no-build --verbosity normal
-      
-    - name: Generate Coverage Report
-      with: 
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./coverage1.xml,./coverage2.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
-        verbose: true
-    
-    
