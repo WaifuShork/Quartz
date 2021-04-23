@@ -1,8 +1,11 @@
 <h1 align="center" style="position: relative;">
-<img width="500" style="border-radius: 50%;" src="logo.png" alt="Vivian Logo" /><br>
+    <img width="500" style="border-radius: 50%;" src="logo.png" alt="Vivian Logo" /><br>
+    
 <a href="https://github.com/WaifuShork/Vivian/actions">
-    <img src="https://github.com/WaifuShork/Vivian/actions/workflows/dotnet.yml/badge.svg" />
-</a>
+    <img alt="Build status" src="https://img.shields.io/github/workflow/status/WaifuShork/Vivian/.NET%20Core%20Workflow?label=BUILD%20STATUS&logo=github&style=for-the-badge&logoWidth=30&color=181717"></a>
+<a href="https://github.com/WaifuShork/Vivian/issues">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues/WaifuShork/Vivian?style=for-the-badge"></a>
+
 </h1>
 
 ## Vivian Language Feature Suggestions

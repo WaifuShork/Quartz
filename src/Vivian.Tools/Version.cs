@@ -10,6 +10,7 @@ namespace Vivian.Tools
         public const int Hotfix = 10;
 
         public static string ShortVersion { get; } = $"{Major}.{Minor}";
+        public static string MidVersion { get; } = $"{Major}.{Minor}.{Patch}";
         public static string FullVersion { get; } = $"{Major}.{Minor}.{Patch}.{Hotfix}";
     }
 }

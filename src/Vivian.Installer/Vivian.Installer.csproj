@@ -25,4 +25,8 @@
       <ProjectReference Include="..\Vivian.Tools\Vivian.Tools.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
+    </ItemGroup>
+
 </Project>

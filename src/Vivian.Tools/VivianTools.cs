@@ -13,29 +13,27 @@ using Vivian.Tools.Services;
 
 namespace Vivian.Tools
 {
-    public class VivianTools
+    public static class VivianTools
     {
-        private string _configPath;
-        private string _projectName;
+        private static string _configPath;
+        private static string _projectName;
         
-        private bool _helpRequested;
-        private bool _versionRequested;
-        private OptionSet _options;
-        private ConfigurationRoot _config;
+        private static OptionSet _options;
+        private static ConfigurationRoot _config;
 
         // Files
-        private List<string> _sourcePaths;
-        private string[] _references;
+        private static List<string> _sourcePaths;
+        private static string[] _references;
         
         // Compiler Options
-        private string _moduleName;
-        private string _outputPath;
+        private static string _moduleName;
+        private static string _outputPath;
 
-        private bool _isBuildingProject;
-        private bool _isRunningProject;
-        private bool _isCreatingTemplate;
+        private static bool _isBuildingProject;
+        private static bool _isRunningProject;
+        private static bool _isCreatingTemplate;
 
-        public void RunVivianTools(IEnumerable<string> args)
+        public static void RunVivianTools(IEnumerable<string> args)
         {
             ParseOptions(args);
 
@@ -50,40 +48,43 @@ namespace Vivian.Tools
             }
         }
         
-        private void ParseOptions(IEnumerable<string> args)
+        private static void ParseOptions(IEnumerable<string> args)
         {
+            var sdkListRequested = false;
+            var versionRequested = false;
+            var helpRequested = false;
+            
             // Options
             // --------------------------- //  
             _options = new()
             {
-                "Usage: vivian [options]",
-                "Usage: vivian [config-path]",
-                
-                // Useful 
-                { "b|build=", "builds the {path} of the .vivconfig file", v =>
+                $"Vivian SDK ({Version.MidVersion})",
+                "Usage: vivian [sdk-options] [command] [command-options] [arguments]",
+                "",
+                "Execute a Vivian SDK command.",
+                "",
+                "sdk-options:",
+                { "?|h|help", "display help.", _ => helpRequested = true },
+                { "list-sdks", "Display the installed SDKs.", _ => sdkListRequested = true },
+                { "version", "displays the current version of Vivian installed", _ => versionRequested = true },
+                "",
+                {  "build=", "builds the {path} of the .vivconfig file", v =>
                 {
                     _isBuildingProject = true;
                     _configPath = v;
                 }},
-                { "r|run=", "runs project exe with the {path} of the .vivconfig file", v =>
+                { "run=", "runs project exe with the {path} of the .vivconfig file", v =>
                 {
                     _isBuildingProject = true;
                     _isRunningProject = true;
                     _configPath = v;
                 }},
-                { "n|new=", "creates a new Vivian project with a {name} and {path}", v => 
+                { "new=", "creates a new Vivian project with a {name} and {path}", v =>
                 {
-                    _isCreatingTemplate = true;
-                    _projectName = v;
-                }},
-                
-                // Trivial
-                { "version", "displays the current version of Vivian installed", _ => _versionRequested = true },
-                { "?|h|help", "display help.", _ => _helpRequested = true }
+                        _isCreatingTemplate = true;
+                        _projectName = v;
+                }}
             };
-            
-            // Attempt to parse the options
-            // --------------------------- //  
             try
             {
                 _options.Parse(args);
@@ -94,19 +95,38 @@ namespace Vivian.Tools
                 return;
             }
             
-            if (_helpRequested)
+            if (helpRequested)
             {
-                _options.WriteOptionDescriptions(Console.Out);
+                Console.Out.WriteLine($"Vivian SDK ({Version.MidVersion})");
+                Console.Out.WriteLine("Usage: vivian [sdk-options] [command] [command-options] [arguments]");
+                Console.Out.WriteLine();
+                Console.Out.WriteLine("Execute a Vivian SDK command.");
+                Console.Out.WriteLine();
+                Console.Out.WriteLine("sdk-options:");
+                Console.Out.WriteLine("  --version         Display Vivian SDK version in use.");
+                Console.Out.WriteLine("  --list-sdks       Display the installed SDKs.");
+                Console.Out.WriteLine("  -h|--help         Show command line help.");
+                Console.Out.WriteLine();
+                Console.Out.WriteLine("  --new             Create a new Vivian project or file.");
+                Console.Out.WriteLine("  --run             Build and run a Vivian project output.");
+                Console.Out.WriteLine("  --build           Build a Vivian project.");
+                Console.Out.WriteLine();
                 return;
             }
 
-            if (_versionRequested)
+            if (versionRequested)
             {
-                Console.Out.WriteError(Version.FullVersion);
+                Console.Out.WriteSuccess(Version.FullVersion);
+                return;
+            }
+
+            if (sdkListRequested)
+            {
+                Console.Out.WriteLine("");
             }
         }
 
-        private void ParseConfig()
+        private static void ParseConfig()
         {
             // Build the configuration
             // --------------------------- //  
@@ -159,7 +179,7 @@ namespace Vivian.Tools
             }
         }
 
-        private void CompileProgram()
+        private static void CompileProgram()
         {
             ParseConfig();
             var syntaxTrees = new List<SyntaxTree>();
@@ -208,7 +228,7 @@ namespace Vivian.Tools
 
         // Copies all files from the PATH template, and creates directories to build a basic console app
         // This method exists solely for when cross-platform support is added
-        private void CreateProjectTemplate(string projectName)
+        private static void CreateProjectTemplate(string projectName)
         {
             if (OperatingSystem.IsWindows())
             {
@@ -216,7 +236,7 @@ namespace Vivian.Tools
             }
         }
 
-        private void CreateWindowsTemplate(string projectName)
+        private static void CreateWindowsTemplate(string projectName)
         {
             if (string.IsNullOrWhiteSpace(projectName))
             {

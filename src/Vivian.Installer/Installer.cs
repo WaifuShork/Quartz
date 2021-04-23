@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Security;
 using System.Reflection;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using System.Security.Principal;
 
 using Vivian.IO;
 
@@ -14,13 +16,24 @@ namespace Vivian.Installer
     {
         public static async Task<int> Install()
         {
+            using (var identity = WindowsIdentity.GetCurrent())
+            {
+                var principal = new WindowsPrincipal(identity);
+                var isElevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
+                if (!isElevated)
+                {
+                    await Console.Error.WriteErrorAsync("Unable to execute installer/uninstall, please run as administrator.");
+                    return 0;
+                }
+            }
+
             // Force 64 bit
             // Do not allow 32 bit until the language runtime itself supports it
             if (!Environment.Is64BitOperatingSystem)
             {
                 await Console.Error.WriteErrorAsync("Error: Unsupported OS Architecture detected, please ensure you're using Windows OS (x64 bit)");
                 Console.ReadKey();
-                return 1;
+                return 0;
             }
             
             // Find the embedded resource 
@@ -38,46 +51,98 @@ namespace Vivian.Installer
             var logo = await FetchLogoAsync(zip, "logo.txt");
             await Console.Out.WriteColorAsync(logo, ConsoleColor.Magenta);
 
-            await Console.Out.WriteAsync("Confirm installation of Vivian Tools? ([Y]es / [N]o): ");
+            await Console.Out.WriteAsync("Install or Uninstall? ([I]nstall / [U]ninstall");
             var input = await Console.In.ReadLineAsync();
 
-            // prompt user
             if (!string.IsNullOrWhiteSpace(input))
             {
-                if (!PromptUser(input))
+                var path = @$"{Path.GetPathRoot(Environment.SystemDirectory)}Program Files\vivian";
+                if (input.ToLowerInvariant() == "install" | input.ToLowerInvariant() == "i")
                 {
+                    await Console.Out.WriteAsync("Confirm installation of Vivian Tools? ([Y]es / [N]o): ");
+                    input = await Console.In.ReadLineAsync();
+
+                    // prompt user
+                    if (!string.IsNullOrWhiteSpace(input))
+                    {
+                        if (!PromptUser(input))
+                        {
+                            return 0;
+                        }
+                    }
+
+                    await Console.Out.WriteAsync("Would you like to add Vivian Tools to PATH? ([Y]es / [N]o): ");
+                    input = await Console.In.ReadLineAsync();
+                    var isAddingToPath = false;
+
+                    if (!string.IsNullOrWhiteSpace(input))
+                    {
+                        isAddingToPath = PromptUser(input);
+                    }
+
+                    await InstallVivianTools(isAddingToPath, path, zip);
+                    
+                    await Console.Out.WriteSuccessAsync("Successfully installed Vivian Tools. Press any key to exit...");
+                    await Task.Run(() => Console.ReadKey(true).Key);
                     return 0;
                 }
+                
+                // Leaving this temporarily unimplemented
+                // not tryna fuck up shit
+                // if (input.ToLowerInvariant() == "uninstall" | input.ToLowerInvariant() == "u")
+                //{
+                    // if for some reason the path isn't at the SystemDir\Program Files\vivian
+                    // something is wrong and should be aborted
+                //    await UninstallVivianTools(path);
+                //    return 0;
+                //}
             }
 
-            await Console.Out.WriteAsync("Would you like to add Vivian Tools to PATH? ([Y]es / [N]o): ");
-            input = await Console.In.ReadLineAsync();
-            var isAddingToPath = false;
+            // if we somehow reached this point, then we've done something wrong
+            return 1;
+        }
 
-            if (!string.IsNullOrWhiteSpace(input))
+        private static async Task UninstallVivianTools(string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path))
             {
-                isAddingToPath = PromptUser(input);
+                try
+                {
+                    Directory.Delete(path);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    await Console.Error.WriteErrorAsync($"Error: Unable to uninstall Vivian Tools at {path}\n" +
+                                                         "Reason: Insufficient Permissions");
+                }
+                catch (IOException)
+                {
+                    await Console.Error.WriteErrorAsync($"Error: Vivian Tools doesn't exist at {path}");
+                }
+                catch (Exception)
+                {
+                    await Console.Error.WriteErrorAsync("Internal Error: Something internal went wrong, please report to <bug-tracker>");
+                }
             }
-
-            var path = @$"{Path.GetPathRoot(Environment.SystemDirectory)}\Program Files\vivian";
-            await InstallVivianTools(isAddingToPath, path, zip);
-            await Console.Out.WriteSuccessAsync("Successfully installed Vivian Tools.");
-            await Console.Out.WriteSuccessAsync("Press any key to exit...");
-            await Task.Run(() => Console.ReadKey(true).Key);
-            return 0;
         }
 
         private static bool PromptUser(string input)
         {
-            if (input.ToLowerInvariant() == "y")
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.Error.WriteErrorAsync("Please provide an input");
+            }
+            
+            if (input.ToLowerInvariant() == "y" | input.ToLowerInvariant() == "yes")
             {
                 return true;
             }
-            if (input.ToLowerInvariant() == "n")
+            if (input.ToLowerInvariant() == "n" | input.ToLowerInvariant() == "no")
             {
                 return false;
             }
             
+            // if they enter another key, they may have mistyped and don't want to install
             return false;
         }
         
@@ -139,14 +204,22 @@ namespace Vivian.Installer
             if (!string.IsNullOrWhiteSpace(path))
             {
                 await BackupPath(path);
-                Environment.SetEnvironmentVariable
-                (
-                    "Path",
-                    path.EndsWith(";") 
-                        ? $"{path}{value};"
-                        : $";{path}{value};",
-                    EnvironmentVariableTarget.Machine
-                );
+                try
+                {
+                    Environment.SetEnvironmentVariable
+                    (
+                        "Path",
+                        path.EndsWith(";")
+                            ? $"{path}{value};"
+                            : $";{path}{value};",
+                        EnvironmentVariableTarget.Machine
+                    );
+                }
+                catch (SecurityException)
+                {
+                    await Console.Error.WriteErrorAsync("Error: Requested registry access is not allowed.");
+                }
+                
             }
             else
             {
