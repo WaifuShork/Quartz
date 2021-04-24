@@ -10,14 +10,14 @@ namespace Vivian.CodeAnalysis.Binding
                             FunctionSymbol? mainFunction,
                             FunctionSymbol? scriptFunction,
                             ImmutableDictionary<FunctionSymbol, BoundBlockStatement> functions,
-                            ImmutableDictionary<ClassSymbol, BoundBlockStatement> structs)
+                            ImmutableDictionary<ClassSymbol, BoundBlockStatement> classes)
         {
             Previous = previous;
             Diagnostics = diagnostics;
             MainFunction = mainFunction;
             ScriptFunction = scriptFunction;
             Functions = functions;
-            Structs = structs;
+            Classes = classes;
         }
 
         public BoundProgram? Previous { get; }
@@ -25,6 +25,6 @@ namespace Vivian.CodeAnalysis.Binding
         public FunctionSymbol? MainFunction { get; }
         public FunctionSymbol? ScriptFunction { get; }
         public ImmutableDictionary<FunctionSymbol, BoundBlockStatement> Functions { get; }
-        public ImmutableDictionary<ClassSymbol, BoundBlockStatement> Structs { get; }
+        public ImmutableDictionary<ClassSymbol, BoundBlockStatement> Classes { get; }
     }
 }

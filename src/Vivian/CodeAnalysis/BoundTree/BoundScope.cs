@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using Vivian.CodeAnalysis.Symbols;
 
 namespace Vivian.CodeAnalysis.Binding

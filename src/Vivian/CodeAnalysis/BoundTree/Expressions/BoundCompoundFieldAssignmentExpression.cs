@@ -5,11 +5,11 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundCompoundFieldAssignmentExpression : BoundExpression
     {
-        public BoundCompoundFieldAssignmentExpression(SyntaxNode syntax, BoundExpression structInstance, VariableSymbol structMember, BoundBinaryOperator op, BoundExpression expression)
+        public BoundCompoundFieldAssignmentExpression(SyntaxNode syntax, BoundExpression classInstance, VariableSymbol classMember, BoundBinaryOperator op, BoundExpression expression)
             : base(syntax)
         {
-            StructInstance = structInstance;
-            StructMember = structMember;
+            ClassInstance = classInstance;
+            ClassMember = classMember;
             Op = op;
             Expression = expression;
         }
@@ -17,8 +17,8 @@ namespace Vivian.CodeAnalysis.Binding
         public override BoundNodeKind Kind => BoundNodeKind.CompoundFieldAssignmentExpression;
         public override TypeSymbol Type => Expression.Type;
 
-        public BoundExpression StructInstance { get; }
-        public VariableSymbol StructMember { get; }
+        public BoundExpression ClassInstance { get; }
+        public VariableSymbol ClassMember { get; }
         public BoundBinaryOperator Op {get; }
         public BoundExpression Expression { get; }
     }

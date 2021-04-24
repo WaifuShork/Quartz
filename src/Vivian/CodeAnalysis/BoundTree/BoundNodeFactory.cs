@@ -30,8 +30,7 @@ namespace Vivian.CodeAnalysis.Binding
             
             public static BoundGotoStatement Goto(SyntaxNode syntax, BoundLabel label)
                 => new(syntax, label);
-            
-    
+
             public static BoundConditionalGotoStatement GotoTrue(SyntaxNode syntax, BoundLabel label, BoundExpression condition)
                 => new(syntax, label, condition, jumpIfTrue: true);
     

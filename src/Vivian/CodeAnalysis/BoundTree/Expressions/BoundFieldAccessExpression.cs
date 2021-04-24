@@ -5,17 +5,17 @@ namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class BoundFieldAccessExpression : BoundExpression
     {
-        public BoundFieldAccessExpression(SyntaxNode syntax, BoundExpression structInstance, VariableSymbol structMember)
+        public BoundFieldAccessExpression(SyntaxNode syntax, BoundExpression classInstance, VariableSymbol classMember)
             : base(syntax)
         {
-            StructInstance = structInstance;
-            StructMember = structMember;
+            ClassInstance = classInstance;
+            ClassMember = classMember;
         }
 
         public override BoundNodeKind Kind => BoundNodeKind.FieldAccessExpression;
 
-        public BoundExpression StructInstance { get; }
-        public VariableSymbol StructMember { get; }
-        public override TypeSymbol Type => StructMember.Type;
+        public BoundExpression ClassInstance { get; }
+        public VariableSymbol ClassMember { get; }
+        public override TypeSymbol Type => ClassMember.Type;
     }
 }

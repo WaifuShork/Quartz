@@ -93,7 +93,7 @@ namespace Vivian.CodeAnalysis.Binding
                     WriteConversionExpression((BoundConversionExpression)node, writer);
                     break;
                 default:
-                    throw new Exception($"Unexpected node {node.Kind}");
+                    throw new InternalCompilerException($"Unexpected node {node.Kind}");
             }
         }
 

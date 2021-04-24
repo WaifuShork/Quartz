@@ -38,7 +38,7 @@ namespace Vivian.CodeAnalysis.Binding
                 case BoundNodeKind.WhileStatement:
                     return RewriteWhileStatement((BoundWhileStatement) node);
                 default:
-                    throw new Exception($"Unexpected node: {node.Kind}");
+                    throw new InternalCompilerException($"Unexpected node: {node.Kind}");
             }
         }
 
@@ -102,6 +102,7 @@ namespace Vivian.CodeAnalysis.Binding
             var condition = RewriteExpression(node.Condition);
             var thenStatement = RewriteStatement(node.ThenStatement);
             var elseStatement = node.ElseStatement == null ? null : RewriteStatement(node.ElseStatement);
+            
             if (condition == node.Condition && 
                 thenStatement == node.ThenStatement &&
                 elseStatement == node.ElseStatement)
@@ -239,7 +240,7 @@ namespace Vivian.CodeAnalysis.Binding
                 case BoundNodeKind.VariableExpression:
                     return RewriteVariableExpression((BoundVariableExpression) node);
                 default:
-                    throw new Exception($"Unexpected node: {node.Kind}");
+                    throw new InternalCompilerException($"Unexpected node: {node.Kind}");
             }
         }
 
@@ -250,40 +251,40 @@ namespace Vivian.CodeAnalysis.Binding
 
         protected virtual BoundExpression RewriteCompoundFieldAssignmentExpression(BoundCompoundFieldAssignmentExpression node)
         {
-            var structInstanceExpr = RewriteExpression(node.StructInstance);
+            var classInstanceExpression = RewriteExpression(node.ClassInstance);
             var valueExpr = RewriteExpression(node.Expression);
 
-            if (structInstanceExpr == node.StructInstance && valueExpr == node.Expression)
+            if (classInstanceExpression == node.ClassInstance && valueExpr == node.Expression)
             {
                 return node;
             }
 
-            return new BoundCompoundFieldAssignmentExpression(node.Syntax, structInstanceExpr, node.StructMember, node.Op, valueExpr);
+            return new BoundCompoundFieldAssignmentExpression(node.Syntax, classInstanceExpression, node.ClassMember, node.Op, valueExpr);
         }
 
         private BoundExpression RewriteFieldAssignmentExpression(BoundFieldAssignmentExpression node)
         {
-            var structInstanceExpr = RewriteExpression(node.StructInstance);
+            var classInstanceExpression = RewriteExpression(node.ClassInstance);
             var valueExpr = RewriteExpression(node.Expression);
 
-            if (structInstanceExpr == node.StructInstance && valueExpr == node.Expression)
+            if (classInstanceExpression == node.ClassInstance && valueExpr == node.Expression)
             {
                 return node;
             }
 
-            return new BoundFieldAssignmentExpression(node.StructInstance.Syntax, structInstanceExpr, node.StructMember, valueExpr);
+            return new BoundFieldAssignmentExpression(node.ClassInstance.Syntax, classInstanceExpression, node.ClassMember, valueExpr);
         }
 
         private BoundExpression RewriteFieldAccessExpression(BoundFieldAccessExpression node)
         {
-            var expression = RewriteExpression(node.StructInstance);
+            var expression = RewriteExpression(node.ClassInstance);
 
-            if (expression == node.StructInstance)
+            if (expression == node.ClassInstance)
             {
                 return node;
             }
 
-            return new BoundFieldAccessExpression(expression.Syntax, expression, node.StructMember);
+            return new BoundFieldAccessExpression(expression.Syntax, expression, node.ClassMember);
         }
 
         protected virtual BoundExpression RewriteErrorExpression(BoundErrorExpression node)

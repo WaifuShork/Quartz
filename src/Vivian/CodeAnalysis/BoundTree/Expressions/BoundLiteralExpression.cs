@@ -57,7 +57,7 @@ namespace Vivian.CodeAnalysis.Binding
                     Type = TypeSymbol.Void;
                     break;
                 default:
-                    throw new Exception($"Unexpected literal '{value}' of type {value.GetType()}");
+                    throw new InternalCompilerException($"Unexpected literal '{value}' of type {value.GetType()}");
             }
 
             ConstantValue = new BoundConstant(value);

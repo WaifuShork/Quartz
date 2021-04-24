@@ -13,6 +13,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         public override TypeSymbol Type => Instance;
         public override BoundNodeKind Kind => BoundNodeKind.ThisExpression;
+        
         public ClassSymbol Instance { get; }
     }
 }

@@ -304,11 +304,11 @@ namespace Vivian.CodeAnalysis.Lowering
             //
             // a.f = (a.f <op> b)
             return BoundNodeFactory.Assignment(newNode.Syntax,
-                                               newNode.StructInstance,
-                                               newNode.StructMember,
+                                               newNode.ClassInstance,
+                                               newNode.ClassMember,
                                                BoundNodeFactory.Binary(newNode.Syntax,
                                                    BoundNodeFactory.Field(newNode.Syntax, 
-                                                       newNode.StructInstance, newNode.StructMember),
+                                                       newNode.ClassInstance, newNode.ClassMember),
                                                            newNode.Op,
                                                            newNode.Expression)
             );

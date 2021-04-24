@@ -1007,29 +1007,29 @@ namespace Vivian.CodeAnalysis.Binding
 
                 if (boundLeft is BoundFieldAccessExpression field)
                 {
-                    if (field.StructMember.IsReadOnly)
+                    if (field.ClassMember.IsReadOnly)
                     {
-                        Diagnostics.ReportCannotAssign(syntax.OperatorToken.Location, field.StructMember.Name);
+                        Diagnostics.ReportCannotAssign(syntax.OperatorToken.Location, field.ClassMember.Name);
                     }
 
                     if (syntax.OperatorToken.Kind != SyntaxKind.EqualsToken)
                     {
                         var equivalentOperatorTokenKind = SyntaxFacts.GetBinaryOperatorOfAssignmentOperator(syntax.OperatorToken.Kind);
-                        var boundAssignOperator = BoundBinaryOperator.Bind(equivalentOperatorTokenKind, field.StructMember.Type, boundRight.Type);
+                        var boundAssignOperator = BoundBinaryOperator.Bind(equivalentOperatorTokenKind, field.ClassMember.Type, boundRight.Type);
 
                         if (boundAssignOperator == null)
                         {
-                            Diagnostics.ReportUndefinedBinaryOperator(syntax.OperatorToken.Location, syntax.OperatorToken.Text, field.StructMember.Type, boundRight.Type);
+                            Diagnostics.ReportUndefinedBinaryOperator(syntax.OperatorToken.Location, syntax.OperatorToken.Text, field.ClassMember.Type, boundRight.Type);
                             return new BoundErrorExpression(syntax);
                         }
 
                         var convertedExpression = BindConversion(syntax.Right.Location, boundRight, field.Type);
-                        return new BoundCompoundFieldAssignmentExpression(syntax, field.StructInstance, field.StructMember, boundAssignOperator, convertedExpression);
+                        return new BoundCompoundFieldAssignmentExpression(syntax, field.ClassInstance, field.ClassMember, boundAssignOperator, convertedExpression);
                     }
                     else
                     {
                         var convertedExpression = BindConversion(syntax.Right.Location, boundRight, field.Type);
-                        return new BoundFieldAssignmentExpression(syntax, field.StructInstance, field.StructMember, convertedExpression);
+                        return new BoundFieldAssignmentExpression(syntax, field.ClassInstance, field.ClassMember, convertedExpression);
                     }
                 }
 
@@ -1368,7 +1368,7 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 else if (variable is BoundFieldAccessExpression f)
                 {
-                    Diagnostics.ReportNotAClass(variable.Syntax.Location, f.StructMember.Name);
+                    Diagnostics.ReportNotAClass(variable.Syntax.Location, f.ClassMember.Name);
                 }
                 else
                 {

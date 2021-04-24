@@ -265,12 +265,12 @@ namespace Vivian.CodeAnalysis.Emit
                 return _diagnostics.ToImmutableArray();
             }
 
-            foreach (var structWithBody in program.Structs)
+            foreach (var structWithBody in program.Classes)
             {
                 EmitStructDeclaration(structWithBody.Key);
             }
 
-            foreach (var (@struct, body) in program.Structs)
+            foreach (var (@struct, body) in program.Classes)
             {
                 EmitStructBody(@struct, body);
             }
@@ -667,18 +667,18 @@ namespace Vivian.CodeAnalysis.Emit
 
         private void EmitFieldAssignmentExpression(ILProcessor ilProcessor, BoundFieldAssignmentExpression node)
         {
-            var structSymbol = node.StructInstance.Type as ClassSymbol;
+            var structSymbol = node.ClassInstance.Type as ClassSymbol;
 
             Debug.Assert(structSymbol != null);
 
-            EmitExpression(ilProcessor, node.StructInstance);
+            EmitExpression(ilProcessor, node.ClassInstance);
             EmitExpression(ilProcessor, node.Expression);
 
             var @struct = _structs[structSymbol];
 
             foreach (var field in @struct.Fields)
             {
-                if (field.Name == node.StructMember.Name)
+                if (field.Name == node.ClassMember.Name)
                 {
                     ilProcessor.Emit(OpCodes.Stfld, field);
                     break;
@@ -691,9 +691,9 @@ namespace Vivian.CodeAnalysis.Emit
 
         private void EmitFieldAccessExpression(ILProcessor ilProcessor, BoundFieldAccessExpression node)
         {
-            EmitExpression(ilProcessor, node.StructInstance);
+            EmitExpression(ilProcessor, node.ClassInstance);
 
-            var structSymbol = node.StructInstance.Type as ClassSymbol;
+            var structSymbol = node.ClassInstance.Type as ClassSymbol;
 
             Debug.Assert(structSymbol != null);
 
@@ -701,7 +701,7 @@ namespace Vivian.CodeAnalysis.Emit
 
             foreach (var field in @struct.Fields)
             {
-                if (field.Name == node.StructMember.Name)
+                if (field.Name == node.ClassMember.Name)
                 {
                     ilProcessor.Emit(OpCodes.Ldfld, field);
                     break;
