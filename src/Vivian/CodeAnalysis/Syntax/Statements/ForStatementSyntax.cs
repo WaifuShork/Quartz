@@ -2,6 +2,7 @@
 
 namespace Vivian.CodeAnalysis.Syntax
 {
+    // TODO: Remake for statement syntax
     public sealed class ForStatementSyntax : StatementSyntax
     {
         internal ForStatementSyntax(SyntaxTree syntaxTree, 

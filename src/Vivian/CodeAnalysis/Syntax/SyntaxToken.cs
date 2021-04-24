@@ -47,10 +47,7 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             return Array.Empty<SyntaxNode>();
         }
-
-        /// <summary>
-        /// A token is missing if it was inserted by the parser and doesn't appear in source.
-        /// </summary>
+        
         public bool IsMissing { get; }
     }
 }

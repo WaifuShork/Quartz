@@ -27,7 +27,9 @@ namespace Vivian.CodeAnalysis.Syntax
         public SyntaxToken GetSeparator(int index)
         {
             if (index < 0 || index >= Count - 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index));
+            }
 
             return (SyntaxToken) _nodesAndSeparators[index * 2 + 1];
         }
@@ -37,7 +39,9 @@ namespace Vivian.CodeAnalysis.Syntax
         public IEnumerator<T> GetEnumerator()
         {
             for (var i = 0; i < Count; i++)
+            {
                 yield return this[i];
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

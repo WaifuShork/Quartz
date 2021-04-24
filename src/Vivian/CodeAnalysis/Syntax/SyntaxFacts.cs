@@ -330,7 +330,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case SyntaxKind.StarEqualsToken:
                     return SyntaxKind.StarToken;
                 default:
-                    throw new Exception($"Unexpected syntax: '{kind}'");
+                    throw new InternalCompilerException($"Unexpected syntax: '{kind}'");
             }
         }
     }
