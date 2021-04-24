@@ -12,6 +12,8 @@ namespace Vivian.CodeAnalysis
 {
     // VE - Vivian Error
     // VE - Vivian Warning
+    
+    // TODO: Generate proper error codes
     internal sealed class DiagnosticBag : IEnumerable<Diagnostic>
     {
         private readonly List<Diagnostic> _diagnostics = new();

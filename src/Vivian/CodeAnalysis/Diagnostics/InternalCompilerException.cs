@@ -5,7 +5,6 @@ namespace Vivian.CodeAnalysis
 {
     internal class InternalCompilerException : Exception
     {
-        public InternalCompilerException(string message) : base(message)
-        { }
+        public InternalCompilerException(string message) : base(message) { }
     }
 }
