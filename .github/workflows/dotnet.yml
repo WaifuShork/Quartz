@@ -26,13 +26,4 @@ jobs:
       run: dotnet build Vivian.sln --no-restore --nologo
     
     - name: Generate Coverage Report
-      run: dotnet test src/Vivian.Tests --no-build --verbosity normal --results-directory TestResults
-
-    - name: Uploade Coverage
-      uses: codecov/codecov-action@v1
-      with: 
-        token: ${{ secrets.CODECOV_TOKEN }}
-        directory: ./TestResults
-        flags: unittests
-        fail_ci_if_error: true
-        verbose: true
+      run: dotnet test src/Vivian.Tests --no-build --verbosity normal
