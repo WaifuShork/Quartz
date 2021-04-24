@@ -30,7 +30,7 @@ namespace Vivian.CodeAnalysis.Symbols
                     WriteStructTo((ClassSymbol)symbol, writer);
                     break;
                 default:
-                    throw new Exception($"Unexpected symbol: {symbol.Kind}");
+                    throw new InternalCompilerException($"Unexpected symbol: {symbol.Kind}");
             }
         }
 

@@ -18,8 +18,7 @@ namespace Vivian.CodeAnalysis.Symbols
         public static readonly FunctionSymbol ReadKey = new("ReadKey", ImmutableArray<ParameterSymbol>.Empty, TypeSymbol.String);
         
         public static readonly FunctionSymbol ReadAllText = new("ReadAllText", ImmutableArray.Create(new ParameterSymbol("path", TypeSymbol.String, 0)), TypeSymbol.String);
-        public static readonly FunctionSymbol WriteAllText =
-            new("WriteAllText", ImmutableArray.Create(
+        public static readonly FunctionSymbol WriteAllText = new("WriteAllText", ImmutableArray.Create(
                 new ParameterSymbol("path", TypeSymbol.String, 0), // arg 1
                 new ParameterSymbol("contents", TypeSymbol.String, 1)), // arg 2
                 TypeSymbol.Void); // return type
