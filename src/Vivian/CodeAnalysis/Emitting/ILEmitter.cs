@@ -17,13 +17,15 @@ using Vivian.CodeAnalysis.Text;
 
 namespace Vivian.CodeAnalysis.Emit
 {
+    // TODO: Literally all of this needs to be rewritten
+    // :notlikefuckingmeow:
     internal sealed class ILEmitter
     {
         private const TypeAttributes _classAttributes = TypeAttributes.Class | TypeAttributes.NotPublic | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit;
 
         private readonly DiagnosticBag _diagnostics = new();
         private readonly Dictionary<SourceText, Document> _documents = new();
-        private readonly Dictionary<ClassSymbol, TypeDefinition> _structs = new();
+        private readonly Dictionary<ClassSymbol, TypeDefinition> _classes = new();
         private readonly Dictionary<FunctionSymbol, MethodDefinition> _methods = new();
         private readonly Dictionary<VariableSymbol, VariableDefinition> _locals = new();
         private readonly Dictionary<BoundLabel, int> _labels = new();
@@ -31,6 +33,8 @@ namespace Vivian.CodeAnalysis.Emit
         
         private readonly Dictionary<TypeSymbol, TypeReference> _knownTypes;
 
+        private readonly AssemblyDefinition _assemblyDefinition;
+        
         private readonly MethodReference _consoleReadLineReference;
         private readonly MethodReference _consoleReadKeyReference;
         
@@ -61,15 +65,13 @@ namespace Vivian.CodeAnalysis.Emit
         private readonly MethodReference _convertToCharReference;
         private readonly MethodReference _convertToStringReference;
         private readonly MethodReference _debuggableAttributeCtorReference;
-        private readonly TypeReference _randomReference;
         private readonly MethodReference _randomCtorReference;
         private readonly MethodReference _randomNextReference;
-        
-        private readonly AssemblyDefinition _assemblyDefinition;
+
+        private readonly TypeReference _randomReference;
         
         private readonly TypeDefinition _typeDefinition;
         private FieldDefinition? _randomFieldDefinition;
-        
         
         // TODO: This constructor does too much. Resolution should be factored out.
         private ILEmitter(string moduleName, string[] references)
@@ -91,22 +93,22 @@ namespace Vivian.CodeAnalysis.Emit
 
             var builtInTypes = new List<(TypeSymbol Type, string MetadataName)>()
             {
-                (TypeSymbol.Object, "System.Object"),
-                (TypeSymbol.Bool, "System.Boolean"),
-                (TypeSymbol.Int8, "System.SByte"),
-                (TypeSymbol.Int16, "System.Int16"),
-                (TypeSymbol.Int32, "System.Int32"),
-                (TypeSymbol.Int64, "System.Int64"),
-                (TypeSymbol.UInt8, "System.Byte"),
-                (TypeSymbol.UInt16, "System.UInt16"),
-                (TypeSymbol.UInt32, "System.UInt32"),
-                (TypeSymbol.UInt64, "System.UInt64"),
+                (TypeSymbol.Object,  "System.Object"),
+                (TypeSymbol.Bool,    "System.Boolean"),
+                (TypeSymbol.Int8,    "System.SByte"),
+                (TypeSymbol.Int16,   "System.Int16"),
+                (TypeSymbol.Int32,   "System.Int32"),
+                (TypeSymbol.Int64,   "System.Int64"),
+                (TypeSymbol.UInt8,   "System.Byte"),
+                (TypeSymbol.UInt16,  "System.UInt16"),
+                (TypeSymbol.UInt32,  "System.UInt32"),
+                (TypeSymbol.UInt64,  "System.UInt64"),
                 (TypeSymbol.Float32, "System.Single"),
                 (TypeSymbol.Float64, "System.Double"),
                 (TypeSymbol.Decimal, "System.Decimal"),
-                (TypeSymbol.Char, "System.Char"),
-                (TypeSymbol.String, "System.String"),
-                (TypeSymbol.Void, "System.Void"),
+                (TypeSymbol.Char,    "System.Char"),
+                (TypeSymbol.String,  "System.String"),
+                (TypeSymbol.Void,    "System.Void"),
             };
 
             var assemblyName = new AssemblyNameDefinition(moduleName, new Version(1, 0));
@@ -126,6 +128,7 @@ namespace Vivian.CodeAnalysis.Emit
                                            .SelectMany(m => m.Types)
                                            .Where(t => t.FullName == metadataName)
                                            .ToArray();
+                
                 if (foundTypes.Length == 1)
                 {
                     return _assemblyDefinition.MainModule.ImportReference(foundTypes[0]);
@@ -265,26 +268,31 @@ namespace Vivian.CodeAnalysis.Emit
                 return _diagnostics.ToImmutableArray();
             }
 
-            foreach (var structWithBody in program.Classes)
+            // Phase 1: Emit class declarations
+            foreach (var classWithBody in program.Classes)
             {
-                EmitStructDeclaration(structWithBody.Key);
+                EmitClassDeclaration(classWithBody.Key);
             }
 
-            foreach (var (@struct, body) in program.Classes)
+            // Phase 2: Emit class bodies
+            foreach (var (@class, body) in program.Classes)
             {
-                EmitStructBody(@struct, body);
+                EmitClassBody(@class, body);
             }
 
+            // Phase 3: Emit function declarations
             foreach (var functionWithBody in program.Functions)
             {
                 EmitFunctionDeclaration(functionWithBody.Key);
             }
 
+            // Phase 4: Emit function bodies
             foreach (var (function, body) in program.Functions)
             {
                 EmitFunctionBody(function, body);
             }
 
+            // Set the entry point
             if (program.MainFunction != null)
             {
                 _assemblyDefinition.EntryPoint = _methods[program.MainFunction];
@@ -315,14 +323,12 @@ namespace Vivian.CodeAnalysis.Emit
             return _diagnostics.ToImmutableArray();
         }
 
-        private void EmitStructDeclaration(ClassSymbol key)
+        private void EmitClassDeclaration(ClassSymbol key)
         {
-            // Classes are actually implemented as classes to align more closely with the C-style understanding of structs.
-            // They are reference types rather than the .NET value types.
             var classType = new TypeDefinition("", key.Name, _classAttributes, _knownTypes[TypeSymbol.Object]);
 
             _assemblyDefinition.MainModule.Types.Add(classType);
-            _structs.Add(key, classType);
+            _classes.Add(key, classType);
             _knownTypes.Add(key, classType);
 
             // Forward-declare empty constructor
@@ -349,18 +355,18 @@ namespace Vivian.CodeAnalysis.Emit
             classType.Methods.Insert(1, defaultCtorDefinition);
         }
 
-        private void EmitStructBody(ClassSymbol key, BoundBlockStatement value)
+        private void EmitClassBody(ClassSymbol key, BoundBlockStatement value)
         {
-            var structType = _structs[key];
+            var classType = _classes[key];
 
-            EmitEmptyConstructorForStruct(value, structType);
-            EmitDefaultConstructorForStruct(key, value, structType);
+            EmitEmptyConstructorForStruct(value, classType);
+            EmitDefaultConstructorForStruct(key, value, classType);
         }
 
-        private void EmitEmptyConstructorForStruct(BoundBlockStatement value, TypeDefinition structType)
+        private void EmitEmptyConstructorForStruct(BoundBlockStatement value, TypeDefinition classType)
         {
             // Create empty constructor
-            var constructor = structType.Methods[0];
+            var constructor = classType.Methods[0];
             var ilProcessor = constructor.Body.GetILProcessor();
 
             foreach (var field in value.Statements)
@@ -369,7 +375,7 @@ namespace Vivian.CodeAnalysis.Emit
                 {
                     var fieldAttributes = d.Variable.IsReadOnly ? FieldAttributes.Public | FieldAttributes.InitOnly : FieldAttributes.Public;
                     var fieldDefinition = new FieldDefinition(d.Variable.Name, fieldAttributes, _knownTypes[d.Variable.Type]);
-                    structType.Fields.Add(fieldDefinition);
+                    classType.Fields.Add(fieldDefinition);
 
                     EmitFieldAssignment(ilProcessor, d, fieldDefinition);
                 }
@@ -377,7 +383,7 @@ namespace Vivian.CodeAnalysis.Emit
                 {
                     var fieldAttributes = sd.Variable.IsReadOnly ? FieldAttributes.Public | FieldAttributes.InitOnly : FieldAttributes.Public;
                     var fieldDefinition = new FieldDefinition(sd.Variable.Name, fieldAttributes, _knownTypes[sd.Variable.Type]);
-                    structType.Fields.Add(fieldDefinition);
+                    classType.Fields.Add(fieldDefinition);
 
                     EmitSequencePointStatement(ilProcessor, s);
                     // EmitFieldAssignment(ilProcessor, sd, fieldDefinition);
@@ -391,19 +397,19 @@ namespace Vivian.CodeAnalysis.Emit
             ilProcessor.Emit(OpCodes.Ldarg_0);
             ilProcessor.Emit(OpCodes.Call, _objectCtor);
             ilProcessor.Emit(OpCodes.Ret);
-
+            
             constructor.Body.Optimize();
         }
 
-        private void EmitDefaultConstructorForStruct(ClassSymbol @class, BoundBlockStatement value, TypeDefinition structType)
+        private void EmitDefaultConstructorForStruct(ClassSymbol @class, BoundBlockStatement value, TypeDefinition classType)
         {
             // Create empty constructor
-            var constructor = structType.Methods[1];
+            var constructor = classType.Methods[1];
             var ilProcessor = constructor.Body.GetILProcessor();
 
             // Call base .ctor(), which should in turn call the object.ctor()
             ilProcessor.Emit(OpCodes.Ldarg_0);
-            ilProcessor.Emit(OpCodes.Call, structType.Methods[0]);
+            ilProcessor.Emit(OpCodes.Call, classType.Methods[0]);
 
             // Assign each parameter
             for (var i = 0; i < @class.CtorParameters.Length; i++)
@@ -418,7 +424,7 @@ namespace Vivian.CodeAnalysis.Emit
                 ilProcessor.Emit(OpCodes.Ldarg_0);
                 ilProcessor.Emit(OpCodes.Ldarg, i + 1);
 
-                foreach (var field in structType.Fields)
+                foreach (var field in classType.Fields)
                 {
                     if (field.Name == ctorParam.Name)
                     {
@@ -454,7 +460,7 @@ namespace Vivian.CodeAnalysis.Emit
             }
             else
             {
-                _structs[function.Receiver].Methods.Add(method);
+                _classes[function.Receiver].Methods.Add(method);
             }
 
             _methods.Add(function, method);
@@ -485,7 +491,6 @@ namespace Vivian.CodeAnalysis.Emit
             method.Body.Optimize();
 
             // TODO: Only emit this when emitting symbols
-
             method.DebugInformation.Scope = new ScopeDebugInformation(method.Body.Instructions[0], method.Body.Instructions.Last());
 
             foreach (var (symbol, definition) in _locals)
@@ -590,7 +595,9 @@ namespace Vivian.CodeAnalysis.Emit
             EmitExpression(ilProcessor, node.Expression);
 
             if (node.Expression.Type != TypeSymbol.Void)
+            {
                 ilProcessor.Emit(OpCodes.Pop);
+            }
         }
 
         private void EmitSequencePointStatement(ILProcessor ilProcessor, BoundSequencePointStatement node)
@@ -667,16 +674,16 @@ namespace Vivian.CodeAnalysis.Emit
 
         private void EmitFieldAssignmentExpression(ILProcessor ilProcessor, BoundFieldAssignmentExpression node)
         {
-            var structSymbol = node.ClassInstance.Type as ClassSymbol;
+            var classSymbol = node.ClassInstance.Type as ClassSymbol;
 
-            Debug.Assert(structSymbol != null);
+            Debug.Assert(classSymbol != null);
 
             EmitExpression(ilProcessor, node.ClassInstance);
             EmitExpression(ilProcessor, node.Expression);
 
-            var @struct = _structs[structSymbol];
+            var @class = _classes[classSymbol];
 
-            foreach (var field in @struct.Fields)
+            foreach (var field in @class.Fields)
             {
                 if (field.Name == node.ClassMember.Name)
                 {
@@ -693,13 +700,13 @@ namespace Vivian.CodeAnalysis.Emit
         {
             EmitExpression(ilProcessor, node.ClassInstance);
 
-            var structSymbol = node.ClassInstance.Type as ClassSymbol;
+            var classSymbol = node.ClassInstance.Type as ClassSymbol;
 
-            Debug.Assert(structSymbol != null);
+            Debug.Assert(classSymbol != null);
 
-            var @struct = _structs[structSymbol];
+            var @class = _classes[classSymbol];
 
-            foreach (var field in @struct.Fields)
+            foreach (var field in @class.Fields)
             {
                 if (field.Name == node.ClassMember.Name)
                 {
@@ -848,7 +855,7 @@ namespace Vivian.CodeAnalysis.Emit
             }
             else
             {
-                throw new Exception($"Unexpected unary operator {SyntaxFacts.GetText(node.Op.SyntaxKind)}({node.Operand.Type})");
+                throw new InternalCompilerException($"Unexpected unary operator {SyntaxFacts.GetText(node.Op.SyntaxKind)}({node.Operand.Type})");
             }
         }
 
@@ -1034,7 +1041,7 @@ namespace Vivian.CodeAnalysis.Emit
                 {
                     if (node.Type != TypeSymbol.String)
                     {
-                        throw new Exception($"Unexpected node type in string concatenation: {node.Type}");
+                        throw new InternalCompilerException($"Unexpected node type in string concatenation: {node.Type}");
                     }
 
                     yield return node;
@@ -1117,7 +1124,7 @@ namespace Vivian.CodeAnalysis.Emit
                 }
                 else
                 {
-                    throw new Exception("Unexpected node type in call expression");
+                    throw new InternalCompilerException("Unexpected node type in call expression");
                 }
 
                 foreach (var argument in node.Arguments)
@@ -1161,10 +1168,10 @@ namespace Vivian.CodeAnalysis.Emit
                 else if (node.Function.Name.EndsWith(".ctor"))
                 {
                     var className = node.Function.Name[..^5];
-                    var @struct = _structs.First(s => s.Key.Name == className).Value;
+                    var @class = _classes.First(s => s.Key.Name == className).Value;
 
                     // TODO: Use a general overload resolution algorithm instead
-                    ilProcessor.Emit(OpCodes.Newobj, node.Arguments.Length == 0 ? @struct.Methods[0] : @struct.Methods[1]);
+                    ilProcessor.Emit(OpCodes.Newobj, node.Arguments.Length == 0 ? @class.Methods[0] : @class.Methods[1]);
                 }
                 else
                 {
