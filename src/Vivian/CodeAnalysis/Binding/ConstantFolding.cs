@@ -26,7 +26,7 @@ namespace Vivian.CodeAnalysis.Binding
                         float i => i,
                         double i => i,
                         decimal i => i,
-                        _ => throw new Exception("Unexpected type")
+                        _ => throw new InternalCompilerException("Unexpected type")
                     }),
                     BoundUnaryOperatorKind.Negation => new BoundConstant(operand.ConstantValue.Value switch
                     {
@@ -39,7 +39,7 @@ namespace Vivian.CodeAnalysis.Binding
                         float i => -i,
                         double i => -i,
                         decimal i => -i,
-                        _ => throw new Exception("Unexpected type")
+                        _ => throw new InternalCompilerException("Unexpected type")
                     }),
                     BoundUnaryOperatorKind.LogicalNegation => new BoundConstant(!(bool) operand.ConstantValue.Value),
                     BoundUnaryOperatorKind.OnesComplement => new BoundConstant(operand.ConstantValue.Value switch
@@ -53,9 +53,9 @@ namespace Vivian.CodeAnalysis.Binding
                         ushort i => ~i,
                         uint i => ~i,
                         ulong i => ~i,
-                        _ => throw new Exception("Unexpected type")
+                        _ => throw new InternalCompilerException("Unexpected type")
                     }),
-                    _ => throw new Exception($"Unexpected unary operator {op.Kind}")
+                    _ => throw new InternalCompilerException($"Unexpected unary operator {op.Kind}")
                 };
             }
 
@@ -72,8 +72,8 @@ namespace Vivian.CodeAnalysis.Binding
 
             if (op.Kind == BoundBinaryOperatorKind.LogicalAnd)
             {
-                if ((leftConstant?.Value != null && !(bool)leftConstant.Value) ||
-                    (rightConstant?.Value != null && !(bool)rightConstant.Value))
+                if (leftConstant?.Value != null && !(bool)leftConstant.Value ||
+                    rightConstant?.Value != null && !(bool)rightConstant.Value)
                 {
                     return new BoundConstant(false);
                 }
@@ -81,15 +81,17 @@ namespace Vivian.CodeAnalysis.Binding
 
             if (op.Kind == BoundBinaryOperatorKind.LogicalOr)
             {
-                if ((leftConstant?.Value != null && (bool)leftConstant.Value) ||
-                    (rightConstant?.Value != null && (bool)rightConstant.Value))
+                if (leftConstant?.Value != null && (bool)leftConstant.Value ||
+                    rightConstant?.Value != null && (bool)rightConstant.Value)
                 {
                     return new BoundConstant(true);
                 }
             }
 
             if (leftConstant?.Value == null || rightConstant?.Value == null)
+            {
                 return null;
+            }
 
 
             var leftConstantValue = leftConstant.Value;
@@ -114,7 +116,7 @@ namespace Vivian.CodeAnalysis.Binding
                             float i => i + (float)rightConstantValue,
                             double i => i + (double)rightConstantValue,
                             decimal i => i + (decimal)rightConstantValue,
-                            _ => throw new Exception("Unexpected type")
+                            _ => throw new InternalCompilerException("Unexpected type")
                         });
                     }
                     else
@@ -147,7 +149,7 @@ namespace Vivian.CodeAnalysis.Binding
 
                             // Can't do bitwise operations on floats
 
-                            _ => throw new Exception("Unexpected type")
+                            _ => throw new InternalCompilerException("Unexpected type")
                         });
                     }
                     else
@@ -172,7 +174,7 @@ namespace Vivian.CodeAnalysis.Binding
 
                             // Can't do bitwise operations on floats
 
-                            _ => throw new Exception("Unexpected type")
+                            _ => throw new InternalCompilerException("Unexpected type")
                         });
                     }
                     else
@@ -196,8 +198,7 @@ namespace Vivian.CodeAnalysis.Binding
                             ulong i => i ^ (ulong)rightConstantValue,
 
                             // Can't do bitwise operations on floats
-
-                            _ => throw new Exception("Unexpected type")
+                            _ => throw new InternalCompilerException("Unexpected type")
                         });
                     }
                     else
@@ -227,7 +228,7 @@ namespace Vivian.CodeAnalysis.Binding
                         float i => i < (float)rightConstantValue,
                         double i => i < (double)rightConstantValue,
                         decimal i => i < (decimal)rightConstantValue,
-                        _ => throw new Exception("Unexpected type")
+                        _ => throw new InternalCompilerException("Unexpected type")
                     });
                 case BoundBinaryOperatorKind.LessOrEquals:
                     return new BoundConstant(leftConstantValue switch
@@ -244,7 +245,7 @@ namespace Vivian.CodeAnalysis.Binding
                         float i => i <= (float)rightConstantValue,
                         double i => i <= (double)rightConstantValue,
                         decimal i => i <= (decimal)rightConstantValue,
-                        _ => throw new Exception("Unexpected type")
+                        _ => throw new InternalCompilerException("Unexpected type")
                     });
                 case BoundBinaryOperatorKind.Greater:
                     return new BoundConstant(leftConstantValue switch
@@ -261,7 +262,7 @@ namespace Vivian.CodeAnalysis.Binding
                         float i => i > (float)rightConstantValue,
                         double i => i > (double)rightConstantValue,
                         decimal i => i > (decimal)rightConstantValue,
-                        _ => throw new Exception("Unexpected type")
+                        _ => throw new InternalCompilerException("Unexpected type")
                     });
                 case BoundBinaryOperatorKind.GreaterOrEquals:
                     return new BoundConstant(leftConstantValue switch
@@ -278,10 +279,10 @@ namespace Vivian.CodeAnalysis.Binding
                         float i => i >= (float)rightConstantValue,
                         double i => i >= (double)rightConstantValue,
                         decimal i => i >= (decimal)rightConstantValue,
-                        _ => throw new Exception("Unexpected type")
+                        _ => throw new InternalCompilerException("Unexpected type")
                     });
                 default:
-                    throw new Exception($"Unexpected binary operator {op.Kind}");
+                    throw new InternalCompilerException($"Unexpected binary operator {op.Kind}");
             }
         }
     }

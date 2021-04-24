@@ -38,17 +38,22 @@ namespace Vivian.CodeAnalysis.Binding
 
             public bool IsStart { get; }
             public bool IsEnd { get; }
-            public List<BoundStatement> Statements { get; } = new List<BoundStatement>();
-            public List<BasicBlockBranch> Incoming { get; } = new List<BasicBlockBranch>();
-            public List<BasicBlockBranch> Outgoing { get; } = new List<BasicBlockBranch>();
+            
+            public List<BoundStatement> Statements { get; } = new();
+            public List<BasicBlockBranch> Incoming { get; } = new();
+            public List<BasicBlockBranch> Outgoing { get; } = new();
 
             public override string ToString()
             {
                 if (IsStart)
+                {
                     return "<Start>";
+                }
 
                 if (IsEnd)
+                {
                     return "<End>";
+                }
 
                 using var writer = new StringWriter();
                 using var indentedWriter = new IndentedTextWriter(writer);
@@ -212,7 +217,9 @@ namespace Vivian.CodeAnalysis.Binding
                             case BoundNodeKind.SequencePointStatement:
                             case BoundNodeKind.ExpressionStatement:
                                 if (isLastStatementInBlock)
+                                {
                                     Connect(current, next);
+                                }
                                 break;
 
                             default:

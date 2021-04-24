@@ -36,12 +36,16 @@ namespace Vivian.CodeAnalysis.Binding
 
             // Casting to the same type but with more bits can be implicit
             if (from == TypeSymbol.Int8 && 
-                (to == TypeSymbol.Int16 || to == TypeSymbol.Int32 || to == TypeSymbol.Int64))
+               (to == TypeSymbol.Int16 || 
+                to == TypeSymbol.Int32 || 
+                to == TypeSymbol.Int64))
             {
                 return Implicit;
             }
 
-            if (from == TypeSymbol.Int16 && (to == TypeSymbol.Int32 || to == TypeSymbol.Int64))
+            if (from == TypeSymbol.Int16 && 
+               (to == TypeSymbol.Int32 || 
+                to == TypeSymbol.Int64))
             {
                 return Implicit;
             }
@@ -51,13 +55,17 @@ namespace Vivian.CodeAnalysis.Binding
                 return Implicit;
             }
 
-            if (from == TypeSymbol.UInt8 &&
-                (to == TypeSymbol.UInt16 || to == TypeSymbol.UInt32 || to == TypeSymbol.UInt64))
+            if (from == TypeSymbol.UInt8 && 
+               (to == TypeSymbol.UInt16 || 
+                to == TypeSymbol.UInt32 || 
+                to == TypeSymbol.UInt64))
             {
                 return Implicit;
             }
 
-            if (from == TypeSymbol.UInt16 && (to == TypeSymbol.UInt32 || to == TypeSymbol.UInt64))
+            if (from == TypeSymbol.UInt16 && 
+               (to == TypeSymbol.UInt32 || 
+                to == TypeSymbol.UInt64))
             {
                 return Implicit;
             }
@@ -67,10 +75,17 @@ namespace Vivian.CodeAnalysis.Binding
                 return Implicit;
             }
 
-            if ((from == TypeSymbol.Int8 || from == TypeSymbol.Int16 || from == TypeSymbol.Int32 ||
-                 from == TypeSymbol.Int64 || from == TypeSymbol.UInt8 || from == TypeSymbol.UInt16 ||
-                 from == TypeSymbol.UInt32 || from == TypeSymbol.UInt64)
-                && (to == TypeSymbol.Float32 || to == TypeSymbol.Float64 || to == TypeSymbol.Decimal))
+            if ((from == TypeSymbol.Int8 || 
+                 from == TypeSymbol.Int16 || 
+                 from == TypeSymbol.Int32 ||
+                 from == TypeSymbol.Int64 || 
+                 from == TypeSymbol.UInt8 || 
+                 from == TypeSymbol.UInt16 ||
+                 from == TypeSymbol.UInt32 || 
+                 from == TypeSymbol.UInt64) && 
+                (to == TypeSymbol.Float32 || 
+                 to == TypeSymbol.Float64 || 
+                 to == TypeSymbol.Decimal))
             {
                 return Implicit;
             }
@@ -106,6 +121,7 @@ namespace Vivian.CodeAnalysis.Binding
                     return Explicit;
                 }
             }
+            
             return None;
         }
     }

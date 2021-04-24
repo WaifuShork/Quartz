@@ -57,7 +57,7 @@ namespace Vivian.CodeAnalysis.Binding
         public ImmutableArray<FunctionSymbol> GetDeclaredFunctions()
             => GetDeclaredSymbols<FunctionSymbol>();
 
-        public ImmutableArray<ClassSymbol> GetDeclaredStructs()
+        public ImmutableArray<ClassSymbol> GetDeclaredClasses()
             => GetDeclaredSymbols<ClassSymbol>();
 
         private ImmutableArray<TSymbol> GetDeclaredSymbols<TSymbol>() where TSymbol : Symbol

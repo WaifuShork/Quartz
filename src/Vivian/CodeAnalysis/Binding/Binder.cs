@@ -1,22 +1,24 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using Vivian.CodeAnalysis.Lowering;
-using Vivian.CodeAnalysis.Symbols;
-using Vivian.CodeAnalysis.Syntax;
+
 using Vivian.CodeAnalysis.Text;
+using Vivian.CodeAnalysis.Syntax;
+using Vivian.CodeAnalysis.Symbols;
+using Vivian.CodeAnalysis.Lowering;
 
 namespace Vivian.CodeAnalysis.Binding
 {
     internal sealed class Binder
     {
+        private BoundScope _scope;
         private readonly FunctionSymbol? _function;
 
+        // loops 
         private readonly Stack<(BoundLabel BreakLabel, BoundLabel ContinueLabel)> _loopStack = new();
         private int _labelCounter;
-        private BoundScope _scope;
 
         private Binder(BoundScope? parent, FunctionSymbol? function)
         {
@@ -73,7 +75,8 @@ namespace Vivian.CodeAnalysis.Binding
                 binder.BindFunctionDeclaration(function);
             }
 
-            // Phase 2: Bind all global statements
+            // Phase 3: Bind all global statements
+            // TODO?: Nuke the globals, this isn't C lmao 
             var globalStatements = syntaxTrees.SelectMany(st => st.Root.Members)
                                               .OfType<GlobalStatementSyntax>();
 
@@ -102,18 +105,23 @@ namespace Vivian.CodeAnalysis.Binding
             // Check for main/script with global statements
             var functions = binder._scope.GetDeclaredFunctions();
 
+            // Locate the Main function in the compilation
             var mainFunction = functions.FirstOrDefault(f => f.Name == "Main");
             
             FunctionSymbol? scriptFunction = null;
 
             if (mainFunction != null)
             {
+                // TODO: Command line args
+                // TODO: Allow Main to return integer exit codes
+                // Also make sure that void is forced for Main
                 if (mainFunction.ReturnType != TypeSymbol.Void || mainFunction.Parameters.Any())
                 {
                     binder.Diagnostics.ReportMainMustHaveCorrectSignature(mainFunction.Declaration!.Identifier.Location);
                 }
             }
 
+            // Globals cannot exist when a main function is present
             if (globalStatementSyntax.Any())
             {
                 if (mainFunction != null)
@@ -127,20 +135,21 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 else
                 {
+                    // Manufacture a main function if none exists, we still need an entry point
                     mainFunction = new FunctionSymbol("Main", ImmutableArray<ParameterSymbol>.Empty, TypeSymbol.Void, null);
                 }
             }
 
             var diagnostics = binder.Diagnostics.ToImmutableArray();
             var variables = binder._scope.GetDeclaredVariables();
-            var structs = binder._scope.GetDeclaredStructs();
+            var classes = binder._scope.GetDeclaredClasses();
 
             if (previous != null)
             {
                 diagnostics = diagnostics.InsertRange(0, previous.Diagnostics);
             }
 
-            return new BoundGlobalScope(previous, diagnostics, mainFunction, scriptFunction, structs, functions, variables, statements.ToImmutable());
+            return new BoundGlobalScope(previous, diagnostics, mainFunction, scriptFunction, classes, functions, variables, statements.ToImmutable());
         }
 
         public static BoundProgram BindProgram(BoundProgram? previous, BoundGlobalScope globalScope)
@@ -169,7 +178,6 @@ namespace Vivian.CodeAnalysis.Binding
                 var loweredBody = Lowerer.Lower(@class, body);
 
                 structBodies.Add(@class, loweredBody);
-
                 diagnostics.AddRange(binder.Diagnostics);
             }
 
@@ -234,7 +242,7 @@ namespace Vivian.CodeAnalysis.Binding
             var variableMembers = syntax.Body.Statements.OfType<VariableDeclarationSyntax>();
             var functionsMembers = syntax.Body.Statements.OfType<FunctionDeclarationSyntax>();
 
-            // TODO: "constructor Class()" // implement actual constructors for more control
+            // TODO: "construct Class() { }" - implement actual constructors for more control
             var ctorParameters = ImmutableArray.CreateBuilder<ParameterSymbol>();
             var boundMembers = ImmutableArray.CreateBuilder<VariableSymbol>();
 
@@ -302,6 +310,7 @@ namespace Vivian.CodeAnalysis.Binding
                 var parameterName = parameterSyntax.Identifier.Text;
                 var parameterType = BindTypeClause(parameterSyntax.Type);
 
+                // if a duplicate function signature exists, report error
                 if (!seenParameterNames.Add(parameterName))
                 {
                     Diagnostics.ReportParameterAlreadyDeclared(parameterSyntax.Location, parameterName);
@@ -314,7 +323,11 @@ namespace Vivian.CodeAnalysis.Binding
                 }
             }
 
+            // "void" is an implicitly slotted type, if a type is omitted on function declaration, 
+            // then the default will be void
             var type = BindTypeClause(syntax.Type) ?? TypeSymbol.Void;
+            
+            // Locate the receiver 
             var receiver = BindTypeClause(syntax.Receiver) as ClassSymbol;
 
             var function = new FunctionSymbol(syntax.Identifier.Text, parameters.ToImmutable(), type, syntax, receiver: receiver);
@@ -343,16 +356,19 @@ namespace Vivian.CodeAnalysis.Binding
 
                 var scope = new BoundScope(parent);
 
+                // Phase 1: Class declarations
                 foreach (var s in previous.Classes)
                 {
                     scope.TryDeclareClass(s);
                 }
 
+                // Phase 2: Function declarations
                 foreach (var f in previous.Functions)
                 {
                     scope.TryDeclareFunction(f);
                 }
 
+                // Phase 3: Variable declarations
                 foreach (var v in previous.Variables)
                 {
                     scope.TryDeclareVariable(v);
@@ -375,8 +391,8 @@ namespace Vivian.CodeAnalysis.Binding
 
             return result;
         }
-
-
+        
+        // Generic error statement to maintain structure
         private static BoundStatement BindErrorStatement(SyntaxNode syntax)
         {
             return new BoundExpressionStatement(syntax, new BoundErrorExpression(syntax));
@@ -490,7 +506,8 @@ namespace Vivian.CodeAnalysis.Binding
                 {
                     // Check for over/underflows and adjust type
                     object? newValue = null;
-
+    
+                    // Signed integer types
                     if (variableType == TypeSymbol.Int8)
                     {
                         newValue = Convert.ToSByte(ble.Value);
@@ -507,6 +524,8 @@ namespace Vivian.CodeAnalysis.Binding
                     {
                         newValue = Convert.ToInt64(ble.Value);
                     }
+                    
+                    // Unsigned integer types
                     else if (variableType == TypeSymbol.UInt8)
                     {
                         newValue = Convert.ToByte(ble.Value);
@@ -523,6 +542,8 @@ namespace Vivian.CodeAnalysis.Binding
                     {
                         newValue = Convert.ToUInt64(ble.Value);
                     }
+                    
+                    // Floating-point numeric types
                     else if (variableType == TypeSymbol.Float32)
                     {
                         newValue = Convert.ToSingle(ble.Value);
@@ -531,6 +552,9 @@ namespace Vivian.CodeAnalysis.Binding
                     {
                         newValue = Convert.ToDouble(ble.Value);
                     }
+                    
+                    // TODO: Implement decimal values
+                    // High-precision floating-point numeric type
                     else if (variableType == TypeSymbol.Decimal)
                     {
                         newValue = Convert.ToDecimal(ble.Value);
@@ -544,11 +568,14 @@ namespace Vivian.CodeAnalysis.Binding
 
                 return new BoundVariableDeclaration(syntax, variable, convertedInitializer);
             }
+            // if a type is explicitly stated in a declaration, the default keyword may be used
+            // in which case, it will assign the variable to its default value
             else if (type != null)
             {
                 var initializer = syntax.Initializer?.Kind == SyntaxKind.DefaultKeyword
                     ? BindDefaultExpression((DefaultKeywordSyntax)syntax.Initializer, syntax.TypeClause)
                     : BindSyntheticDefaultExpression(syntax, syntax.TypeClause);
+                
                 var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly, type);
                 var convertedInitializer = BindConversion(syntax.TypeClause!.Location, initializer!, type);
 
@@ -556,7 +583,10 @@ namespace Vivian.CodeAnalysis.Binding
             }
             else
             {
-                Diagnostics.ReportUndefinedType(syntax.TypeClause?.Location ?? syntax.Identifier.Location, syntax.TypeClause?.Identifier.Text ?? syntax.Identifier.Text);
+                var location = syntax.TypeClause?.Location ?? syntax.Identifier.Location;
+                var text = syntax.TypeClause?.Identifier.Text ?? syntax.Identifier.Text;
+                
+                Diagnostics.ReportUndefinedType(location, text);
                 return new BoundExpressionStatement(syntax, new BoundErrorExpression(syntax));
             }
         }
@@ -585,14 +615,43 @@ namespace Vivian.CodeAnalysis.Binding
                 Diagnostics.ReportUndefinedType(typeSyntax.Identifier.Location, typeSyntax.Identifier.Text);
             }
 
-            if (type is ClassSymbol s)
+            if (type is ClassSymbol classSymbol)
             {
                 // Class types default to calling their empty constructor
-                var ctorSyntaxToken = new NameExpressionSyntax(syntax.SyntaxTree, new SyntaxToken(syntax.SyntaxTree, SyntaxKind.IdentifierToken, syntax.Span.End, s.Name, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty));
-                var openParenToken = new SyntaxToken(syntax.SyntaxTree, SyntaxKind.OpenParenthesisToken, syntax.Span.End, "(", null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
-                var closeParenToken = new SyntaxToken(syntax.SyntaxTree, SyntaxKind.CloseParenthesisToken, syntax.Span.End, ")", null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
+                var ctorSyntaxToken = 
+                    new NameExpressionSyntax(syntax.SyntaxTree, 
+                        new SyntaxToken(syntax.SyntaxTree, 
+                            SyntaxKind.IdentifierToken, 
+                            syntax.Span.End, 
+                            classSymbol.Name, 
+                            null, 
+                            ImmutableArray<SyntaxTrivia>.Empty, 
+                            ImmutableArray<SyntaxTrivia>.Empty));
+                
+                var openParenToken = 
+                    new SyntaxToken(syntax.SyntaxTree, 
+                        SyntaxKind.OpenParenthesisToken, 
+                        syntax.Span.End, 
+                        "(", 
+                        null, 
+                        ImmutableArray<SyntaxTrivia>.Empty, 
+                        ImmutableArray<SyntaxTrivia>.Empty);
+                
+                var closeParenToken = 
+                    new SyntaxToken(syntax.SyntaxTree, 
+                        SyntaxKind.CloseParenthesisToken, 
+                        syntax.Span.End, 
+                        ")", 
+                        null, 
+                        ImmutableArray<SyntaxTrivia>.Empty, 
+                        ImmutableArray<SyntaxTrivia>.Empty);
 
-                return BindCallExpression(new CallExpressionSyntax(syntax.SyntaxTree, ctorSyntaxToken, openParenToken, new SeparatedSyntaxList<ExpressionSyntax>(ImmutableArray<SyntaxNode>.Empty), closeParenToken));
+                return BindCallExpression(
+                    new CallExpressionSyntax(syntax.SyntaxTree, 
+                        ctorSyntaxToken, 
+                        openParenToken, 
+                        new SeparatedSyntaxList<ExpressionSyntax>(ImmutableArray<SyntaxNode>.Empty), 
+                        closeParenToken));
             }
 
             return new BoundLiteralExpression(syntax, type?.DefaultValue);
@@ -650,6 +709,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             var thenStatement = BindStatement(syntax.ThenStatement);
             var elseStatement = syntax.ElseClause == null ? null : BindStatement(syntax.ElseClause.ElseStatement);
+            
             return new BoundIfStatement(syntax, condition, thenStatement, elseStatement);
         }
 
@@ -683,8 +743,7 @@ namespace Vivian.CodeAnalysis.Binding
 
             _scope = new BoundScope(_scope);
 
-            // We don't want the loop variable to be read-only because the user needs
-            // more control over the loop
+            // We don't want the loop variable to be read-only because the user needs more control over the loop
             var variable = BindVariableDeclaration(syntax.Identifier, isReadOnly: false, TypeSymbol.Int32);
             var body = BindLoopBody(syntax.Body, out var breakLabel, out var continueLabel);
 
@@ -738,12 +797,13 @@ namespace Vivian.CodeAnalysis.Binding
             {
                 if (expression != null)
                 {
-                    // Main does not support return values.
+                    // I have no idea wtf this name is
                     Diagnostics.ReportInvalidReturnWithValueInGlobalStatements(syntax.Expression!.Location);
                 }
             }
             else
             {
+                // void obviously doesn't support returns
                 if (_function.ReturnType == TypeSymbol.Void)
                 {
                     if (expression != null)
@@ -753,6 +813,8 @@ namespace Vivian.CodeAnalysis.Binding
                 }
                 else
                 {
+                    // If the return value is meant to be anything besides void,
+                    // and the value is not found, then the function is incomplete
                     if (expression == null)
                     {
                         Diagnostics.ReportMissingReturnExpression(syntax.ReturnKeyword.Location, _function.ReturnType);
@@ -1062,7 +1124,10 @@ namespace Vivian.CodeAnalysis.Binding
                         firstExceedingNode = syntax.Arguments.GetSeparator(function.Parameters.Length - 1);
                     }
                     else
+                    {
                         firstExceedingNode = syntax.Arguments[0];
+                    }
+                    
                     var lastExceedingArgument = syntax.Arguments[^1];
                     span = TextSpan.FromBounds(firstExceedingNode.Span.Start, lastExceedingArgument.Span.End);
                 }
@@ -1076,6 +1141,7 @@ namespace Vivian.CodeAnalysis.Binding
 
                 return new BoundErrorExpression(syntax);
             }
+            // TODO: Overloads don't work
             else if (function.OverloadFor != null)
             {
                 // Find best overload
@@ -1113,10 +1179,13 @@ namespace Vivian.CodeAnalysis.Binding
                 {
                     case BoundVariableExpression i:
                         return new BoundCallExpression(syntax, i, function, boundArguments.ToImmutable());
+                    
                     case BoundFieldAccessExpression i:
                         return new BoundCallExpression(syntax, i, function, boundArguments.ToImmutable());
+                    
                     case BoundThisExpression i:
                         return new BoundCallExpression(syntax, i, function, boundArguments.ToImmutable());
+                    
                     default:
                         return new BoundErrorExpression(syntax);
                 }
@@ -1200,6 +1269,7 @@ namespace Vivian.CodeAnalysis.Binding
                 case SyntaxKind.ThisKeyword when _function == null:
                     Diagnostics.ReportCannotUseThisOutsideOfAFunction(syntax.Expression.Location);
                     return new BoundErrorExpression(syntax);
+                
                 case SyntaxKind.ThisKeyword when _function.Receiver == null:
                     Diagnostics.ReportCannotUseThisOutsideOfReceiverFunctions(syntax.Expression.Location, _function.Name);
                     return new BoundErrorExpression(syntax);
@@ -1273,7 +1343,7 @@ namespace Vivian.CodeAnalysis.Binding
 
         private VariableSymbol BindVariableDeclaration(SyntaxToken identifier, bool isReadOnly, TypeSymbol type, BoundConstant? constant = null)
         {
-            var name = identifier.Text ?? "?";
+            var name = identifier.Text; // ?? "?";
             var declare = !identifier.IsMissing;
             var variable = _function == null
                                 ? (VariableSymbol)new GlobalVariableSymbol(name, isReadOnly, type, constant)
@@ -1329,7 +1399,7 @@ namespace Vivian.CodeAnalysis.Binding
             switch (_scope.TryLookupSymbol(name))
             {
                 case FunctionSymbol func:
-                    return  func;
+                    return func;
 
                 default:
                     Diagnostics.ReportNotAFunction(identifierToken.Location, name);
@@ -1367,47 +1437,42 @@ namespace Vivian.CodeAnalysis.Binding
                 case "bool":
                     return TypeSymbol.Bool;
 
-                // Integer types
+                // Signed integer types
                 case "int8":
                     return TypeSymbol.Int8;
-
                 case "int16":
                     return TypeSymbol.Int16;
-
                 case "int32":
                     return TypeSymbol.Int32;
-
                 case "int64":
                     return TypeSymbol.Int64;
 
+                // Unsigned integer types
                 case "uint8":
                     return TypeSymbol.UInt8;
-
                 case "uint16":
                     return TypeSymbol.UInt16;
-
                 case "uint32":
                     return TypeSymbol.UInt32;
-
                 case "uint64":
                     return TypeSymbol.UInt64;
 
-                // Float types
+                // Float-point types
                 case "float32":
                     return TypeSymbol.Float32;
-
                 case "float64":
                     return TypeSymbol.Float64;
-
                 case "float128":
                     return TypeSymbol.Decimal;
 
-                // String types
+                // Unicode character
                 case "char":
                     return TypeSymbol.Char;
-
+                
+                // String type
                 case "string":
                     return TypeSymbol.String;
+                
                 case "void":
                     return TypeSymbol.Void;
 
