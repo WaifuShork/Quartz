@@ -8,11 +8,16 @@ namespace Vivian.CodeAnalysis.Syntax
     internal sealed class Lexer
     {
         private readonly SyntaxTree _syntaxTree;
+        private SyntaxKind _kind;
+        
         private readonly SourceText _text;
         private int _position;
         private int _start;
-        private SyntaxKind _kind;
         private object? _value;
+        
+        private char _current => Peek(0);
+        private char _lookahead => Peek(1);
+        
         private readonly ImmutableArray<SyntaxTrivia>.Builder _triviaBuilder = ImmutableArray.CreateBuilder<SyntaxTrivia>();
 
         public Lexer(SyntaxTree syntaxTree)
@@ -22,11 +27,7 @@ namespace Vivian.CodeAnalysis.Syntax
         }
 
         public DiagnosticBag Diagnostics { get; } = new();
-
-        private char Current => Peek(0);
-
-        private char Lookahead => Peek(1);
-
+        
         private char Peek(int offset)
         {
             var index = _position + offset;
@@ -77,17 +78,17 @@ namespace Vivian.CodeAnalysis.Syntax
                 _kind = SyntaxKind.BadToken;
                 _value = null;
 
-                switch (Current)
+                switch (_current)
                 {
                     case '\0':
                         done = true;
                         break;
                     case '/':
-                        if (Lookahead == '/')
+                        if (_lookahead == '/')
                         {
                             ReadSingleLineComment();
                         }
-                        else if (Lookahead == '*')
+                        else if (_lookahead == '*')
                         {
                             ReadMultiLineComment();
                         }
@@ -109,7 +110,7 @@ namespace Vivian.CodeAnalysis.Syntax
                         ReadWhiteSpace();
                         break;
                     default:
-                        if (char.IsWhiteSpace(Current))
+                        if (char.IsWhiteSpace(_current))
                         {
                             ReadWhiteSpace();
                         }
@@ -132,7 +133,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private void ReadLineBreak()
         {
-            if (Current == '\r' && Lookahead == '\n')
+            if (_current == '\r' && _lookahead == '\n')
             {
                 _position += 2;
             }
@@ -150,7 +151,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             while (!done)
             {
-                switch (Current)
+                switch (_current)
                 {
                     case '\0':
                     case '\r':
@@ -158,7 +159,7 @@ namespace Vivian.CodeAnalysis.Syntax
                         done = true;
                         break;
                     default:
-                        if (!char.IsWhiteSpace(Current))
+                        if (!char.IsWhiteSpace(_current))
                         {
                             done = true;
                         }
@@ -180,7 +181,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             while (!done)
             {
-                switch (Current)
+                switch (_current)
                 {
                     case '\0':
                     case '\r':
@@ -203,7 +204,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             while (!done)
             {
-                switch (Current)
+                switch (_current)
                 {
                     case '\0':
                         var span = new TextSpan(_start, 2);
@@ -212,7 +213,7 @@ namespace Vivian.CodeAnalysis.Syntax
                         done = true;
                         break;
                     case '*':
-                        if (Lookahead == '/')
+                        if (_lookahead == '/')
                         {
                             _position++;
                             done = true;
@@ -234,7 +235,7 @@ namespace Vivian.CodeAnalysis.Syntax
             _kind = SyntaxKind.BadToken;
             _value = null;
 
-            switch (Current)
+            switch (_current)
             {
                 case '\0':
                     _kind = SyntaxKind.EndOfFileToken;
@@ -245,7 +246,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '+':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.PlusToken;
                     }
@@ -257,7 +258,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '-':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.MinusToken;
                     }
@@ -269,7 +270,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '*':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.StarToken;
                     }
@@ -281,7 +282,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '/':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.SlashToken;
                     }
@@ -329,7 +330,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '^':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.HatToken;
                     }
@@ -341,12 +342,12 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '&':
                     _position++;
-                    if (Current == '&')
+                    if (_current == '&')
                     {
                         _kind = SyntaxKind.AmpersandAmpersandToken;
                         _position++;
                     }
-                    else if (Current == '=')
+                    else if (_current == '=')
                     {
                         _kind = SyntaxKind.AmpersandEqualsToken;
                         _position++;
@@ -358,12 +359,12 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '|':
                     _position++;
-                    if (Current == '|')
+                    if (_current == '|')
                     {
                         _kind = SyntaxKind.PipePipeToken;
                         _position++;
                     }
-                    else if (Current == '=')
+                    else if (_current == '=')
                     {
                         _kind = SyntaxKind.PipeEqualsToken;
                         _position++;
@@ -375,11 +376,11 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '=':
                     _position++;
-                    if (Current != '=' && Current != '>')
+                    if (_current != '=' && _current != '>')
                     {
                         _kind = SyntaxKind.EqualsToken;
                     }
-                    else switch (Current)
+                    else switch (_current)
                     {
                         case '>':
                             _kind = SyntaxKind.EqualsGreaterThanToken;
@@ -393,7 +394,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '!':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.BangToken;
                     }
@@ -405,7 +406,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '<':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.LessToken;
                     }
@@ -417,7 +418,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     break;
                 case '>':
                     _position++;
-                    if (Current != '=')
+                    if (_current != '=')
                     {
                         _kind = SyntaxKind.GreaterToken;
                     }
@@ -431,15 +432,23 @@ namespace Vivian.CodeAnalysis.Syntax
                 case '\'':
                     ReadString();
                     break;
-                case '0': case '1': case '2': case '3': case '4':
-                case '5': case '6': case '7': case '8': case '9':
+                case '0': 
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
                     ReadNumber();
                     break;
                 case '_':
                     ReadIdentifierOrKeyword();
                     break;
                 default:
-                    if (char.IsLetter(Current))
+                    if (char.IsLetter(_current))
                     {
                         ReadIdentifierOrKeyword();
                     }
@@ -447,7 +456,7 @@ namespace Vivian.CodeAnalysis.Syntax
                     {
                         var span = new TextSpan(_position, 1);
                         var location = new TextLocation(_text, span);
-                        Diagnostics.ReportBadCharacter(location, Current);
+                        Diagnostics.ReportBadCharacter(location, _current);
                         _position++;
                     }
                     break;
@@ -457,7 +466,7 @@ namespace Vivian.CodeAnalysis.Syntax
         private void ReadString()
         {
             // Skip the current quote
-            var quoteChar = Current;
+            var quoteChar = _current;
             _position++;
 
             var sb = new StringBuilder();
@@ -465,7 +474,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             while (!done)
             {
-                switch (Current)
+                switch (_current)
                 {
                     case '\0':
                     case '\r':
@@ -477,9 +486,9 @@ namespace Vivian.CodeAnalysis.Syntax
                         break;
                     case '\'':
                     case '"':
-                        if (Lookahead == quoteChar)
+                        if (_lookahead == quoteChar)
                         {
-                            sb.Append(Current);
+                            sb.Append(_current);
                             _position += 2;
                         }
                         else
@@ -489,7 +498,7 @@ namespace Vivian.CodeAnalysis.Syntax
                         }
                         break;
                     default:
-                        sb.Append(Current);
+                        sb.Append(_current);
                         _position++;
                         break;
                 }
@@ -530,12 +539,16 @@ namespace Vivian.CodeAnalysis.Syntax
 
             // Allow numbers and underscores as long as there are more digits following them.
             // This allows _ to act as separators for numeric literals (e.g. 1_000_000)
-            while (char.IsDigit(Current) || (Current == '_' && char.IsDigit(Peek(1))) || (Current == '.' && char.IsDigit(Peek(1))))
+            while (char.IsDigit(_current) || 
+                   _current == '_' && char.IsDigit(Peek(1)) || 
+                   _current == '.' && char.IsDigit(Peek(1)))
             {
-                if (!hasSeparator && Current == '_')
+                if (!hasSeparator && _current == '_')
+                {
                     hasSeparator = true;
+                }
 
-                if (Current == '.')
+                if (_current == '.')
                 {
                     if (hasDecimal)
                     {
@@ -567,45 +580,45 @@ namespace Vivian.CodeAnalysis.Syntax
 
             if (hasDecimal)
             {
-                if (!double.TryParse(text, out var fvalue))
+                if (!double.TryParse(text, out var floatValue))
                 {
                     Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Decimal);
                 }
                 else
                 {
-                    if (fvalue >= float.MinValue && fvalue <= float.MaxValue)
+                    if (floatValue >= float.MinValue && floatValue <= float.MaxValue)
                     {
-                        _value = (float)fvalue;
+                        _value = (float)floatValue;
                     }
-                    else if (fvalue >= double.MinValue && fvalue <= double.MaxValue)
+                    else if (floatValue >= double.MinValue && floatValue <= double.MaxValue)
                     {
-                        _value = fvalue;
+                        _value = floatValue;
                     }
                 }
             }
             else
             {
-                if (!ulong.TryParse(text, out var ivalue))
+                if (!ulong.TryParse(text, out var integerValue))
                 {
                     Diagnostics.ReportInvalidNumber(location, text, TypeSymbol.Int32);
                 }
                 else
                 {
-                    if (ivalue <= int.MaxValue)
+                    if (integerValue <= int.MaxValue)
                     {
-                        _value = (int)ivalue;
+                        _value = (int)integerValue;
                     }
-                    else if (ivalue <= uint.MaxValue)
+                    else if (integerValue <= uint.MaxValue)
                     {
-                        _value = (uint)ivalue;
+                        _value = (uint)integerValue;
                     }
-                    else if (ivalue <= long.MaxValue)
+                    else if (integerValue <= long.MaxValue)
                     {
-                        _value = ivalue;
+                        _value = integerValue;
                     }
-                    else if (ivalue <= ulong.MaxValue)
+                    else if (integerValue <= ulong.MaxValue)
                     {
-                        _value = ivalue;
+                        _value = integerValue;
                     }
                 }
             }
@@ -615,7 +628,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private void ReadIdentifierOrKeyword()
         {
-            while (char.IsLetterOrDigit(Current) || Current == '_')
+            while (char.IsLetterOrDigit(_current) || _current == '_')
             {
                 _position++;
             }

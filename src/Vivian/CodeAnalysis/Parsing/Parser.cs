@@ -11,8 +11,10 @@ namespace Vivian.CodeAnalysis.Syntax
     internal sealed class Parser
     {
         private readonly SyntaxTree _syntaxTree;
-        private readonly SourceText _text;
         private readonly ImmutableArray<SyntaxToken> _tokens;
+        private SyntaxToken _current => Peek(0);
+
+        private readonly SourceText _text;
         private int _position;
 
         public Parser(SyntaxTree syntaxTree)
@@ -79,40 +81,38 @@ namespace Vivian.CodeAnalysis.Syntax
 
             return _tokens[index];
         }
-
-        private SyntaxToken Current => Peek(0);
-
+        
         private SyntaxToken NextToken()
         {
-            var current = Current;
+            var current = _current;
             _position++;
             return current;
         }
 
         private SyntaxToken MatchToken(SyntaxKind kind)
         {
-            if (Current.Kind == kind)
+            if (_current.Kind == kind)
             {
                 return NextToken();
             }
             
             // If the token doesn't match, we return an error and manufacture a fake token 
             // so that the syntax tree doesn't become malformed.
-            Diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind);
-            return new SyntaxToken(_syntaxTree, kind, Current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
+            Diagnostics.ReportUnexpectedToken(_current.Location, _current.Kind, kind);
+            return new SyntaxToken(_syntaxTree, kind, _current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
         }
 
         private SyntaxToken MatchToken(SyntaxKind kind1, SyntaxKind kind2)
         {
-            if (Current.Kind == kind1 || Current.Kind == kind2)
+            if (_current.Kind == kind1 || _current.Kind == kind2)
             {
                 return NextToken();
             }
 
             // If the token doesn't match, we return an error and manufacture a fake token 
             // so that the syntax tree doesn't become malformed.
-            Diagnostics.ReportUnexpectedToken(Current.Location, Current.Kind, kind1);
-            return new SyntaxToken(_syntaxTree, kind1, Current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
+            Diagnostics.ReportUnexpectedToken(_current.Location, _current.Kind, kind1);
+            return new SyntaxToken(_syntaxTree, kind1, _current.Position, null, null, ImmutableArray<SyntaxTrivia>.Empty, ImmutableArray<SyntaxTrivia>.Empty);
         }
 
         public CompilationUnitSyntax ParseCompilationUnit()
@@ -126,9 +126,9 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             var members = ImmutableArray.CreateBuilder<MemberSyntax>();
 
-            while (Current.Kind != SyntaxKind.EndOfFileToken)
+            while (_current.Kind != SyntaxKind.EndOfFileToken)
             {
-                var startToken = Current;
+                var startToken = _current;
 
                 var member = ParseMember();
                 members.Add(member);
@@ -140,7 +140,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 // We don't need to report an error, because we'll
                 // already tried to parse an expression statement
                 // and reported one.
-                if (Current == startToken)
+                if (_current == startToken)
                 {
                     NextToken();
                 }
@@ -151,12 +151,12 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private MemberSyntax ParseMember()
         {
-            if (Current.Kind == SyntaxKind.FunctionKeyword)
+            if (_current.Kind == SyntaxKind.FunctionKeyword)
             {
                return ParseFunctionDeclaration();
             }
 
-            if (Current.Kind == SyntaxKind.ClassKeyword)
+            if (_current.Kind == SyntaxKind.ClassKeyword)
             {
                 return ParseClassDeclaration();
             }
@@ -171,7 +171,7 @@ namespace Vivian.CodeAnalysis.Syntax
             
             var functionKeyword = MatchToken(SyntaxKind.FunctionKeyword);
 
-            if (Current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind == SyntaxKind.DotToken)
+            if (_current.Kind == SyntaxKind.IdentifierToken && Peek(1).Kind == SyntaxKind.DotToken)
             {
                 receiver = MatchToken(SyntaxKind.IdentifierToken);
                 dotToken = MatchToken(SyntaxKind.DotToken);
@@ -199,14 +199,14 @@ namespace Vivian.CodeAnalysis.Syntax
             var parseNextParameter = true;
 
             while (parseNextParameter &&
-                   Current.Kind != SyntaxKind.CloseParenthesisToken &&
-                   Current.Kind != SyntaxKind.EndOfFileToken)
+                   _current.Kind != SyntaxKind.CloseParenthesisToken &&
+                   _current.Kind != SyntaxKind.EndOfFileToken)
             {
                 var parameter = ParseParameter();
 
                 nodesAndSeparators.Add(parameter);
 
-                if (Current.Kind == SyntaxKind.CommaToken)
+                if (_current.Kind == SyntaxKind.CommaToken)
                 {
                     var comma = MatchToken(SyntaxKind.CommaToken);
                     nodesAndSeparators.Add(comma);
@@ -235,7 +235,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private StatementSyntax ParseStatement()
         {
-            switch (Current.Kind)
+            switch (_current.Kind)
             {
                 case SyntaxKind.BreakKeyword:
                     return ParseBreakStatement();
@@ -275,15 +275,15 @@ namespace Vivian.CodeAnalysis.Syntax
 
             var openBraceToken = MatchToken(SyntaxKind.OpenBraceToken);
 
-            while (Current.Kind != SyntaxKind.EndOfFileToken &&
-                   Current.Kind != SyntaxKind.CloseBraceToken)
+            while (_current.Kind != SyntaxKind.EndOfFileToken &&
+                   _current.Kind != SyntaxKind.CloseBraceToken)
             {
-                var startToken = Current;
+                var startToken = _current;
 
                 var statement = ParseStatement();
                 statements.Add(statement);
 
-                if (Current == startToken)
+                if (_current == startToken)
                 {
                     NextToken();
                 }
@@ -310,18 +310,18 @@ namespace Vivian.CodeAnalysis.Syntax
 
             var openBraceToken = MatchToken(SyntaxKind.OpenBraceToken);
 
-            while (Current.Kind != SyntaxKind.EndOfFileToken &&
-                   Current.Kind != SyntaxKind.CloseBraceToken)
+            while (_current.Kind != SyntaxKind.EndOfFileToken &&
+                   _current.Kind != SyntaxKind.CloseBraceToken)
             {
-                var startToken = Current;
+                var startToken = _current;
                 
-                if (Current.Kind == SyntaxKind.VarKeyword || Current.Kind == SyntaxKind.ConstKeyword)
+                if (_current.Kind == SyntaxKind.VarKeyword || _current.Kind == SyntaxKind.ConstKeyword)
                 {
                     var statement = ParseStatement();
                     statements.Add(statement);
                 }
             
-                if (Current == startToken)
+                if (_current == startToken)
                 {
                     NextToken();
                 }
@@ -334,18 +334,18 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private StatementSyntax ParseVariableDeclaration()
         {
-            var expected = Current.Kind == SyntaxKind.ConstKeyword ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword;
+            var expected = _current.Kind == SyntaxKind.ConstKeyword ? SyntaxKind.ConstKeyword : SyntaxKind.VarKeyword;
             var keyword = MatchToken(expected);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
 
             var typeClause = ParseOptionalTypeClause();
             
-            if (typeClause == null || Current.Kind == SyntaxKind.EqualsToken || expected == SyntaxKind.ConstKeyword)
+            if (typeClause == null || _current.Kind == SyntaxKind.EqualsToken || expected == SyntaxKind.ConstKeyword)
             {
                 var equals = MatchToken(SyntaxKind.EqualsToken);
                 var initializer = ParseExpression();
 
-                if (Current.Kind == SyntaxKind.SemicolonToken)
+                if (_current.Kind == SyntaxKind.SemicolonToken)
                 {
                     NextToken();
                 }
@@ -353,7 +353,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 return new VariableDeclarationSyntax(_syntaxTree, keyword, identifier, typeClause, equals, initializer);
             }
             
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
@@ -364,7 +364,7 @@ namespace Vivian.CodeAnalysis.Syntax
         
         private TypeClauseSyntax? ParseOptionalTypeClause()
         {
-            if (Current.Kind != SyntaxKind.EqualsGreaterThanToken && Current.Kind != SyntaxKind.ColonToken)
+            if (_current.Kind != SyntaxKind.EqualsGreaterThanToken && _current.Kind != SyntaxKind.ColonToken)
             {
                 return null;
             }
@@ -374,7 +374,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private TypeClauseSyntax ParseTypeClause()
         {
-            var expected = Current.Kind == SyntaxKind.EqualsGreaterThanToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken;
+            var expected = _current.Kind == SyntaxKind.EqualsGreaterThanToken ? SyntaxKind.EqualsGreaterThanToken : SyntaxKind.ColonToken;
             var token = MatchToken(expected);
             var identifier = MatchToken(SyntaxKind.IdentifierToken);
             return new TypeClauseSyntax(_syntaxTree, token, identifier);
@@ -393,7 +393,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private ElseClauseSyntax? ParseOptionalElseClause()
         {
-            if (Current.Kind != SyntaxKind.ElseKeyword)
+            if (_current.Kind != SyntaxKind.ElseKeyword)
             {
                 return null;
             }
@@ -422,7 +422,7 @@ namespace Vivian.CodeAnalysis.Syntax
             var openParenthesis = MatchToken(SyntaxKind.OpenParenthesisToken);
             var condition = ParseExpression();
             var closeParenthesis = MatchToken(SyntaxKind.CloseParenthesisToken);
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
@@ -446,7 +446,7 @@ namespace Vivian.CodeAnalysis.Syntax
         private StatementSyntax ParseBreakStatement()
         {
             var keyword = MatchToken(SyntaxKind.BreakKeyword);
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
@@ -456,7 +456,7 @@ namespace Vivian.CodeAnalysis.Syntax
         private StatementSyntax ParseContinueStatement()
         {
             var keyword = MatchToken(SyntaxKind.ContinueKeyword);
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
@@ -467,11 +467,11 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             var keyword = MatchToken(SyntaxKind.ReturnKeyword);
             var keywordLine = _text.GetLineIndex(keyword.Span.Start);
-            var currentLine = _text.GetLineIndex(Current.Span.Start);
-            var isEof = Current.Kind == SyntaxKind.EndOfFileToken;
+            var currentLine = _text.GetLineIndex(_current.Span.Start);
+            var isEof = _current.Kind == SyntaxKind.EndOfFileToken;
             var sameLine = !isEof && keywordLine == currentLine;
             var expression = sameLine ? ParseExpression() : null;
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
@@ -481,7 +481,7 @@ namespace Vivian.CodeAnalysis.Syntax
         private ExpressionStatementSyntax ParseExpressionStatement()
         {
             var expression = ParseExpression();
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
@@ -497,7 +497,7 @@ namespace Vivian.CodeAnalysis.Syntax
         {
             ExpressionSyntax left;
 
-            var unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
+            var unaryOperatorPrecedence = _current.Kind.GetUnaryOperatorPrecedence();
 
             if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence)
             {
@@ -513,7 +513,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             while (true)
             {
-                var precedence = Current.Kind.GetBinaryOperatorPrecedence();
+                var precedence = _current.Kind.GetBinaryOperatorPrecedence();
 
                 if (precedence == 0 || precedence <= parentPrecedence)
                 {
@@ -531,7 +531,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private ExpressionSyntax ParsePrimaryExpression()
         {
-            switch (Current.Kind)
+            switch (_current.Kind)
             {
                 case SyntaxKind.CharToken:
                     return ParseCharLiteral();
@@ -566,7 +566,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
         private ExpressionSyntax ParseBooleanLiteral()
         {
-            var isTrue = Current.Kind == SyntaxKind.TrueKeyword;
+            var isTrue = _current.Kind == SyntaxKind.TrueKeyword;
             var keywordToken = isTrue ? MatchToken(SyntaxKind.TrueKeyword) : MatchToken(SyntaxKind.FalseKeyword);
             return new LiteralExpressionSyntax(_syntaxTree, keywordToken, isTrue);
         }
@@ -607,7 +607,7 @@ namespace Vivian.CodeAnalysis.Syntax
             var arguments = ParseArguments();
             var closeParenthesisToken = MatchToken(SyntaxKind.CloseParenthesisToken);
             
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
@@ -619,7 +619,7 @@ namespace Vivian.CodeAnalysis.Syntax
                 case MemberAccessExpressionSyntax id:
                     return new CallExpressionSyntax(_syntaxTree, id, openParenthesisToken, arguments, closeParenthesisToken);
                 default:
-                    throw new InternalCompilerException($"Unexpected expression kind: {Current.Kind}");
+                    throw new InternalCompilerException($"Unexpected expression kind: {_current.Kind}");
             }
         }
 
@@ -629,13 +629,13 @@ namespace Vivian.CodeAnalysis.Syntax
 
             var parseNextArgument = true;
             while (parseNextArgument &&
-                   Current.Kind != SyntaxKind.CloseParenthesisToken &&
-                   Current.Kind != SyntaxKind.EndOfFileToken)
+                   _current.Kind != SyntaxKind.CloseParenthesisToken &&
+                   _current.Kind != SyntaxKind.EndOfFileToken)
             {
                 var expression = ParseExpression();
                 nodesAndSeparators.Add(expression);
 
-                if (Current.Kind == SyntaxKind.CommaToken)
+                if (_current.Kind == SyntaxKind.CommaToken)
                 {
                     var comma = MatchToken(SyntaxKind.CommaToken);
                     nodesAndSeparators.Add(comma);
@@ -669,7 +669,7 @@ namespace Vivian.CodeAnalysis.Syntax
             {
                 queue.Enqueue(MatchToken(SyntaxKind.IdentifierToken, SyntaxKind.ThisKeyword));
 
-                if (Current.Kind == SyntaxKind.DotToken)
+                if (_current.Kind == SyntaxKind.DotToken)
                 {
                     queue.Enqueue(MatchToken(SyntaxKind.DotToken));
                 }
@@ -681,7 +681,7 @@ namespace Vivian.CodeAnalysis.Syntax
 
             var firstIdentifier = queue.Dequeue();
 
-            if (Current.Kind == SyntaxKind.SemicolonToken)
+            if (_current.Kind == SyntaxKind.SemicolonToken)
             {
                 NextToken();
             }
