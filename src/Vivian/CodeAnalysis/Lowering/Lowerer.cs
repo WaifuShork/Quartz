@@ -24,7 +24,7 @@ namespace Vivian.CodeAnalysis.Lowering
         {
             if (!(symbol is FunctionSymbol || symbol is ClassSymbol))
             {
-                throw new Exception($"Symbol of type {symbol.Kind} not expected in Lowerer.");
+                throw new InternalCompilerException($"Symbol of type {symbol.Kind} not expected in Lowerer.");
             }
 
             var lowerer = new Lowerer();
@@ -35,8 +35,8 @@ namespace Vivian.CodeAnalysis.Lowering
 
         private static BoundBlockStatement Flatten(Symbol function, BoundStatement statement)
         {
-            // TODO: Take into account nested scopes when Flattening.  The compiler allows a naming collision
-            // to occur if separate scope blocks contain identically named symbols.
+            // TODO(1): Take into account nested scopes when Flattening.  The compiler allows a naming collision
+            // TODO(2): to occur if separate scope blocks contain identically named symbols.
 
             var builder = ImmutableArray.CreateBuilder<BoundStatement>();
             var stack = new Stack<BoundStatement>();
