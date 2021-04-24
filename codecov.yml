@@ -11,7 +11,7 @@ coverage:
         threshold: 15%
         base: auto
         paths: 
-          - "Vivian"
+          - "src"
         if_ci_failed: ignore #success, failure, error, ignore
         informational: false
         only_pulls: false
