@@ -4,16 +4,15 @@
 <a href="https://github.com/WaifuShork/Vivian/actions">
     <img alt="Build status" src="https://img.shields.io/github/workflow/status/WaifuShork/Vivian/.NET%20Core%20Workflow?label=BUILD%20STATUS&logo=github&style=for-the-badge">
 </a>
-<a href="https://github.com/WaifuShork/Vivian/issues">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues/WaifuShork/Vivian?style=for-the-badge">
-</a>
-
 <a href="https://ci.appveyor.com/project/WaifuShork/vivian">
-    <img alt="AppVeyor" src="https://img.shields.io/appveyor/build/waifushork/vivian?style=for-the-badge">
+    <img alt="AppVeyor" src="https://img.shields.io/appveyor/build/waifushork/vivian?style=for-the-badge&logo=appveyor">
+</a>
+<a href="https://github.com/WaifuShork/Vivian/issues">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues/WaifuShork/Vivian?style=for-the-badge&logo=github">
 </a>
 
 <a href="https://app.codecov.io/gh/WaifuShork/Vivian">
-    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/waifushork/vivian?style=for-the-badge">
+    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/waifushork/vivian?style=for-the-badge&logo=codecov">
 </a>
 
 </h1>
