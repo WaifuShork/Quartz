@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center"> 
-Static. Fast. Elegant
+Static. Fast. Elegant.
 </h1>
 
 <h1 align="center"> 
@@ -20,6 +20,13 @@ Static. Fast. Elegant
         <img alt="Codecov" src="https://img.shields.io/codecov/c/github/waifushork/vivian?style=for-the-badge&logo=codecov">
     </a>
 </h1>
+
+## The Vivian Programming Language
+
+Vivian is a modern, object-oriented, type-safe, and elegant programming language. Vivian is designed entirely with developers
+in mind, it's secure, robust, and apart of the .NET ecosystem. Vivian takes inspiration from languages such as C#, TypeScript,
+JavaScript, and Java. This tour provides an overview of the major components in the Vivian 1.0. If you want to explore the language
+through interactive examples, try the [introduction to Vivian](insert-link) tutorials.
 
 ## Vivian Language Feature Suggestions
 If you'd like to suggest a new feature or learn the Vivian language, please go here: 
