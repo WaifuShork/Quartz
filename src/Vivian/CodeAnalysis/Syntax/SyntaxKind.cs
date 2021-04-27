@@ -17,7 +17,7 @@
         AmpersandEqualsToken,
         SlashEqualsToken,
         StarEqualsToken,
-        PercentEqualsToken,
+        // PercentEqualsToken,
         
         AmpersandAmpersandToken,
         AmpersandToken,
