@@ -12,7 +12,7 @@ build:
 
 test_script:
 - dotnet tool install --global coverlet.console --verbosity q
-- cd C:\projects\vivian-x5gta\src\Vivian.Tests
+- cd C:\projects\Vivian\src\Vivian.Tests
 - dotnet test --collect:"XPlat Code Coverage" --settings coverage.settings --verbosity n
 - pwd
 - cd "TestResults/"
